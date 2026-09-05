@@ -66,8 +66,10 @@ whole subtree into a client-rendered app and undoes the above.
 
 ### SEO (will be addressed later, but we should expect it to come at the end)
 - [ ] Set the production domain and canonical URL handling.
-- [ ] Decide whether `youngmuslims.com` or `www.youngmuslims.com` is canonical,
-      and 301 the other to it.
+- [ ] Pick the canonical host and 301 the other to it. Bare
+      `youngmuslims.com` is the modern convention and the suggested default;
+      Netlify DNS handles apex domains natively. Either way users never type
+      `www`, since the one we don't pick redirects to the one we do.
 - [ ] 301 redirect `ymsite.com` and `ymsisters.com` to `youngmuslims.com` at the
       DNS/host level, once those sites are taken down.
 - [ ] Page metadata: titles, descriptions, canonical tags.
