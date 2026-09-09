@@ -1,0 +1,12 @@
+# Netlify build configuration.
+#
+# The Next.js runtime is auto-detected and installed by Netlify, so it is not
+# declared here. Bun is detected from bun.lock; the version is pinned below so
+# CI cannot drift from local.
+
+[build]
+  command = "bun run build"
+  publish = ".next"
+
+[build.environment]
+  BUN_VERSION = "1.3.11"
