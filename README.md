@@ -25,10 +25,20 @@ The dev server runs at http://localhost:3000.
 Other scripts:
 
 ```bash
-bun run build   # production build
-bun run start   # serve the production build locally
-bun run lint    # eslint
+bun run build         # production build
+bun run start         # serve the production build locally
+bun run lint          # eslint
+bun run typecheck     # next typegen && tsc --noEmit
+bun run format        # prettier --write
+bun run format:check  # prettier --check, for CI
 ```
+
+`typecheck` runs `next typegen` first because Next generates the route and
+layout types that `tsc` needs; plain `tsc --noEmit` fails without them.
+
+Prettier runs with `prettier-plugin-tailwindcss`, which sorts utility classes
+into a canonical order. Run `bun run format` before committing so class-order
+churn stays out of diffs.
 
 ## Decisions
 
@@ -59,12 +69,14 @@ whole subtree into a client-rendered app and undoes the above.
 ## To dos
 
 ### Integrations
+
 - [ ] Fundraise Up. Embed the widget snippet, wire donate links, decide
       which pages get a donate CTA. No API keys or server work required.
 - [ ] Embedded form platform. Pick the vendor, then embed.
 - [ ] CMS. Between Sanity, Payload, and Contentful.
 
 ### SEO (will be addressed later, but we should expect it to come at the end)
+
 - [ ] Set the production domain and canonical URL handling.
 - [ ] Pick the canonical host and 301 the other to it. Bare
       `youngmuslims.com` is the modern convention and the suggested default;
@@ -78,12 +90,14 @@ whole subtree into a client-rendered app and undoes the above.
 - [ ] Google Search Console and Bing Webmaster verification.
 
 ### Branding and sharing
+
 - [ ] Design an Open Graph image for link sharing, covering the sizes each
       platform expects.
 - [ ] Design a favicon and produce the full icon set (browser tab, iOS
       home screen, Android, web app manifest).
 
 ### Foundations
+
 - [ ] Site structure and navigation.
 - [ ] Accessibility pass (WCAG AA).
 - [ ] Analytics, and a consent banner if one is needed.
