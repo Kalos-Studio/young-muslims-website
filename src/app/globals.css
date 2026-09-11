@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens.
+ *
+ * Tailwind 4 is configured here in CSS rather than in a tailwind.config.js,
+ * which no longer exists in v4. Brand colors and any custom type or spacing
+ * scale belong in this block once branding is settled.
+ *
+ * `inline` is required because these values reference other CSS variables
+ * (the next/font ones set on <html> in layout.tsx).
+ */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
