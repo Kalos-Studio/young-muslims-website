@@ -96,16 +96,8 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
 export default function BlogPage() {
   return (
     <PageFrame className="pt-16">
+      {/* No page title. The grid of posts says what this is without one. */}
       <Annotate>
-        <h1 className="text-4xl font-semibold">Blog</h1>
-        <p className="mt-3 max-w-2xl text-base text-muted-foreground">
-          Reports, guides and writing from across the network.
-        </p>
-      </Annotate>
-
-      {/* The featured post: one image with everything laid over it, carousel
-          dots bottom-left. */}
-      <Annotate className="mt-10">
         <div className="relative flex aspect-[21/9] flex-col justify-end bg-wf-fill-muted p-12">
           <p className="absolute top-12 left-12 text-sm text-background/80">
             Featured post image, full bleed, carousel of three

@@ -33,7 +33,18 @@ const portraits = [
 export default function StoriesPage() {
   return (
     <PageFrame className="pt-16">
-      <Annotate note="Muneeb's 'product of YM' idea, broadened to include current members too. Stories of the impact YM has had on people, closer to case studies.">
+      {/* The header does the work of saying these are members, not models, so
+          the portraits below it need no caption. */}
+      <Annotate>
+        <h1 className="max-w-3xl text-5xl leading-tight font-semibold tracking-tight">
+          Stories of real Young Muslims
+        </h1>
+      </Annotate>
+
+      <Annotate
+        className="mt-14"
+        note="Muneeb's 'product of YM' idea, broadened to include current members too. Stories of the impact YM has had on people, closer to case studies."
+      >
         <div className="relative h-[46rem] w-full">
           {portraits.map((portrait) => (
             <div
