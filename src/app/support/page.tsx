@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 
-// WIREFRAME: route stub. Replace this body when the Support page gets built.
-import { PageStub } from "@/components/wireframe/page-stub";
+// WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
+import { Annotate } from "@/components/wireframe/annotate";
+import { Frame } from "@/components/wireframe/frame";
+import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
   title: "Support · Young Muslims",
@@ -10,9 +12,61 @@ export const metadata: Metadata = {
 
 export default function SupportPage() {
   return (
-    <PageStub
-      summary="Hero with tagline, then the YM mission, then a full-bleed image next to the donation widget, a story block, and the recent supporters list."
-      note="include something about advocacy, and anonymize supporter names to 'anonymous person from X state'"
-    />
+    <PageFrame className="pt-16">
+      <Annotate note="include something about advocacy">
+        <div className="flex flex-col gap-4">
+          <Frame
+            variant="fill"
+            label="Hero with tagline"
+            className="min-h-[9rem]"
+          />
+          <Frame
+            variant="fill"
+            label="YM mission"
+            detail="What the money actually goes to: service, relief work, advocacy"
+            className="min-h-[9rem]"
+          />
+        </div>
+      </Annotate>
+
+      {/* The donation widget is Fundraise Up, which is a third-party embed, so
+          it is a fixed-width column beside the image rather than something we
+          lay out ourselves. */}
+      <Annotate className="mt-4">
+        <div className="grid grid-cols-[minmax(0,1fr)_22rem] items-stretch">
+          <Frame
+            variant="muted"
+            label="Full-bleed image"
+            className="aspect-[4/3]"
+          />
+          <Frame
+            variant="outline"
+            label="Donation widget"
+            detail="Fundraise Up embed: one-time / monthly, preset amounts, dedicate, comment, donate"
+            className="px-8"
+          />
+        </div>
+      </Annotate>
+
+      <Annotate
+        note="anonymize supporter names — “an anonymous person from X state”"
+        className="mt-4"
+      >
+        <div className="grid grid-cols-[minmax(0,1fr)_22rem] items-stretch">
+          <Frame
+            variant="muted"
+            label="Story"
+            detail="One person's story, tying the giving back to a name"
+            className="aspect-[4/3]"
+          />
+          <Frame
+            variant="outline"
+            label="Recent supporters"
+            detail="A running list of recent gifts, plus a share prompt above it"
+            className="px-8"
+          />
+        </div>
+      </Annotate>
+    </PageFrame>
   );
 }
