@@ -19,7 +19,7 @@ export default function Home() {
           block can run the full width of the window the way it will in the
           real thing. `100dvh - 6rem` is the viewport minus the sticky header. */}
       <Annotate
-        overlay
+        bleed
         note="background video loop with footage of people having fun — brothers' videos and sisters' videos interlooped"
       >
         <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-10 bg-wf-fill px-10 py-20">
@@ -51,7 +51,6 @@ export default function Home() {
       <Annotate
         note="Some messaging surrounding this about YM mission/vision"
         className="mt-10"
-        align="center"
       >
         <Frame
           variant="fill"

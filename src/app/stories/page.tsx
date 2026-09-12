@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 
 // WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
 import { Annotate } from "@/components/wireframe/annotate";
-import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
+import { PersonOutline } from "@/components/wireframe/person-outline";
 
 export const metadata: Metadata = {
   title: "Stories · Young Muslims",
@@ -14,20 +14,20 @@ export const metadata: Metadata = {
  * WIREFRAME: the scattered field of portraits.
  *
  * Positions are hardcoded percentages rather than randomised, so the layout is
- * the same every render and the client is looking at one arrangement instead of
- * a new one each reload. Sizes vary because the Figma frame does — the
- * scattering is the idea, not a grid.
+ * the same every render and the client reviews one arrangement instead of a new
+ * one each reload. Sizes vary because the Figma frame does — the scattering is
+ * the idea, not a grid.
  */
 const portraits = [
-  { left: "4%", top: "2%", size: "10rem" },
-  { left: "26%", top: "0%", size: "8.5rem" },
-  { left: "58%", top: "6%", size: "9.5rem" },
-  { left: "40%", top: "16%", size: "11rem" },
-  { left: "10%", top: "26%", size: "9rem" },
-  { left: "68%", top: "30%", size: "8rem" },
-  { left: "34%", top: "44%", size: "9.5rem" },
-  { left: "6%", top: "54%", size: "10.5rem" },
-  { left: "60%", top: "58%", size: "9rem" },
+  { left: "3%", top: "1%", size: "10rem" },
+  { left: "25%", top: "0%", size: "8.5rem" },
+  { left: "57%", top: "5%", size: "9.5rem" },
+  { left: "39%", top: "15%", size: "11rem" },
+  { left: "9%", top: "25%", size: "9rem" },
+  { left: "70%", top: "28%", size: "8rem" },
+  { left: "33%", top: "43%", size: "9.5rem" },
+  { left: "5%", top: "53%", size: "10.5rem" },
+  { left: "61%", top: "56%", size: "9rem" },
 ];
 
 export default function StoriesPage() {
@@ -38,7 +38,7 @@ export default function StoriesPage() {
           {portraits.map((portrait) => (
             <div
               key={`${portrait.left}-${portrait.top}`}
-              className="absolute flex items-center justify-center rounded-full bg-wf-fill-muted text-center text-xs text-background"
+              className="absolute flex items-center justify-center rounded-full bg-muted text-wf-fill-muted"
               style={{
                 left: portrait.left,
                 top: portrait.top,
@@ -46,28 +46,39 @@ export default function StoriesPage() {
                 height: portrait.size,
               }}
             >
-              Portrait
+              <PersonOutline className="h-1/2 w-1/2" />
             </div>
           ))}
         </div>
       </Annotate>
 
+      {/* The scroll stop. Clicking a portrait above lands the reader here. */}
       <Annotate
-        note="Scroll stop — clicking a portrait above lands you here on that person's story"
+        note="Scroll stop — clicking a portrait above lands you on that person's story"
         className="mt-8"
       >
         <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-stretch">
-          <Frame
-            variant="muted"
-            label="Portrait of the person whose story this is"
-            className="aspect-[4/5]"
-          />
-          <Frame
-            variant="fill"
-            label="Full story"
-            detail="A paragraph or two in their own words, closer to a case study than a testimonial"
-            className="px-12"
-          />
+          <div className="flex aspect-[4/5] items-center justify-center bg-muted text-wf-fill-muted">
+            <PersonOutline className="h-2/5 w-2/5" />
+          </div>
+
+          {/* WIREFRAME: invented, and only here so the client can see the shape
+              and length of a story. Not drafted copy — the real ones get
+              written with the people in them. */}
+          <div className="flex flex-col justify-center gap-5 bg-wf-fill px-14 py-16 text-background">
+            <p className="text-sm text-background/50">
+              Rough example, invented — shows length and tone, not final copy
+            </p>
+            <p className="text-3xl font-semibold">Amina · Dallas, TX</p>
+            <p className="max-w-xl text-base leading-relaxed text-background/80">
+              She moved for work and knew nobody. Someone invited her to a
+              Thursday hangout and she almost didn&apos;t go.
+            </p>
+            <p className="max-w-xl text-base leading-relaxed text-background/80">
+              Three years on, those are the people she calls first — and she now
+              runs the NeighborNet she walked into.
+            </p>
+          </div>
         </div>
       </Annotate>
     </PageFrame>

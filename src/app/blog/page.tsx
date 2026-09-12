@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 // WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
 import { Annotate } from "@/components/wireframe/annotate";
-import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
@@ -11,18 +10,85 @@ export const metadata: Metadata = {
 };
 
 /**
- * WIREFRAME: one card in the post grid. Six of these sit below the featured
- * carousel, so the shape is defined once rather than repeated inline.
+ * WIREFRAME: sample posts.
+ *
+ * These are real titles from the existing youngmuslims.com resources and
+ * articles, used so the client can judge the grid against the length of
+ * headlines they actually publish — several run to two lines, which a row of
+ * invented three-word titles would have hidden. The dates, read times and
+ * authors are made up.
  */
-function PostCard() {
+const posts = [
+  {
+    title: "Muslim Youth Issues: Addressing Mental Health",
+    excerpt:
+      "The current state of mental health among American Muslim youth, and a toolkit for community leaders supporting them.",
+    date: "30 Jan 2025",
+    read: "10 min read",
+    author: "YM Muslim Youth Issues Team",
+  },
+  {
+    title: "How to Give a Khutbah",
+    excerpt:
+      "A starting point for anyone stepping into the position of khateeb, meant to be gone over with a local imam.",
+    date: "22 Jan 2025",
+    read: "6 min read",
+    author: "YM Brothers",
+  },
+  {
+    title: "Ramadan Survival Guide",
+    excerpt:
+      "A daily checklist, du'as and challenges to help you get the most out of the month.",
+    date: "14 Jan 2025",
+    read: "8 min read",
+    author: "Young Muslims",
+  },
+  {
+    title: "Muslim Youth Issues: Judgement Stigma",
+    excerpt:
+      "Raising awareness of judgement and shame in the American Muslim community, and practical ways to counter it.",
+    date: "3 Jan 2025",
+    read: "12 min read",
+    author: "YM Presents",
+  },
+  {
+    title: "Supporting the Black Community",
+    excerpt:
+      "A handbook of civic engagement tools and action items, built around sustainable long-term strategies.",
+    date: "19 Dec 2024",
+    read: "15 min read",
+    author: "Young Muslims",
+  },
+  {
+    title: "Through the Eyes of American Muslims",
+    excerpt:
+      "Survey data from 213 American Muslims on their experiences amid the genocide in Gaza and the West Bank.",
+    date: "2 Dec 2024",
+    read: "9 min read",
+    author: "Khalil Center & YM",
+  },
+];
+
+const [featured, ...rest] = posts;
+
+function PostCard({ post }: { post: (typeof posts)[number] }) {
   return (
-    <div className="flex flex-col gap-3">
-      <Frame variant="muted" label="Post image" className="aspect-[3/2]" />
-      <p className="text-sm text-muted-foreground">Date · read time</p>
-      <Frame label="Post title" className="px-4 py-5" />
-      <Frame label="Excerpt" className="min-h-[5rem] px-4 py-4" />
-      <p className="text-sm text-muted-foreground">Author avatar · name</p>
-    </div>
+    <article className="flex flex-col gap-3">
+      <div className="flex aspect-[3/2] items-center justify-center bg-wf-fill-muted text-sm text-background">
+        Post image
+      </div>
+      <p className="text-sm text-muted-foreground">
+        {post.date} · {post.read}
+      </p>
+      <h3 className="text-xl leading-snug font-medium">{post.title}</h3>
+      <p className="text-sm leading-relaxed text-muted-foreground">
+        {post.excerpt}
+      </p>
+      <div className="mt-1 flex items-center gap-2">
+        <span className="size-6 shrink-0 rounded-full bg-muted" />
+        <span className="text-sm text-muted-foreground">{post.author}</span>
+      </div>
+    </article>
   );
 }
 
@@ -30,29 +96,46 @@ export default function BlogPage() {
   return (
     <PageFrame className="pt-16">
       <Annotate>
-        <div className="flex flex-col gap-3">
-          <Frame label="Blog" className="px-8 py-8" />
-          <Frame
-            label="Standfirst"
-            detail="One line on what gets written about here"
-            className="px-8 py-6"
-          />
+        <h1 className="text-4xl font-semibold">Blog</h1>
+        <p className="mt-3 max-w-2xl text-base text-muted-foreground">
+          Reports, guides and writing from across the network.
+        </p>
+      </Annotate>
+
+      {/* The featured post: one image with everything laid over it, carousel
+          dots bottom-left. */}
+      <Annotate className="mt-10">
+        <div className="relative flex aspect-[21/9] flex-col justify-end bg-wf-fill-muted p-12">
+          <p className="absolute top-12 left-12 text-sm text-background/80">
+            Featured post image, full bleed — carousel of three
+          </p>
+
+          <h2 className="max-w-2xl text-4xl leading-tight font-semibold text-background">
+            {featured.title}
+          </h2>
+          <p className="mt-3 max-w-xl text-base text-background/80">
+            {featured.excerpt}
+          </p>
+
+          <div className="mt-6 flex items-center gap-3">
+            <span className="size-8 shrink-0 rounded-full bg-background/30" />
+            <span className="text-sm text-background">
+              {featured.author} · {featured.date} · {featured.read}
+            </span>
+          </div>
+
+          <div className="mt-8 flex gap-2">
+            <span className="size-2.5 rounded-full bg-background" />
+            <span className="size-2.5 rounded-full bg-background/40" />
+            <span className="size-2.5 rounded-full bg-background/40" />
+          </div>
         </div>
       </Annotate>
 
-      <Annotate className="mt-10">
-        <Frame
-          variant="fill"
-          label="Featured post carousel"
-          detail="Full-width image with the title, excerpt, author, date and read time laid over it; carousel dots bottom-left"
-          className="aspect-[21/9]"
-        />
-      </Annotate>
-
-      <Annotate className="mt-12">
-        <div className="grid grid-cols-3 gap-8">
-          {Array.from({ length: 6 }, (_, index) => (
-            <PostCard key={index} />
+      <Annotate className="mt-14">
+        <div className="grid grid-cols-3 gap-x-8 gap-y-14">
+          {rest.map((post) => (
+            <PostCard key={post.title} post={post} />
           ))}
         </div>
       </Annotate>

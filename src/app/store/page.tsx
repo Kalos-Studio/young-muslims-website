@@ -19,7 +19,7 @@ export default function StorePage() {
   return (
     <PageFrame>
       <Annotate
-        overlay
+        bleed
         note="brothers and sisters cover images; clicking either side navigates you out to that store"
       >
         <section className="grid min-h-[calc(100dvh-6rem)] grid-cols-2">
