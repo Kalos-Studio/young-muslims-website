@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 export default function SupportPage() {
   return (
     <PageStub
-      label="Support"
       summary="Hero with tagline, then the YM mission, then a full-bleed image next to the donation widget, a story block, and the recent supporters list."
       note="include something about advocacy, and anonymize supporter names to 'anonymous person from X state'"
     />

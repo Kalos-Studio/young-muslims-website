@@ -3,13 +3,20 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 /**
- * WIREFRAME: the core placeholder rectangle.
+ * WIREFRAME: the placeholder rectangle. The only placeholder primitive there
+ * is — every slot on every wireframe page is one of these.
  *
- * Every slot on a wireframe page is one of these: a rectangle with a caption
- * saying what will eventually live there. The caption is a description of the
- * slot ("HIGHLIGHT REEL VIDEO"), never sample content — the whole point is that
- * the client reads structure and does not get distracted arguing with copy that
- * was never meant to be real.
+ * A rectangle with a plain-language description of what will live there. Two
+ * earlier versions of this were worse and are worth not going back to:
+ *
+ * - A second primitive that drew grey bars at the weight of the eventual
+ *   headline. It read as noise rather than as a placeholder.
+ * - Labels set in letterspaced capitals. Nothing on this site is going to be
+ *   set that way, so it made the wireframe look like a design decision instead
+ *   of a description of one.
+ *
+ * So: normal sentences, sentence case, inside a box. Where a real example helps
+ * the client picture the slot, put it in `detail` in quotes.
  *
  * Building a real page means deleting a <Frame> and putting the actual thing in
  * its place, which is a local, obvious edit.
@@ -35,9 +42,9 @@ const frameVariants = cva(
 );
 
 type FrameProps = VariantProps<typeof frameVariants> & {
-  /** What goes here eventually. Shown centred, in small caps. */
+  /** What goes here eventually, in plain words. */
   label: string;
-  /** A second line for detail the label alone cannot carry. */
+  /** A second line: an example of the real thing, or detail the label can't carry. */
   detail?: string;
   className?: string;
   children?: React.ReactNode;
@@ -53,15 +60,9 @@ export function Frame({
   return (
     <div className={cn(frameVariants({ variant }), className)}>
       {children ?? (
-        <div className="px-6 py-4">
-          <p className="text-xs font-medium tracking-[0.18em] uppercase">
-            {label}
-          </p>
-          {detail ? (
-            <p className="mt-2 text-xs tracking-normal normal-case opacity-70">
-              {detail}
-            </p>
-          ) : null}
+        <div className="max-w-lg px-6 py-4">
+          <p className="text-sm font-medium">{label}</p>
+          {detail ? <p className="mt-2 text-sm opacity-70">{detail}</p> : null}
         </div>
       )}
     </div>

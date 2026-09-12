@@ -1,31 +1,22 @@
 import { cn } from "@/lib/utils";
 
 /**
- * WIREFRAME: the outer container for a wireframe page.
+ * WIREFRAME: the outer wrapper for a wireframe page.
  *
- * Prints the frame's name in the corner the way the Figma artboards do, so the
- * client can match what they are looking at to what they reviewed in Figma, and
- * sets the one content width every page shares.
+ * Deliberately does nothing but be the <main> element. It used to print the
+ * Figma artboard's name in the corner of every page, which was redundant — you
+ * can see which page you are on — and it used to impose one content width,
+ * which stopped a section from ever going full-bleed.
  *
- * The width is sized so that a section's content column plus the 15rem sticky
- * note rail and the gap between them land at a comfortable desktop measure.
- * Changing it here changes every page at once.
+ * Width is <Annotate>'s job now, so a contained section and a full-page hero
+ * can sit in the same page.
  */
 export function PageFrame({
-  label,
   children,
   className,
 }: {
-  label: string;
   children: React.ReactNode;
   className?: string;
 }) {
-  return (
-    <main className={cn("mx-auto w-full max-w-[84rem] px-10 pb-24", className)}>
-      <p className="py-8 text-xs font-medium tracking-[0.3em] text-muted-foreground uppercase">
-        {label}
-      </p>
-      {children}
-    </main>
-  );
+  return <main className={cn("w-full", className)}>{children}</main>;
 }

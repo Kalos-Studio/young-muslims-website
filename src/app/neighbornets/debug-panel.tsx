@@ -212,7 +212,7 @@ function Section({
   return (
     <fieldset className="mb-3 border-t border-border pt-3 first:border-t-0 first:pt-0">
       <legend className="sr-only">{label}</legend>
-      <p className="mb-1.5 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+      <p className="mb-1.5 text-[11px] font-semibold text-muted-foreground">
         {label}
       </p>
       <div className="space-y-1">{children}</div>

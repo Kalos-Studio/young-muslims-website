@@ -1,10 +1,10 @@
 /**
  * The site's information architecture, in one place.
  *
- * The header, the side drawer, and the footer all render from these arrays, so
- * adding a page to the site means adding it here once. Nothing about this file
- * is part of the wireframe: these are the real routes and the real labels, and
- * they outlive the grey boxes.
+ * The header and the side drawer both render from these arrays, so adding a
+ * page to the site means adding it here once. Nothing about this file is part
+ * of the wireframe: these are the real routes and the real labels, and they
+ * outlive the grey boxes.
  *
  * `href` values are `as const` so they stay literal types rather than widening
  * to `string`, which is what Next's typed `<Link href>` expects.
@@ -13,8 +13,6 @@
 export type NavLink = {
   href: string;
   label: string;
-  /** Shown in the drawer, where there is room to say what a page is for. */
-  blurb: string;
 };
 
 /**
@@ -22,21 +20,9 @@ export type NavLink = {
  * first-time visitor to see; everything else is one level down.
  */
 export const primaryLinks = [
-  {
-    href: "/about",
-    label: "About",
-    blurb: "What Young Muslims is and who it's for.",
-  },
-  {
-    href: "/stories",
-    label: "Stories",
-    blurb: "The impact YM has had on people, in their words.",
-  },
-  {
-    href: "/support",
-    label: "Support",
-    blurb: "Give to the work, and see where it goes.",
-  },
+  { href: "/about", label: "About" },
+  { href: "/stories", label: "Stories" },
+  { href: "/support", label: "Support" },
 ] as const satisfies readonly NavLink[];
 
 /**
@@ -47,7 +33,6 @@ export const primaryLinks = [
 export const ctaLink = {
   href: "/neighbornets",
   label: "Join a NeighborNet",
-  blurb: "Find the circle closest to you on the map.",
 } as const satisfies NavLink;
 
 /**
@@ -56,16 +41,8 @@ export const ctaLink = {
  * dilute it.
  */
 export const drawerOnlyLinks = [
-  {
-    href: "/store",
-    label: "Store",
-    blurb: "Split point out to the brothers' and sisters' stores.",
-  },
-  {
-    href: "/blog",
-    label: "Blog",
-    blurb: "Writing from across the network.",
-  },
+  { href: "/store", label: "Store" },
+  { href: "/blog", label: "Blog" },
 ] as const satisfies readonly NavLink[];
 
 /** Everything the drawer lists, in the order it lists them. */
@@ -74,6 +51,3 @@ export const drawerLinks = [
   ctaLink,
   ...drawerOnlyLinks,
 ] as const satisfies readonly NavLink[];
-
-/** Everything the footer lists. The footer is the one complete index. */
-export const footerLinks = drawerLinks;

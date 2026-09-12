@@ -10,9 +10,6 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   return (
-    <PageStub
-      label="Blog"
-      summary="A featured post carousel across the top, then a grid of post cards: image, date, read time, title, excerpt, author."
-    />
+    <PageStub summary="A featured post carousel across the top, then a grid of post cards: image, date, read time, title, excerpt, author." />
   );
 }

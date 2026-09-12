@@ -42,17 +42,25 @@ import {
  * the debug panel beside it exists so we can compare marker treatments and
  * info-reveal patterns against real-ish data before committing to one.
  *
- * Both props exist so a caller can dress the map differently without changing
- * what every other caller gets: the wireframe needs a greyscale map and no
- * debug panel, but `defaultSettings` stays the settings this prototype boots
+ * The props exist so a caller can dress the map differently without changing
+ * what every other caller gets: the wireframe needs a greyscale, bare map with
+ * no debug panel, but `defaultSettings` stays the settings this prototype boots
  * with everywhere else.
+ *
+ * `bare` drops the prototype chrome entirely — no side column, no border, no
+ * zoom or pan — so the map reads as the shape of the country sitting on the
+ * page rather than as a widget embedded in a box. Note that it also removes the
+ * side panel, so a `bare` caller wants an `infoMode` that surfaces details on
+ * the map itself (`click-popup` or `hover-tooltip`), not `side-panel`.
  */
 export function NeighborNetsMap({
   initialSettings = defaultSettings,
   showDebugPanel = true,
+  bare = false,
 }: {
   initialSettings?: MapSettings;
   showDebugPanel?: boolean;
+  bare?: boolean;
 } = {}) {
   const [settings, setSettings] = useState<MapSettings>(initialSettings);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -101,10 +109,23 @@ export function NeighborNetsMap({
   }
 
   return (
-    <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
-      {/* `min-h-0` on both cells is what stops the tall debug panel from
-          stretching the grid row and pushing the map's center off-screen. */}
-      <div className="relative h-[60vh] min-h-0 overflow-hidden rounded-lg border border-border lg:h-full">
+    <div
+      className={cn(
+        bare
+          ? "relative h-full w-full"
+          : // `min-h-0` on both cells is what stops the tall debug panel from
+            // stretching the grid row and pushing the map's center off-screen.
+            "grid min-h-0 flex-1 gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]",
+      )}
+    >
+      <div
+        className={cn(
+          "relative",
+          bare
+            ? "h-full w-full"
+            : "h-[60vh] min-h-0 overflow-hidden rounded-lg border border-border lg:h-full",
+        )}
+      >
         <Map
           className="h-full w-full"
           // mapcn otherwise picks its theme from prefers-color-scheme, which
@@ -118,6 +139,11 @@ export function NeighborNetsMap({
           // phone-width container instead of being clamped and overflowing.
           minZoom={1.5}
           maxZoom={14}
+          // A bare map is a picture of the country, not something to fly
+          // around in. This disables MapLibre's own drag/zoom/keyboard
+          // handlers; markers are separate DOM overlays, so they stay
+          // clickable, and fitBounds still drives the camera.
+          interactive={!bare}
         >
           <FitToUS />
 
@@ -210,54 +236,58 @@ export function NeighborNetsMap({
             ))
           )}
 
-          <MapControls
-            position="top-right"
-            showZoom
-            showCompass
-            showFullscreen
-          />
+          {bare ? null : (
+            <MapControls
+              position="top-right"
+              showZoom
+              showCompass
+              showFullscreen
+            />
+          )}
         </Map>
 
         <Legend settings={settings} />
       </div>
 
-      <div className="flex min-h-0 flex-col gap-4 overflow-hidden">
-        {panelMode ? (
-          <div className="rounded-lg border border-border bg-card p-1">
-            {selected ? (
-              <NetDetails
-                net={selected}
-                palette={settings.palette}
-                density="full"
-                onClose={() => setSelectedId(null)}
-                className="border-0 shadow-none"
-              />
-            ) : (
-              <p className="px-3 py-6 text-center text-xs text-muted-foreground">
-                Click a dot to see that neighbornet&apos;s contact details.
-              </p>
-            )}
-          </div>
-        ) : null}
+      {bare ? null : (
+        <div className="flex min-h-0 flex-col gap-4 overflow-hidden">
+          {panelMode ? (
+            <div className="rounded-lg border border-border bg-card p-1">
+              {selected ? (
+                <NetDetails
+                  net={selected}
+                  palette={settings.palette}
+                  density="full"
+                  onClose={() => setSelectedId(null)}
+                  className="border-0 shadow-none"
+                />
+              ) : (
+                <p className="px-3 py-6 text-center text-xs text-muted-foreground">
+                  Click a dot to see that neighbornet&apos;s contact details.
+                </p>
+              )}
+            </div>
+          ) : null}
 
-        {showDebugPanel ? (
-          <div className="min-h-0 lg:flex-1">
-            <DebugPanel
-              settings={settings}
-              onChange={(next) => {
-                setSettings(next);
-                if (
-                  next.infoMode !== "side-panel" &&
-                  next.infoMode !== "both"
-                ) {
-                  setSelectedId(null);
-                }
-              }}
-              counts={counts}
-            />
-          </div>
-        ) : null}
-      </div>
+          {showDebugPanel ? (
+            <div className="min-h-0 lg:flex-1">
+              <DebugPanel
+                settings={settings}
+                onChange={(next) => {
+                  setSettings(next);
+                  if (
+                    next.infoMode !== "side-panel" &&
+                    next.infoMode !== "both"
+                  ) {
+                    setSelectedId(null);
+                  }
+                }}
+                counts={counts}
+              />
+            </div>
+          ) : null}
+        </div>
+      )}
     </div>
   );
 }
@@ -382,7 +412,7 @@ function Legend({ settings }: { settings: MapSettings }) {
 
   return (
     <div className="absolute bottom-3 left-3 rounded-md border border-border bg-background/90 px-3 py-2 text-xs shadow-sm backdrop-blur-sm">
-      <p className="mb-1.5 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+      <p className="mb-1.5 text-[11px] font-semibold text-muted-foreground">
         Neighbornets
       </p>
       <ul className="space-y-1">
