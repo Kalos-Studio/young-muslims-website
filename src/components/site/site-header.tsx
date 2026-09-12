@@ -21,18 +21,21 @@ import { SideNav } from "./side-nav";
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-sm">
-      <div className="mx-auto flex h-24 max-w-[90rem] items-center justify-between gap-8 px-10">
+      <div className="mx-auto grid h-24 max-w-[90rem] grid-cols-[1fr_auto_1fr] items-center gap-8 px-10">
         <Link
           href="/"
           aria-label="Young Muslims, home"
-          className="shrink-0 rounded-xs outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="justify-self-start rounded-xs outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
           {/* aria-hidden because the link above already names the destination;
               without it a screen reader announces the name twice. */}
           <Logo className="h-14" aria-hidden />
         </Link>
 
-        <nav aria-label="Primary" className="flex items-center gap-8 text-base">
+        <nav
+          aria-label="Primary"
+          className="flex items-center justify-center gap-8 text-base"
+        >
           {primaryLinks.map((link) => (
             <NavLink key={link.href} href={link.href}>
               {link.label}
@@ -40,7 +43,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-6">
+        <div className="flex shrink-0 items-center justify-end gap-6">
           <NavLink
             href={ctaLink.href}
             className="font-semibold text-foreground no-underline hover:underline"
