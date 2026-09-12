@@ -16,11 +16,11 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <PageFrame>
-      {/* Full-page hero. Bleeds, so the video block runs the full width of the
-          window the way it will in the real thing. `100dvh - 6rem` is the
-          viewport minus the sticky header. */}
+      {/* Full-page hero. Bleeds, so the clips run the full width of the window
+          the way they will in the real thing. `100dvh - 6rem` is the viewport
+          minus the sticky header. */}
       {/* Two notes, each anchored to what it is about: the nav note sits top
-          right, directly under the nav it explains. The video note sits in the
+          right, directly under the nav it explains. The clips note sits in the
           middle band on the left, clear of the fixed notes toggle that lives in
           the bottom-left corner. */}
       <Annotate
@@ -31,11 +31,11 @@ export default function Home() {
         <Annotate
           bleed
           placement="center-left"
-          note="background video loop with footage of people having fun, brothers' videos and sisters' videos interlooped"
+          note="cinematic clips of people having fun, brothers' and sisters' footage interlooped"
         >
           <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-12 bg-wf-fill px-10 py-20 text-center">
             <p className="text-sm text-background/50">
-              Video loop plays full-bleed behind everything in this block
+              Cinematic clips play full-bleed behind everything in this block
             </p>
 
             <h1 className="text-7xl leading-[1.05] font-semibold tracking-tight text-background">
@@ -45,7 +45,7 @@ export default function Home() {
             </h1>
 
             <p className="text-sm text-background/50">
-              H1, overlaid on the video
+              H1, overlaid on the clips
             </p>
           </section>
         </Annotate>
