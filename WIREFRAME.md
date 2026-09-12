@@ -101,22 +101,41 @@ that into Claude Code and the feedback is immediately actionable.
 
 **The review loop:** open the preview URL → annotate → Copy → paste to Claude.
 
-**Its one limit, stated plainly:** with no sync endpoint configured, annotations
-live in the annotator's own browser (Agentation keys `localStorage` by pathname,
-so they survive reload). The client's notes do not appear in your browser
-automatically — copy-paste is the handoff. Agentation does support an
-`endpoint`/`sessionId` for shared sessions and a `webhookUrl`, but both need a
-server we would have to host. Worth revisiting only if client review gets heavy.
+#### Letting Claude read the notes directly, over MCP
 
-**Optional, for local work only.** Registering the MCP server skips the
-copy-paste step entirely when working against `localhost`:
+Annotating locally, Claude Code can pull your notes itself instead of you
+pasting them. Two halves have to line up, and **both** are required:
 
-```bash
-claude mcp add agentation -- npx agentation-mcp server
-```
+1. **The page has to sync somewhere.** `<AnnotationToolbar>` points at
+   `http://localhost:4747` in dev by default, so this half is already done.
+2. **That server has to exist, and Claude has to know about it.** One-time, on
+   your machine:
 
-That is a machine-level setup, not a repo change, which is why it is documented
-here rather than wired into the build.
+   ```bash
+   claude mcp add agentation -- npx agentation-mcp server
+   ```
+
+   Then restart Claude Code so it picks the server up. Verify with
+   `claude mcp list` — you want an `agentation` row, and
+   `curl -s -o /dev/null -w "%{http_code}" http://localhost:4747/sessions` to
+   answer rather than hang.
+
+With both in place, ask Claude for the pending annotations and it reads them
+through the MCP tools (`agentation_get_all_pending` and friends), replies on
+threads, and marks them resolved.
+
+Nothing is lost if you annotate before starting the server: Agentation catches
+the failed connection, warns once in the console, keeps writing to
+`localStorage`, and **backfills the unsynced annotations** as soon as a session
+is established.
+
+**On deploy previews it stays copy-paste**, and that is deliberate. A reviewer
+opening a preview URL has no server of their own, so `NEXT_PUBLIC_AGENTATION_ENDPOINT`
+is left unset there and annotations live in that reviewer's browser
+(`localStorage`, keyed by pathname, surviving reload). They click Copy and send
+you the markdown. Shared sessions across people would need a server we host —
+Agentation supports it via `endpoint`/`sessionId` and `webhookUrl`, but it is
+not worth standing up unless client review gets heavy.
 
 ### How both reach the Netlify previews
 

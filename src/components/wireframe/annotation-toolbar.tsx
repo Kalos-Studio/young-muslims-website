@@ -33,6 +33,31 @@ import dynamic from "next/dynamic";
 
 const AGENTATION_ENABLED = process.env.NEXT_PUBLIC_ENABLE_AGENTATION === "true";
 
+/**
+ * Where annotations sync to. With no endpoint, Agentation keeps them in the
+ * annotator's own `localStorage` and the only way to hand them over is the
+ * toolbar's Copy button. Pointed at a running `agentation-mcp server`, they
+ * also land somewhere Claude Code can read directly through MCP, which removes
+ * the copy-paste step.
+ *
+ * Defaulted on in local dev because it degrades well: if nothing is listening,
+ * Agentation catches the failure, logs one console warning, and carries on
+ * against localStorage. Better still, it backfills — annotations made while the
+ * server was down sync as soon as a session is established, so notes taken
+ * before the server was started are not lost.
+ *
+ * Left unset everywhere else, including Netlify previews: a reviewer opening a
+ * preview URL has no server of their own, so pointing their browser at
+ * localhost would only produce warnings. There, Copy is the handoff.
+ *
+ * Set NEXT_PUBLIC_AGENTATION_ENDPOINT to override, or to "" to force local-only.
+ */
+const AGENTATION_ENDPOINT =
+  process.env.NEXT_PUBLIC_AGENTATION_ENDPOINT ??
+  (process.env.NODE_ENV === "development"
+    ? "http://localhost:4747"
+    : undefined);
+
 const Agentation = dynamic(
   () => import("agentation").then((mod) => mod.Agentation),
   { ssr: false },
@@ -41,5 +66,5 @@ const Agentation = dynamic(
 export function AnnotationToolbar() {
   if (!AGENTATION_ENABLED) return null;
 
-  return <Agentation />;
+  return <Agentation endpoint={AGENTATION_ENDPOINT || undefined} />;
 }
