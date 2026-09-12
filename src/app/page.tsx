@@ -6,7 +6,6 @@ import type { Metadata } from "next";
 import { Annotate } from "@/components/wireframe/annotate";
 import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
-import { TextSlot } from "@/components/wireframe/text-slot";
 
 export const metadata: Metadata = {
   title: "Young Muslims",
@@ -15,41 +14,37 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <PageFrame label="Landing">
-      {/* Hero. A video loop plays behind the headline, so the headline slot is
-          drawn on the filled block rather than beside it. */}
+    <PageFrame>
+      {/* Full-page hero. Overlay layout rather than the note rail, so the video
+          block can run the full width of the window the way it will in the
+          real thing. `100dvh - 6rem` is the viewport minus the sticky header. */}
       <Annotate
-        note="background video clips of people having fun"
-        align="center"
+        overlay
+        note="background video loop with footage of people having fun — brothers' videos and sisters' videos interlooped"
       >
-        <Frame
-          variant="fill"
-          label="Background video loop"
-          className="min-h-[34rem] px-16"
-        >
-          <div className="flex w-full flex-col items-center gap-10">
-            <p className="text-[0.625rem] font-medium tracking-[0.3em] text-background/50 uppercase">
-              Background video loop
+        <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-10 bg-wf-fill px-10 py-20">
+          <p className="text-sm text-background/60">
+            Video loop plays full-bleed behind everything in this block
+          </p>
+
+          <div className="border border-dashed border-background/40 px-12 py-14 text-center">
+            <p className="text-5xl leading-[1.1] font-semibold text-background">
+              For the youth,
+              <br />
+              By the youth
             </p>
-            <TextSlot
-              label="H1"
-              size="h1"
-              lines={2}
-              align="center"
-              tone="dark"
-              className="max-w-xl"
-            />
+            <p className="mt-8 text-sm text-background/60">
+              H1, overlaid on the video
+            </p>
           </div>
-        </Frame>
+        </section>
       </Annotate>
 
-      {/* The line under the hero. Three terms inside it are emphasised, which is
-          a type decision rather than a layout one, so it gets its own slot. */}
       <Annotate className="mt-24">
-        <TextSlot
-          label="Tagline · three emphasised terms"
-          size="h2"
-          lines={1}
+        <Frame
+          label="Tagline / intro text"
+          detail="e.g. “Built on brotherhood, sisterhood, and Deen.”"
+          className="px-8 py-12"
         />
       </Annotate>
 

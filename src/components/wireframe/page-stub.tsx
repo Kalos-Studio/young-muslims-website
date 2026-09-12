@@ -14,19 +14,16 @@ import { PageFrame } from "./page-frame";
  * correct.
  */
 export function PageStub({
-  label,
   summary,
   note,
 }: {
-  /** Frame name, matching the Figma artboard. */
-  label: string;
   /** What this page will hold, in a sentence. */
   summary: string;
   /** Optional sticky note carrying thinking we already have. */
   note?: React.ReactNode;
 }) {
   return (
-    <PageFrame label={label}>
+    <PageFrame className="pt-16">
       <Annotate note={note}>
         <Frame
           variant="outline"

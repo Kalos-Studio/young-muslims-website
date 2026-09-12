@@ -38,7 +38,7 @@ export function SideNav() {
         <Dialog.Backdrop className="fixed inset-0 bg-foreground/20 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0" />
         <Dialog.Popup className="fixed top-0 right-0 bottom-0 flex w-[24rem] flex-col border-l border-border bg-background transition-transform duration-200 outline-none data-ending-style:translate-x-full data-starting-style:translate-x-full">
           <div className="flex items-center justify-between border-b border-border px-8 py-6">
-            <Dialog.Title className="text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase">
+            <Dialog.Title className="text-sm font-medium text-muted-foreground">
               Menu
             </Dialog.Title>
             <Dialog.Close
@@ -49,20 +49,15 @@ export function SideNav() {
             </Dialog.Close>
           </div>
 
-          <nav aria-label="Site" className="flex flex-col px-8 py-6">
+          <nav aria-label="Site" className="flex flex-col gap-5 px-8 py-8">
             {drawerLinks.map((link) => (
               <NavLink
                 key={link.href}
                 href={link.href}
                 onNavigate={() => setOpen(false)}
-                className="group block border-b border-border py-5 no-underline last:border-b-0"
+                className="text-2xl font-semibold tracking-tight no-underline hover:underline hover:underline-offset-8"
               >
-                <span className="block text-2xl font-semibold tracking-tight group-hover:underline group-hover:underline-offset-8">
-                  {link.label}
-                </span>
-                <span className="mt-1 block text-sm text-muted-foreground">
-                  {link.blurb}
-                </span>
+                {link.label}
               </NavLink>
             ))}
           </nav>

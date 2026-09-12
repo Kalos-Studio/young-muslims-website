@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 export default function StorePage() {
   return (
     <PageStub
-      label="Store"
       summary="A split screen and nothing else: brothers on one side, sisters on the other."
       note="brothers and sisters cover images; clicking one navigates you out to that store"
     />

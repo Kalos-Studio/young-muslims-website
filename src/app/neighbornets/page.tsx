@@ -4,8 +4,8 @@ import { NeighborNetsMap } from "./neighbornets-map";
 import { defaultSettings, type MapSettings } from "./map-options";
 // WIREFRAME: wireframe chrome around a real, working map. See WIREFRAME.md.
 import { Annotate } from "@/components/wireframe/annotate";
+import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
-import { TextSlot } from "@/components/wireframe/text-slot";
 
 export const metadata: Metadata = {
   title: "Join a NeighborNet · Young Muslims",
@@ -18,38 +18,49 @@ export const metadata: Metadata = {
  * the marker-comparison prototype still boots the way it always did — this is a
  * per-caller override, not a change to what everyone gets.
  *
- * `mono` plus the shape channel is what makes the map greyscale without losing
- * the brothers/sisters distinction: both branches draw in the same neutral, and
- * sisters' nets read as diamonds rather than circles. That option space already
- * existed in map-options.ts, so this is a configuration, not a rewrite.
+ * Greyscale but still colour-coded: black for brothers, grey for sisters, with
+ * the ringed marker style giving each dot a white halo so the grey ones do not
+ * sink into the state fill. The shape channel is off — one visual difference is
+ * easier to read than two.
+ *
+ * `click-popup` rather than the default `side-panel`, because a bare map has no
+ * side column to put details in; the card opens on the map itself.
  *
  * The blank basemap is also the honest choice here: it draws our own
- * public-domain state polygons instead of CARTO's tiles, so the wireframe does
- * not pull a third party into the page just to show a shape of the country.
+ * public-domain state polygons instead of CARTO's tiles, so the page does not
+ * pull a third party in just to show the shape of the country.
  */
 const wireframeSettings: MapSettings = {
   ...defaultSettings,
   basemap: "blank",
-  palette: "mono",
-  differentiator: "shape",
+  palette: "black-gray",
+  differentiator: "color",
   markerStyle: "ring",
+  infoMode: "click-popup",
 };
 
 export default function NeighborNetsPage() {
   return (
-    <PageFrame label="Join a NeighborNet">
+    <PageFrame className="pt-16">
       <Annotate className="mb-10">
-        <TextSlot label="Intro copy about YM" size="h2" lines={1} />
+        <Frame
+          label="Intro copy about YM"
+          detail="A line or two above the map"
+          className="px-8 py-10"
+        />
       </Annotate>
 
-      <Annotate note="the one live piece: real map, real placeholder data. brothers are circles, sisters are diamonds, so the split reads without colour">
-        {/* WIREFRAME: the debug panel is hidden for the client-facing prototype.
-            Drop `showDebugPanel={false}` to get the marker-comparison tooling
-            back while we are still deciding how the dots should look. */}
-        <div className="h-[42rem] overflow-hidden border border-wf-rule">
+      <Annotate note="the one live piece: real map, real placeholder data. black dots are brothers' nets, grey are sisters'">
+        {/* WIREFRAME: `bare` drops the prototype's border, side column and zoom
+            controls so this reads as the country sitting on the page rather
+            than a widget in a box. Drop `bare` and `showDebugPanel={false}` to
+            get the marker-comparison tooling back while we are still deciding
+            how the dots should look. */}
+        <div className="h-[38rem]">
           <NeighborNetsMap
             initialSettings={wireframeSettings}
             showDebugPanel={false}
+            bare
           />
         </div>
       </Annotate>

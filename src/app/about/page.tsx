@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <PageStub
-      label="About"
       summary="Rotating images of people beside the explanation of what YM is: a friend group you belong to, the weekly moves, and how those friendships turn into service, relief work and advocacy."
       note="summarize down with a good header"
     />

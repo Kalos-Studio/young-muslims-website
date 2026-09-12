@@ -15,7 +15,8 @@ export type MarkerStyle = "dot" | "ring" | "pin" | "initial" | "pulse";
 export type Differentiator = "color" | "shape" | "initial" | "color-and-shape";
 
 /** Named brother/sister color pairs to compare for contrast and tone. */
-export type Palette = "emerald-violet" | "blue-rose" | "teal-amber" | "mono";
+export type Palette =
+  "emerald-violet" | "blue-rose" | "teal-amber" | "mono" | "black-gray";
 
 /** How a neighbornet's details are surfaced. */
 export type InfoMode = "hover-tooltip" | "click-popup" | "side-panel" | "both";
@@ -87,6 +88,12 @@ export const palettes: Record<
     brothers: "#404040",
     sisters: "#404040",
     note: "Forces the shape or letter channel to do all the work.",
+  },
+  "black-gray": {
+    label: "Black / Gray",
+    brothers: "#111111",
+    sisters: "#a1a1a1",
+    note: "Greyscale but still color-coded. Relies on the ringed marker style for its white halo, or mid-gray dots disappear into the state fill.",
   },
 };
 
