@@ -29,7 +29,7 @@ scaffolding, so you replace the right things.
 | Real, keep it                                | Scaffolding, replace it                  |
 | -------------------------------------------- | ---------------------------------------- |
 | Routes and folder structure under `src/app/` | The body of each `page.tsx`              |
-| `src/components/site/nav-links.ts` — the IA  | Grey boxes (`<Frame>`)                   |
+| `src/components/site/nav-links.ts` — the IA  | Placeholders (`<Frame>`, `<Text>`)       |
 | `SiteHeader`, `SideNav`, `SiteFooter`        | Yellow sticky notes and the notes toggle |
 | Page `metadata` exports                      | The Agentation feedback toolbar          |
 | The NeighborNets map and its data            | The map's wireframe settings override    |
@@ -186,12 +186,29 @@ NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
   from the existing youngmuslims.com so the grid is judged against headline
   lengths they actually publish; Stories carries a made-up example capped with a
   line saying so.
-- **One placeholder primitive.** Every other slot is a `<Frame>` — a box with a
-  plain sentence inside saying what will live there. Never lorem ipsum: fake sentences
+- **Boxes for media, type for words.** `<Frame>` is a box with a sentence in it,
+  and it is right for images, video and embeds. It is wrong for copy: a box
+  labelled "tagline" never tells you how much room the tagline takes, whether it
+  out-shouts the thing beneath it, or where the eye lands first — which is most
+  of what a wireframe is for. Copy slots use `<Text>`, which sets real type at
+  the real size with the placeholder wording in brackets:
+
+  ```tsx
+  <Text as="h2" example="Built on brotherhood, sisterhood, and Deen.">
+    Placeholder tagline / intro text
+  </Text>
+  ```
+
+  `<Lorem>` fills body copy where only the volume matters. Latin rather than
+  plausible English, so nobody starts editing it. The `h1`/`h2`/`h3`/`body`
+  scale lives in `text.tsx` and is provisional — when branding lands, the real
+  scale goes in the `@theme` block of `globals.css` and that file is deleted
+  rather than promoted. Never lorem ipsum: fake sentences
   invite the client to respond to the words instead of the structure. Where a
   real example helps them picture the slot, put it in `detail` in quotes. The
   landing hero's headline is the one deliberate exception, because Omar supplied
   the actual line.
+
 - **No all-caps, anywhere.** No letterspaced small capitals for labels or
   headings. Nothing on this site is going to be set that way, so using it in the
   wireframe makes it look like a design decision rather than a description of

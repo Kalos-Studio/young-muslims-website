@@ -4,7 +4,7 @@ import { NeighborNetsMap } from "./neighbornets-map";
 import { defaultSettings, type MapSettings } from "./map-options";
 // WIREFRAME: wireframe chrome around a real, working map. See WIREFRAME.md.
 import { Annotate } from "@/components/wireframe/annotate";
-import { Frame } from "@/components/wireframe/frame";
+import { Text } from "@/components/wireframe/text";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
@@ -42,12 +42,13 @@ const wireframeSettings: MapSettings = {
 export default function NeighborNetsPage() {
   return (
     <PageFrame className="pt-16">
-      <Annotate className="mb-10">
-        <Frame
-          label="Intro copy about YM"
-          detail="A line or two above the map"
-          className="px-8 py-10"
-        />
+      <Annotate className="mb-12">
+        <Text
+          as="h2"
+          example="There's a NeighborNet near you. Find it on the map."
+        >
+          Placeholder intro copy about YM
+        </Text>
       </Annotate>
 
       <Annotate note="the one live piece: real map, real placeholder data. black dots are brothers' nets, grey are sisters'">
