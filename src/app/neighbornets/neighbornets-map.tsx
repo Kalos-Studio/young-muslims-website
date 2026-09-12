@@ -41,9 +41,20 @@ import {
  * Prototype surface for the neighbornet map. The map itself is the deliverable;
  * the debug panel beside it exists so we can compare marker treatments and
  * info-reveal patterns against real-ish data before committing to one.
+ *
+ * Both props exist so a caller can dress the map differently without changing
+ * what every other caller gets: the wireframe needs a greyscale map and no
+ * debug panel, but `defaultSettings` stays the settings this prototype boots
+ * with everywhere else.
  */
-export function NeighborNetsMap() {
-  const [settings, setSettings] = useState<MapSettings>(defaultSettings);
+export function NeighborNetsMap({
+  initialSettings = defaultSettings,
+  showDebugPanel = true,
+}: {
+  initialSettings?: MapSettings;
+  showDebugPanel?: boolean;
+} = {}) {
+  const [settings, setSettings] = useState<MapSettings>(initialSettings);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
@@ -229,18 +240,23 @@ export function NeighborNetsMap() {
           </div>
         ) : null}
 
-        <div className="min-h-0 lg:flex-1">
-          <DebugPanel
-            settings={settings}
-            onChange={(next) => {
-              setSettings(next);
-              if (next.infoMode !== "side-panel" && next.infoMode !== "both") {
-                setSelectedId(null);
-              }
-            }}
-            counts={counts}
-          />
-        </div>
+        {showDebugPanel ? (
+          <div className="min-h-0 lg:flex-1">
+            <DebugPanel
+              settings={settings}
+              onChange={(next) => {
+                setSettings(next);
+                if (
+                  next.infoMode !== "side-panel" &&
+                  next.infoMode !== "both"
+                ) {
+                  setSelectedId(null);
+                }
+              }}
+              counts={counts}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );
