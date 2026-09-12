@@ -122,19 +122,8 @@ function RecentSupporters() {
 
 export default function SupportPage() {
   return (
-    <PageFrame className="pt-16">
-      <Annotate note="include something about advocacy">
-        <Text as="h1">Placeholder hero headline</Text>
-        <Text
-          as="h3"
-          className="mt-5 max-w-2xl"
-          example="Give to the work, and see exactly where it goes."
-        >
-          Placeholder hero tagline
-        </Text>
-      </Annotate>
-
-      <Annotate className="mt-20">
+    <PageFrame className="pt-24">
+      <Annotate>
         <Text as="h2">Placeholder YM mission heading</Text>
         <Lorem paragraphs={2} className="mt-5 max-w-3xl" />
       </Annotate>
@@ -146,17 +135,21 @@ export default function SupportPage() {
         </div>
       </Annotate>
 
+      {/* The left column is not a profile of one person — it is the argument
+          for giving, which is a different job and a different shape. Two notes
+          because the row makes a different point in each column. */}
       <Annotate
-        note="anonymize supporter names — “an anonymous person from X state”"
-        className="mt-4"
+        className="mt-28"
+        notes={[
+          "include something about advocacy",
+          "anonymize supporter names — “an anonymous person from X state”",
+        ]}
       >
         <div className="grid grid-cols-[minmax(0,1fr)_24rem] items-stretch gap-4">
-          <Frame
-            variant="muted"
-            label="Story"
-            detail="One person's story, tying the giving back to a name"
-            className="aspect-[4/3]"
-          />
+          <div className="flex flex-col justify-center bg-muted px-12 py-16">
+            <Text as="h2">Placeholder — the case for giving</Text>
+            <Lorem paragraphs={2} className="mt-5" />
+          </div>
           <RecentSupporters />
         </div>
       </Annotate>

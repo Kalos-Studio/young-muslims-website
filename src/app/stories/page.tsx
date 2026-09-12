@@ -32,7 +32,7 @@ const portraits = [
 
 export default function StoriesPage() {
   return (
-    <PageFrame className="pt-16">
+    <PageFrame className="pt-32">
       <Annotate note="Muneeb's 'product of YM' idea, broadened to include current members too. Stories of the impact YM has had on people, closer to case studies.">
         <div className="relative h-[46rem] w-full">
           {portraits.map((portrait) => (
@@ -55,7 +55,7 @@ export default function StoriesPage() {
       {/* The scroll stop. Clicking a portrait above lands the reader here. */}
       <Annotate
         note="Scroll stop — clicking a portrait above lands you on that person's story"
-        className="mt-8"
+        className="mt-28"
       >
         <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-stretch">
           <div className="flex aspect-[4/5] items-center justify-center bg-muted text-wf-fill-muted">
@@ -67,16 +67,26 @@ export default function StoriesPage() {
               written with the people in them. */}
           <div className="flex flex-col justify-center gap-5 bg-wf-fill px-14 py-16 text-background">
             <p className="text-sm text-background/50">
-              Rough example, invented — shows length and tone, not final copy
+              Rough example, invented — shows the length and tone a story runs
+              to, not final copy
             </p>
-            <p className="text-3xl font-semibold">Amina · Dallas, TX</p>
-            <p className="max-w-xl text-base leading-relaxed text-background/80">
-              She moved for work and knew nobody. Someone invited her to a
-              Thursday hangout and she almost didn&apos;t go.
+            <p className="text-3xl font-semibold">Amina · Richardson, TX</p>
+            <p className="max-w-2xl text-base leading-relaxed text-background/80">
+              She moved for work in the middle of a semester and knew exactly
+              nobody. For the first two months she went to the masjid on Fridays
+              and left as soon as the khutbah ended, because staying meant
+              standing in a room full of people who already knew each other.
+              Someone she half-recognised from work mentioned a Thursday hangout
+              a few streets over. She said yes and then spent the rest of the
+              week looking for a reason not to go.
             </p>
-            <p className="max-w-xl text-base leading-relaxed text-background/80">
-              Three years on, those are the people she calls first — and she now
-              runs the NeighborNet she walked into.
+            <p className="max-w-2xl text-base leading-relaxed text-background/80">
+              She went. It was eight people, a lot of food, and a conversation
+              that ran past midnight about things she had not said out loud to
+              anyone in a year. Three years on, those are the people she calls
+              first when something goes wrong — and she now runs the NeighborNet
+              she walked into, which currently meets in her living room because
+              it outgrew the last place.
             </p>
           </div>
         </div>

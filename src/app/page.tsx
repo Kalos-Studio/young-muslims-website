@@ -48,7 +48,7 @@ export default function Home() {
 
       <Annotate
         note="Some messaging surrounding this about YM mission/vision"
-        className="mt-10"
+        className="mt-28"
       >
         <Frame
           variant="fill"

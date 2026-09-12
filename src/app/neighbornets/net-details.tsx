@@ -1,9 +1,9 @@
 "use client";
 
-import { AtSign, Mail, MessageCircle, Phone, X } from "lucide-react";
+import { AtSign, Mail, Phone, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { branchLabel, statusLabel, type NeighborNet } from "@/lib/neighbornets";
+import { branchLabel, type NeighborNet } from "@/lib/neighbornets";
 import { branchColor } from "./net-marker";
 import type { Palette } from "./map-options";
 
@@ -78,9 +78,6 @@ export function NetDetails({
               {net.name}
             </h3>
           </div>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            {net.city}, {net.state} · {net.region}
-          </p>
         </div>
         {onClose ? (
           <button
@@ -97,26 +94,6 @@ export function NetDetails({
       <div className="mt-3 flex flex-wrap gap-1.5">
         <Chip style={{ borderColor: color, color }}>
           {branchLabel[net.branch]}
-        </Chip>
-        {/* The `mono` palette means colour carries no meaning anywhere on the
-            map, so the status chip drops its hue too rather than being the one
-            coloured thing left on an otherwise neutral surface. Every other
-            palette keeps the colour coding. */}
-        <Chip
-          className={
-            palette === "mono"
-              ? "border-border text-muted-foreground"
-              : net.status === "active"
-                ? "border-emerald-600/40 text-emerald-700 dark:text-emerald-400"
-                : net.status === "forming"
-                  ? "border-amber-600/40 text-amber-700 dark:text-amber-400"
-                  : "border-border text-muted-foreground"
-          }
-        >
-          {statusLabel[net.status]}
-        </Chip>
-        <Chip className="border-border text-muted-foreground">
-          {net.ageGroup}
         </Chip>
         {density === "full" ? (
           <Chip className="border-border text-muted-foreground">
@@ -148,14 +125,6 @@ export function NetDetails({
             icon={Phone}
           >
             {density === "full" ? net.contact.phone : "Call"}
-          </ContactLink>
-        ) : null}
-        {net.contact.whatsapp ? (
-          <ContactLink
-            href={`https://wa.me/${net.contact.whatsapp.replace(/[^\d]/g, "")}`}
-            icon={MessageCircle}
-          >
-            WhatsApp
           </ContactLink>
         ) : null}
         {net.contact.instagram ? (

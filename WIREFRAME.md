@@ -87,13 +87,17 @@ mirroring the notes in the Figma file. Add one by passing `note` to
 </Annotate>
 ```
 
-Notes are absolutely positioned over the top-right of the section they annotate,
-so they take up no space and the page reads at the width it will really be. An
-earlier version gave them a fixed rail down the right-hand side, which narrowed
-every section to make room for commentary — the wireframe was showing a layout
-that was never going to exist. They behave like sticky notes on a Figma artboard
-now: on top, `pointer-events-none`, and turning them off changes nothing
-underneath.
+Notes sit in the whitespace _above_ the section they annotate, right-aligned and
+absolutely positioned — so they cost no layout and cover nothing. Two earlier
+versions were worse and are worth not repeating: a fixed right-hand rail, which
+took real space and narrowed every section to make room for commentary; and
+laying them over the section's top-right corner, which fixed that and instead
+covered the components they were about.
+
+The cost of above-and-outside is that annotated sections need real headroom —
+`mt-28` or so — which is why the pages space them out. Pass `notes` instead of
+`note` when one section needs two, as on Support, where the row makes a
+different point about each of its columns.
 
 `<Annotate>` also carries the shared content width, so pass `bleed` for a
 full-width section — the landing hero, the store's split screen. Width lives

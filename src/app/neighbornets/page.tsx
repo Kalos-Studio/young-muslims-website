@@ -41,13 +41,24 @@ const wireframeSettings: MapSettings = {
 
 export default function NeighborNetsPage() {
   return (
-    <PageFrame className="pt-16">
-      <Annotate className="mb-12">
+    <PageFrame className="pt-32">
+      {/* Nobody arriving on this site knows what a NeighborNet is, and the map
+          alone does not tell them — so the explanation comes before it, not
+          after. */}
+      <Annotate
+        className="mb-28"
+        note="people don't know what a neighbornet is when they land here, so say it before the map, not after"
+      >
         <Text
-          as="h2"
-          example="There's a NeighborNet near you. Find it on the map."
+          as="h1"
+          className="max-w-4xl"
+          example="Youth from around the country, coming together every week."
         >
-          Placeholder intro copy about YM
+          Placeholder headline — what a NeighborNet is
+        </Text>
+        <Text as="body" className="mt-6 max-w-2xl">
+          Placeholder supporting line — a local circle you can actually turn up
+          to, and what happens when you do
         </Text>
       </Annotate>
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 // WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
-import { cn } from "@/lib/utils";
 import { Annotate } from "@/components/wireframe/annotate";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
@@ -12,8 +12,15 @@ export const metadata: Metadata = {
 
 /**
  * WIREFRAME: the store is a split screen and nothing else — a fork out to two
- * stores that live on other sites. Full-bleed, so it uses the overlay note
- * layout rather than the rail.
+ * stores that live on other sites, so each half is one big link.
+ *
+ * The brothers' half has its real cover photo. It renders greyscale, which is a
+ * deliberate call rather than an oversight: the rest of the prototype is black
+ * and white, and one full-colour photograph would pull every eye straight to it
+ * and start an art-direction conversation this round is not for. Dropping
+ * `grayscale` from the className below shows it in colour.
+ *
+ * The sisters' half stays a placeholder until that cover image exists.
  */
 export default function StorePage() {
   return (
@@ -23,21 +30,36 @@ export default function StorePage() {
         note="brothers and sisters cover images; clicking either side navigates you out to that store"
       >
         <section className="grid min-h-[calc(100dvh-6rem)] grid-cols-2">
-          {["Brothers", "Sisters"].map((side, index) => (
-            <div
-              key={side}
-              className={cn(
-                "flex flex-col items-center justify-center gap-6 bg-wf-fill px-10 text-center",
-                index === 1 && "border-l border-background/25",
-              )}
-            >
-              <p className="text-6xl font-semibold text-background">{side}</p>
-              <p className="max-w-xs text-sm text-background/60">
-                {side.toLowerCase()} cover image fills this half; the whole half
-                is the link out
-              </p>
-            </div>
-          ))}
+          <a
+            href="https://www.ymsite.com/"
+            className="group relative flex items-center justify-center overflow-hidden bg-wf-fill outline-none"
+          >
+            <Image
+              src="/wireframe/brothers-merch.jpg"
+              alt=""
+              fill
+              sizes="50vw"
+              priority
+              className="object-cover grayscale transition-transform duration-500 group-hover:scale-105"
+            />
+            {/* The photo is near-black at the top and busy with patches at the
+                bottom, so the label needs its own scrim to stay legible over
+                either. */}
+            <span className="absolute inset-0 bg-wf-fill/45" />
+            <span className="relative text-6xl font-semibold text-background underline-offset-8 group-hover:underline group-focus-visible:underline">
+              Brothers&apos; Merch
+            </span>
+          </a>
+
+          <div className="flex flex-col items-center justify-center gap-6 border-l border-background/25 bg-wf-fill px-10 text-center">
+            <p className="text-6xl font-semibold text-background">
+              Sisters&apos; Merch
+            </p>
+            <p className="max-w-xs text-sm text-background/60">
+              Sisters&apos; cover image fills this half; the whole half is the
+              link out
+            </p>
+          </div>
         </section>
       </Annotate>
     </PageFrame>
