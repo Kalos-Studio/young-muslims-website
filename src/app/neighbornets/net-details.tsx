@@ -98,13 +98,19 @@ export function NetDetails({
         <Chip style={{ borderColor: color, color }}>
           {branchLabel[net.branch]}
         </Chip>
+        {/* The `mono` palette means colour carries no meaning anywhere on the
+            map, so the status chip drops its hue too rather than being the one
+            coloured thing left on an otherwise neutral surface. Every other
+            palette keeps the colour coding. */}
         <Chip
           className={
-            net.status === "active"
-              ? "border-emerald-600/40 text-emerald-700 dark:text-emerald-400"
-              : net.status === "forming"
-                ? "border-amber-600/40 text-amber-700 dark:text-amber-400"
-                : "border-border text-muted-foreground"
+            palette === "mono"
+              ? "border-border text-muted-foreground"
+              : net.status === "active"
+                ? "border-emerald-600/40 text-emerald-700 dark:text-emerald-400"
+                : net.status === "forming"
+                  ? "border-amber-600/40 text-amber-700 dark:text-amber-400"
+                  : "border-border text-muted-foreground"
           }
         >
           {statusLabel[net.status]}

@@ -40,6 +40,13 @@ Prettier runs with `prettier-plugin-tailwindcss`, which sorts utility classes
 into a canonical order. Run `bun run format` before committing so class-order
 churn stays out of diffs.
 
+## Wireframe prototype
+
+The site is currently a black-and-white wireframe. **[WIREFRAME.md](WIREFRAME.md)
+says which code is real and which is scaffolding** — read it before changing
+anything under `src/`, and follow its removal checklist when the wireframe comes
+out.
+
 ## Decisions
 
 Recorded here so they do not get relitigated. Change them deliberately.

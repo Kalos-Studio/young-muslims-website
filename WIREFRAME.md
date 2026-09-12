@@ -1,0 +1,184 @@
+# The wireframe prototype
+
+This branch is a clickable, black-and-white wireframe of the whole site. It
+exists to get the information architecture in front of the client before anyone
+argues about colour or copy, and it is also the foundation the real site gets
+built on, one page at a time.
+
+**If you are an agent working in this repo, read this file before you touch
+anything under `src/`.** It tells you which code is real and which is
+scaffolding, so you replace the right things.
+
+## The two rules
+
+1. **Everything disposable is isolated and marked.** Disposable components live
+   in `src/components/wireframe/`. Every integration point outside that folder
+   carries a `WIREFRAME:` comment. `grep -rn "WIREFRAME:" src` is the complete
+   inventory — there is nothing temporary that this grep does not find.
+2. **Nothing permanent depends on anything disposable.**
+   `src/components/site/` imports nothing from `src/components/wireframe/`, and
+   it must stay that way. Deleting the wireframe folder must never break the
+   shell. Check with:
+
+   ```bash
+   grep -rn "wireframe" src/components/site/   # must return nothing
+   ```
+
+## What is real and what is not
+
+| Real, keep it                                | Scaffolding, replace it                  |
+| -------------------------------------------- | ---------------------------------------- |
+| Routes and folder structure under `src/app/` | The body of each `page.tsx`              |
+| `src/components/site/nav-links.ts` — the IA  | Grey boxes (`<Frame>`, `<TextSlot>`)     |
+| `SiteHeader`, `SideNav`, `SiteFooter`        | Yellow sticky notes and the notes toggle |
+| Page `metadata` exports                      | The Agentation feedback toolbar          |
+| The NeighborNets map and its data            | The map's wireframe settings override    |
+
+The wordmark in the header and footer is set as real type rather than a
+placeholder box, on purpose: a grey rectangle there would make the permanent
+shell depend on a disposable component. When the real logo asset arrives it
+replaces those `<span>`s and nothing else moves.
+
+## Information architecture
+
+`src/components/site/nav-links.ts` is the single source of truth. The header,
+the drawer, and the footer all render from it, so adding a page means adding it
+there once.
+
+| Route           | In nav as   | Holds                                                                                                       |
+| --------------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
+| `/`             | Wordmark    | Hero over a background video loop, tagline, highlight reel                                                  |
+| `/about`        | Header      | Rotating images of people beside what YM is and how friendships turn into service, relief work and advocacy |
+| `/stories`      | Header      | A scattered field of portraits; clicking one scroll-stops into that person's full story                     |
+| `/support`      | Header      | Hero, mission, full-bleed image beside the donation widget, a story block, recent supporters                |
+| `/neighbornets` | Header CTA  | The interactive map of brothers' and sisters' circles                                                       |
+| `/store`        | Drawer only | A split screen out to the brothers' and sisters' stores                                                     |
+| `/blog`         | Drawer only | Featured post carousel, then a grid of post cards                                                           |
+
+Every route exists today. The ones that are not wireframed yet render
+`<PageStub>`, which says what the page will be — a prototype where half the
+links 404 tests nothing.
+
+## Building a real page
+
+1. Open that route's `page.tsx`.
+2. Replace the `<PageFrame>` body with real components.
+3. Delete the `WIREFRAME:` comment at the top of the file.
+4. Leave the route, the `metadata`, and the nav entry alone — they are already
+   correct.
+
+Keep using `src/components/site/` for anything the whole site shares. Put
+page-specific components next to the page, the way `src/app/neighbornets/`
+already does.
+
+## The two annotation layers
+
+They do different jobs and both work on Netlify deploy previews.
+
+### Sticky notes — "here's why I did it this way"
+
+Omar's design rationale, authored into the page next to the block it explains,
+mirroring the notes in the Figma file. Add one by passing `note` to
+`<Annotate>`:
+
+```tsx
+<Annotate note="background video clips of people having fun">
+  <Frame variant="fill" label="Background video loop" />
+</Annotate>
+```
+
+Notes sit in a fixed-width rail to the right of the content rather than floating
+over it, so a note can never clip off the edge of the window and toggling them
+off leaves an empty rail instead of reflowing the page. Sections without a note
+still use `<Annotate>` so every section shares one content width.
+
+### Agentation — "here's what to change"
+
+[Agentation](https://github.com/benjitaylor/agentation) puts a feedback toolbar
+in the bottom-right corner. Click any element, type a comment, and it produces
+markdown carrying that element's selector, path, classes and position. Paste
+that into Claude Code and the feedback is immediately actionable.
+
+**The review loop:** open the preview URL → annotate → Copy → paste to Claude.
+
+**Its one limit, stated plainly:** with no sync endpoint configured, annotations
+live in the annotator's own browser (Agentation keys `localStorage` by pathname,
+so they survive reload). The client's notes do not appear in your browser
+automatically — copy-paste is the handoff. Agentation does support an
+`endpoint`/`sessionId` for shared sessions and a `webhookUrl`, but both need a
+server we would have to host. Worth revisiting only if client review gets heavy.
+
+**Optional, for local work only.** Registering the MCP server skips the
+copy-paste step entirely when working against `localhost`:
+
+```bash
+claude mcp add agentation -- npx agentation-mcp server
+```
+
+That is a machine-level setup, not a repo change, which is why it is documented
+here rather than wired into the build.
+
+### How both reach the Netlify previews
+
+`NEXT_PUBLIC_SHOW_NOTES` and `NEXT_PUBLIC_ENABLE_AGENTATION` gate them. Both are
+on in local dev, and `netlify.toml` turns them on for the `deploy-preview` and
+`branch-deploy` contexts while deliberately leaving them unset for production.
+`NEXT_PUBLIC_*` values are inlined at build time and every Netlify context is its
+own build, so the gate is decided once per deploy rather than at runtime.
+
+What that does and does not guarantee, precisely:
+
+- **Note text does not ship to production.** Verified: build without the flags
+  and `grep "background video clips" .next/server/app/index.html` finds nothing.
+  This only holds because `<Annotate>` is a server component. If you ever make
+  it a client component again, every note's text lands back in the RSC payload
+  even on builds where the notes do not render — a client component's props are
+  serialised regardless of what it decides to render.
+- **The Agentation chunk is emitted but never requested.** `next/dynamic` puts
+  it in its own ~413KB chunk, which is written into the build output either way
+  because the bundler cannot drop a dynamic import behind a runtime check. It is
+  not part of the initial bundle and no browser fetches it while the flag is
+  off, so it costs deploy size and nothing else. If that ever matters, removing
+  it is the checklist item below, not a build trick.
+
+To see what the client sees, locally:
+
+```bash
+NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
+```
+
+## Conventions
+
+- **No real copy anywhere.** Text positions are `<TextSlot>` bars labelled with
+  what they are (`H1 · 2 lines`), never lorem ipsum. Fake sentences invite the
+  client to respond to the words instead of the structure.
+- **Greyscale only.** The only colour in the prototype is the sticky-note
+  yellow, which is what makes a note read as commentary sitting on top of the
+  wireframe rather than as part of the design. Use `bg-background`,
+  `text-foreground`, `border-border`, `bg-muted`, and the `wf-*` tokens.
+- **Tailwind 4 has no config file.** Design tokens live in the `@theme` block of
+  `src/app/globals.css`. The wireframe's own tokens are in a fenced
+  `WIREFRAME:start` / `WIREFRAME:end` block at the bottom of that file.
+- **Desktop only for now.** No mobile work has been done — no breakpoint tuning,
+  no mobile nav variant, no narrow-width QA. Tailwind is mobile-first by default
+  so adding breakpoints later is additive, not a rewrite. Two places will need
+  real work when we do responsive, and both carry a `WIREFRAME:` note: the
+  header collapsing its centre links into the drawer (`site-header.tsx`), and
+  the notes rail, which has nowhere to go on a narrow screen and will need to
+  stack inline (`annotate.tsx`).
+
+## How to remove the wireframe
+
+Work through this list; `grep -rn "WIREFRAME:" src` confirms when you are done.
+
+| Kind                               | Where                                               | Removal                                                                                               |
+| ---------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Disposable components              | `src/components/wireframe/`                         | Delete the folder                                                                                     |
+| Imports and wrappers in real pages | `src/app/**`                                        | `grep -rn "WIREFRAME:" src/app`                                                                       |
+| CSS tokens                         | `src/app/globals.css`                               | Delete the fenced `WIREFRAME:start`/`end` block                                                       |
+| Map settings override              | `src/app/neighbornets/page.tsx`                     | Drop `initialSettings`/`showDebugPanel`, and the props on `NeighborNetsMap` if nothing else uses them |
+| `noindex` metadata                 | `src/app/layout.tsx`                                | Remove when there is real content to find                                                             |
+| Feedback toolbar                   | `src/app/layout.tsx`, `package.json`                | Remove `<AnnotationToolbar />`, then `bun remove agentation`                                          |
+| Env gates                          | `netlify.toml`                                      | Delete both `[context.*.environment]` blocks                                                          |
+| Route stubs                        | `about/`, `stories/`, `support/`, `store/`, `blog/` | Replaced as each page is built                                                                        |
+| This file                          | `WIREFRAME.md`                                      | Delete it, and the pointer in `README.md`                                                             |
