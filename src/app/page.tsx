@@ -20,8 +20,9 @@ export default function Home() {
           window the way it will in the real thing. `100dvh - 6rem` is the
           viewport minus the sticky header. */}
       {/* Two notes, each anchored to what it is about: the nav note sits top
-          right, directly under the nav it explains, and the video note sits at
-          the bottom of the block the video fills. */}
+          right, directly under the nav it explains. The video note sits in the
+          middle band on the left, clear of the fixed notes toggle that lives in
+          the bottom-left corner. */}
       <Annotate
         bleed
         placement="top-right"
@@ -29,7 +30,7 @@ export default function Home() {
       >
         <Annotate
           bleed
-          placement="bottom-left"
+          placement="center-left"
           note="background video loop with footage of people having fun, brothers' videos and sisters' videos interlooped"
         >
           <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-12 bg-wf-fill px-10 py-20 text-center">

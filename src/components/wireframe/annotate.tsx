@@ -52,6 +52,10 @@ const placements = {
   "top-left": "top-6 left-6",
   "bottom-right": "right-6 bottom-6",
   "bottom-left": "bottom-6 left-6",
+  /** Vertically centred, for notes that would otherwise sit in a dead corner
+      or collide with the fixed notes toggle in the bottom left. */
+  "center-left": "top-1/2 left-10 -translate-y-1/2",
+  "center-right": "top-1/2 right-10 -translate-y-1/2",
 } as const;
 
 export function Annotate({
