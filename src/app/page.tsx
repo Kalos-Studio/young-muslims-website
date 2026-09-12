@@ -25,7 +25,7 @@ export default function Home() {
       <Annotate
         bleed
         placement="top-right"
-        note="Nav is ordered by the three questions someone actually lands with. What is this? About. Is it real? Stories, because the impact is what proves it. How do I join? Join a NeighborNet, kept separate as the one action. Anything that doesn't serve those three goes in the menu."
+        note="Nav is anchored on putting the primary information at the first degree. Someone landing here is working out who we are, what we do, why we matter, and whether this is real. Everything else goes in the menu."
       >
         <Annotate
           bleed
