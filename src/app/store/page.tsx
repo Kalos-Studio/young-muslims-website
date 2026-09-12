@@ -6,7 +6,7 @@ import { Annotate } from "@/components/wireframe/annotate";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
-  title: "Store · Young Muslims",
+  title: "Store",
   description: "The brothers' and sisters' stores.",
 };
 
@@ -29,7 +29,7 @@ export default function StorePage() {
         bleed
         note="brothers and sisters cover images; clicking either side navigates you out to that store"
       >
-        <section className="grid min-h-[calc(100dvh-6rem)] grid-cols-2">
+        <section className="grid h-[calc(100dvh-6rem)] grid-cols-2 overflow-hidden">
           <a
             href="https://www.ymsite.com/"
             className="group relative flex items-center justify-center overflow-hidden bg-wf-fill outline-none"

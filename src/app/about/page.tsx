@@ -7,13 +7,13 @@ import { PageFrame } from "@/components/wireframe/page-frame";
 import { Lorem, Text } from "@/components/wireframe/text";
 
 export const metadata: Metadata = {
-  title: "About · Young Muslims",
+  title: "About",
   description: "What Young Muslims is and who it's for.",
 };
 
 export default function AboutPage() {
   return (
-    <PageFrame className="pt-32">
+    <PageFrame className="pt-16">
       <Annotate note="summarize down with a good header">
         <div className="grid grid-cols-2 items-start gap-16">
           <Frame
@@ -35,13 +35,13 @@ export default function AboutPage() {
             </div>
 
             <div>
-              <Text as="h3">Placeholder heading — what a NeighborNet is</Text>
+              <Text as="h3">Placeholder heading: what a NeighborNet is</Text>
               <Lorem paragraphs={1} className="mt-4" />
             </div>
 
             <div>
               <Text as="h3">
-                Placeholder heading — service, relief work, advocacy
+                Placeholder heading: service, relief work, advocacy
               </Text>
               <Lorem paragraphs={1} className="mt-4" />
             </div>

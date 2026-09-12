@@ -19,28 +19,38 @@ export default function Home() {
       {/* Full-page hero. Bleeds, so the video block runs the full width of the
           window the way it will in the real thing. `100dvh - 6rem` is the
           viewport minus the sticky header. */}
+      {/* Two notes, each anchored to what it is about: the nav note sits top
+          right, directly under the nav it explains, and the video note sits at
+          the bottom of the block the video fills. */}
       <Annotate
         bleed
-        note="background video loop with footage of people having fun — brothers' videos and sisters' videos interlooped"
+        placement="top-right"
+        note="Nav is ordered by the three questions someone actually lands with. What is this? About. Is it real? Stories, because the impact is what proves it. How do I join? Join a NeighborNet, kept separate as the one action. Anything that doesn't serve those three goes in the menu."
       >
-        <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-12 bg-wf-fill px-10 py-20 text-center">
-          <p className="text-sm text-background/50">
-            Video loop plays full-bleed behind everything in this block
-          </p>
+        <Annotate
+          bleed
+          placement="bottom-left"
+          note="background video loop with footage of people having fun, brothers' videos and sisters' videos interlooped"
+        >
+          <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-12 bg-wf-fill px-10 py-20 text-center">
+            <p className="text-sm text-background/50">
+              Video loop plays full-bleed behind everything in this block
+            </p>
 
-          <h1 className="text-7xl leading-[1.05] font-semibold tracking-tight text-background">
-            For the youth,
-            <br />
-            By the youth
-          </h1>
+            <h1 className="text-7xl leading-[1.05] font-semibold tracking-tight text-background">
+              For the youth,
+              <br />
+              By the youth
+            </h1>
 
-          <p className="text-sm text-background/50">
-            H1, overlaid on the video
-          </p>
-        </section>
+            <p className="text-sm text-background/50">
+              H1, overlaid on the video
+            </p>
+          </section>
+        </Annotate>
       </Annotate>
 
-      <Annotate className="mt-28">
+      <Annotate className="mt-20">
         <Text as="h2" example="Built on brotherhood, sisterhood, and Deen.">
           Placeholder tagline / intro text
         </Text>
@@ -48,7 +58,7 @@ export default function Home() {
 
       <Annotate
         note="Some messaging surrounding this about YM mission/vision"
-        className="mt-28"
+        className="mt-20"
       >
         <Frame
           variant="fill"

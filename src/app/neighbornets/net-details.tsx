@@ -109,7 +109,7 @@ export function NetDetails({
         ) : null}
         <Row label="Contact">
           {net.contact.name}
-          <span className="text-muted-foreground"> · {net.contact.role}</span>
+          <span className="text-muted-foreground">, {net.contact.role}</span>
         </Row>
       </dl>
 
