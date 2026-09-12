@@ -8,7 +8,7 @@ import { Text } from "@/components/wireframe/text";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
-  title: "Join a NeighborNet · Young Muslims",
+  title: "Join a NeighborNet",
   description:
     "Find a Young Muslims neighbornet near you: brothers' and sisters' circles across the United States.",
 };
@@ -41,12 +41,12 @@ const wireframeSettings: MapSettings = {
 
 export default function NeighborNetsPage() {
   return (
-    <PageFrame className="pt-32">
+    <PageFrame className="pt-16">
       {/* Nobody arriving on this site knows what a NeighborNet is, and the map
           alone does not tell them — so the explanation comes before it, not
           after. */}
       <Annotate
-        className="mb-28"
+        className="mb-14"
         note="people don't know what a neighbornet is when they land here, so say it before the map, not after"
       >
         <Text
@@ -54,10 +54,10 @@ export default function NeighborNetsPage() {
           className="max-w-4xl"
           example="Youth from around the country, coming together every week."
         >
-          Placeholder headline — what a NeighborNet is
+          Placeholder headline: what a NeighborNet is
         </Text>
         <Text as="body" className="mt-6 max-w-2xl">
-          Placeholder supporting line — a local circle you can actually turn up
+          Placeholder supporting line: a local circle you can actually turn up
           to, and what happens when you do
         </Text>
       </Annotate>

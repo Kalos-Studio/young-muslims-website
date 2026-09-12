@@ -5,7 +5,7 @@ import { Annotate } from "@/components/wireframe/annotate";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
-  title: "Blog · Young Muslims",
+  title: "Blog",
   description: "Writing from across the network.",
 };
 
@@ -77,8 +77,9 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
       <div className="flex aspect-[3/2] items-center justify-center bg-wf-fill-muted text-sm text-background">
         Post image
       </div>
-      <p className="text-sm text-muted-foreground">
-        {post.date} · {post.read}
+      <p className="flex gap-4 text-sm text-muted-foreground">
+        <span>{post.date}</span>
+        <span>{post.read}</span>
       </p>
       <h3 className="text-xl leading-snug font-medium">{post.title}</h3>
       <p className="text-sm leading-relaxed text-muted-foreground">
@@ -107,7 +108,7 @@ export default function BlogPage() {
       <Annotate className="mt-10">
         <div className="relative flex aspect-[21/9] flex-col justify-end bg-wf-fill-muted p-12">
           <p className="absolute top-12 left-12 text-sm text-background/80">
-            Featured post image, full bleed — carousel of three
+            Featured post image, full bleed, carousel of three
           </p>
 
           <h2 className="max-w-2xl text-4xl leading-tight font-semibold text-background">
@@ -119,8 +120,10 @@ export default function BlogPage() {
 
           <div className="mt-6 flex items-center gap-3">
             <span className="size-8 shrink-0 rounded-full bg-background/30" />
-            <span className="text-sm text-background">
-              {featured.author} · {featured.date} · {featured.read}
+            <span className="flex gap-4 text-sm text-background">
+              <span>{featured.author}</span>
+              <span>{featured.date}</span>
+              <span>{featured.read}</span>
             </span>
           </div>
 

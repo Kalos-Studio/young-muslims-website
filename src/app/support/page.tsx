@@ -9,7 +9,7 @@ import { PageFrame } from "@/components/wireframe/page-frame";
 import { PersonOutline } from "@/components/wireframe/person-outline";
 
 export const metadata: Metadata = {
-  title: "Support · Young Muslims",
+  title: "Support",
   description: "Give to the work, and see where it goes.",
 };
 
@@ -29,7 +29,7 @@ function DonationWidget() {
   return (
     <div className="flex flex-col gap-4 border border-wf-rule bg-background p-7">
       <p className="text-sm text-muted-foreground">
-        Fundraise Up embed — we control the column, not the internals
+        Fundraise Up embed. We control the column, not the internals
       </p>
 
       <div className="grid grid-cols-2 gap-2">
@@ -110,7 +110,7 @@ function RecentSupporters() {
                 An anonymous supporter from {supporter.place}
               </span>
               <span className="text-xs text-muted-foreground">
-                {supporter.amount} · {supporter.when}
+                {supporter.amount}, {supporter.when}
               </span>
             </span>
           </div>
@@ -122,7 +122,7 @@ function RecentSupporters() {
 
 export default function SupportPage() {
   return (
-    <PageFrame className="pt-24">
+    <PageFrame className="pt-16">
       <Annotate>
         <Text as="h2">Placeholder YM mission heading</Text>
         <Lorem paragraphs={2} className="mt-5 max-w-3xl" />
@@ -138,19 +138,27 @@ export default function SupportPage() {
       {/* The left column is not a profile of one person — it is the argument
           for giving, which is a different job and a different shape. Two notes
           because the row makes a different point in each column. */}
-      <Annotate
-        className="mt-28"
-        notes={[
-          "include something about advocacy",
-          "anonymize supporter names — “an anonymous person from X state”",
-        ]}
-      >
+      <Annotate className="mt-16">
         <div className="grid grid-cols-[minmax(0,1fr)_24rem] items-stretch gap-4">
-          <div className="flex flex-col justify-center bg-muted px-12 py-16">
-            <Text as="h2">Placeholder — the case for giving</Text>
-            <Lorem paragraphs={2} className="mt-5" />
-          </div>
-          <RecentSupporters />
+          {/* A note per column, each sitting on the column it is about. */}
+          <Annotate
+            bleed
+            placement="bottom-right"
+            note="include something about advocacy"
+          >
+            <div className="flex h-full flex-col justify-center bg-muted px-12 py-16">
+              <Text as="h2">Placeholder heading: the case for giving</Text>
+              <Lorem paragraphs={2} className="mt-5" />
+            </div>
+          </Annotate>
+
+          <Annotate
+            bleed
+            placement="top-right"
+            note="anonymize supporter names, e.g. “an anonymous person from X state”"
+          >
+            <RecentSupporters />
+          </Annotate>
         </div>
       </Annotate>
     </PageFrame>

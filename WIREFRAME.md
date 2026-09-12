@@ -44,7 +44,9 @@ so the mark takes the colour of whatever it sits in.
 
 `src/components/site/nav-links.ts` is the single source of truth. The header and
 the drawer both render from it, so adding a page means adding it there once. The
-footer carries no link index — it is the mark, the credit and the legal line.
+footer carries no link index, just the mark, the credit and the legal line, and
+`FooterSlot` hides it entirely on routes in `FULL_SCREEN_ROUTES` (the store,
+which is a full-bleed fork with nothing below it and so should not scroll).
 
 | Route           | In nav as   | Holds                                                                                                       |
 | --------------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
@@ -87,17 +89,21 @@ mirroring the notes in the Figma file. Add one by passing `note` to
 </Annotate>
 ```
 
-Notes sit in the whitespace _above_ the section they annotate, right-aligned and
-absolutely positioned — so they cost no layout and cover nothing. Two earlier
-versions were worse and are worth not repeating: a fixed right-hand rail, which
-took real space and narrowed every section to make room for commentary; and
-laying them over the section's top-right corner, which fixed that and instead
-covered the components they were about.
+Notes are absolutely positioned over a corner of the section they annotate, so
+they cost no layout and sit next to what they are about. Overlapping the content
+is fine and expected, the way a sticky note covers part of a Figma artboard.
+What matters is that a note stays with its subject, so `placement` picks the
+corner: `top-right` (default), `top-left`, `bottom-right`, `bottom-left`.
 
-The cost of above-and-outside is that annotated sections need real headroom —
-`mt-28` or so — which is why the pages space them out. Pass `notes` instead of
-`note` when one section needs two, as on Support, where the row makes a
-different point about each of its columns.
+Two earlier versions got this wrong in opposite directions, and neither is worth
+repeating. A fixed right-hand rail took real space, narrowing every section to
+make room for commentary. Moving notes into the gap above each section then
+covered nothing but floated them out of context and forced big artificial gaps
+between sections.
+
+For a section needing a note on each of two columns, nest: wrap each column in
+its own `<Annotate bleed>`, which attaches a note to that element without adding
+a container. Support's bottom row does this.
 
 `<Annotate>` also carries the shared content width, so pass `bleed` for a
 full-width section — the landing hero, the store's split screen. Width lives
@@ -213,6 +219,12 @@ NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
   landing hero's headline is the one deliberate exception, because Omar supplied
   the actual line.
 
+- **No em dashes and no interpunct dots in anything the visitor reads.** No `—`
+  and no `·` or `•`, in copy, in placeholder text, in note text, in page titles.
+  Use a comma, a colon, a full stop, or layout spacing instead. Page titles come
+  from the `template` in the root layout so the separator is defined once rather
+  than retyped per page. `grep -rn '—\|·' src/app src/components` should only
+  ever hit comments.
 - **No all-caps, anywhere.** No letterspaced small capitals for labels or
   headings. Nothing on this site is going to be set that way, so using it in the
   wireframe makes it look like a design decision rather than a description of
