@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { Annotate } from "@/components/wireframe/annotate";
 import { Frame } from "@/components/wireframe/frame";
+import { Lorem, Text } from "@/components/wireframe/text";
 import { PageFrame } from "@/components/wireframe/page-frame";
 import { PersonOutline } from "@/components/wireframe/person-outline";
 
@@ -123,22 +124,22 @@ export default function SupportPage() {
   return (
     <PageFrame className="pt-16">
       <Annotate note="include something about advocacy">
-        <div className="flex flex-col gap-4">
-          <Frame
-            variant="fill"
-            label="Hero with tagline"
-            className="min-h-[9rem]"
-          />
-          <Frame
-            variant="fill"
-            label="YM mission"
-            detail="What the money actually goes to: service, relief work, advocacy"
-            className="min-h-[9rem]"
-          />
-        </div>
+        <Text as="h1">Placeholder hero headline</Text>
+        <Text
+          as="h3"
+          className="mt-5 max-w-2xl"
+          example="Give to the work, and see exactly where it goes."
+        >
+          Placeholder hero tagline
+        </Text>
       </Annotate>
 
-      <Annotate className="mt-4">
+      <Annotate className="mt-20">
+        <Text as="h2">Placeholder YM mission heading</Text>
+        <Lorem paragraphs={2} className="mt-5 max-w-3xl" />
+      </Annotate>
+
+      <Annotate className="mt-16">
         <div className="grid grid-cols-[minmax(0,1fr)_24rem] items-stretch gap-4">
           <Frame variant="muted" label="Full-bleed image" />
           <DonationWidget />

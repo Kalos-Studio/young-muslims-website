@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Annotate } from "@/components/wireframe/annotate";
 import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
+import { Lorem, Text } from "@/components/wireframe/text";
 
 export const metadata: Metadata = {
   title: "About · Young Muslims",
@@ -14,7 +15,7 @@ export default function AboutPage() {
   return (
     <PageFrame className="pt-16">
       <Annotate note="summarize down with a good header">
-        <div className="grid grid-cols-2 items-start gap-14">
+        <div className="grid grid-cols-2 items-start gap-16">
           <Frame
             variant="fill"
             label="Rotating images of people"
@@ -22,27 +23,28 @@ export default function AboutPage() {
             className="aspect-square"
           />
 
-          <div className="flex flex-col gap-5">
-            <Frame
-              label="Section header"
-              detail="The one line that says what YM is, pulled out of the copy below"
-              className="px-8 py-10"
-            />
-            <Frame
-              label="What Young Muslims is"
-              detail="Not a program you attend — a friend group you belong to. Thousands of young adults who hang out every week."
-              className="min-h-[11rem] px-8 py-8"
-            />
-            <Frame
-              label="What a NeighborNet is"
-              detail="The weekly hangouts, and what members actually call them"
-              className="min-h-[9rem] px-8 py-8"
-            />
-            <Frame
-              label="Where it leads"
-              detail="Those friendships turning into service, relief work and advocacy"
-              className="min-h-[9rem] px-8 py-8"
-            />
+          <div className="flex flex-col gap-12">
+            <div>
+              <Text
+                as="h2"
+                example="Young Muslims isn't a program you attend. It's a friend group you belong to."
+              >
+                Placeholder section header
+              </Text>
+              <Lorem paragraphs={1} className="mt-5" />
+            </div>
+
+            <div>
+              <Text as="h3">Placeholder heading — what a NeighborNet is</Text>
+              <Lorem paragraphs={1} className="mt-4" />
+            </div>
+
+            <div>
+              <Text as="h3">
+                Placeholder heading — service, relief work, advocacy
+              </Text>
+              <Lorem paragraphs={1} className="mt-4" />
+            </div>
           </div>
         </div>
       </Annotate>

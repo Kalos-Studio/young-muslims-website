@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Annotate } from "@/components/wireframe/annotate";
 import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
+import { Text } from "@/components/wireframe/text";
 
 export const metadata: Metadata = {
   title: "Young Muslims",
@@ -15,37 +16,34 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <PageFrame>
-      {/* Full-page hero. Overlay layout rather than the note rail, so the video
-          block can run the full width of the window the way it will in the
-          real thing. `100dvh - 6rem` is the viewport minus the sticky header. */}
+      {/* Full-page hero. Bleeds, so the video block runs the full width of the
+          window the way it will in the real thing. `100dvh - 6rem` is the
+          viewport minus the sticky header. */}
       <Annotate
         bleed
         note="background video loop with footage of people having fun — brothers' videos and sisters' videos interlooped"
       >
-        <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-10 bg-wf-fill px-10 py-20">
-          <p className="text-sm text-background/60">
+        <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-12 bg-wf-fill px-10 py-20 text-center">
+          <p className="text-sm text-background/50">
             Video loop plays full-bleed behind everything in this block
           </p>
 
-          <div className="border border-dashed border-background/40 px-12 py-14 text-center">
-            <p className="text-5xl leading-[1.1] font-semibold text-background">
-              For the youth,
-              <br />
-              By the youth
-            </p>
-            <p className="mt-8 text-sm text-background/60">
-              H1, overlaid on the video
-            </p>
-          </div>
+          <h1 className="text-7xl leading-[1.05] font-semibold tracking-tight text-background">
+            For the youth,
+            <br />
+            By the youth
+          </h1>
+
+          <p className="text-sm text-background/50">
+            H1, overlaid on the video
+          </p>
         </section>
       </Annotate>
 
-      <Annotate className="mt-24">
-        <Frame
-          label="Tagline / intro text"
-          detail="e.g. “Built on brotherhood, sisterhood, and Deen.”"
-          className="px-8 py-12"
-        />
+      <Annotate className="mt-28">
+        <Text as="h2" example="Built on brotherhood, sisterhood, and Deen.">
+          Placeholder tagline / intro text
+        </Text>
       </Annotate>
 
       <Annotate
