@@ -22,7 +22,7 @@ export function StickyNote({
   return (
     <aside
       className={cn(
-        "w-56 rotate-[-1.2deg] border border-wf-note-edge bg-wf-note px-4 py-3 shadow-[0_2px_10px_rgba(0,0,0,0.12)]",
+        "w-52 rotate-[-1.2deg] border border-wf-note-edge bg-wf-note px-4 py-3 shadow-[0_2px_10px_rgba(0,0,0,0.12)]",
         className,
       )}
     >

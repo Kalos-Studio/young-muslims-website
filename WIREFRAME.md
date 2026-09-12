@@ -87,16 +87,18 @@ mirroring the notes in the Figma file. Add one by passing `note` to
 </Annotate>
 ```
 
-`<Annotate>` has two layouts. By default the section sits in a centred column
-with the note in a fixed-width rail beside it, so a note can never clip off the
-edge of the window and toggling notes off leaves an empty rail rather than
-reflowing the page. Sections without a note still use it, so every section shares
-one content width.
+Notes are absolutely positioned over the top-right of the section they annotate,
+so they take up no space and the page reads at the width it will really be. An
+earlier version gave them a fixed rail down the right-hand side, which narrowed
+every section to make room for commentary — the wireframe was showing a layout
+that was never going to exist. They behave like sticky notes on a Figma artboard
+now: on top, `pointer-events-none`, and turning them off changes nothing
+underneath.
 
-Pass `overlay` for a full-bleed section — the landing hero, the store's split
-screen — and the section runs the full width with the note laid on top of it.
-Width lives here rather than in `<PageFrame>`, which is why a contained section
-and a full-page hero can sit on the same page.
+`<Annotate>` also carries the shared content width, so pass `bleed` for a
+full-width section — the landing hero, the store's split screen. Width lives
+here rather than in `<PageFrame>`, which is why a contained section and a
+full-page hero can sit on the same page.
 
 ### Agentation — "here's what to change"
 
@@ -174,8 +176,18 @@ NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
 
 ## Conventions
 
-- **One placeholder primitive.** Every slot is a `<Frame>` — a box with a plain
-  sentence inside saying what will live there. Never lorem ipsum: fake sentences
+- **Go one level deeper than a labelled box where it earns it.** A box saying
+  "donation widget" hides the fact that its height drives the row beside it; a
+  grey circle reads as "something goes here" where a head-and-shoulders outline
+  reads as "a person goes here". Draw the shapes when the shapes carry
+  information. `<PersonOutline>` and the Support page's widgets are the pattern.
+- **Sample content is allowed when it is doing a job**, and labelled as invented
+  where it might be mistaken for a draft. The Blog page uses real article titles
+  from the existing youngmuslims.com so the grid is judged against headline
+  lengths they actually publish; Stories carries a made-up example capped with a
+  line saying so.
+- **One placeholder primitive.** Every other slot is a `<Frame>` — a box with a
+  plain sentence inside saying what will live there. Never lorem ipsum: fake sentences
   invite the client to respond to the words instead of the structure. Where a
   real example helps them picture the slot, put it in `detail` in quotes. The
   landing hero's headline is the one deliberate exception, because Omar supplied
