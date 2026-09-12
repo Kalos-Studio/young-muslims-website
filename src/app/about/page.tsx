@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <PageFrame className="pt-16">
+    <PageFrame className="pt-32">
       <Annotate note="summarize down with a good header">
         <div className="grid grid-cols-2 items-start gap-16">
           <Frame
