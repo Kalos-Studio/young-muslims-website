@@ -29,21 +29,22 @@ scaffolding, so you replace the right things.
 | Real, keep it                                | Scaffolding, replace it                  |
 | -------------------------------------------- | ---------------------------------------- |
 | Routes and folder structure under `src/app/` | The body of each `page.tsx`              |
-| `src/components/site/nav-links.ts` — the IA  | Grey boxes (`<Frame>`, `<TextSlot>`)     |
+| `src/components/site/nav-links.ts` — the IA  | Grey boxes (`<Frame>`)                   |
 | `SiteHeader`, `SideNav`, `SiteFooter`        | Yellow sticky notes and the notes toggle |
 | Page `metadata` exports                      | The Agentation feedback toolbar          |
 | The NeighborNets map and its data            | The map's wireframe settings override    |
 
-The wordmark in the header and footer is set as real type rather than a
-placeholder box, on purpose: a grey rectangle there would make the permanent
-shell depend on a disposable component. When the real logo asset arrives it
-replaces those `<span>`s and nothing else moves.
+The logo in the header and footer is the real asset, not a placeholder box, on
+purpose: a grey rectangle there would make the permanent shell depend on a
+disposable component, and removing the wireframe would then mean rebuilding the
+header. `src/components/site/logo.tsx` inlines the SVG with `fill="currentColor"`
+so the mark takes the colour of whatever it sits in.
 
 ## Information architecture
 
-`src/components/site/nav-links.ts` is the single source of truth. The header,
-the drawer, and the footer all render from it, so adding a page means adding it
-there once.
+`src/components/site/nav-links.ts` is the single source of truth. The header and
+the drawer both render from it, so adding a page means adding it there once. The
+footer carries no link index — it is the mark, the credit and the legal line.
 
 | Route           | In nav as   | Holds                                                                                                       |
 | --------------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
@@ -55,9 +56,8 @@ there once.
 | `/store`        | Drawer only | A split screen out to the brothers' and sisters' stores                                                     |
 | `/blog`         | Drawer only | Featured post carousel, then a grid of post cards                                                           |
 
-Every route exists today. The ones that are not wireframed yet render
-`<PageStub>`, which says what the page will be — a prototype where half the
-links 404 tests nothing.
+Every route in the table is wireframed, so the whole prototype is clickable
+end to end — a prototype where half the links 404 tests nothing.
 
 ## Building a real page
 
@@ -87,10 +87,16 @@ mirroring the notes in the Figma file. Add one by passing `note` to
 </Annotate>
 ```
 
-Notes sit in a fixed-width rail to the right of the content rather than floating
-over it, so a note can never clip off the edge of the window and toggling them
-off leaves an empty rail instead of reflowing the page. Sections without a note
-still use `<Annotate>` so every section shares one content width.
+`<Annotate>` has two layouts. By default the section sits in a centred column
+with the note in a fixed-width rail beside it, so a note can never clip off the
+edge of the window and toggling notes off leaves an empty rail rather than
+reflowing the page. Sections without a note still use it, so every section shares
+one content width.
+
+Pass `overlay` for a full-bleed section — the landing hero, the store's split
+screen — and the section runs the full width with the note laid on top of it.
+Width lives here rather than in `<PageFrame>`, which is why a contained section
+and a full-page hero can sit on the same page.
 
 ### Agentation — "here's what to change"
 
@@ -168,9 +174,16 @@ NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
 
 ## Conventions
 
-- **No real copy anywhere.** Text positions are `<TextSlot>` bars labelled with
-  what they are (`H1 · 2 lines`), never lorem ipsum. Fake sentences invite the
-  client to respond to the words instead of the structure.
+- **One placeholder primitive.** Every slot is a `<Frame>` — a box with a plain
+  sentence inside saying what will live there. Never lorem ipsum: fake sentences
+  invite the client to respond to the words instead of the structure. Where a
+  real example helps them picture the slot, put it in `detail` in quotes. The
+  landing hero's headline is the one deliberate exception, because Omar supplied
+  the actual line.
+- **No all-caps, anywhere.** No letterspaced small capitals for labels or
+  headings. Nothing on this site is going to be set that way, so using it in the
+  wireframe makes it look like a design decision rather than a description of
+  one. Sentence case, normal tracking.
 - **Greyscale only.** The only colour in the prototype is the sticky-note
   yellow, which is what makes a note read as commentary sitting on top of the
   wireframe rather than as part of the design. Use `bg-background`,
