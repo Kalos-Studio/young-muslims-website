@@ -226,7 +226,9 @@ NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
   than retyped per page. `grep -rn '—\|·' src/app src/components` should only
   ever hit comments.
 - **No all-caps, anywhere.** No letterspaced small capitals for labels or
-  headings. Nothing on this site is going to be set that way, so using it in the
+  headings. The one deliberate exception is `READ THIS FIRST` on the landing
+  page's framing note, which has to out-rank the other notes on the page; it is
+  marked as an exception in `src/app/page.tsx`. Nothing on this site is going to be set that way, so using it in the
   wireframe makes it look like a design decision rather than a description of
   one. Sentence case, normal tracking.
 - **Greyscale only.** The only colour in the prototype is the sticky-note

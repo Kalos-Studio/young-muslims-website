@@ -29,7 +29,22 @@ export default function Home() {
         notes={[
           {
             placement: "top-left",
-            note: "Hey! This is the first step: a rough skeleton of the site so we can get aligned on structure and layout before anything gets designed. All the copy and images are placeholders, so nothing here is final. What's most useful right now is your take on what goes where, and whether anything is missing.",
+            note: (
+              <>
+                {/* WIREFRAME: the one deliberate exception to the no-all-caps
+                    rule, because this note has to be read before the others. */}
+                <span className="block font-bold">READ THIS FIRST</span>
+                <span className="mt-3 block">
+                  The intention of this prototype is to map out the information
+                  architecture of the Young Muslims website. It is intentionally
+                  black and white so we can focus on the site map and the IA.
+                </span>
+                <span className="mt-3 block">
+                  Styling, fonts and colors in the final version will of course
+                  match the brand kit.
+                </span>
+              </>
+            ),
           },
           {
             placement: "top-right",
