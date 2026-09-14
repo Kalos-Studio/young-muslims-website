@@ -58,23 +58,34 @@ const placements = {
   "center-right": "top-1/2 right-10 -translate-y-1/2",
 } as const;
 
+export type Placement = keyof typeof placements;
+
 export function Annotate({
   children,
   note,
+  notes,
   author,
   /** Run full width instead of inside the shared content column. */
   bleed = false,
-  /** Which corner of the section the note sits over. */
+  /** Which corner of the section a single `note` sits over. */
   placement = "top-right",
   className,
 }: {
   children: React.ReactNode;
   note?: React.ReactNode;
+  /**
+   * Several notes on one section, each with its own corner. Use this rather
+   * than nesting <Annotate> wrappers when the notes are all about the same
+   * section, as on the landing hero.
+   */
+  notes?: { note: React.ReactNode; placement: Placement }[];
   author?: string;
   bleed?: boolean;
-  placement?: keyof typeof placements;
+  placement?: Placement;
   className?: string;
 }) {
+  const all = notes ?? (note ? [{ note, placement }] : []);
+
   // Once the wireframe is gone this component goes with it; until then, a build
   // with notes disabled pays for neither the wrapper nor the note text.
   if (!NOTES_ENABLED) {
@@ -84,18 +95,19 @@ export function Annotate({
   return (
     <div className={cn("relative", !bleed && CONTAINER, className)}>
       {children}
-      {note ? (
+      {all.map((entry, index) => (
         <div
+          key={index}
           className={cn(
             "pointer-events-none absolute z-20",
-            placements[placement],
+            placements[entry.placement],
           )}
         >
           <NoteSlot>
-            <StickyNote author={author}>{note}</StickyNote>
+            <StickyNote author={author}>{entry.note}</StickyNote>
           </NoteSlot>
         </div>
-      ) : null}
+      ))}
     </div>
   );
 }

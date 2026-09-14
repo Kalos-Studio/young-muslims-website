@@ -19,36 +19,43 @@ export default function Home() {
       {/* Full-page hero. Bleeds, so the clips run the full width of the window
           the way they will in the real thing. `100dvh - 6rem` is the viewport
           minus the sticky header. */}
-      {/* Two notes, each anchored to what it is about: the nav note sits top
-          right, directly under the nav it explains. The clips note sits in the
-          middle band on the left, clear of the fixed notes toggle that lives in
-          the bottom-left corner. */}
+      {/* Three notes, each anchored to what it is about. The framing note is
+          top left so it is the first one read: left before right, and level
+          with the nav it sits under. The nav rationale is top right, against
+          the nav itself. The clips note sits in the middle band on the left,
+          clear of the fixed notes toggle in the bottom-left corner. */}
       <Annotate
         bleed
-        placement="top-right"
-        note="Nav is anchored on putting the primary information at the first degree. Someone landing here is working out who we are, what we do, why we matter, and whether this is real. Everything else goes in the menu."
+        notes={[
+          {
+            placement: "top-left",
+            note: "Read this first. This prototype is only about information architecture: agreeing on the structure of the site and the high level layout of each page. Everything here is placeholder. Please don't react to content or copy yet, none of it is written.",
+          },
+          {
+            placement: "top-right",
+            note: "Nav is anchored on putting the primary information at the first degree. Someone landing here is working out who we are, what we do, why we matter, and whether this is real. Everything else goes in the menu.",
+          },
+          {
+            placement: "center-left",
+            note: "cinematic clips of people having fun, brothers' and sisters' footage interlooped",
+          },
+        ]}
       >
-        <Annotate
-          bleed
-          placement="center-left"
-          note="cinematic clips of people having fun, brothers' and sisters' footage interlooped"
-        >
-          <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-12 bg-wf-fill px-10 py-20 text-center">
-            <p className="text-sm text-background/50">
-              Cinematic clips play full-bleed behind everything in this block
-            </p>
+        <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-12 bg-wf-fill px-10 py-20 text-center">
+          <p className="text-sm text-background/50">
+            Cinematic clips play full-bleed behind everything in this block
+          </p>
 
-            <h1 className="text-7xl leading-[1.05] font-semibold tracking-tight text-background">
-              For the youth,
-              <br />
-              By the youth
-            </h1>
+          <h1 className="text-7xl leading-[1.05] font-semibold tracking-tight text-background">
+            For the youth,
+            <br />
+            By the youth
+          </h1>
 
-            <p className="text-sm text-background/50">
-              H1, overlaid on the clips
-            </p>
-          </section>
-        </Annotate>
+          <p className="text-sm text-background/50">
+            H1, overlaid on the clips
+          </p>
+        </section>
       </Annotate>
 
       <Annotate className="mt-20">
