@@ -29,7 +29,7 @@ export default function Home() {
         notes={[
           {
             placement: "top-left",
-            note: "Read this first. This prototype is only about information architecture: agreeing on the structure of the site and the high level layout of each page. Everything here is placeholder. Please don't react to content or copy yet, none of it is written.",
+            note: "Hey! This is the first step: a rough skeleton of the site so we can get aligned on structure and layout before anything gets designed. All the copy and images are placeholders, so nothing here is final. What's most useful right now is your take on what goes where, and whether anything is missing.",
           },
           {
             placement: "top-right",
