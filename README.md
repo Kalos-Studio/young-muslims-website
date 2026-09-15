@@ -40,6 +40,13 @@ Prettier runs with `prettier-plugin-tailwindcss`, which sorts utility classes
 into a canonical order. Run `bun run format` before committing so class-order
 churn stays out of diffs.
 
+## Wireframe prototype
+
+The site is currently a black-and-white wireframe. **[WIREFRAME.md](WIREFRAME.md)
+says which code is real and which is scaffolding** — read it before changing
+anything under `src/`, and follow its removal checklist when the wireframe comes
+out.
+
 ## Decisions
 
 Recorded here so they do not get relitigated. Change them deliberately.
@@ -65,6 +72,23 @@ is fine, because nothing inside them needs to be indexed. Avoid putting
 whole subtree into a client-rendered app and undoes the above.
 
 **Hosted on Netlify**, using the Netlify Next.js runtime.
+
+**Maps use [mapcn](https://mapcn.dev) on top of MapLibre GL.** mapcn is a
+shadcn-style registry, so `src/components/ui/map.tsx` is vendored source we own
+rather than a dependency we import from. Re-adding it with
+`bunx shadcn@latest add @mapcn/map` overwrites that file, which is why it is
+excluded from eslint and Prettier: any local formatting would be churn.
+
+MapLibre's web worker is served from our own origin rather than the unpkg CDN
+mapcn defaults to. `scripts/copy-maplibre-worker.mjs` copies it out of
+node_modules into `public/` on postinstall, and `src/lib/maplibre-worker.ts`
+points MapLibre at that copy. Import `@/lib/maplibre-worker` before the map
+component in any module that uses it, or the CDN fallback wins and the map
+silently renders no tiles wherever unpkg is unreachable.
+
+US state polygons live at `public/us-states.geojson` for the same reason: a map
+of our own chapters should not depend on a third party staying up. The data is
+derived from US Census cartographic boundary files, which are public domain.
 
 ## To dos
 
