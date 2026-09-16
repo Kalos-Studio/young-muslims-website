@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 // WIREFRAME: this whole page is scaffolding. Building the real landing page
 // means replacing the sections below with real components; the route, the
 // metadata and the nav entry pointing here are already correct. See WIREFRAME.md.
+import { cn } from "@/lib/utils";
 import { Annotate } from "@/components/wireframe/annotate";
 import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
@@ -15,27 +16,40 @@ export const metadata: Metadata = {
 };
 
 /**
- * WIREFRAME: a row of cut-out portraits, standing in for the collage band.
+ * WIREFRAME: a diagonal band of cut-out portraits.
  *
- * The high-fidelity mock has these flowing diagonally across a ribbon with the
- * copy sitting in the gap. A straight row is the honest wireframe of that: the
- * point to agree on is that a band of faces frames the copy, not the exact
- * curve it takes.
+ * The band itself is rotated and each portrait is counter-rotated by the same
+ * amount, which is what puts the faces on a diagonal line while keeping every
+ * face upright. Rotating only the row would tip all the faces with it.
+ *
+ * It is deliberately wider than the viewport and the section clips it, so the
+ * band runs off both edges the way it does in the mock rather than starting and
+ * stopping inside the page.
  */
-function PortraitRow({
-  count,
-  className,
-}: {
-  count: number;
-  className?: string;
-}) {
+const PORTRAIT_SIZES = [
+  "size-24",
+  "size-20",
+  "size-28",
+  "size-16",
+  "size-24",
+  "size-20",
+];
+
+function PortraitBand({ className }: { className?: string }) {
   return (
-    <div className={className}>
-      {Array.from({ length: count }, (_, index) => (
+    <div
+      className={cn(
+        "flex w-[130%] -translate-x-[12%] -rotate-6 items-center justify-center gap-6",
+        className,
+      )}
+    >
+      {Array.from({ length: 16 }, (_, index) => (
         <div
           key={index}
-          className="flex size-20 shrink-0 items-center justify-center rounded-full bg-wf-fill-muted text-background"
-          style={{ marginTop: `${(index % 3) * 1.25}rem` }}
+          className={cn(
+            "flex shrink-0 rotate-6 items-center justify-center rounded-full bg-wf-fill-muted text-background",
+            PORTRAIT_SIZES[index % PORTRAIT_SIZES.length],
+          )}
         >
           <PersonOutline className="h-1/2 w-1/2" />
         </div>
@@ -112,36 +126,24 @@ export default function Home() {
       </Annotate>
 
       {/* The collage band. Copy sits in the gap the faces leave. */}
-      <Annotate
-        bleed
-        placement="top-right"
-        note="cut-out portraits flowing diagonally across the band, copy sitting in the gap they leave"
-        className="mt-0"
-      >
-        <section className="w-full overflow-hidden bg-muted py-20">
-          <PortraitRow count={12} className="flex items-start gap-6 px-10" />
+      <Annotate bleed className="mt-0">
+        <section className="w-full overflow-hidden bg-muted py-24">
+          <PortraitBand />
 
-          <div className="mx-auto max-w-2xl px-10 py-16 text-center">
+          <div className="mx-auto max-w-2xl px-10 py-20 text-center">
             <Text as="h2" className="mx-auto">
               Placeholder section headline, two lines
             </Text>
             <Lorem paragraphs={1} className="mt-6" />
           </div>
 
-          <PortraitRow
-            count={12}
-            className="flex items-start justify-end gap-6 px-10"
-          />
+          <PortraitBand />
         </section>
       </Annotate>
 
       {/* Video. In the mock the wordmark is set very large behind the player and
           runs off both edges, so the player reads as sitting on top of it. */}
-      <Annotate
-        bleed
-        placement="top-right"
-        note="the wordmark set very large behind the player, running off both edges so the video sits on top of it"
-      >
+      <Annotate bleed>
         <section className="w-full bg-wf-fill px-16 py-24">
           <Text as="h2" tone="dark" className="mx-auto max-w-3xl text-center">
             Placeholder headline leading into the video
@@ -207,12 +209,7 @@ export default function Home() {
           ))}
         </div>
 
-        <Annotate
-          bleed
-          placement="top-right"
-          note="a globe, fixed on America, rather than a flat map"
-          className="mt-16"
-        >
+        <Annotate bleed className="mt-16">
           <Frame
             variant="muted"
             label="Interactive globe"
@@ -235,11 +232,7 @@ export default function Home() {
       </Annotate>
 
       {/* The handoff into Stories. */}
-      <Annotate
-        className="mt-28"
-        placement="top-right"
-        note="this is the hand-off into Stories, which is where 'is it real' gets answered"
-      >
+      <Annotate className="mt-28">
         <Text as="h2" className="mx-auto max-w-3xl text-center">
           Placeholder closing headline, leading into the stories
         </Text>
