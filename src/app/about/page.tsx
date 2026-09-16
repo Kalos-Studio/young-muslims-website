@@ -57,6 +57,62 @@ export default function AboutPage() {
       </Annotate>
 
       <Annotate className="mt-24">
+        <div className="grid grid-cols-2 gap-16">
+          <div>
+            <Text as="h2">Our mission</Text>
+            <Lorem paragraphs={2} className="mt-5" />
+          </div>
+          <div>
+            <Text as="h2">Our vision</Text>
+            <Lorem paragraphs={2} className="mt-5" />
+          </div>
+        </div>
+      </Annotate>
+
+      <Annotate
+        className="mt-24"
+        note="on scroll, the image swaps to match the event type in view: conferences show a conference photo, retreats show a retreat photo, etc."
+        placement="top-right"
+      >
+        <Text as="h2">Conferences and retreats</Text>
+        <div className="mt-10 flex flex-col divide-y divide-border">
+          <div className="grid grid-cols-2 items-start gap-12 py-12">
+            <Frame
+              variant="fill"
+              label="Event image: conferences"
+              className="aspect-video"
+            />
+            <div>
+              <Text as="h3">Conferences</Text>
+              <Lorem paragraphs={2} className="mt-4" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 items-start gap-12 py-12">
+            <Frame
+              variant="fill"
+              label="Event image: retreats"
+              className="aspect-video"
+            />
+            <div>
+              <Text as="h3">Retreats</Text>
+              <Lorem paragraphs={2} className="mt-4" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 items-start gap-12 py-12">
+            <Frame
+              variant="fill"
+              label="Event image: events"
+              className="aspect-video"
+            />
+            <div>
+              <Text as="h3">Events</Text>
+              <Lorem paragraphs={2} className="mt-4" />
+            </div>
+          </div>
+        </div>
+      </Annotate>
+
+      <Annotate className="mt-24">
         <Text as="h2">Leadership</Text>
         <div className="mt-8 grid grid-cols-[1fr_1px_1fr] gap-x-12">
           <div>
