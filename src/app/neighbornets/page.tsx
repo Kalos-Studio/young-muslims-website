@@ -4,7 +4,8 @@ import { NeighborNetsMap } from "./neighbornets-map";
 import { defaultSettings, type MapSettings } from "./map-options";
 // WIREFRAME: wireframe chrome around a real, working map. See WIREFRAME.md.
 import { Annotate } from "@/components/wireframe/annotate";
-import { Text } from "@/components/wireframe/text";
+import { Frame } from "@/components/wireframe/frame";
+import { Lorem, Text } from "@/components/wireframe/text";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
@@ -76,6 +77,42 @@ export default function NeighborNetsPage() {
           />
         </div>
       </Annotate>
+
+      <Annotate className="mt-2">
+        <div className="grid grid-cols-2 items-start gap-12">
+          <div>
+            <Text as="h2">What is a NeighborNet</Text>
+            <Lorem paragraphs={2} className="mt-4" />
+            <button className="mt-6 rounded-md border border-foreground bg-foreground px-6 py-3 text-sm font-medium text-background">
+              Don&apos;t have a NN near you? Start one here
+            </button>
+          </div>
+          <Frame
+            variant="muted"
+            label="Slideshow of images here"
+            className="aspect-square w-full"
+          />
+        </div>
+      </Annotate>
+
+      <Annotate className="mt-16" note="each card links out to its own page: one for events, one for conferences, one for retreats">
+        <Text as="h2" className="text-center">Other Ways to Get Involved</Text>
+        <div className="mt-8 grid grid-cols-3 gap-6">
+          <div>
+            <Frame variant="muted" label="Events" className="aspect-video w-full" />
+            <Lorem paragraphs={1} className="mt-3" />
+          </div>
+          <div>
+            <Frame variant="muted" label="Conferences" className="aspect-video w-full" />
+            <Lorem paragraphs={1} className="mt-3" />
+          </div>
+          <div>
+            <Frame variant="muted" label="Retreats" className="aspect-video w-full" />
+            <Lorem paragraphs={1} className="mt-3" />
+          </div>
+        </div>
+      </Annotate>
+
     </PageFrame>
   );
 }
