@@ -12,11 +12,9 @@ import { cn } from "@/lib/utils";
  */
 export function StickyNote({
   children,
-  author = "omar",
   className,
 }: {
   children: React.ReactNode;
-  author?: string;
   className?: string;
 }) {
   return (
@@ -29,7 +27,6 @@ export function StickyNote({
       <p className="text-sm leading-snug font-medium text-wf-note-ink">
         {children}
       </p>
-      <p className="mt-4 text-[0.625rem] text-wf-note-ink/60">{author}</p>
     </aside>
   );
 }

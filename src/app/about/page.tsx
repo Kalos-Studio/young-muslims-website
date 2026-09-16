@@ -35,15 +35,21 @@ export default function AboutPage() {
               <Lorem paragraphs={1} className="mt-5" />
             </div>
 
+            {/* The three things YM actually runs, stacked under the summary.
+                What a NeighborNet is used to live here, but it now has its own
+                section on /neighbornets, so saying it twice helped nobody. */}
             <div>
-              <Text as="h3">Placeholder heading: what a NeighborNet is</Text>
+              <Text as="h3">Retreats</Text>
               <Lorem paragraphs={1} className="mt-4" />
             </div>
 
             <div>
-              <Text as="h3">
-                Placeholder heading: service, relief work, advocacy
-              </Text>
+              <Text as="h3">Conventions</Text>
+              <Lorem paragraphs={1} className="mt-4" />
+            </div>
+
+            <div>
+              <Text as="h3">Advocacy</Text>
               <Lorem paragraphs={1} className="mt-4" />
             </div>
           </div>
@@ -56,7 +62,7 @@ export default function AboutPage() {
           <div>
             <Text as="h3">Brothers</Text>
             <div className="mt-6 grid grid-cols-4 gap-4">
-              {Array.from({ length: 8 }).map((_, i) => (
+              {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="h-[90px] text-muted-foreground">
                   <PersonOutline />
                 </div>
@@ -67,7 +73,7 @@ export default function AboutPage() {
           <div>
             <Text as="h3">Sisters</Text>
             <div className="mt-6 grid grid-cols-4 gap-4">
-              {Array.from({ length: 8 }).map((_, i) => (
+              {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="h-[90px] text-muted-foreground">
                   <PersonOutline />
                 </div>
@@ -81,7 +87,7 @@ export default function AboutPage() {
         <Text as="h2">FAQ</Text>
         <div className="mt-10 grid grid-cols-2 gap-12">
           <div>
-            <Text as="h3">For Members</Text>
+            <Text as="h3">For Youth</Text>
             <ul className="mt-6 divide-y divide-border border-t border-border">
               {Array.from({ length: 5 }).map((_, i) => (
                 <li key={i} className="flex items-center justify-between py-4">
