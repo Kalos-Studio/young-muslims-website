@@ -68,16 +68,18 @@ function PortraitBand({ className }: { className?: string }) {
   );
 }
 
-/** WIREFRAME: one of the four cards in the "what we are about" grid. */
-function PointCard({ className }: { className?: string }) {
+/**
+ * WIREFRAME: one of the four cards in the "what YM is about" grid. Each card is
+ * an example of the claim in the column beside it, so they are named rather than
+ * left as four identical unknowns.
+ */
+function PointCard({ title }: { title: string }) {
   return (
-    <div className={className}>
-      <div className="border border-background/30 bg-background/10 px-7 py-8">
-        <Text as="h4" tone="dark">
-          Placeholder card heading
-        </Text>
-        <Lorem paragraphs={1} tone="dark" className="mt-3" />
-      </div>
+    <div className="border border-background/30 bg-background/10 px-7 py-8">
+      <Text as="h4" tone="dark">
+        {title}
+      </Text>
+      <Lorem paragraphs={1} tone="dark" className="mt-3" />
     </div>
   );
 }
@@ -122,7 +124,7 @@ export default function Home() {
           },
         ]}
       >
-        <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col justify-end gap-6 bg-wf-fill px-16 pt-20 pb-24">
+        <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-6 bg-wf-fill px-16 py-24 text-center">
           <p className="text-sm text-background/50">
             Full-bleed footage behind everything in this block
           </p>
@@ -142,7 +144,7 @@ export default function Home() {
 
           <div className="mx-auto max-w-2xl px-10 py-20 text-center">
             <Text as="h2" className="mx-auto">
-              Placeholder section headline, two lines
+              Placeholder, copy describing what Young Muslims is
             </Text>
             <Lorem paragraphs={1} className="mt-6" />
           </div>
@@ -156,7 +158,8 @@ export default function Home() {
       <Annotate bleed>
         <section className="w-full bg-wf-fill px-16 py-24">
           <Text as="h2" tone="dark" className="mx-auto max-w-3xl text-center">
-            Placeholder headline leading into the video
+            Placeholder line, transitioning from telling them into showing them
+            what YM is
           </Text>
 
           <div className="relative mt-14 overflow-hidden">
@@ -178,7 +181,7 @@ export default function Home() {
         <section className="grid w-full grid-cols-2 items-center gap-16 bg-wf-fill px-16 py-28">
           <div>
             <Text as="h2" tone="dark">
-              Placeholder headline, what we are about
+              Placeholder, what YM is about
             </Text>
             <Lorem paragraphs={1} tone="dark" className="mt-6 max-w-md" />
             <div className="mt-8 inline-block rounded-full border border-background px-6 py-3 text-sm font-medium text-background">
@@ -188,13 +191,13 @@ export default function Home() {
 
           <div className="grid grid-cols-2 gap-6">
             <div className="flex flex-col gap-6">
-              <PointCard />
-              <PointCard />
+              <PointCard title="Education" />
+              <PointCard title="Advocacy" />
             </div>
             {/* The offset is the whole point of the treatment in the mock. */}
             <div className="mt-16 flex flex-col gap-6">
-              <PointCard />
-              <PointCard />
+              <PointCard title="Mentorship" />
+              <PointCard title="Giving back" />
             </div>
           </div>
         </section>
@@ -243,9 +246,11 @@ export default function Home() {
 
       {/* The handoff into Stories. */}
       <Annotate className="mt-28">
-        <Text as="h2" className="mx-auto max-w-3xl text-center">
-          Placeholder closing headline, leading into the stories
-        </Text>
+        <Frame
+          label="Still in progress"
+          detail="The rest of the landing page is not designed yet"
+          className="min-h-[18rem] w-full"
+        />
       </Annotate>
     </PageFrame>
   );
