@@ -248,7 +248,7 @@ export default function Home() {
       <Annotate className="mt-28">
         <Frame
           label="Still in progress"
-          detail="The rest of the landing page is not designed yet"
+          detail="More content coming"
           className="min-h-[18rem] w-full"
         />
       </Annotate>
