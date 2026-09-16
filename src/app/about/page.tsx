@@ -5,6 +5,7 @@ import { Annotate } from "@/components/wireframe/annotate";
 import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
 import { Lorem, Text } from "@/components/wireframe/text";
+import { PersonOutline } from "@/components/wireframe/person-outline";
 
 export const metadata: Metadata = {
   title: "About",
@@ -45,6 +46,65 @@ export default function AboutPage() {
               </Text>
               <Lorem paragraphs={1} className="mt-4" />
             </div>
+          </div>
+        </div>
+      </Annotate>
+
+      <Annotate className="mt-24">
+        <Text as="h2">Leadership</Text>
+        <div className="mt-8 grid grid-cols-[1fr_1px_1fr] gap-x-12">
+          <div>
+            <Text as="h3">Brothers</Text>
+            <div className="mt-6 grid grid-cols-4 gap-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="h-[90px] text-muted-foreground">
+                  <PersonOutline />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="bg-border" />
+          <div>
+            <Text as="h3">Sisters</Text>
+            <div className="mt-6 grid grid-cols-4 gap-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="h-[90px] text-muted-foreground">
+                  <PersonOutline />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Annotate>
+
+      <Annotate className="mt-24">
+        <Text as="h2">FAQ</Text>
+        <div className="mt-10 grid grid-cols-2 gap-12">
+          <div>
+            <Text as="h3">For Members</Text>
+            <ul className="mt-6 divide-y divide-border border-t border-border">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <li key={i} className="flex items-center justify-between py-4">
+                  <span className="text-sm text-muted-foreground">Question</span>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-muted-foreground" aria-hidden>
+                    <path d="M4 6l4 4 4-4" />
+                  </svg>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <Text as="h3">For Parents</Text>
+            <ul className="mt-6 divide-y divide-border border-t border-border">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <li key={i} className="flex items-center justify-between py-4">
+                  <span className="text-sm text-muted-foreground">Question</span>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-muted-foreground" aria-hidden>
+                    <path d="M4 6l4 4 4-4" />
+                  </svg>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </Annotate>
