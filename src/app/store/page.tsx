@@ -25,6 +25,10 @@ export const metadata: Metadata = {
 export default function StorePage() {
   return (
     <PageFrame>
+      {/* The two halves are the page. A screen reader still needs a heading to
+          announce, so it is sr-only rather than absent. */}
+      <h1 className="sr-only">Store</h1>
+
       <Annotate
         bleed
         note="brothers and sisters cover images; clicking either side navigates you out to that store"

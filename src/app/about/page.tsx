@@ -27,10 +27,10 @@ export default function AboutPage() {
           <div className="flex flex-col gap-12">
             <div>
               <Text
-                as="h2"
+                as="h1"
                 example="Young Muslims isn't a program you attend. It's a friend group you belong to."
               >
-                Placeholder section header
+                Placeholder page header
               </Text>
               <Lorem paragraphs={1} className="mt-5" />
             </div>

@@ -96,7 +96,11 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
 export default function BlogPage() {
   return (
     <PageFrame className="pt-16">
-      {/* No page title. The grid of posts says what this is without one. */}
+      {/* No visible page title: the grid of posts says what this is without
+          one. Screen readers still need an h1, so it is sr-only rather than
+          absent. */}
+      <h1 className="sr-only">Blog</h1>
+
       <Annotate>
         <div className="relative flex aspect-[21/9] flex-col justify-end bg-wf-fill-muted p-12">
           <p className="absolute top-12 left-12 text-sm text-background/80">
