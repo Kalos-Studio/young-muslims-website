@@ -412,7 +412,7 @@ function Legend({ settings }: { settings: MapSettings }) {
 
   return (
     <div className="absolute bottom-3 left-3 rounded-md border border-border bg-background/90 px-3 py-2 text-xs shadow-sm backdrop-blur-sm">
-      <p className="mb-1.5 text-[11px] font-semibold text-muted-foreground">
+      <p className="mb-1.5 text-xs font-semibold text-muted-foreground">
         Neighbornets
       </p>
       <ul className="space-y-1">
@@ -434,7 +434,7 @@ function Legend({ settings }: { settings: MapSettings }) {
         ))}
       </ul>
       {settings.dimInactive ? (
-        <p className="mt-1.5 text-[11px] text-muted-foreground">
+        <p className="mt-1.5 text-xs text-muted-foreground">
           Faded = forming or paused
         </p>
       ) : null}

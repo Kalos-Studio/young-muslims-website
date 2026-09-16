@@ -61,7 +61,7 @@ export default function Home() {
             Cinematic clips play full-bleed behind everything in this block
           </p>
 
-          <h1 className="text-7xl leading-[1.05] font-semibold tracking-tight text-background">
+          <h1 className="text-display font-semibold text-background">
             For the youth,
             <br />
             By the youth

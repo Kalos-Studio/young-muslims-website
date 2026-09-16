@@ -210,8 +210,8 @@ NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
   ```
 
   `<Lorem>` fills body copy where only the volume matters. Latin rather than
-  plausible English, so nobody starts editing it. The `h1`/`h2`/`h3`/`body`
-  scale lives in `text.tsx` and is provisional — when branding lands, the real
+  plausible English, so nobody starts editing it. The sizes come from the shared
+  scale — when branding lands, the real
   scale goes in the `@theme` block of `globals.css` and that file is deleted
   rather than promoted. Never lorem ipsum: fake sentences
   invite the client to respond to the words instead of the structure. Where a
@@ -225,6 +225,13 @@ NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
   from the `template` in the root layout so the separator is defined once rather
   than retyped per page. `grep -rn '—\|·' src/app src/components` should only
   ever hit comments.
+- **Headings use the type scale, never an ad-hoc size.** `text-display`,
+  `text-h1`, `text-h2`, `text-h3`, `text-h4`, defined in the `@theme` block of
+  `globals.css`. Each step carries its own line height and letter spacing, so
+  `text-h2` is the whole decision and no call site adds `leading-*` or
+  `tracking-*`. Reach for `text-4xl` or `text-[32px]` and you have invented an
+  eighth heading size; add a step to the scale instead. Body copy stays on
+  Tailwind's `text-base` / `text-sm` / `text-xs`.
 - **No all-caps, anywhere.** No letterspaced small capitals for labels or
   headings. The one deliberate exception is `READ THIS FIRST` on the landing
   page's framing note, which has to out-rank the other notes on the page; it is

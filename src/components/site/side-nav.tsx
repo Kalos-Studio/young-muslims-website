@@ -55,7 +55,7 @@ export function SideNav() {
                 key={link.href}
                 href={link.href}
                 onNavigate={() => setOpen(false)}
-                className="text-2xl font-semibold tracking-tight no-underline hover:underline hover:underline-offset-8"
+                className="text-h3 font-semibold no-underline hover:underline hover:underline-offset-8"
               >
                 {link.label}
               </NavLink>

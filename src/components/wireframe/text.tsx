@@ -14,15 +14,16 @@ import { cn } from "@/lib/utils";
  *
  * Boxes are still right for images, video and embeds. They are wrong for words.
  *
- * WIREFRAME: the scale below is provisional and lives here so it goes away with
- * the wireframe. When branding lands, the real scale belongs in the `@theme`
- * block of globals.css, and this file gets deleted rather than promoted.
+ * The sizes come from the shared type scale in globals.css (`text-h1` and
+ * friends), which carries line height and letter spacing with it. This
+ * component only decides which step a slot is and how the placeholder reads, so
+ * deleting it with the rest of the wireframe takes nothing with it.
  */
 
 const levels = {
-  h1: "text-6xl leading-[1.05] font-semibold tracking-tight",
-  h2: "text-4xl leading-[1.15] font-semibold tracking-tight",
-  h3: "text-2xl leading-snug font-medium",
+  h1: "text-h1 font-semibold",
+  h2: "text-h2 font-semibold",
+  h3: "text-h3 font-medium",
   body: "text-base leading-relaxed",
 } as const;
 
