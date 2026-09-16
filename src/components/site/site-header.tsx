@@ -29,7 +29,7 @@ export function SiteHeader() {
         >
           {/* aria-hidden because the link above already names the destination;
               without it a screen reader announces the name twice. */}
-          <Logo className="h-14" aria-hidden />
+          <Logo className="h-8" aria-hidden />
         </Link>
 
         <nav
