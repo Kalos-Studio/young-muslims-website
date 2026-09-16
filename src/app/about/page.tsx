@@ -15,48 +15,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <PageFrame className="pt-16">
-      <Annotate note="summarize down with a good header">
-        <div className="grid grid-cols-2 items-start gap-16">
-          <Frame
-            variant="fill"
-            label="Rotating images of people"
-            detail="Cycles through photos of members while the copy stays put"
-            className="aspect-square"
-          />
-
-          <div className="flex flex-col gap-12">
-            <div>
-              <Text
-                as="h1"
-                example="Young Muslims isn't a program you attend. It's a friend group you belong to."
-              >
-                Placeholder page header
-              </Text>
-              <Lorem paragraphs={1} className="mt-5" />
-            </div>
-
-            {/* The three things YM actually runs, stacked under the summary.
-                What a NeighborNet is used to live here, but it now has its own
-                section on /neighbornets, so saying it twice helped nobody. */}
-            <div>
-              <Text as="h3">Retreats</Text>
-              <Lorem paragraphs={1} className="mt-4" />
-            </div>
-
-            <div>
-              <Text as="h3">Conventions</Text>
-              <Lorem paragraphs={1} className="mt-4" />
-            </div>
-
-            <div>
-              <Text as="h3">Advocacy</Text>
-              <Lorem paragraphs={1} className="mt-4" />
-            </div>
-          </div>
-        </div>
-      </Annotate>
-
-      <Annotate className="mt-24">
+      <Annotate>
         <div className="grid grid-cols-2 gap-16">
           <div>
             <Text as="h2">Our mission</Text>
