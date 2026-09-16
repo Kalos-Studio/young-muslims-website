@@ -6,19 +6,61 @@ import type { Metadata } from "next";
 import { Annotate } from "@/components/wireframe/annotate";
 import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
-import { Text } from "@/components/wireframe/text";
+import { PersonOutline } from "@/components/wireframe/person-outline";
+import { Lorem, Text } from "@/components/wireframe/text";
 
 export const metadata: Metadata = {
   title: "Young Muslims",
   description: "By the youth, for the youth.",
 };
 
+/**
+ * WIREFRAME: a row of cut-out portraits, standing in for the collage band.
+ *
+ * The high-fidelity mock has these flowing diagonally across a ribbon with the
+ * copy sitting in the gap. A straight row is the honest wireframe of that: the
+ * point to agree on is that a band of faces frames the copy, not the exact
+ * curve it takes.
+ */
+function PortraitRow({
+  count,
+  className,
+}: {
+  count: number;
+  className?: string;
+}) {
+  return (
+    <div className={className}>
+      {Array.from({ length: count }, (_, index) => (
+        <div
+          key={index}
+          className="flex size-20 shrink-0 items-center justify-center rounded-full bg-wf-fill-muted text-background"
+          style={{ marginTop: `${(index % 3) * 1.25}rem` }}
+        >
+          <PersonOutline className="h-1/2 w-1/2" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** WIREFRAME: one of the four cards in the "what we are about" grid. */
+function PointCard({ className }: { className?: string }) {
+  return (
+    <div className={className}>
+      <div className="border border-background/30 bg-background/10 px-7 py-8">
+        <Text as="h4" tone="dark">
+          Placeholder card heading
+        </Text>
+        <Lorem paragraphs={1} tone="dark" className="mt-3" />
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <PageFrame>
-      {/* Full-page hero. Bleeds, so the clips run the full width of the window
-          the way they will in the real thing. `100dvh - 6rem` is the viewport
-          minus the sticky header. */}
       {/* Three notes, each anchored to what it is about. The framing note is
           top left so it is the first one read: left before right, and level
           with the nav it sits under. The nav rationale is top right, against
@@ -56,38 +98,151 @@ export default function Home() {
           },
         ]}
       >
-        <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-12 bg-wf-fill px-10 py-20 text-center">
+        <section className="flex min-h-[calc(100dvh-6rem)] w-full flex-col justify-end gap-6 bg-wf-fill px-16 pt-20 pb-24">
           <p className="text-sm text-background/50">
-            Cinematic clips play full-bleed behind everything in this block
+            Full-bleed footage behind everything in this block
           </p>
-
-          <h1 className="text-display font-semibold text-background">
-            For the youth,
-            <br />
-            By the youth
-          </h1>
-
-          <p className="text-sm text-background/50">
-            H1, overlaid on the clips
-          </p>
+          <Text as="display" tone="dark" className="max-w-4xl">
+            Placeholder hero headline
+          </Text>
+          <Text as="body" tone="dark" className="max-w-xl">
+            Placeholder supporting line, one sentence on what YM is
+          </Text>
         </section>
       </Annotate>
 
-      <Annotate className="mt-20">
-        <Text as="h2" example="Built on brotherhood, sisterhood, and Deen.">
-          Placeholder tagline / intro text
-        </Text>
+      {/* The collage band. Copy sits in the gap the faces leave. */}
+      <Annotate
+        bleed
+        placement="top-right"
+        note="cut-out portraits flowing diagonally across the band, copy sitting in the gap they leave"
+        className="mt-0"
+      >
+        <section className="w-full overflow-hidden bg-muted py-20">
+          <PortraitRow count={12} className="flex items-start gap-6 px-10" />
+
+          <div className="mx-auto max-w-2xl px-10 py-16 text-center">
+            <Text as="h2" className="mx-auto">
+              Placeholder section headline, two lines
+            </Text>
+            <Lorem paragraphs={1} className="mt-6" />
+          </div>
+
+          <PortraitRow
+            count={12}
+            className="flex items-start justify-end gap-6 px-10"
+          />
+        </section>
       </Annotate>
 
+      {/* Video. In the mock the wordmark is set very large behind the player and
+          runs off both edges, so the player reads as sitting on top of it. */}
       <Annotate
-        note="Some messaging surrounding this about YM mission/vision"
-        className="mt-20"
+        bleed
+        placement="top-right"
+        note="the wordmark set very large behind the player, running off both edges so the video sits on top of it"
       >
-        <Frame
-          variant="fill"
-          label="Highlight reel video"
-          className="aspect-video w-full"
-        />
+        <section className="w-full bg-wf-fill px-16 py-24">
+          <Text as="h2" tone="dark" className="mx-auto max-w-3xl text-center">
+            Placeholder headline leading into the video
+          </Text>
+
+          <div className="relative mt-14 overflow-hidden">
+            <p className="pointer-events-none absolute inset-0 flex items-center text-display font-semibold whitespace-nowrap text-background/15">
+              Oversized wordmark behind the player
+            </p>
+            <Frame
+              variant="muted"
+              label="Highlight reel video, with a play control"
+              className="relative mx-auto aspect-video w-2/3"
+            />
+          </div>
+        </section>
+      </Annotate>
+
+      {/* What we are about: a statement on the left, the four points on the
+          right, staggered so the column reads as a set rather than a list. */}
+      <Annotate bleed placement="top-right">
+        <section className="grid w-full grid-cols-2 items-center gap-16 bg-wf-fill px-16 py-28">
+          <div>
+            <Text as="h2" tone="dark">
+              Placeholder headline, what we are about
+            </Text>
+            <Lorem paragraphs={1} tone="dark" className="mt-6 max-w-md" />
+            <div className="mt-8 inline-block rounded-full border border-background px-6 py-3 text-sm font-medium text-background">
+              Link through to About
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            <div className="flex flex-col gap-6">
+              <PointCard />
+              <PointCard />
+            </div>
+            {/* The offset is the whole point of the treatment in the mock. */}
+            <div className="mt-16 flex flex-col gap-6">
+              <PointCard />
+              <PointCard />
+            </div>
+          </div>
+        </section>
+      </Annotate>
+
+      {/* Reach: the claim, the numbers behind it, then the map that makes the
+          numbers concrete. */}
+      <Annotate className="mt-28">
+        <div className="mx-auto max-w-2xl text-center">
+          <Text as="h2" className="mx-auto">
+            Placeholder headline, that this is nationwide
+          </Text>
+          <Lorem paragraphs={1} className="mt-6" />
+        </div>
+
+        <div className="mt-20 grid grid-cols-3 gap-10 text-center">
+          {["NeighborNets", "States", "Young Muslims"].map((label) => (
+            <div key={label}>
+              <p className="text-h1 font-semibold">[Number]</p>
+              <p className="mt-2 text-sm text-muted-foreground">{label}</p>
+            </div>
+          ))}
+        </div>
+
+        <Annotate
+          bleed
+          placement="top-right"
+          note="a globe, fixed on America, rather than a flat map"
+          className="mt-16"
+        >
+          <Frame
+            variant="muted"
+            label="Interactive globe"
+            detail="Fixed on the United States, showing where the nets are"
+            className="aspect-[21/9] w-full"
+          />
+        </Annotate>
+
+        <div className="mt-16 flex items-center justify-center gap-10">
+          <div className="flex size-24 shrink-0 items-center justify-center rounded-full bg-muted text-wf-fill-muted">
+            <PersonOutline className="h-1/2 w-1/2" />
+          </div>
+          <Text as="body" className="max-w-md text-center">
+            Placeholder closing line on finding people wherever you go
+          </Text>
+          <div className="flex size-24 shrink-0 items-center justify-center rounded-full bg-muted text-wf-fill-muted">
+            <PersonOutline className="h-1/2 w-1/2" />
+          </div>
+        </div>
+      </Annotate>
+
+      {/* The handoff into Stories. */}
+      <Annotate
+        className="mt-28"
+        placement="top-right"
+        note="this is the hand-off into Stories, which is where 'is it real' gets answered"
+      >
+        <Text as="h2" className="mx-auto max-w-3xl text-center">
+          Placeholder closing headline, leading into the stories
+        </Text>
       </Annotate>
     </PageFrame>
   );
