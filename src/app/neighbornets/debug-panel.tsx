@@ -136,7 +136,7 @@ export function DebugPanel({
                   </span>
                   <span className="min-w-0">
                     <span className="block text-xs font-medium">{p.label}</span>
-                    <span className="block text-[11px] leading-4 text-muted-foreground">
+                    <span className="block text-xs leading-4 text-muted-foreground">
                       {p.note}
                     </span>
                   </span>
@@ -212,7 +212,7 @@ function Section({
   return (
     <fieldset className="mb-3 border-t border-border pt-3 first:border-t-0 first:pt-0">
       <legend className="sr-only">{label}</legend>
-      <p className="mb-1.5 text-[11px] font-semibold text-muted-foreground">
+      <p className="mb-1.5 text-xs font-semibold text-muted-foreground">
         {label}
       </p>
       <div className="space-y-1">{children}</div>
@@ -247,7 +247,7 @@ function RadioList<T extends string>({
             )}
           >
             <span className="block text-xs font-medium">{option.label}</span>
-            <span className="block text-[11px] leading-4 text-muted-foreground">
+            <span className="block text-xs leading-4 text-muted-foreground">
               {option.note}
             </span>
           </button>
@@ -309,7 +309,7 @@ function Toggle({
       />
       <span className="min-w-0">
         <span className="block text-xs font-medium">{label}</span>
-        <span className="block text-[11px] leading-4 text-muted-foreground">
+        <span className="block text-xs leading-4 text-muted-foreground">
           {note}
         </span>
       </span>

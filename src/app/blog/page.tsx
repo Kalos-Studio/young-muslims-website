@@ -81,7 +81,7 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
         <span>{post.date}</span>
         <span>{post.read}</span>
       </p>
-      <h3 className="text-xl leading-snug font-medium">{post.title}</h3>
+      <h3 className="text-h4 font-medium">{post.title}</h3>
       <p className="text-sm leading-relaxed text-muted-foreground">
         {post.excerpt}
       </p>
@@ -103,7 +103,7 @@ export default function BlogPage() {
             Featured post image, full bleed, carousel of three
           </p>
 
-          <h2 className="max-w-2xl text-4xl leading-tight font-semibold text-background">
+          <h2 className="max-w-2xl text-h2 font-semibold text-background">
             {featured.title}
           </h2>
           <p className="mt-3 max-w-xl text-base text-background/80">
