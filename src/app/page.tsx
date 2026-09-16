@@ -18,38 +18,48 @@ export const metadata: Metadata = {
 /**
  * WIREFRAME: a diagonal band of cut-out portraits.
  *
- * The band itself is rotated and each portrait is counter-rotated by the same
- * amount, which is what puts the faces on a diagonal line while keeping every
- * face upright. Rotating only the row would tip all the faces with it.
+ * The band is rotated and each portrait counter-rotated by the same amount,
+ * which puts the faces on a diagonal line while keeping every face upright.
+ * Rotating only the row would tip all the faces with it.
  *
- * It is deliberately wider than the viewport and the section clips it, so the
- * band runs off both edges the way it does in the mock rather than starting and
- * stopping inside the page.
+ * Sizes and gaps are hardcoded and uneven on purpose. An even row of same-sized
+ * circles reads as an avatar list; the mock is a collage, which means a few
+ * large faces, several small ones, and irregular clustering with real gaps. The
+ * values are fixed rather than random so the client reviews one arrangement
+ * instead of a new one per reload.
+ *
+ * The band is wider than the viewport and the section clips it, so it runs off
+ * both edges rather than starting and stopping inside the page.
  */
-const PORTRAIT_SIZES = [
-  "size-24",
-  "size-20",
-  "size-28",
-  "size-16",
-  "size-24",
-  "size-20",
+const BAND = [
+  { size: "7rem", gap: "0rem", drop: "0.5rem" },
+  { size: "4.5rem", gap: "2.5rem", drop: "-1.25rem" },
+  { size: "9rem", gap: "1rem", drop: "1rem" },
+  { size: "5rem", gap: "4rem", drop: "-0.75rem" },
+  { size: "6.5rem", gap: "1.25rem", drop: "0.75rem" },
+  { size: "4rem", gap: "3.5rem", drop: "-1rem" },
+  { size: "8rem", gap: "1rem", drop: "0.25rem" },
+  { size: "5.5rem", gap: "3rem", drop: "-0.5rem" },
 ];
 
 function PortraitBand({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "flex w-[130%] -translate-x-[12%] -rotate-6 items-center justify-center gap-6",
+        "flex w-[130%] -translate-x-[12%] -rotate-6 items-center justify-center",
         className,
       )}
     >
-      {Array.from({ length: 16 }, (_, index) => (
+      {BAND.map((portrait, index) => (
         <div
           key={index}
-          className={cn(
-            "flex shrink-0 rotate-6 items-center justify-center rounded-full bg-wf-fill-muted text-background",
-            PORTRAIT_SIZES[index % PORTRAIT_SIZES.length],
-          )}
+          className="flex shrink-0 rotate-6 items-center justify-center rounded-full bg-wf-fill-muted text-background"
+          style={{
+            width: portrait.size,
+            height: portrait.size,
+            marginLeft: portrait.gap,
+            marginTop: portrait.drop,
+          }}
         >
           <PersonOutline className="h-1/2 w-1/2" />
         </div>
