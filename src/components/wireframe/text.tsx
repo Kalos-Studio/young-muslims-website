@@ -21,16 +21,20 @@ import { cn } from "@/lib/utils";
  */
 
 const levels = {
+  display: "text-display font-semibold",
   h1: "text-h1 font-semibold",
   h2: "text-h2 font-semibold",
   h3: "text-h3 font-medium",
+  h4: "text-h4 font-medium",
   body: "text-base leading-relaxed",
 } as const;
 
 const tags = {
+  display: "h1",
   h1: "h1",
   h2: "h2",
   h3: "h3",
+  h4: "h4",
   body: "p",
 } as const;
 
