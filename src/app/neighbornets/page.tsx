@@ -95,24 +95,40 @@ export default function NeighborNetsPage() {
         </div>
       </Annotate>
 
-      <Annotate className="mt-16" note="each card links out to its own page: one for events, one for conferences, one for retreats">
-        <Text as="h2" className="text-center">Other Ways to Get Involved</Text>
+      <Annotate
+        className="mt-16"
+        note="each card links out to its own page: one for events, one for conferences, one for retreats"
+      >
+        <Text as="h2" className="text-center">
+          Other Ways to Get Involved
+        </Text>
         <div className="mt-8 grid grid-cols-3 gap-6">
           <div>
-            <Frame variant="muted" label="Events" className="aspect-video w-full" />
+            <Frame
+              variant="muted"
+              label="Events"
+              className="aspect-video w-full"
+            />
             <Lorem paragraphs={1} className="mt-3" />
           </div>
           <div>
-            <Frame variant="muted" label="Conferences" className="aspect-video w-full" />
+            <Frame
+              variant="muted"
+              label="Conferences"
+              className="aspect-video w-full"
+            />
             <Lorem paragraphs={1} className="mt-3" />
           </div>
           <div>
-            <Frame variant="muted" label="Retreats" className="aspect-video w-full" />
+            <Frame
+              variant="muted"
+              label="Retreats"
+              className="aspect-video w-full"
+            />
             <Lorem paragraphs={1} className="mt-3" />
           </div>
         </div>
       </Annotate>
-
     </PageFrame>
   );
 }

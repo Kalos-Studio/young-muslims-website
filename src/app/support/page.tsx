@@ -166,15 +166,27 @@ export default function SupportPage() {
         <Text as="h2">Where Your Support Goes</Text>
         <div className="mt-8 grid grid-cols-3 gap-6">
           <div>
-            <Frame variant="muted" label="Advocacy" className="aspect-video w-full" />
+            <Frame
+              variant="muted"
+              label="Advocacy"
+              className="aspect-video w-full"
+            />
             <Lorem paragraphs={1} className="mt-3" />
           </div>
           <div>
-            <Frame variant="muted" label="Community Work" className="aspect-video w-full" />
+            <Frame
+              variant="muted"
+              label="Community Work"
+              className="aspect-video w-full"
+            />
             <Lorem paragraphs={1} className="mt-3" />
           </div>
           <div>
-            <Frame variant="muted" label="Dawah" className="aspect-video w-full" />
+            <Frame
+              variant="muted"
+              label="Dawah"
+              className="aspect-video w-full"
+            />
             <Lorem paragraphs={1} className="mt-3" />
           </div>
         </div>
