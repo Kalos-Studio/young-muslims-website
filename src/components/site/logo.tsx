@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
  * appears twice per page (header and footer); that is cheap, because the second
  * copy is near-identical bytes and compresses to almost nothing.
  *
- * Size it by height and let the width follow: `<Logo className="h-8" />`. Note
+ * Size it by height and let the width follow: `<Logo className="h-4" />`. Note
  * this lockup is roughly 10:1, so a height that looked right on the old stacked
  * mark will be far too wide here. The default is set accordingly.
  *
@@ -30,7 +30,7 @@ export function Logo({ className, ...props }: React.ComponentProps<"svg">) {
       fill="currentColor"
       role="img"
       aria-label="Young Muslims"
-      className={cn("h-8 w-auto", className)}
+      className={cn("h-4 w-auto", className)}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
