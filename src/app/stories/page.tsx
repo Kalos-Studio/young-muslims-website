@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 // WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
 import { Annotate } from "@/components/wireframe/annotate";
@@ -99,6 +100,16 @@ export default function StoriesPage() {
               she walked into, which currently meets in her living room because
               it outgrew the last place.
             </p>
+
+            {/* The story is the argument; this is what to do about it. Inside
+                the card rather than after it, so the call to action arrives
+                while the story is still in view. */}
+            <Link
+              href="/neighbornets"
+              className="mt-4 self-start rounded-md border border-background px-6 py-3 text-sm font-medium text-background underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-background focus-visible:ring-offset-2 focus-visible:ring-offset-wf-fill"
+            >
+              Join a NeighborNet
+            </Link>
           </div>
         </div>
       </Annotate>

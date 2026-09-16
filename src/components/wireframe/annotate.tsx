@@ -64,7 +64,6 @@ export function Annotate({
   children,
   note,
   notes,
-  author,
   /** Run full width instead of inside the shared content column. */
   bleed = false,
   /** Which corner of the section a single `note` sits over. */
@@ -79,7 +78,6 @@ export function Annotate({
    * section, as on the landing hero.
    */
   notes?: { note: React.ReactNode; placement: Placement }[];
-  author?: string;
   bleed?: boolean;
   placement?: Placement;
   className?: string;
@@ -104,7 +102,7 @@ export function Annotate({
           )}
         >
           <NoteSlot>
-            <StickyNote author={author}>{entry.note}</StickyNote>
+            <StickyNote>{entry.note}</StickyNote>
           </NoteSlot>
         </div>
       ))}
