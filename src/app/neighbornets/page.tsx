@@ -46,10 +46,7 @@ export default function NeighborNetsPage() {
       {/* Nobody arriving on this site knows what a NeighborNet is, and the map
           alone does not tell them — so the explanation comes before it, not
           after. */}
-      <Annotate
-        className="mb-14"
-        note="people don't know what a neighbornet is when they land here, so say it before the map, not after"
-      >
+      <Annotate className="mb-14">
         <Text
           as="h1"
           className="max-w-4xl"
@@ -63,7 +60,7 @@ export default function NeighborNetsPage() {
         </Text>
       </Annotate>
 
-      <Annotate note="the one live piece: real map, real placeholder data. black dots are brothers' nets, grey are sisters'">
+      <Annotate>
         {/* WIREFRAME: `bare` drops the prototype's border, side column and zoom
             controls so this reads as the country sitting on the page rather
             than a widget in a box. Drop `bare` and `showDebugPanel={false}` to
