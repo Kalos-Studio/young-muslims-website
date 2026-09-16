@@ -124,7 +124,7 @@ export default function SupportPage() {
   return (
     <PageFrame className="pt-16">
       <Annotate>
-        <Text as="h2">Placeholder YM mission heading</Text>
+        <Text as="h1">Placeholder YM mission heading</Text>
         <Lorem paragraphs={2} className="mt-5 max-w-3xl" />
       </Annotate>
 
