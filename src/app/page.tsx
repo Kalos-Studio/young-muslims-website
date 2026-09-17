@@ -115,7 +115,7 @@ export default function Home() {
             ),
           },
           {
-            placement: "top-right",
+            placement: "center-right",
             note: "Nav is anchored on putting the primary information at the first degree. Someone landing here is working out who we are, what we do, why we matter, and whether this is real. Everything else goes in the menu.",
           },
           {
