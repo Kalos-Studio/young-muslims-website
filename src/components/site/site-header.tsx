@@ -50,7 +50,7 @@ export function SiteHeader() {
         <div className="flex shrink-0 items-center justify-end gap-6">
           <NavLink
             href={ctaLink.href}
-            className="font-semibold text-foreground no-underline hover:underline"
+            className="text-foreground no-underline hover:underline"
           >
             {ctaLink.label}
           </NavLink>

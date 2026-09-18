@@ -80,7 +80,7 @@ export default function NeighborNetsPage() {
           <div>
             <Text as="h2">What is a NeighborNet</Text>
             <Lorem paragraphs={2} className="mt-4" />
-            <button className="mt-6 rounded-md border border-foreground bg-foreground px-6 py-3 text-sm font-medium text-background">
+            <button className="mt-6 rounded-md border border-foreground bg-foreground px-6 py-3 text-sm font-semibold text-background">
               Don&apos;t have a NN near you? Start one here
             </button>
           </div>

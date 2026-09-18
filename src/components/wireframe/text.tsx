@@ -21,12 +21,12 @@ import { cn } from "@/lib/utils";
  */
 
 const levels = {
-  display: "text-display font-semibold",
-  h1: "text-h1 font-semibold",
-  h2: "text-h2 font-semibold",
-  h3: "text-h3 font-medium",
-  h4: "text-h4 font-medium",
-  body: "text-base leading-relaxed",
+  display: "font-display text-display font-normal",
+  h1: "font-display text-h1 font-normal",
+  h2: "text-h2 font-bold",
+  h3: "text-h3 font-semibold",
+  h4: "text-h4 font-semibold",
+  body: "text-base font-medium leading-relaxed",
 } as const;
 
 const tags = {
@@ -68,7 +68,7 @@ export function Text({
       {example ? (
         <p
           className={cn(
-            "mt-2 text-sm",
+            "mt-2 text-sm font-medium",
             onDark ? "text-background/60" : "text-muted-foreground",
           )}
         >

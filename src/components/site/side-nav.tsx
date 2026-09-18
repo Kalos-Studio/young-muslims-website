@@ -38,7 +38,7 @@ export function SideNav() {
         <Dialog.Backdrop className="fixed inset-0 bg-foreground/20 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0" />
         <Dialog.Popup className="fixed top-0 right-0 bottom-0 flex w-[24rem] flex-col border-l border-border bg-background transition-transform duration-200 outline-none data-ending-style:translate-x-full data-starting-style:translate-x-full">
           <div className="flex items-center justify-between border-b border-border px-8 py-6">
-            <Dialog.Title className="text-sm font-medium text-muted-foreground">
+            <Dialog.Title className="text-sm font-semibold text-muted-foreground">
               Menu
             </Dialog.Title>
             <Dialog.Close
@@ -55,7 +55,7 @@ export function SideNav() {
                 key={link.href}
                 href={link.href}
                 onNavigate={() => setOpen(false)}
-                className="text-h3 font-semibold no-underline hover:underline hover:underline-offset-8"
+                className="text-h3 no-underline hover:underline hover:underline-offset-8"
               >
                 {link.label}
               </NavLink>
