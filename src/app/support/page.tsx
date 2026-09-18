@@ -33,7 +33,7 @@ function DonationWidget() {
       </p>
 
       <div className="grid grid-cols-2 gap-2">
-        <div className="rounded-full border border-foreground py-2.5 text-center text-sm font-medium">
+        <div className="rounded-full border border-foreground py-2.5 text-center text-sm font-semibold">
           One time
         </div>
         <div className="rounded-full border border-wf-rule py-2.5 text-center text-sm text-muted-foreground">
@@ -48,7 +48,7 @@ function DonationWidget() {
             className={cn(
               "rounded-md border py-3 text-center text-sm",
               index === 0
-                ? "border-foreground font-medium"
+                ? "border-foreground font-semibold"
                 : "border-wf-rule text-muted-foreground",
             )}
           >
@@ -67,7 +67,7 @@ function DonationWidget() {
       </div>
       <p className="text-sm text-muted-foreground underline">Add comment</p>
 
-      <div className="rounded-full bg-wf-fill py-3.5 text-center text-sm font-medium text-background">
+      <div className="rounded-full bg-wf-fill py-3.5 text-center text-sm font-semibold text-background">
         Donate and support
       </div>
     </div>
@@ -93,7 +93,7 @@ function RecentSupporters() {
     <div className="flex flex-col border border-wf-rule bg-background">
       <div className="flex flex-col gap-3 border-b border-wf-rule p-7">
         <p className="text-base font-medium">Your share could raise over $77</p>
-        <div className="rounded-full bg-wf-fill py-3 text-center text-sm font-medium text-background">
+        <div className="rounded-full bg-wf-fill py-3 text-center text-sm font-semibold text-background">
           Share
         </div>
       </div>

@@ -37,7 +37,7 @@ export default function StoriesPage() {
       {/* The header does the work of saying these are members, not models, so
           the portraits below it need no caption. */}
       <Annotate>
-        <h1 className="max-w-3xl text-h1 font-semibold">
+        <h1 className="max-w-3xl font-display text-h1 font-normal">
           Stories of real Young Muslims
         </h1>
       </Annotate>
@@ -82,8 +82,8 @@ export default function StoriesPage() {
               Rough example, invented. Shows the length and tone a story runs
               to, not final copy
             </p>
-            <p className="text-h3 font-semibold">Amina from Richardson, TX</p>
-            <p className="max-w-2xl text-base leading-relaxed text-background/80">
+            <p className="text-h3 font-bold">Amina from Richardson, TX</p>
+            <p className="max-w-2xl text-base leading-relaxed font-medium text-background/80">
               She moved for work in the middle of a semester and knew exactly
               nobody. For the first two months she went to the masjid on Fridays
               and left as soon as the khutbah ended, because staying meant
@@ -92,7 +92,7 @@ export default function StoriesPage() {
               a few streets over. She said yes and then spent the rest of the
               week looking for a reason not to go.
             </p>
-            <p className="max-w-2xl text-base leading-relaxed text-background/80">
+            <p className="max-w-2xl text-base leading-relaxed font-medium text-background/80">
               She went. It was eight people, a lot of food, and a conversation
               that ran past midnight about things she had not said out loud to
               anyone in a year. Three years on, those are the people she calls
@@ -106,7 +106,7 @@ export default function StoriesPage() {
                 while the story is still in view. */}
             <Link
               href="/neighbornets"
-              className="mt-4 self-start rounded-md border border-background px-6 py-3 text-sm font-medium text-background underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-background focus-visible:ring-offset-2 focus-visible:ring-offset-wf-fill"
+              className="mt-4 self-start rounded-md border border-background px-6 py-3 text-sm font-semibold text-background underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-background focus-visible:ring-offset-2 focus-visible:ring-offset-wf-fill"
             >
               Join a NeighborNet
             </Link>

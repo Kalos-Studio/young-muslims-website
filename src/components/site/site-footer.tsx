@@ -15,7 +15,7 @@ export function SiteFooter() {
       <div className="mx-auto flex max-w-[90rem] items-end justify-between gap-16 px-10 py-12">
         <Logo className="h-3.5" />
 
-        <div className="text-right text-xs text-muted-foreground">
+        <div className="text-right text-xs font-medium text-muted-foreground">
           <p>Designed and built by Kalos.</p>
           <p className="mt-1">© {year} Young Muslims. All rights reserved.</p>
         </div>

@@ -50,16 +50,16 @@ export default function StorePage() {
                 bottom, so the label needs its own scrim to stay legible over
                 either. */}
             <span className="absolute inset-0 bg-wf-fill/45" />
-            <span className="relative text-h1 font-semibold text-background underline-offset-8 group-hover:underline group-focus-visible:underline">
+            <span className="relative font-display text-h1 font-normal text-background underline-offset-8 group-hover:underline group-focus-visible:underline">
               Brothers&apos; Merch
             </span>
           </a>
 
           <div className="flex flex-col items-center justify-center gap-6 border-l border-background/25 bg-wf-fill px-10 text-center">
-            <p className="text-h1 font-semibold text-background">
+            <p className="font-display text-h1 font-normal text-background">
               Sisters&apos; Merch
             </p>
-            <p className="max-w-xs text-sm text-background/60">
+            <p className="max-w-xs text-sm font-medium text-background/60">
               Sisters&apos; cover image fills this half; the whole half is the
               link out
             </p>

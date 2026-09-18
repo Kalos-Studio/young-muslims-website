@@ -43,7 +43,7 @@ export function NavLink({
       onClick={onNavigate}
       aria-current={isCurrent ? "page" : undefined}
       className={cn(
-        "rounded-xs underline-offset-8 transition-colors outline-none",
+        "rounded-xs font-semibold underline-offset-8 transition-colors outline-none",
         "hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         isCurrent ? "text-foreground underline" : "text-muted-foreground",
         className,

@@ -163,7 +163,7 @@ export default function Home() {
           </Text>
 
           <div className="relative mt-14 overflow-hidden">
-            <p className="pointer-events-none absolute inset-0 flex items-center text-display font-semibold whitespace-nowrap text-background/15">
+            <p className="pointer-events-none absolute inset-0 flex items-center font-display text-display font-normal whitespace-nowrap text-background/15">
               Oversized wordmark behind the player
             </p>
             <Frame
@@ -184,7 +184,7 @@ export default function Home() {
               Placeholder, what YM is about
             </Text>
             <Lorem paragraphs={1} tone="dark" className="mt-6 max-w-md" />
-            <div className="mt-8 inline-block rounded-full border border-background px-6 py-3 text-sm font-medium text-background">
+            <div className="mt-8 inline-block rounded-full border border-background px-6 py-3 text-sm font-semibold text-background">
               Link through to About
             </div>
           </div>
@@ -216,8 +216,10 @@ export default function Home() {
         <div className="mt-20 grid grid-cols-3 gap-10 text-center">
           {["NeighborNets", "States", "Young Muslims"].map((label) => (
             <div key={label}>
-              <p className="text-h1 font-semibold">[Number]</p>
-              <p className="mt-2 text-sm text-muted-foreground">{label}</p>
+              <p className="text-h1 font-bold">[Number]</p>
+              <p className="mt-2 text-sm font-medium text-muted-foreground">
+                {label}
+              </p>
             </div>
           ))}
         </div>

@@ -17,9 +17,10 @@
  * (the next/font ones set on <html> in layout.tsx).
  */
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-figtree);
+  --font-display: var(--font-boldonse);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-geist-sans);
+  --font-heading: var(--font-figtree);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -37,6 +38,7 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -59,78 +61,89 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 }
+
 /*
- ---break---
+ * Young Muslims brand primitives.
+ *
+ * These are the exact approved values from the 2026 Figma brand kit. They are
+ * immutable source colors, not component decisions. Components should prefer
+ * the semantic tokens above unless they explicitly represent the Brothers or
+ * Sisters identities.
  */
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+@theme {
+  --color-brand-obsidian: #171725;
+  --color-brand-warm-snow: #fcfaf8;
+  --color-brand-royal: #234080;
+  --color-brand-jade: #397451;
+  --color-brand-pure-white: #ffffff;
+
+  --color-brothers-midnight: #16294f;
+  --color-brothers-slate: #99adc8;
+  --color-brothers-sky: #4a90d9;
+
+  --color-sisters-forest: #043222;
+  --color-sisters-brass: #d8aa45;
+  --color-sisters-buttercup: #ebd255;
+
+  /* Functional UI color, intentionally separate from the brand palette. */
+  --color-system-danger: #b42318;
 }
 /*
  ---break---
  */
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+:root {
+  /* General Young Muslims identity: Warm Snow and Obsidian are the base. */
+  --background: var(--color-brand-warm-snow);
+  --foreground: var(--color-brand-obsidian);
+  --card: var(--color-brand-warm-snow);
+  --card-foreground: var(--color-brand-obsidian);
+  --popover: var(--color-brand-pure-white);
+  --popover-foreground: var(--color-brand-obsidian);
+  --primary: var(--color-brand-obsidian);
+  --primary-foreground: var(--color-brand-warm-snow);
+  --secondary: var(--color-brand-royal);
+  --secondary-foreground: var(--color-brand-warm-snow);
+  --accent: var(--color-brand-jade);
+  --accent-foreground: var(--color-brand-warm-snow);
+
+  /*
+   * Functional neutrals are deterministic mixtures of the two brand base
+   * colors. They are UI infrastructure, not additions to the brand palette.
+   */
+  --muted: color-mix(
+    in srgb,
+    var(--color-brand-obsidian) 6%,
+    var(--color-brand-warm-snow)
+  );
+  --muted-foreground: color-mix(
+    in srgb,
+    var(--color-brand-obsidian) 68%,
+    var(--color-brand-warm-snow)
+  );
+  --border: color-mix(
+    in srgb,
+    var(--color-brand-obsidian) 18%,
+    var(--color-brand-warm-snow)
+  );
+  --input: var(--border);
+  --ring: var(--color-brand-royal);
+  --destructive: var(--color-system-danger);
+  --destructive-foreground: var(--color-brand-pure-white);
+
+  --chart-1: var(--color-brand-royal);
+  --chart-2: var(--color-brand-jade);
+  --chart-3: var(--color-brothers-sky);
+  --chart-4: var(--color-sisters-brass);
+  --chart-5: var(--color-brand-obsidian);
+  --radius: 0.625rem;
+  --sidebar: var(--color-brand-warm-snow);
+  --sidebar-foreground: var(--color-brand-obsidian);
+  --sidebar-primary: var(--color-brand-obsidian);
+  --sidebar-primary-foreground: var(--color-brand-warm-snow);
+  --sidebar-accent: var(--muted);
+  --sidebar-accent-foreground: var(--color-brand-obsidian);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--color-brand-royal);
 }
 /*
  ---break---
