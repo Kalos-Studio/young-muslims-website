@@ -7,3 +7,12 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+# Read WIREFRAME.md first
+
+The site is currently a black-and-white wireframe prototype. `WIREFRAME.md` says
+which code is real and which is scaffolding, how the sticky notes and the
+Agentation feedback toolbar work, and how to remove the wireframe when the time
+comes. Read it before changing anything under `src/`.
+
+`grep -rn "WIREFRAME:" src` is the complete inventory of temporary code.
