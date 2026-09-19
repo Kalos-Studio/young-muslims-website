@@ -85,6 +85,10 @@
   --color-sisters-brass: #d8aa45;
   --color-sisters-buttercup: #ebd255;
 
+  /* Exact landing-page accents from the approved website design. */
+  --color-landing-cyan: #23b8c0;
+  --color-landing-blush: #e3d6d6;
+
   /* Functional UI color, intentionally separate from the brand palette. */
   --color-system-danger: #b42318;
 }
@@ -175,6 +179,38 @@
   }
   .maplibregl-ctrl-attrib-button {
     @apply bg-transparent! dark:invert;
+  }
+
+  /* The landing hero begins behind its navigation, matching the Figma frame. */
+  body:has([data-landing-page]) [data-site-header] {
+    @apply fixed! w-full! border-transparent! bg-transparent! text-brand-pure-white backdrop-blur-none!;
+  }
+  body:has([data-landing-page]) [data-site-header-inner] {
+    height: 123px !important;
+    max-width: none !important;
+    padding-inline: 80px !important;
+  }
+  body:has([data-landing-page]) [data-primary-nav] {
+    gap: 16px !important;
+    font-size: 14px !important;
+  }
+  body:has([data-landing-page]) [data-site-header] nav a,
+  body:has([data-landing-page]) [data-site-logo-link],
+  body:has([data-landing-page]) [data-site-header] [data-menu-trigger] {
+    color: var(--color-brand-pure-white) !important;
+    transition: color 300ms ease;
+  }
+  body:has([data-landing-page])
+    [data-site-header][data-header-theme="light"]
+    nav
+    a,
+  body:has([data-landing-page])
+    [data-site-header][data-header-theme="light"]
+    [data-site-logo-link],
+  body:has([data-landing-page])
+    [data-site-header][data-header-theme="light"]
+    [data-menu-trigger] {
+    color: var(--color-brand-obsidian) !important;
   }
 }
 

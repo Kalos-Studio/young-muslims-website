@@ -28,15 +28,16 @@ export function SideNav() {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger
+        data-menu-trigger
         aria-label="Open menu"
-        className="rounded-xs p-1 text-foreground outline-none hover:opacity-60 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="rounded-xs p-2 text-foreground outline-none hover:opacity-60 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         <Menu className="size-6" strokeWidth={2.5} aria-hidden />
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 bg-foreground/20 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0" />
-        <Dialog.Popup className="fixed top-0 right-0 bottom-0 flex w-[24rem] flex-col border-l border-border bg-background transition-transform duration-200 outline-none data-ending-style:translate-x-full data-starting-style:translate-x-full">
+        <Dialog.Backdrop className="fixed inset-0 z-50 bg-foreground/20 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0" />
+        <Dialog.Popup className="fixed top-0 right-0 bottom-0 z-50 flex w-[24rem] flex-col border-l border-border bg-background transition-transform duration-200 outline-none data-ending-style:translate-x-full data-starting-style:translate-x-full">
           <div className="flex items-center justify-between border-b border-border px-8 py-6">
             <Dialog.Title className="text-sm font-semibold text-muted-foreground">
               Menu

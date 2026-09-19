@@ -14,9 +14,14 @@ import { cn } from "@/lib/utils";
 export function PageFrame({
   children,
   className,
+  ...props
 }: {
   children: React.ReactNode;
   className?: string;
-}) {
-  return <main className={cn("w-full", className)}>{children}</main>;
+} & React.ComponentPropsWithoutRef<"main">) {
+  return (
+    <main className={cn("w-full", className)} {...props}>
+      {children}
+    </main>
+  );
 }

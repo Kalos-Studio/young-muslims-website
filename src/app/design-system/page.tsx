@@ -120,6 +120,25 @@ const sistersColors = [
   },
 ] as const;
 
+const landingColors = [
+  {
+    name: "Landing Cyan",
+    token: "landing-cyan",
+    value: "#23B8C0",
+    usage: "Highlighted words on the homepage",
+    swatch: "bg-landing-cyan",
+    ink: "text-brand-obsidian",
+  },
+  {
+    name: "Landing Blush",
+    token: "landing-blush",
+    value: "#E3D6D6",
+    usage: "Homepage story-card surfaces",
+    swatch: "bg-landing-blush",
+    ink: "text-brand-obsidian",
+  },
+] as const;
+
 const typeScale = [
   {
     name: "Display",
@@ -287,6 +306,24 @@ export default function DesignSystemPage() {
                   />
                 ))}
               </div>
+            </div>
+          </div>
+
+          <div className="mt-16">
+            <div className="mb-5 flex items-end justify-between gap-4">
+              <h3 className="text-h3 font-semibold">Landing-page accents</h3>
+              <p className="text-sm text-muted-foreground">
+                Exact values from the approved website frame
+              </p>
+            </div>
+            <div className="grid max-w-2xl grid-cols-2">
+              {landingColors.map((color) => (
+                <ColorCard
+                  key={color.token}
+                  color={color}
+                  className="min-h-56"
+                />
+              ))}
             </div>
           </div>
         </section>
