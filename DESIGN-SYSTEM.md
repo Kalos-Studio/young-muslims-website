@@ -54,6 +54,8 @@ These values are exact and must not be altered.
 | `sisters-forest`    | Deep Forest Green | `#043222` | Sisters dark foundation and text    |
 | `sisters-brass`     | Warm Brass        | `#D8AA45` | Sisters large fills and accents     |
 | `sisters-buttercup` | Buttercup Yellow  | `#EBD255` | Sisters large fills and accents     |
+| `landing-cyan`      | Landing Cyan      | `#23B8C0` | Highlighted words on the homepage   |
+| `landing-blush`     | Landing Blush     | `#E3D6D6` | Homepage story-card surfaces        |
 
 Slate, Sky, Brass, and Buttercup do not have enough contrast for normal-sized
 text on white or Warm Snow. Use them for fills, decoration, and large graphical

@@ -32,7 +32,7 @@ export const primaryLinks = [
  */
 export const ctaLink = {
   href: "/neighbornets",
-  label: "Join a NeighborNet",
+  label: "Find a Chapter",
 } as const satisfies NavLink;
 
 /**
