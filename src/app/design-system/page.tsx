@@ -137,38 +137,64 @@ const landingColors = [
     swatch: "bg-landing-blush",
     ink: "text-brand-obsidian",
   },
+  {
+    name: "Card Ink",
+    token: "landing-card-ink",
+    value: "#000000",
+    usage: "Homepage story-card text",
+    swatch: "bg-landing-card-ink",
+    ink: "text-brand-pure-white",
+  },
 ] as const;
 
 const typeScale = [
   {
     name: "Display",
-    token: "text-display font-display",
+    token: "56px / Auto / -2%, Boldonse Regular",
     sample: "For the youth, by the youth.",
-    className: "font-display text-display",
+    className: "font-display text-display font-normal",
   },
   {
-    name: "Heading 1",
-    token: "text-h1 font-display",
-    sample: "A nationwide community",
-    className: "font-display text-h1 font-normal",
+    name: "Section heading",
+    token: "54px / Auto / -2%, Figtree ExtraBold",
+    sample: "More than a program. A place to belong.",
+    className: "text-section font-extrabold",
   },
   {
-    name: "Heading 2",
-    token: "text-h2 font-heading",
-    sample: "Built on real friendship",
-    className: "font-heading text-h2 font-bold",
+    name: "Hero introduction",
+    token: "24px / Auto / -2%, Figtree Semibold",
+    sample: "A nationwide brotherhood and sisterhood.",
+    className: "text-lead font-semibold",
   },
   {
-    name: "Heading 3",
-    token: "text-h3 font-heading",
-    sample: "Find your NeighborNet",
-    className: "font-heading text-h3 font-semibold",
+    name: "Large body",
+    token: "24px / Auto / -2%, Figtree Medium",
+    sample: "Everything starts with the people. From there, it grows.",
+    className: "text-lead font-medium",
   },
   {
-    name: "Heading 4",
-    token: "text-h4 font-heading",
-    sample: "Showing up for one another",
-    className: "font-heading text-h4 font-semibold",
+    name: "Card title",
+    token: "28px / Auto / 0%, Figtree Semibold",
+    sample: "Your people, every week",
+    className: "text-card-title font-semibold",
+  },
+  {
+    name: "Body",
+    token: "16px / Auto / 0%, Figtree Regular",
+    sample: "The friendships are the foundation for everything else.",
+    className: "text-body font-normal",
+  },
+  {
+    name: "Navigation",
+    token: "14px / Auto / -2%, Figtree Bold",
+    sample: "Find a chapter",
+    className: "text-nav font-bold",
+  },
+  {
+    name: "Statistic",
+    token: "54px / Auto / -2%, Boldonse Regular",
+    sample: "200+",
+    className: "font-display text-stat font-normal",
   },
 ] as const;
 
@@ -185,7 +211,7 @@ function SectionHeading({
     <div className="grid gap-5 border-t border-border pt-8 md:grid-cols-[14rem_1fr]">
       <p className="text-sm font-semibold text-muted-foreground">{eyebrow}</p>
       <div className="max-w-3xl">
-        <h2 className="text-h2 font-bold">{title}</h2>
+        <h2 className="text-card-title font-semibold">{title}</h2>
         <p className="mt-4 max-w-2xl leading-7 text-muted-foreground">
           {description}
         </p>
@@ -218,12 +244,12 @@ function ColorCard({
       )}
     >
       <div>
-        <h3 className="text-h4 font-bold">{color.name}</h3>
+        <h3 className="text-body font-bold">{color.name}</h3>
         {color.usage ? (
           <p className="mt-2 max-w-48 text-sm opacity-75">{color.usage}</p>
         ) : null}
       </div>
-      <div className="font-mono text-xs">
+      <div className="font-sans text-xs">
         <p>{color.value}</p>
         <p className="mt-1 opacity-75">{color.token}</p>
       </div>
@@ -274,7 +300,9 @@ export default function DesignSystemPage() {
           <div className="mt-16 grid gap-12 xl:grid-cols-2">
             <div>
               <div className="mb-5 flex items-end justify-between gap-4">
-                <h3 className="text-h3 font-semibold">Brothers palette</h3>
+                <h3 className="text-card-title font-semibold">
+                  Brothers palette
+                </h3>
                 <p className="text-sm text-muted-foreground">
                   Dark colors may carry text
                 </p>
@@ -292,7 +320,9 @@ export default function DesignSystemPage() {
 
             <div>
               <div className="mb-5 flex items-end justify-between gap-4">
-                <h3 className="text-h3 font-semibold">Sisters palette</h3>
+                <h3 className="text-card-title font-semibold">
+                  Sisters palette
+                </h3>
                 <p className="text-sm text-muted-foreground">
                   Bright colors are fills and accents
                 </p>
@@ -311,12 +341,14 @@ export default function DesignSystemPage() {
 
           <div className="mt-16">
             <div className="mb-5 flex items-end justify-between gap-4">
-              <h3 className="text-h3 font-semibold">Landing-page accents</h3>
+              <h3 className="text-card-title font-semibold">
+                Landing-page accents
+              </h3>
               <p className="text-sm text-muted-foreground">
                 Exact values from the approved website frame
               </p>
             </div>
-            <div className="grid max-w-2xl grid-cols-2">
+            <div className="grid max-w-4xl grid-cols-3">
               {landingColors.map((color) => (
                 <ColorCard
                   key={color.token}
@@ -337,36 +369,36 @@ export default function DesignSystemPage() {
 
           <div className="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             <div className="flex min-h-56 flex-col justify-between border border-border bg-background p-6 text-foreground">
-              <p className="text-h4 font-bold">Background</p>
-              <p className="font-mono text-xs">bg-background</p>
+              <p className="text-body font-bold">Background</p>
+              <p className="font-sans text-xs">bg-background</p>
             </div>
             <div className="flex min-h-56 flex-col justify-between bg-primary p-6 text-primary-foreground">
-              <p className="text-h4 font-bold">Primary</p>
-              <p className="font-mono text-xs">bg-primary</p>
+              <p className="text-body font-bold">Primary</p>
+              <p className="font-sans text-xs">bg-primary</p>
             </div>
             <div className="flex min-h-56 flex-col justify-between bg-secondary p-6 text-secondary-foreground">
-              <p className="text-h4 font-bold">Secondary</p>
-              <p className="font-mono text-xs">bg-secondary</p>
+              <p className="text-body font-bold">Secondary</p>
+              <p className="font-sans text-xs">bg-secondary</p>
             </div>
             <div className="flex min-h-56 flex-col justify-between bg-accent p-6 text-accent-foreground">
-              <p className="text-h4 font-bold">Accent</p>
-              <p className="font-mono text-xs">bg-accent</p>
+              <p className="text-body font-bold">Accent</p>
+              <p className="font-sans text-xs">bg-accent</p>
             </div>
             <div className="flex min-h-40 flex-col justify-between bg-muted p-6 text-muted-foreground">
-              <p className="text-h4 font-bold">Muted</p>
-              <p className="font-mono text-xs">bg-muted</p>
+              <p className="text-body font-bold">Muted</p>
+              <p className="font-sans text-xs">bg-muted</p>
             </div>
             <div className="flex min-h-40 flex-col justify-between bg-destructive p-6 text-destructive-foreground">
-              <p className="text-h4 font-bold">Destructive</p>
-              <p className="font-mono text-xs">bg-destructive</p>
+              <p className="text-body font-bold">Destructive</p>
+              <p className="font-sans text-xs">bg-destructive</p>
             </div>
             <div className="flex min-h-40 flex-col justify-between border-4 border-ring bg-background p-6 text-foreground">
-              <p className="text-h4 font-bold">Focus ring</p>
-              <p className="font-mono text-xs">border-ring</p>
+              <p className="text-body font-bold">Focus ring</p>
+              <p className="font-sans text-xs">border-ring</p>
             </div>
             <div className="flex min-h-40 flex-col justify-between border border-border bg-card p-6 text-card-foreground">
-              <p className="text-h4 font-bold">Border</p>
-              <p className="font-mono text-xs">border-border</p>
+              <p className="text-body font-bold">Border</p>
+              <p className="font-sans text-xs">border-border</p>
             </div>
           </div>
         </section>
@@ -386,40 +418,18 @@ export default function DesignSystemPage() {
               >
                 <div>
                   <p className="font-semibold">{type.name}</p>
-                  <p className="mt-2 font-mono text-xs text-muted-foreground">
+                  <p className="mt-2 font-sans text-xs text-muted-foreground">
                     {type.token}
                   </p>
                 </div>
                 <p className={type.className}>{type.sample}</p>
               </div>
             ))}
-
-            <div className="grid gap-8 py-10 md:grid-cols-[14rem_1fr] md:items-start">
-              <div>
-                <p className="font-semibold">Body</p>
-                <p className="mt-2 font-mono text-xs text-muted-foreground">
-                  text-base font-sans font-medium
-                </p>
-              </div>
-              <div className="max-w-2xl space-y-5 text-base leading-7 font-medium">
-                <p>
-                  Young Muslims is a nationwide network built through ordinary,
-                  consistent friendship. Members meet locally, grow together,
-                  and turn those relationships into service for their
-                  communities.
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Supporting text uses the same typeface at a smaller size and
-                  lower visual emphasis.
-                </p>
-              </div>
-            </div>
           </div>
 
           <p className="mt-5 text-sm text-muted-foreground">
-            The font families are approved. The responsive size scale remains
-            provisional until the website designs define mobile and desktop
-            behavior.
+            These are the exact desktop values in Figma node 26:188. Responsive
+            behavior remains to be defined by mobile website frames.
           </p>
         </section>
 
@@ -431,6 +441,23 @@ export default function DesignSystemPage() {
           />
 
           <div className="mt-16 grid gap-10 border border-border bg-card p-8 md:p-12">
+            <div>
+              <p className="mb-5 text-sm font-semibold text-muted-foreground">
+                Landing radii
+              </p>
+              <div className="flex flex-wrap items-end gap-6 text-sm font-medium">
+                <div className="flex size-24 items-center justify-center rounded-media bg-muted">
+                  6px media
+                </div>
+                <div className="flex size-24 items-center justify-center rounded-card bg-muted">
+                  16px card
+                </div>
+                <div className="flex h-16 min-w-40 items-center justify-center rounded-pill bg-muted px-6">
+                  Pill button
+                </div>
+              </div>
+            </div>
+
             <div>
               <p className="mb-5 text-sm font-semibold text-muted-foreground">
                 Variants
@@ -477,7 +504,7 @@ export default function DesignSystemPage() {
               "Treat focus, errors, borders, and disabled states as functional UI.",
             ].map((rule, index) => (
               <li key={rule} className="flex gap-5 bg-background p-8">
-                <span className="font-mono text-sm text-muted-foreground">
+                <span className="font-sans text-sm text-muted-foreground">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <p className="max-w-md font-medium">{rule}</p>

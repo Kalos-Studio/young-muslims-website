@@ -37,7 +37,7 @@ export function SiteHeader() {
         <nav
           data-primary-nav
           aria-label="Primary"
-          className="flex items-center justify-start gap-8 text-base"
+          className="flex items-center justify-start gap-8 text-nav"
         >
           {primaryLinks.map((link) => (
             <NavLink key={link.href} href={link.href}>
@@ -60,7 +60,7 @@ export function SiteHeader() {
         <div className="flex shrink-0 items-center justify-end gap-6">
           <NavLink
             href={ctaLink.href}
-            className="rounded-full bg-brand-royal px-6 py-4 text-brand-pure-white no-underline hover:bg-brand-royal/80 hover:text-brand-pure-white"
+            className="inline-flex h-16 min-w-40 items-center justify-center overflow-hidden rounded-full! bg-brand-royal px-6 text-nav font-bold text-brand-pure-white no-underline hover:bg-brand-royal/80 hover:text-brand-pure-white"
           >
             {ctaLink.label}
           </NavLink>

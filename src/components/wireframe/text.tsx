@@ -14,19 +14,19 @@ import { cn } from "@/lib/utils";
  *
  * Boxes are still right for images, video and embeds. They are wrong for words.
  *
- * The sizes come from the shared type scale in globals.css (`text-h1` and
- * friends), which carries line height and letter spacing with it. This
- * component only decides which step a slot is and how the placeholder reads, so
- * deleting it with the rest of the wireframe takes nothing with it.
+ * The sizes come from the shared website roles in globals.css, which carry
+ * line height and letter spacing with them. This component only decides which
+ * role a slot uses and how the placeholder reads, so deleting it with the rest
+ * of the wireframe takes nothing with it.
  */
 
 const levels = {
   display: "font-display text-display font-normal",
-  h1: "font-display text-h1 font-normal",
-  h2: "text-h2 font-bold",
-  h3: "text-h3 font-semibold",
-  h4: "text-h4 font-semibold",
-  body: "text-base font-medium leading-relaxed",
+  h1: "font-display text-display font-normal",
+  h2: "text-section font-extrabold",
+  h3: "text-card-title font-semibold",
+  h4: "text-body font-semibold",
+  body: "text-body font-normal",
 } as const;
 
 const tags = {

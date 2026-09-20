@@ -37,7 +37,7 @@ export default function StoriesPage() {
       {/* The header does the work of saying these are members, not models, so
           the portraits below it need no caption. */}
       <Annotate>
-        <h1 className="max-w-3xl font-display text-h1 font-normal">
+        <h1 className="max-w-3xl font-display text-display font-normal">
           Stories of real Young Muslims
         </h1>
       </Annotate>
@@ -82,7 +82,9 @@ export default function StoriesPage() {
               Rough example, invented. Shows the length and tone a story runs
               to, not final copy
             </p>
-            <p className="text-h3 font-bold">Amina from Richardson, TX</p>
+            <p className="text-card-title font-semibold">
+              Amina from Richardson, TX
+            </p>
             <p className="max-w-2xl text-base leading-relaxed font-medium text-background/80">
               She moved for work in the middle of a semester and knew exactly
               nobody. For the first two months she went to the masjid on Fridays
