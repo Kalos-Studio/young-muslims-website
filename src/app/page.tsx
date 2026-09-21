@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { HeroScrollSequence } from "./hero-scroll-sequence";
+import { BelongingPortraitOrbit } from "./belonging-portrait-orbit";
+import { EverywhereSection } from "./everywhere-section";
+import { HeroVideo } from "./hero-video";
 import { HighlightReelMarquee } from "./highlight-reel-section";
 
 // WIREFRAME: media remains represented by placeholders while the landing-page
@@ -17,47 +19,6 @@ export const metadata: Metadata = {
   description:
     "A nationwide brotherhood and sisterhood, built on real friendships and a shared Deen.",
 };
-
-const BAND = [
-  { size: "7rem", gap: "0rem", drop: "0.5rem", tone: "border-brand-royal" },
-  {
-    size: "4.5rem",
-    gap: "2.5rem",
-    drop: "-1.25rem",
-    tone: "border-brand-jade",
-  },
-  { size: "9rem", gap: "1rem", drop: "1rem", tone: "border-landing-cyan" },
-  {
-    size: "5rem",
-    gap: "4rem",
-    drop: "-0.75rem",
-    tone: "border-brand-royal",
-  },
-  {
-    size: "6.5rem",
-    gap: "1.25rem",
-    drop: "0.75rem",
-    tone: "border-brand-jade",
-  },
-  {
-    size: "4rem",
-    gap: "3.5rem",
-    drop: "-1rem",
-    tone: "border-landing-cyan",
-  },
-  {
-    size: "8rem",
-    gap: "1rem",
-    drop: "0.25rem",
-    tone: "border-brand-royal",
-  },
-  {
-    size: "5.5rem",
-    gap: "3rem",
-    drop: "-0.5rem",
-    tone: "border-brand-jade",
-  },
-] as const;
 
 const POINTS = [
   {
@@ -81,36 +42,6 @@ const POINTS = [
     media: "Image of local service",
   },
 ] as const;
-
-function PortraitBand({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn(
-        "flex w-[130%] -translate-x-[12%] -rotate-6 items-center justify-center",
-        className,
-      )}
-      aria-label="Portrait image placeholders"
-    >
-      {BAND.map((portrait, index) => (
-        <div
-          key={index}
-          className={cn(
-            "flex shrink-0 rotate-6 items-center justify-center rounded-full border-4 bg-muted text-muted-foreground",
-            portrait.tone,
-          )}
-          style={{
-            width: portrait.size,
-            height: portrait.size,
-            marginLeft: portrait.gap,
-            marginTop: portrait.drop,
-          }}
-        >
-          <PersonOutline className="h-1/2 w-1/2" />
-        </div>
-      ))}
-    </div>
-  );
-}
 
 function PointCard({
   title,
@@ -170,22 +101,24 @@ export default function Home() {
           },
           {
             placement: "center-left",
-            note: "As the visitor scrolls, the full-screen community video shrinks into a centered frame while moments from Young Muslims appear behind it.",
+            note: "This full-screen placeholder represents a future looping community video. It remains fixed within the hero and does not respond to scrolling.",
           },
         ]}
       >
-        <HeroScrollSequence />
+        <HeroVideo />
       </Annotate>
 
       <Annotate
         bleed
-        note="Portrait photography will animate into view in a circular motion. The placeholders preserve the intended composition."
+        note="Sixteen portraits move continuously around the copy on a wide elliptical path. Several portraits leave the viewport as they orbit, matching the intended photography composition."
       >
         <section
           data-header-theme="light"
-          className="relative min-h-[1611px] w-full overflow-hidden bg-brand-warm-snow"
+          className="relative h-[1424px] w-full overflow-hidden bg-brand-warm-snow"
         >
-          <PortraitBand className="absolute top-40" />
+          <div className="absolute inset-x-0 top-0 h-[1611px]">
+            <BelongingPortraitOrbit />
+          </div>
           <div className="absolute top-[664px] left-1/2 w-full max-w-[784px] -translate-x-1/2 text-center">
             <h2 className="text-section font-extrabold text-brand-jade">
               More than a program.
@@ -200,7 +133,6 @@ export default function Home() {
               lifetime of brotherhood and sisterhood.
             </p>
           </div>
-          <PortraitBand className="absolute bottom-32" />
         </section>
       </Annotate>
 
@@ -266,34 +198,8 @@ export default function Home() {
         </section>
       </Annotate>
 
-      <Annotate note="Metrics will count upward, and the final globe will show Young Muslims communities across America.">
-        <section
-          data-header-theme="light"
-          className="min-h-[1962px] pt-[280px] text-center"
-        >
-          <div className="mx-auto min-h-[219px] w-full max-w-[560px]">
-            <h2 className="text-section font-extrabold">
-              And it&apos;s not just here.
-              <br />
-              It&apos;s everywhere.
-            </h2>
-            <p className="mt-8 text-lead font-medium">
-              What started as a few friends in one city is now a network that
-              spans the country.
-            </p>
-          </div>
-          <div className="mt-[171px] grid grid-cols-3 gap-10">
-            {[
-              ["200+", "NeighborNets"],
-              ["26", "states"],
-              ["10,000s", "of young Muslims"],
-            ].map(([number, label]) => (
-              <div key={label} className="min-h-[133px]">
-                <p className="font-display text-stat font-normal">{number}</p>
-                <p className="mt-2 text-lead font-medium">{label}</p>
-              </div>
-            ))}
-          </div>
+      <Annotate note="Once this section fills the viewport, the heading appears, the metrics count upward, and youth portraits move at different speeds as the visitor scrolls.">
+        <EverywhereSection>
           <Annotate bleed className="mt-[35px]">
             <Frame
               label="Interactive 3D globe placeholder"
@@ -301,16 +207,7 @@ export default function Home() {
               className="h-[681px] w-full rounded-card border border-brand-obsidian/10 bg-muted text-brand-obsidian"
             />
           </Annotate>
-          <div className="mt-[70px] flex items-center justify-center gap-12">
-            <PortraitPlaceholder className="size-28" />
-            <p className="max-w-[560px] text-lead font-medium">
-              Wherever you go, there&apos;s a Young Muslim. A brother or sister
-              in a city you&apos;ve never been to, dealing with the same things
-              you are.
-            </p>
-            <PortraitPlaceholder className="size-28 border-landing-cyan" />
-          </div>
-        </section>
+        </EverywhereSection>
       </Annotate>
 
       <Annotate>
