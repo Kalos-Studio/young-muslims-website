@@ -110,7 +110,7 @@ export default function Home() {
 
       <Annotate
         bleed
-        note="Sixteen portraits move continuously around the copy on a wide elliptical path. Several portraits leave the viewport as they orbit, matching the intended photography composition."
+        note="Twenty-six interlocking portraits form a continuous ring around the copy. The connected composition drifts gently while several portraits remain cropped by the viewport."
       >
         <section
           data-header-theme="light"
