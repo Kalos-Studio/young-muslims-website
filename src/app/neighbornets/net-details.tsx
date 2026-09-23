@@ -38,7 +38,7 @@ export function NetDetails({
     return (
       <div
         className={cn(
-          "flex items-center gap-2 rounded-md border border-border bg-popover px-2.5 py-1.5 text-xs text-popover-foreground shadow-md",
+          "flex items-center gap-2 rounded-card border border-border bg-popover px-4 py-2 text-xs text-popover-foreground",
           className,
         )}
       >
@@ -57,7 +57,7 @@ export function NetDetails({
   return (
     <div
       className={cn(
-        "rounded-lg border border-border bg-popover text-popover-foreground shadow-lg",
+        "rounded-card border border-border bg-popover text-popover-foreground",
         density === "compact" ? "w-64 p-3" : "p-4",
         className,
       )}
@@ -198,7 +198,7 @@ function ContactLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
-      className="inline-flex items-center gap-1.5 rounded-md border border-border px-2 py-1 text-xs font-medium hover:bg-accent"
+      className="inline-flex items-center gap-2 rounded-pill border border-border px-4 py-2 text-xs font-medium hover:bg-muted"
     >
       <Icon className="size-3" />
       {children}

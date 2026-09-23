@@ -16,7 +16,12 @@ export type Differentiator = "color" | "shape" | "initial" | "color-and-shape";
 
 /** Named brother/sister color pairs to compare for contrast and tone. */
 export type Palette =
-  "emerald-violet" | "blue-rose" | "teal-amber" | "mono" | "black-gray";
+  | "young-muslims"
+  | "emerald-violet"
+  | "blue-rose"
+  | "teal-amber"
+  | "mono"
+  | "black-gray";
 
 /** How a neighbornet's details are surfaced. */
 export type InfoMode = "hover-tooltip" | "click-popup" | "side-panel" | "both";
@@ -65,6 +70,12 @@ export const palettes: Record<
   Palette,
   { label: string; brothers: string; sisters: string; note: string }
 > = {
+  "young-muslims": {
+    label: "Young Muslims",
+    brothers: "var(--color-brothers-sky)",
+    sisters: "var(--color-sisters-brass)",
+    note: "The approved Brothers and Sisters accent colors.",
+  },
   "emerald-violet": {
     label: "Emerald / Violet",
     brothers: "#059669",

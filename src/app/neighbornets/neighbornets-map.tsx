@@ -411,7 +411,7 @@ function Legend({ settings }: { settings: MapSettings }) {
     settings.differentiator === "color-and-shape";
 
   return (
-    <div className="absolute bottom-3 left-3 rounded-md border border-border bg-background/90 px-3 py-2 text-xs shadow-sm backdrop-blur-sm">
+    <div className="absolute bottom-3 left-3 rounded-card border border-border bg-background/90 px-4 py-2 text-xs backdrop-blur-sm">
       <p className="mb-1.5 text-xs font-semibold text-muted-foreground">
         Neighbornets
       </p>
