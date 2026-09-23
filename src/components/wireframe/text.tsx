@@ -61,16 +61,13 @@ export function Text({
   const onDark = tone === "dark";
 
   return (
-    <div className={className}>
-      <Tag className={cn(levels[as], onDark && "text-background")}>
-        [{children}]
-      </Tag>
+    <div className={cn(onDark && "text-brand-pure-white", className)}>
+      <Tag className={levels[as]}>[{children}]</Tag>
       {example ? (
         <p
-          className={cn(
-            "mt-2 text-sm font-medium",
-            onDark ? "text-background/60" : "text-muted-foreground",
-          )}
+          className={`mt-2 text-sm font-medium ${
+            onDark ? "text-brand-pure-white/60" : "text-muted-foreground"
+          }`}
         >
           e.g. “{example}”
         </p>
@@ -102,15 +99,15 @@ export function Lorem({
   const onDark = tone === "dark";
 
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
+    <div
+      className={cn(
+        "flex flex-col gap-4",
+        onDark ? "text-brand-pure-white/80" : "text-muted-foreground",
+        className,
+      )}
+    >
       {LOREM.slice(0, paragraphs).map((paragraph) => (
-        <p
-          key={paragraph}
-          className={cn(
-            levels.body,
-            onDark ? "text-background/80" : "text-muted-foreground",
-          )}
-        >
+        <p key={paragraph} className={levels.body}>
           {paragraph}
         </p>
       ))}

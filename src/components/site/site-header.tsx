@@ -58,12 +58,17 @@ export function SiteHeader() {
         </Link>
 
         <div className="flex shrink-0 items-center justify-end gap-6">
-          <NavLink
-            href={ctaLink.href}
-            className="inline-flex h-16 min-w-40 items-center justify-center overflow-hidden rounded-full! bg-brand-royal px-6 text-nav font-bold text-brand-pure-white no-underline hover:bg-brand-royal/80 hover:text-brand-pure-white"
+          <nav
+            aria-label="Find a chapter"
+            className="flex items-center text-nav"
           >
-            {ctaLink.label}
-          </NavLink>
+            <NavLink
+              href={ctaLink.href}
+              className="inline-flex items-center rounded-pill! border border-current px-6 py-4"
+            >
+              {ctaLink.label}
+            </NavLink>
+          </nav>
           <SideNav />
         </div>
       </div>

@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 const wireframeSettings: MapSettings = {
   ...defaultSettings,
   basemap: "blank",
-  palette: "black-gray",
+  palette: "young-muslims",
   differentiator: "color",
   markerStyle: "ring",
   infoMode: "click-popup",
@@ -42,14 +42,14 @@ const wireframeSettings: MapSettings = {
 
 export default function NeighborNetsPage() {
   return (
-    <PageFrame className="pt-16">
+    <PageFrame className="bg-brand-warm-snow pt-16 pb-20 text-brand-obsidian">
       {/* Nobody arriving on this site knows what a NeighborNet is, and the map
           alone does not tell them — so the explanation comes before it, not
           after. */}
       <Annotate className="mb-14">
         <Text
           as="h1"
-          className="max-w-4xl"
+          className="max-w-4xl text-brand-jade"
           example="Youth from around the country, coming together every week."
         >
           Placeholder headline: what a NeighborNet is
@@ -66,7 +66,7 @@ export default function NeighborNetsPage() {
             than a widget in a box. Drop `bare` and `showDebugPanel={false}` to
             get the marker-comparison tooling back while we are still deciding
             how the dots should look. */}
-        <div className="h-[38rem]">
+        <div className="h-screen">
           <NeighborNetsMap
             initialSettings={wireframeSettings}
             showDebugPanel={false}
@@ -76,18 +76,20 @@ export default function NeighborNetsPage() {
       </Annotate>
 
       <Annotate className="mt-2">
-        <div className="grid grid-cols-2 items-start gap-12">
-          <div>
-            <Text as="h2">What is a NeighborNet</Text>
-            <Lorem paragraphs={2} className="mt-4" />
-            <button className="mt-6 rounded-md border border-foreground bg-foreground px-6 py-3 text-sm font-semibold text-background">
+        <div className="grid grid-cols-2 items-stretch gap-8">
+          <div className="rounded-card bg-sisters-forest p-8 text-brand-pure-white">
+            <Text as="h2" tone="dark">
+              What is a NeighborNet
+            </Text>
+            <Lorem paragraphs={2} tone="dark" className="mt-4" />
+            <button className="mt-6 rounded-pill bg-brand-pure-white px-6 py-4 text-nav font-bold text-sisters-forest outline-none focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-sisters-forest">
               Don&apos;t have a NN near you? Start one here
             </button>
           </div>
           <Frame
             variant="muted"
             label="Slideshow of images here"
-            className="aspect-square w-full"
+            className="aspect-square w-full rounded-card bg-sisters-brass text-sisters-forest"
           />
         </div>
       </Annotate>
@@ -96,7 +98,7 @@ export default function NeighborNetsPage() {
         className="mt-16"
         note="each card links out to its own page: one for events, one for conferences, one for retreats"
       >
-        <Text as="h2" className="text-center">
+        <Text as="h2" className="text-center text-brand-royal">
           Other Ways to Get Involved
         </Text>
         <div className="mt-8 grid grid-cols-3 gap-6">
@@ -104,7 +106,7 @@ export default function NeighborNetsPage() {
             <Frame
               variant="muted"
               label="Events"
-              className="aspect-video w-full"
+              className="aspect-video w-full rounded-media bg-brothers-slate text-brothers-midnight"
             />
             <Lorem paragraphs={1} className="mt-3" />
           </div>
@@ -112,7 +114,7 @@ export default function NeighborNetsPage() {
             <Frame
               variant="muted"
               label="Conferences"
-              className="aspect-video w-full"
+              className="aspect-video w-full rounded-media bg-brand-royal text-brand-pure-white"
             />
             <Lorem paragraphs={1} className="mt-3" />
           </div>
@@ -120,7 +122,7 @@ export default function NeighborNetsPage() {
             <Frame
               variant="muted"
               label="Retreats"
-              className="aspect-video w-full"
+              className="aspect-video w-full rounded-media bg-sisters-brass text-sisters-forest"
             />
             <Lorem paragraphs={1} className="mt-3" />
           </div>
