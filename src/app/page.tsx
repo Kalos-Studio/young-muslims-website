@@ -114,12 +114,12 @@ export default function Home() {
       >
         <section
           data-header-theme="light"
-          className="relative h-[1424px] w-full overflow-hidden bg-brand-warm-snow"
+          className="relative h-[1264px] w-full overflow-hidden bg-brand-warm-snow"
         >
-          <div className="absolute inset-x-0 top-0 h-[1611px]">
+          <div className="absolute inset-x-0 -top-40 h-[1611px]">
             <BelongingPortraitOrbit />
           </div>
-          <div className="absolute top-[664px] left-1/2 w-full max-w-[784px] -translate-x-1/2 text-center">
+          <div className="absolute top-[504px] left-1/2 w-full max-w-[784px] -translate-x-1/2 text-center">
             <h2 className="text-section font-extrabold text-brand-jade">
               More than a program.
               <br />A place to belong.
