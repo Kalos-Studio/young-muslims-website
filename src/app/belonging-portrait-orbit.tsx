@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import belongingPortrait from "../../design-assets/figma/frame-37-57.png";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useTime, useTransform } from "motion/react";
 
@@ -85,9 +87,19 @@ function OrbitingPortrait({
         className={cn(
           "flex size-full rotate-6 items-center justify-center rounded-full border-4 bg-muted text-muted-foreground",
           portrait.tone,
+          index === 0 && "rotate-0 rounded-none border-0 bg-transparent",
         )}
       >
-        <PersonOutline className="h-1/2 w-1/2" />
+        {index === 0 ? (
+          <Image
+            src={belongingPortrait}
+            alt=""
+            sizes={portrait.size}
+            className="size-full object-contain"
+          />
+        ) : (
+          <PersonOutline className="h-1/2 w-1/2" />
+        )}
       </div>
     </motion.div>
   );
