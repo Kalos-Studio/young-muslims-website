@@ -196,14 +196,6 @@
   body:has([data-landing-page]) [data-site-header] {
     @apply fixed! w-full! border-transparent! bg-transparent! text-brand-pure-white backdrop-blur-none!;
   }
-  body:has([data-landing-page]) [data-site-header-inner] {
-    height: 123px !important;
-    max-width: none !important;
-    padding-inline: 80px !important;
-  }
-  body:has([data-landing-page]) [data-primary-nav] {
-    @apply gap-4! text-nav!;
-  }
   body:has([data-landing-page]) [data-site-header] nav a,
   body:has([data-landing-page]) [data-site-logo-link],
   body:has([data-landing-page]) [data-site-header] [data-menu-trigger] {

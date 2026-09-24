@@ -58,6 +58,7 @@ const FULL_CIRCLE = Math.PI * 2;
 const ORBIT_DURATION_MS = 36_000;
 const HORIZONTAL_RADIUS = 0.7;
 const VERTICAL_RADIUS = 0.34;
+const ORBIT_TILT_RADIANS = (-7 * Math.PI) / 180;
 
 const PORTRAITS: Portrait[] = [
   {
@@ -265,9 +266,12 @@ const PORTRAITS: Portrait[] = [
 ];
 
 function getOrbitPosition(angle: number, orbitSize: OrbitSize) {
+  const x = Math.cos(angle) * orbitSize.width * HORIZONTAL_RADIUS;
+  const y = Math.sin(angle) * orbitSize.height * VERTICAL_RADIUS;
+
   return {
-    x: Math.cos(angle) * orbitSize.width * HORIZONTAL_RADIUS,
-    y: Math.sin(angle) * orbitSize.height * VERTICAL_RADIUS,
+    x: x * Math.cos(ORBIT_TILT_RADIANS) - y * Math.sin(ORBIT_TILT_RADIANS),
+    y: x * Math.sin(ORBIT_TILT_RADIANS) + y * Math.cos(ORBIT_TILT_RADIANS),
   };
 }
 
