@@ -31,25 +31,35 @@ export type NeighborNetMeeting = {
   venue: string;
 };
 
-export type NeighborNet = {
+export type NeighborNetLocation = {
   id: string;
   name: string;
   branch: Branch;
   status: NeighborNetStatus;
-  city: string;
+  city?: string;
   /** Two-letter USPS state code. */
-  state: string;
+  state?: string;
   /** Regional grouping used by the national team. */
   region: string;
   longitude: number;
   latitude: number;
   /** Rough headcount of regular attendees. Used for size-scaled dot styles. */
-  size: number;
+  size?: number;
   /** Ages the net is aimed at, e.g. "High school". */
+  ageGroup?: string;
+  contact?: NeighborNetContact;
+  meeting?: NeighborNetMeeting;
+  notes?: string;
+};
+
+/** A fully described net, retained for the richer prototype records below. */
+export type NeighborNet = NeighborNetLocation & {
+  city: string;
+  state: string;
+  size: number;
   ageGroup: string;
   contact: NeighborNetContact;
   meeting: NeighborNetMeeting;
-  notes?: string;
 };
 
 /**
@@ -662,6 +672,7 @@ export type NeighborNetFeatureProperties = {
   status: NeighborNetStatus;
   city: string;
   state: string;
+  region: string;
   size: number;
 };
 
@@ -670,7 +681,7 @@ export type NeighborNetFeatureProperties = {
  * layer styling and cluster popups need are promoted onto the feature.
  */
 export function toFeatureCollection(
-  nets: NeighborNet[],
+  nets: NeighborNetLocation[],
 ): FeatureCollection<Point, NeighborNetFeatureProperties> {
   return {
     type: "FeatureCollection",
@@ -683,9 +694,10 @@ export function toFeatureCollection(
         name: net.name,
         branch: net.branch,
         status: net.status,
-        city: net.city,
-        state: net.state,
-        size: net.size,
+        city: net.city ?? net.name,
+        state: net.state ?? "",
+        region: net.region,
+        size: net.size ?? 0,
       },
     })),
   };

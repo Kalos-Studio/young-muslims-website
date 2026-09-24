@@ -1,7 +1,16 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import {
+  type MotionValue,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTime,
+  useTransform,
+} from "motion/react";
 
 import portrait00 from "../../design-assets/figma/belonging-orbit/portrait-00.png";
 import portrait01 from "../../design-assets/figma/belonging-orbit/portrait-01.png";
@@ -39,6 +48,16 @@ type Portrait = {
   rotate?: number;
   centered?: boolean;
 };
+
+type OrbitSize = {
+  width: number;
+  height: number;
+};
+
+const FULL_CIRCLE = Math.PI * 2;
+const ORBIT_DURATION_MS = 36_000;
+const HORIZONTAL_RADIUS = 0.7;
+const VERTICAL_RADIUS = 0.34;
 
 const PORTRAITS: Portrait[] = [
   {
@@ -245,34 +264,178 @@ const PORTRAITS: Portrait[] = [
   },
 ];
 
-export function BelongingPortraitOrbit() {
-  const reduceMotion = useReducedMotion();
+function getOrbitPosition(angle: number, orbitSize: OrbitSize) {
+  return {
+    x: Math.cos(angle) * orbitSize.width * HORIZONTAL_RADIUS,
+    y: Math.sin(angle) * orbitSize.height * VERTICAL_RADIUS,
+  };
+}
+
+function OrbitingPortrait({
+  portrait,
+  index,
+  orbitSize,
+  time,
+  cursorX,
+  cursorY,
+  reduceMotion,
+}: {
+  portrait: Portrait;
+  index: number;
+  orbitSize: OrbitSize;
+  time: MotionValue<number>;
+  cursorX: MotionValue<number>;
+  cursorY: MotionValue<number>;
+  reduceMotion: boolean | null;
+}) {
+  const startingAngle = (index / PORTRAITS.length) * FULL_CIRCLE - Math.PI / 2;
+  const x = useTransform([time, cursorX], ([latestTime, latestCursorX]) => {
+    const angle =
+      startingAngle - (Number(latestTime) / ORBIT_DURATION_MS) * FULL_CIRCLE;
+
+    return getOrbitPosition(angle, orbitSize).x + Number(latestCursorX);
+  });
+  const y = useTransform([time, cursorY], ([latestTime, latestCursorY]) => {
+    const angle =
+      startingAngle - (Number(latestTime) / ORBIT_DURATION_MS) * FULL_CIRCLE;
+
+    return getOrbitPosition(angle, orbitSize).y + Number(latestCursorY);
+  });
+  const zIndex = useTransform(y, (latestY) =>
+    Math.round(latestY + orbitSize.height),
+  );
+  const restingPosition = getOrbitPosition(startingAngle, orbitSize);
 
   return (
     <motion.div
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform"
+      style={{
+        width: portrait.width,
+        height: portrait.height,
+        x: reduceMotion ? restingPosition.x : x,
+        y: reduceMotion ? restingPosition.y : y,
+        zIndex,
+      }}
+    >
+      <Image
+        src={portrait.image}
+        alt=""
+        sizes={`${Math.ceil(portrait.width)}px`}
+        className="size-full max-w-none object-contain"
+        style={{ transform: `rotate(${portrait.rotate ?? 0}deg)` }}
+      />
+    </motion.div>
+  );
+}
+
+export function BelongingPortraitOrbit() {
+  const orbitRef = useRef<HTMLDivElement>(null);
+  const [orbitSize, setOrbitSize] = useState<OrbitSize>({
+    width: 0,
+    height: 0,
+  });
+  const reduceMotion = useReducedMotion();
+  const cursorXTarget = useMotionValue(0);
+  const cursorYTarget = useMotionValue(0);
+  const cursorX = useSpring(cursorXTarget, {
+    stiffness: 45,
+    damping: 20,
+    mass: 0.8,
+  });
+  const cursorY = useSpring(cursorYTarget, {
+    stiffness: 45,
+    damping: 20,
+    mass: 0.8,
+  });
+  const time = useTime();
+
+  useEffect(() => {
+    const orbit = orbitRef.current;
+
+    if (!orbit) return;
+
+    const updateSize = () => {
+      const { width, height } = orbit.getBoundingClientRect();
+      setOrbitSize({ width, height });
+    };
+
+    updateSize();
+
+    const resizeObserver = new ResizeObserver(updateSize);
+    resizeObserver.observe(orbit);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      cursorXTarget.set(0);
+      cursorYTarget.set(0);
+      return;
+    }
+
+    const updateCursorPosition = (event: PointerEvent) => {
+      const orbit = orbitRef.current;
+
+      if (!orbit) return;
+
+      const bounds = orbit.getBoundingClientRect();
+      const isInsideSection =
+        event.clientX >= bounds.left &&
+        event.clientX <= bounds.right &&
+        event.clientY >= bounds.top &&
+        event.clientY <= bounds.bottom;
+
+      if (!isInsideSection) {
+        cursorXTarget.set(0);
+        cursorYTarget.set(0);
+        return;
+      }
+
+      const horizontalPosition =
+        (event.clientX - (bounds.left + bounds.width / 2)) / (bounds.width / 2);
+      const verticalPosition =
+        (event.clientY - (bounds.top + bounds.height / 2)) /
+        (bounds.height / 2);
+
+      cursorXTarget.set(horizontalPosition * 18);
+      cursorYTarget.set(verticalPosition * 12);
+    };
+
+    const resetCursorPosition = () => {
+      cursorXTarget.set(0);
+      cursorYTarget.set(0);
+    };
+
+    window.addEventListener("pointermove", updateCursorPosition, {
+      passive: true,
+    });
+    window.addEventListener("blur", resetCursorPosition);
+
+    return () => {
+      window.removeEventListener("pointermove", updateCursorPosition);
+      window.removeEventListener("blur", resetCursorPosition);
+    };
+  }, [cursorXTarget, cursorYTarget, reduceMotion]);
+
+  return (
+    <div
+      ref={orbitRef}
       aria-hidden="true"
       className="pointer-events-none absolute inset-0"
-      animate={
-        reduceMotion ? undefined : { x: [0, 8, 0, -8, 0], y: [0, -5, 0, 5, 0] }
-      }
-      transition={{ duration: 20, ease: "linear", repeat: Infinity }}
     >
       {PORTRAITS.map((portrait, index) => (
-        <Image
+        <OrbitingPortrait
           key={index}
-          src={portrait.image}
-          alt=""
-          sizes={`${Math.ceil(portrait.width)}px`}
-          className="absolute max-w-none"
-          style={{
-            width: portrait.width,
-            height: portrait.height,
-            left: portrait.left,
-            top: portrait.top,
-            transform: `${portrait.centered ? "translate(-50%, -50%) " : ""}rotate(${portrait.rotate ?? 0}deg)`,
-          }}
+          portrait={portrait}
+          index={index}
+          orbitSize={orbitSize}
+          time={time}
+          cursorX={cursorX}
+          cursorY={cursorY}
+          reduceMotion={reduceMotion}
         />
       ))}
-    </motion.div>
+    </div>
   );
 }

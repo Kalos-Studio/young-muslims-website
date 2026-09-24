@@ -190,6 +190,9 @@
   }
 
   /* The landing hero begins behind its navigation, matching the Figma frame. */
+  body:has([data-landing-page]) {
+    overflow-x: clip;
+  }
   body:has([data-landing-page]) [data-site-header] {
     @apply fixed! w-full! border-transparent! bg-transparent! text-brand-pure-white backdrop-blur-none!;
   }

@@ -24,6 +24,18 @@ export function HeroVideo() {
           a shared Deen.
         </p>
       </div>
+
+      <svg
+        aria-hidden="true"
+        className="absolute right-0 bottom-[-1px] left-0 z-20 h-[104px] w-full text-brand-warm-snow"
+        viewBox="0 0 1440 104"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0 52C240 104 480 104 720 52S1200 0 1440 52V104H0Z"
+          fill="currentColor"
+        />
+      </svg>
     </section>
   );
 }
