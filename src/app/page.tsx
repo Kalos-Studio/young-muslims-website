@@ -1,18 +1,25 @@
 import type { Metadata } from "next";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 
+import bottomPortraitLeft from "../../design-assets/figma/frame-37-52.png";
+import bottomPortraitCenter from "../../design-assets/figma/frame-37-53.png";
+import bottomPortraitRight from "../../design-assets/figma/frame-37-54.png";
+import bottomPortraitLowerLeft from "../../design-assets/figma/frame-37-56.png";
+import bottomPortraitLowerCenter from "../../design-assets/figma/frame-37-57.png";
+import bottomPortraitLowerRight from "../../design-assets/figma/frame-37-58.png";
 import { BelongingPortraitOrbit } from "./belonging-portrait-orbit";
 import { EverywhereSection } from "./everywhere-section";
 import { HeroVideo } from "./hero-video";
 import { HighlightReelMarquee } from "./highlight-reel-section";
 
-// WIREFRAME: media remains represented by placeholders while the landing-page
-// visual system, hierarchy, and approved copy come from Figma. See WIREFRAME.md.
+// WIREFRAME: some media remains represented by placeholders while the
+// landing-page visual system, hierarchy, and approved copy come from Figma.
+// See WIREFRAME.md.
 import { cn } from "@/lib/utils";
 import { Annotate } from "@/components/wireframe/annotate";
 import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
-import { PersonOutline } from "@/components/wireframe/person-outline";
 
 export const metadata: Metadata = {
   title: "Young Muslims",
@@ -66,16 +73,16 @@ function PointCard({
   );
 }
 
-function PortraitPlaceholder({ className }: { className?: string }) {
+function BottomPortrait({
+  image,
+  className,
+}: {
+  image: StaticImageData;
+  className?: string;
+}) {
   return (
-    <div
-      className={cn(
-        "flex shrink-0 items-center justify-center rounded-full border-4 border-brand-jade bg-muted text-muted-foreground",
-        className,
-      )}
-      aria-label="Portrait image placeholder"
-    >
-      <PersonOutline className="h-1/2 w-1/2" />
+    <div className={cn("absolute", className)} aria-hidden="true">
+      <Image src={image} alt="" fill sizes="176px" className="object-contain" />
     </div>
   );
 }
@@ -93,8 +100,8 @@ export default function Home() {
                 <span className="block font-bold">READ THIS FIRST</span>
                 <span className="mt-3 block">
                   Colors, typography, hierarchy, and approved copy now follow
-                  the landing-page design. Photography and video remain labelled
-                  placeholders until final media is supplied.
+                  the landing-page design. Remaining photography and video stay
+                  labelled as placeholders until final media is supplied.
                 </span>
               </>
             ),
@@ -215,12 +222,30 @@ export default function Home() {
           data-header-theme="light"
           className="relative min-h-[1038px] overflow-hidden text-center"
         >
-          <PortraitPlaceholder className="absolute top-10 left-[8%] size-40 border-brand-royal" />
-          <PortraitPlaceholder className="absolute top-0 left-[43%] size-36 border-brand-jade" />
-          <PortraitPlaceholder className="absolute top-16 right-[9%] size-36 border-landing-cyan" />
-          <PortraitPlaceholder className="absolute bottom-16 left-[14%] size-36 border-brand-jade" />
-          <PortraitPlaceholder className="absolute bottom-0 left-[45%] size-40 border-landing-cyan" />
-          <PortraitPlaceholder className="absolute right-[12%] bottom-20 size-44 border-brand-royal" />
+          <BottomPortrait
+            image={bottomPortraitLeft}
+            className="top-10 left-[8%] size-40"
+          />
+          <BottomPortrait
+            image={bottomPortraitCenter}
+            className="top-0 left-[43%] size-36"
+          />
+          <BottomPortrait
+            image={bottomPortraitRight}
+            className="top-16 right-[9%] size-36"
+          />
+          <BottomPortrait
+            image={bottomPortraitLowerLeft}
+            className="bottom-16 left-[14%] size-36"
+          />
+          <BottomPortrait
+            image={bottomPortraitLowerCenter}
+            className="bottom-0 left-[45%] size-40"
+          />
+          <BottomPortrait
+            image={bottomPortraitLowerRight}
+            className="right-[12%] bottom-20 size-44"
+          />
           <div className="absolute top-1/2 left-1/2 w-full max-w-[784px] -translate-x-1/2 -translate-y-1/2 text-section font-extrabold">
             <p>A number can&apos;t show you what it actually feels like.</p>
             <p className="text-landing-cyan">The people can.</p>
