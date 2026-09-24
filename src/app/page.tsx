@@ -110,13 +110,13 @@ export default function Home() {
 
       <Annotate
         bleed
-        note="Twenty-six interlocking portraits form a continuous ring around the copy. The connected composition drifts gently while several portraits remain cropped by the viewport."
+        note="Twenty-six portraits follow one another around a continuous elliptical path, each completing the full circuit around the copy. The orbit leans gently toward the cursor while several portraits remain cropped by the viewport."
       >
         <section
           data-header-theme="light"
           className="relative h-[1264px] w-full overflow-hidden bg-brand-warm-snow"
         >
-          <div className="absolute inset-x-0 -top-40 h-[1611px]">
+          <div className="absolute inset-0">
             <BelongingPortraitOrbit />
           </div>
           <div className="absolute top-[504px] left-1/2 w-full max-w-[784px] -translate-x-1/2 text-center">

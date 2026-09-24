@@ -20,10 +20,9 @@ import {
 import { cn } from "@/lib/utils";
 import {
   branchLabel,
-  neighborNets,
   toFeatureCollection,
   type Branch,
-  type NeighborNet,
+  type NeighborNetLocation,
 } from "@/lib/neighbornets";
 import { DebugPanel } from "./debug-panel";
 import { NetDetails } from "./net-details";
@@ -54,14 +53,16 @@ import {
  * the map itself (`click-popup` or `hover-tooltip`), not `side-panel`.
  */
 export function NeighborNetsMap({
+  locations,
   initialSettings = defaultSettings,
   showDebugPanel = true,
   bare = false,
 }: {
+  locations: NeighborNetLocation[];
   initialSettings?: MapSettings;
   showDebugPanel?: boolean;
   bare?: boolean;
-} = {}) {
+}) {
   const [settings, setSettings] = useState<MapSettings>(initialSettings);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -69,21 +70,32 @@ export function NeighborNetsMap({
   const visibleNets = useMemo(
     () =>
       settings.branchFilter === "all"
-        ? neighborNets
-        : neighborNets.filter((net) => net.branch === settings.branchFilter),
-    [settings.branchFilter],
+        ? locations
+        : locations.filter((net) => net.branch === settings.branchFilter),
+    [locations, settings.branchFilter],
   );
 
   const counts = useMemo(
     () => ({
-      brothers: neighborNets.filter((n) => n.branch === "brothers").length,
-      sisters: neighborNets.filter((n) => n.branch === "sisters").length,
+      brothers: locations.filter((n) => n.branch === "brothers").length,
+      sisters: locations.filter((n) => n.branch === "sisters").length,
       shown: visibleNets.length,
     }),
-    [visibleNets],
+    [locations, visibleNets],
   );
 
   const pairedCities = useMemo(() => sharedCities(visibleNets), [visibleNets]);
+  const availableBranches = useMemo(
+    () =>
+      (["brothers", "sisters"] as const).filter((branch) =>
+        locations.some((net) => net.branch === branch),
+      ),
+    [locations],
+  );
+  const coordinateOffsets = useMemo(
+    () => offsetsForSharedCoordinates(visibleNets),
+    [visibleNets],
+  );
 
   /** One name label per city: the id of the first net found in each. */
   const labelledNets = useMemo(() => {
@@ -103,7 +115,7 @@ export function NeighborNetsMap({
   const panelMode =
     settings.infoMode === "side-panel" || settings.infoMode === "both";
 
-  function handleSelect(net: NeighborNet) {
+  function handleSelect(net: NeighborNetLocation) {
     if (!panelMode) return;
     setSelectedId((current) => (current === net.id ? null : net.id));
   }
@@ -181,9 +193,10 @@ export function NeighborNetsMap({
                 // A screen-space nudge, so the two nets stay separated at every
                 // zoom instead of merging as you zoom out.
                 offset={
-                  settings.pairOffset && pairedCities.has(cityKey(net))
+                  coordinateOffsets[net.id] ??
+                  (settings.pairOffset && pairedCities.has(cityKey(net))
                     ? [net.branch === "brothers" ? -9 : 9, 0]
-                    : [0, 0]
+                    : [0, 0])
                 }
                 onMouseEnter={() => setHoveredId(net.id)}
                 onMouseLeave={() => setHoveredId(null)}
@@ -205,7 +218,7 @@ export function NeighborNetsMap({
                       same city name twice on top of each other. */}
                   {settings.showLabels && labelledNets.has(net.id) ? (
                     <MarkerLabel className="rounded bg-background/85 px-1 py-px">
-                      {net.city}
+                      {net.city ?? net.name}
                     </MarkerLabel>
                   ) : null}
                 </MarkerContent>
@@ -246,7 +259,11 @@ export function NeighborNetsMap({
           )}
         </Map>
 
-        <Legend settings={settings} />
+        <Legend
+          settings={settings}
+          branches={availableBranches}
+          hasInactive={locations.some((net) => net.status !== "active")}
+        />
       </div>
 
       {bare ? null : (
@@ -331,8 +348,10 @@ function FitToUS() {
   return null;
 }
 
-function cityKey(net: NeighborNet): string {
-  return `${net.city}|${net.state}`;
+function cityKey(net: NeighborNetLocation): string {
+  return net.city
+    ? `${net.city}|${net.state ?? ""}`
+    : `${net.longitude}|${net.latitude}`;
 }
 
 /**
@@ -340,7 +359,7 @@ function cityKey(net: NeighborNet): string {
  * close enough that at national zoom the two dots land on the same pixel and
  * one silently covers the other, so these are the ones worth nudging apart.
  */
-function sharedCities(nets: NeighborNet[]): Set<string> {
+function sharedCities(nets: NeighborNetLocation[]): Set<string> {
   // A plain record rather than a `Map`, which the mapcn `Map` component shadows
   // in this module.
   const branches: Record<string, Set<Branch>> = {};
@@ -356,6 +375,27 @@ function sharedCities(nets: NeighborNet[]): Set<string> {
   );
 }
 
+/** Offset exact coordinate duplicates so every source row remains clickable. */
+function offsetsForSharedCoordinates(
+  nets: NeighborNetLocation[],
+): Record<string, [number, number]> {
+  const groups: Record<string, NeighborNetLocation[]> = {};
+  for (const net of nets) {
+    const key = `${net.longitude}|${net.latitude}`;
+    groups[key] ??= [];
+    groups[key].push(net);
+  }
+
+  const offsets: Record<string, [number, number]> = {};
+  for (const group of Object.values(groups)) {
+    if (group.length < 2) continue;
+    group.forEach((net, index) => {
+      offsets[net.id] = [(index - (group.length - 1) / 2) * 18, 0];
+    });
+  }
+  return offsets;
+}
+
 /**
  * Clustering collapses markers into circle layers, which means the per-net
  * React glyph is gone. Rendering one cluster layer per branch is what keeps the
@@ -366,9 +406,9 @@ function ClusterLayers({
   settings,
   onSelect,
 }: {
-  nets: NeighborNet[];
+  nets: NeighborNetLocation[];
   settings: MapSettings;
-  onSelect: (net: NeighborNet) => void;
+  onSelect: (net: NeighborNetLocation) => void;
 }) {
   const byBranch = useMemo(
     () => ({
@@ -404,7 +444,15 @@ function ClusterLayers({
   );
 }
 
-function Legend({ settings }: { settings: MapSettings }) {
+function Legend({
+  settings,
+  branches,
+  hasInactive,
+}: {
+  settings: MapSettings;
+  branches: Branch[];
+  hasInactive: boolean;
+}) {
   const palette = palettes[settings.palette];
   const shapeChannel =
     settings.differentiator === "shape" ||
@@ -416,7 +464,7 @@ function Legend({ settings }: { settings: MapSettings }) {
         Neighbornets
       </p>
       <ul className="space-y-1">
-        {(["brothers", "sisters"] as const).map((branch) => (
+        {branches.map((branch) => (
           <li key={branch} className="flex items-center gap-2">
             <span
               className={cn(
@@ -433,7 +481,7 @@ function Legend({ settings }: { settings: MapSettings }) {
           </li>
         ))}
       </ul>
-      {settings.dimInactive ? (
+      {settings.dimInactive && hasInactive ? (
         <p className="mt-1.5 text-xs text-muted-foreground">
           Faded = forming or paused
         </p>

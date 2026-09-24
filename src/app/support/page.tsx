@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 // WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
-import { cn } from "@/lib/utils";
+import { FundraiseUpDonationForm } from "@/components/fundraise-up/donation-form";
 import { Annotate } from "@/components/wireframe/annotate";
 import { Frame } from "@/components/wireframe/frame";
 import { Lorem, Text } from "@/components/wireframe/text";
@@ -12,67 +12,6 @@ export const metadata: Metadata = {
   title: "Support",
   description: "Give to the work, and see where it goes.",
 };
-
-const amounts = ["$40", "$100", "$200", "$1,000", "$2,500", "$5,000"];
-
-/**
- * WIREFRAME: the donation widget.
- *
- * Drawn out rather than left as a labelled box because its height and density
- * drive the whole row beside it — the image next to it has to be roughly this
- * tall, and that is only obvious once the controls are on the page.
- *
- * This will be a Fundraise Up embed, so none of this markup survives; we do not
- * control the internals, only the column it sits in.
- */
-function DonationWidget() {
-  return (
-    <div className="flex flex-col gap-4 rounded-card border border-border bg-brand-pure-white p-8">
-      <p className="text-body text-muted-foreground">
-        Fundraise Up embed. We control the column, not the internals
-      </p>
-
-      <div className="grid grid-cols-2 gap-2">
-        <div className="rounded-pill bg-brand-royal px-6 py-4 text-center text-nav font-bold text-brand-pure-white">
-          One time
-        </div>
-        <div className="rounded-pill border border-border px-6 py-4 text-center text-nav font-bold text-muted-foreground">
-          Monthly
-        </div>
-      </div>
-
-      <div className="grid grid-cols-3 gap-2">
-        {amounts.map((amount, index) => (
-          <div
-            key={amount}
-            className={cn(
-              "rounded-media border px-4 py-4 text-center text-nav",
-              index === 0
-                ? "border-brand-royal font-bold text-brand-royal"
-                : "border-border text-muted-foreground",
-            )}
-          >
-            {amount}
-          </div>
-        ))}
-      </div>
-
-      <div className="rounded-media border border-border px-4 py-4 text-body text-muted-foreground">
-        Custom amount
-      </div>
-
-      <div className="flex items-center gap-2 text-body text-muted-foreground">
-        <span className="size-4 shrink-0 rounded-sm border border-border" />
-        Dedicate this donation
-      </div>
-      <p className="text-body text-brand-royal underline">Add comment</p>
-
-      <div className="rounded-pill bg-brand-royal px-6 py-4 text-center text-nav font-bold text-brand-pure-white">
-        Donate and support
-      </div>
-    </div>
-  );
-}
 
 /**
  * WIREFRAME: the recent supporters list. Names are anonymised per Omar's note —
@@ -137,7 +76,7 @@ export default function SupportPage() {
             label="Full-bleed image"
             className="col-span-2 rounded-card bg-brothers-slate text-brothers-midnight"
           />
-          <DonationWidget />
+          <FundraiseUpDonationForm />
         </div>
       </Annotate>
 

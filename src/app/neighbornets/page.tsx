@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { brotherLocations } from "@/generated/brother-neighbornets";
 import { NeighborNetsMap } from "./neighbornets-map";
 import { defaultSettings, type MapSettings } from "./map-options";
 // WIREFRAME: wireframe chrome around a real, working map. See WIREFRAME.md.
@@ -68,6 +69,7 @@ export default function NeighborNetsPage() {
             how the dots should look. */}
         <div className="h-screen">
           <NeighborNetsMap
+            locations={brotherLocations}
             initialSettings={wireframeSettings}
             showDebugPanel={false}
             bare
