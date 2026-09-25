@@ -69,7 +69,10 @@ export default function StoriesPage() {
         note="Scroll stop. Clicking a portrait above lands you on that person's story"
         className="mt-16"
       >
-        <div className="grid grid-cols-2 items-stretch overflow-hidden rounded-card">
+        <div
+          id="example-story"
+          className="grid scroll-mt-36 grid-cols-2 items-stretch overflow-hidden rounded-card"
+        >
           <div className="flex aspect-square items-center justify-center bg-landing-blush text-brand-royal">
             <PersonOutline className="h-2/5 w-2/5" />
           </div>

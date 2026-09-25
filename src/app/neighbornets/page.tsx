@@ -28,13 +28,13 @@ export const metadata: Metadata = {
  * `click-popup` rather than the default `side-panel`, because a bare map has no
  * side column to put details in; the card opens on the map itself.
  *
- * The blank basemap is also the honest choice here: it draws our own
- * public-domain state polygons instead of CARTO's tiles, so the page does not
- * pull a third party in just to show the shape of the country.
+ * The street basemap gives a searched region enough geographic context to make
+ * the result useful: city names, roads, and highways remain visible beneath
+ * the density layer and chapter dots.
  */
 const wireframeSettings: MapSettings = {
   ...defaultSettings,
-  basemap: "blank",
+  basemap: "streets",
   palette: "young-muslims",
   differentiator: "color",
   markerStyle: "ring",
@@ -67,12 +67,14 @@ export default function NeighborNetsPage() {
             than a widget in a box. Drop `bare` and `showDebugPanel={false}` to
             get the marker-comparison tooling back while we are still deciding
             how the dots should look. */}
-        <div className="h-screen">
+        <div>
           <NeighborNetsMap
             locations={brotherLocations}
             initialSettings={wireframeSettings}
             showDebugPanel={false}
             bare
+            finder
+            interactive
           />
         </div>
       </Annotate>
@@ -100,9 +102,11 @@ export default function NeighborNetsPage() {
         className="mt-16"
         note="each card links out to its own page: one for events, one for conferences, one for retreats"
       >
-        <Text as="h2" className="text-center text-brand-royal">
-          Other Ways to Get Involved
-        </Text>
+        <div id="upcoming-events" className="scroll-mt-36">
+          <Text as="h2" className="text-center text-brand-royal">
+            Other Ways to Get Involved
+          </Text>
+        </div>
         <div className="mt-8 grid grid-cols-3 gap-6">
           <div>
             <Frame

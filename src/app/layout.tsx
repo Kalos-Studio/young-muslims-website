@@ -6,6 +6,7 @@ import { FundraiseUpScript } from "@/components/fundraise-up/fundraise-up-script
 import { FooterSlot } from "@/components/site/footer-slot";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { TopNavTransitionProvider } from "@/components/site/top-nav-transition";
 // WIREFRAME: the two imports below are prototype scaffolding. See WIREFRAME.md.
 import { AnnotationToolbar } from "@/components/wireframe/annotation-toolbar";
 import { NotesToggle } from "@/components/wireframe/notes-toggle";
@@ -50,8 +51,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <FundraiseUpScript />
       </head>
       <body className="flex min-h-full flex-col">
-        <SiteHeader />
-        <div className="flex-1">{children}</div>
+        <TopNavTransitionProvider>
+          <SiteHeader />
+        </TopNavTransitionProvider>
+        <div data-page-shell className="flex-1">
+          {children}
+        </div>
         <FooterSlot>
           <SiteFooter />
         </FooterSlot>
