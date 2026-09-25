@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import type { Branch, NeighborNet } from "@/lib/neighbornets";
+import type { Branch, NeighborNetLocation } from "@/lib/neighbornets";
 import {
   palettes,
   type Differentiator,
@@ -36,16 +36,20 @@ function usesInitial(
  * Base diameter in px. `by-size` interpolates between 12 and 26px across a
  * headcount range of roughly 5–35, which is the spread in the seed data.
  */
-function glyphSize(net: NeighborNet, sizeMode: SizeMode, hasLetter: boolean) {
+function glyphSize(
+  net: NeighborNetLocation,
+  sizeMode: SizeMode,
+  hasLetter: boolean,
+) {
   const base = hasLetter ? 20 : 14;
-  if (sizeMode === "uniform") return base;
+  if (sizeMode === "uniform" || net.size === undefined) return base;
   const clamped = Math.min(Math.max(net.size, 5), 35);
   const scaled = 12 + ((clamped - 5) / 30) * 14;
   return Math.round(Math.max(scaled, hasLetter ? 18 : 12));
 }
 
 export type NetMarkerProps = {
-  net: NeighborNet;
+  net: NeighborNetLocation;
   markerStyle: MarkerStyle;
   differentiator: Differentiator;
   palette: Palette;

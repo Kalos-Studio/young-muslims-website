@@ -21,7 +21,9 @@
 [context.deploy-preview.environment]
   NEXT_PUBLIC_SHOW_NOTES = "true"
   NEXT_PUBLIC_ENABLE_AGENTATION = "true"
+  NEXT_PUBLIC_FUNDRAISE_UP_LIVEMODE = "false"
 
 [context.branch-deploy.environment]
   NEXT_PUBLIC_SHOW_NOTES = "true"
   NEXT_PUBLIC_ENABLE_AGENTATION = "true"
+  NEXT_PUBLIC_FUNDRAISE_UP_LIVEMODE = "false"
