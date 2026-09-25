@@ -270,6 +270,401 @@
   -webkit-text-stroke: 2.94131px var(--color-brand-warm-snow);
 }
 
+/* Full-screen site menu ------------------------------------------------------
+ * The surface is one oversized organic shape whose center is measured from the
+ * menu trigger. Opening grows it from the hamburger; closing sends the exact
+ * same shape back into that button.
+ */
+.ym-menu-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  overflow: hidden;
+  color: var(--color-brand-pure-white);
+  outline: none;
+  opacity: 1;
+  transition: opacity 800ms;
+}
+
+/* Base UI watches the popup's own transitions before unmounting it. This
+ * imperceptible opacity delta keeps the popup alive while the child surface
+ * completes its visible reverse animation into the hamburger button. */
+.ym-menu-popup[data-starting-style],
+.ym-menu-popup[data-ending-style] {
+  opacity: 0.999;
+}
+
+.ym-menu-surface {
+  position: absolute;
+  top: var(--menu-origin-y, 3.85rem);
+  left: var(--menu-origin-x, calc(100vw - 5.75rem));
+  width: 220vmax;
+  aspect-ratio: 1;
+  background: var(--color-brand-obsidian);
+  border-radius: 61% 39% 55% 45% / 44% 61% 39% 56%;
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center;
+  transition: transform 800ms cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: transform;
+}
+
+.ym-menu-popup[data-starting-style] .ym-menu-surface,
+.ym-menu-popup[data-ending-style] .ym-menu-surface {
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.ym-menu-popup[data-ending-style] .ym-menu-surface {
+  transition-timing-function: cubic-bezier(0.5, 0.3, 0, 1);
+}
+
+.ym-menu-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  min-height: 100dvh;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 0 5rem 4rem;
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 250ms ease 180ms,
+    transform 800ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.ym-menu-popup[data-starting-style] .ym-menu-content,
+.ym-menu-popup[data-ending-style] .ym-menu-content {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.ym-menu-popup[data-ending-style] .ym-menu-content {
+  transition:
+    opacity 150ms ease,
+    transform 300ms cubic-bezier(0.5, 0.3, 0, 1);
+}
+
+.ym-menu-topbar {
+  display: grid;
+  min-height: 7.6875rem;
+  flex: none;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.ym-menu-logo {
+  grid-column: 2;
+  color: var(--color-brand-pure-white);
+  outline: none;
+  transition:
+    color 200ms ease,
+    opacity 200ms ease;
+}
+
+.ym-menu-logo:hover {
+  color: var(--color-brand-jade);
+}
+
+.ym-menu-logo:focus-visible {
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 3px var(--color-brand-jade);
+}
+
+.ym-menu-close {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+  justify-self: end;
+  place-items: center;
+  border-radius: 9999px;
+  color: var(--color-brand-pure-white);
+  outline: none;
+  transition:
+    color 200ms ease,
+    background-color 200ms ease,
+    transform 450ms cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.ym-menu-close:hover {
+  background: var(--color-brand-pure-white);
+  color: var(--color-brand-obsidian);
+  transform: rotate(90deg);
+}
+
+.ym-menu-close:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--color-brand-obsidian),
+    0 0 0 4px var(--color-brand-pure-white);
+}
+
+.ym-menu-layout {
+  display: grid;
+  width: 100%;
+  max-width: 90rem;
+  flex: 1;
+  grid-template-columns: minmax(18rem, 0.82fr) minmax(28rem, 1.18fr);
+  gap: clamp(3rem, 8vw, 9rem);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 5vh, 4.5rem);
+}
+
+.ym-menu-link-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.ym-menu-link-list a {
+  outline: none;
+  transition:
+    color 250ms ease,
+    opacity 250ms ease,
+    transform 450ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.ym-menu-primary-link {
+  display: block;
+  width: fit-content;
+  font-family: var(--font-boldonse);
+  font-size: clamp(2.6rem, 5.4vw, 5.5rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--color-brand-pure-white);
+  text-transform: uppercase;
+}
+
+.ym-menu-primary-list {
+  gap: 0.35rem;
+}
+
+.ym-menu-primary-link:hover,
+.ym-menu-primary-link:focus-visible {
+  color: var(--color-brand-jade);
+  transform: translateX(0.5rem);
+}
+
+.ym-menu-primary-link[aria-current="page"]::after {
+  display: inline-block;
+  width: 0.16em;
+  aspect-ratio: 1;
+  margin-left: 0.18em;
+  border-radius: 9999px;
+  background: currentColor;
+  content: "";
+  vertical-align: 0.5em;
+}
+
+.ym-menu-primary-list:has(a:hover) a:not(:hover),
+.ym-menu-primary-list:has(a:focus-visible) a:not(:focus-visible),
+.ym-menu-secondary-list:has(a:hover) a:not(:hover),
+.ym-menu-secondary-list:has(a:focus-visible) a:not(:focus-visible) {
+  opacity: 0.28;
+}
+
+.ym-menu-secondary-list {
+  max-width: 28rem;
+  border-top: 1px solid
+    color-mix(in srgb, var(--color-brand-pure-white) 20%, transparent);
+}
+
+.ym-menu-secondary-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--color-brand-pure-white) 20%, transparent);
+  padding-block: 0.95rem;
+  color: var(--color-brand-pure-white);
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.ym-menu-secondary-link:hover,
+.ym-menu-secondary-link:focus-visible {
+  color: var(--color-brand-jade);
+}
+
+.ym-menu-features {
+  display: grid;
+  min-height: min(38rem, calc(100dvh - 15rem));
+  grid-template-columns: 1.08fr 0.92fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
+}
+
+.ym-menu-feature {
+  position: relative;
+  display: flex;
+  min-height: 12rem;
+  flex-direction: column;
+  overflow: hidden;
+  padding: clamp(1.5rem, 2.5vw, 2.5rem);
+  outline: none;
+  transition:
+    border-radius 500ms cubic-bezier(0.19, 1, 0.22, 1),
+    transform 500ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.ym-menu-feature:first-child {
+  grid-row: 1 / span 2;
+  border-radius: 18% 4% 24% 7% / 10% 18% 8% 23%;
+}
+
+.ym-menu-feature:nth-child(2) {
+  border-radius: 8% 24% 7% 20% / 22% 9% 26% 8%;
+}
+
+.ym-menu-feature:nth-child(3) {
+  border-radius: 22% 8% 18% 6% / 12% 24% 8% 20%;
+}
+
+.ym-menu-feature:hover,
+.ym-menu-feature:focus-visible {
+  z-index: 1;
+  border-radius: var(--radius-card);
+  transform: scale(1.025);
+}
+
+.ym-menu-feature:focus-visible {
+  box-shadow: inset 0 0 0 3px var(--color-brand-pure-white);
+}
+
+.ym-menu-feature--royal {
+  background: var(--color-brand-royal);
+  color: var(--color-brand-pure-white);
+}
+
+.ym-menu-feature--jade {
+  background: var(--color-brand-jade);
+  color: var(--color-brand-pure-white);
+}
+
+.ym-menu-feature--brass {
+  background: var(--color-sisters-brass);
+  color: var(--color-brand-obsidian);
+}
+
+@media (max-width: 900px) {
+  .ym-menu-content {
+    padding-inline: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .ym-menu-topbar {
+    min-height: 5.5rem;
+  }
+
+  .ym-menu-layout {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+    padding-block: 1.5rem 3rem;
+  }
+
+  .ym-menu-primary-link {
+    font-size: clamp(2.65rem, 12vw, 4.5rem);
+  }
+
+  .ym-menu-features {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+
+  .ym-menu-feature:first-child {
+    grid-row: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ym-menu-popup,
+  .ym-menu-surface,
+  .ym-menu-content,
+  .ym-menu-close,
+  .ym-menu-link-list a,
+  .ym-menu-feature {
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+/* Persistent top-nav route transition. Only TopNavLink opts into this mask, so
+ * drawer links, page sublinks, and browser history navigation remain native. */
+.ym-route-transition {
+  position: fixed;
+  z-index: 2147483647;
+  inset: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ym-route-transition[data-phase="covering"],
+.ym-route-transition[data-phase="covered"],
+.ym-route-transition[data-phase="presenting"],
+.ym-route-transition[data-phase="uncovering"] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.ym-route-transition-shape {
+  position: absolute;
+  top: var(--ym-route-origin-y);
+  left: var(--ym-route-origin-x);
+  width: 220vmax;
+  aspect-ratio: 1;
+  border-radius: 43% 57% 39% 61% / 54% 38% 62% 46%;
+  background: var(--ym-route-background, var(--color-brand-warm-snow));
+  transform: translate(-50%, -50%) scale(0);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.ym-route-transition[data-phase="covering"] .ym-route-transition-shape,
+.ym-route-transition[data-phase="covered"] .ym-route-transition-shape,
+.ym-route-transition[data-phase="presenting"] .ym-route-transition-shape {
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 800ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.ym-route-transition-text {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ym-route-transition[data-phase="presenting"] .ym-route-transition-text,
+.ym-route-transition[data-phase="uncovering"] .ym-route-transition-text {
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+.ym-route-transition-text-snapshot,
+.ym-route-transition-text-snapshot * {
+  pointer-events: none !important;
+}
+
+.ym-route-transition-text-snapshot *::before,
+.ym-route-transition-text-snapshot *::after {
+  content: none !important;
+}
+
+.ym-route-transition[data-phase="uncovering"] .ym-route-transition-shape {
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 800ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ym-route-transition-shape {
+    transition-duration: 1ms !important;
+  }
+}
+
 /* WIREFRAME:start ------------------------------------------------------------
  * Wireframe-only design tokens. Delete this entire fenced block when the
  * wireframe comes out; nothing in the real site should reference `--wf-*` or
