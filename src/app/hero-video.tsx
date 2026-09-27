@@ -11,9 +11,14 @@ export function HeroVideo() {
       />
       <div aria-hidden className="absolute inset-0 bg-brand-obsidian/35" />
 
-      <p className="absolute top-36 left-1/2 -translate-x-1/2 text-sm font-medium whitespace-nowrap text-brand-warm-snow/60">
-        Full-bleed community video placeholder
-      </p>
+      <div className="absolute top-36 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center">
+        <p className="text-sm font-medium whitespace-nowrap text-brand-warm-snow/60">
+          Full-bleed community video placeholder
+        </p>
+        <p lang="ar" dir="rtl" className="mt-3 text-4xl font-normal">
+          ﷽
+        </p>
+      </div>
 
       <div className="relative z-10 flex w-full max-w-[983px] flex-col items-center gap-4">
         <h1 className="font-display text-display font-normal md:whitespace-nowrap">

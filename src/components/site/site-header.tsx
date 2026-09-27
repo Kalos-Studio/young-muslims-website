@@ -1,9 +1,10 @@
+import Link from "next/link";
+
 import { HeaderContrastController } from "./header-contrast-controller";
 import { Logo } from "./logo";
 import { NavLink } from "./nav-link";
 import { ctaLink, primaryLinks } from "./nav-links";
 import { SideNav } from "./side-nav";
-import { TopNavLink } from "./top-nav-transition";
 
 /**
  * The site header. Permanent: these are the real routes and the real layout.
@@ -39,13 +40,13 @@ export function SiteHeader() {
           className="flex items-center justify-start gap-4 text-nav"
         >
           {primaryLinks.map((link) => (
-            <NavLink key={link.href} href={link.href} topLevel>
+            <NavLink key={link.href} href={link.href}>
               {link.label}
             </NavLink>
           ))}
         </nav>
 
-        <TopNavLink
+        <Link
           href="/"
           aria-label="Young Muslims, home"
           data-site-logo-link
@@ -54,7 +55,7 @@ export function SiteHeader() {
           {/* aria-hidden because the link above already names the destination;
               without it a screen reader announces the name twice. */}
           <Logo className="h-5" aria-hidden />
-        </TopNavLink>
+        </Link>
 
         <div className="flex shrink-0 items-center justify-end gap-6">
           <nav
@@ -63,7 +64,6 @@ export function SiteHeader() {
           >
             <NavLink
               href={ctaLink.href}
-              topLevel
               className="inline-flex items-center rounded-pill! border border-current px-6 py-4"
             >
               {ctaLink.label}

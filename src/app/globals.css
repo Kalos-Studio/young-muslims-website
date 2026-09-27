@@ -300,7 +300,27 @@
   left: var(--menu-origin-x, calc(100vw - 5.75rem));
   width: 220vmax;
   aspect-ratio: 1;
-  background: var(--color-brand-obsidian);
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--color-brand-obsidian) 35%, transparent),
+      color-mix(in srgb, var(--color-brand-obsidian) 35%, transparent)
+    ),
+    radial-gradient(
+      circle at 30% 30%,
+      color-mix(in srgb, var(--color-brothers-sky) 42%, transparent),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 72% 68%,
+      color-mix(in srgb, var(--color-brand-jade) 48%, transparent),
+      transparent 38%
+    ),
+    linear-gradient(
+      135deg,
+      var(--color-brothers-midnight),
+      var(--color-brand-obsidian) 68%
+    );
+  background-attachment: fixed;
   border-radius: 61% 39% 55% 45% / 44% 61% 39% 56%;
   transform: translate(-50%, -50%) scale(1);
   transform-origin: center;
@@ -363,12 +383,12 @@
 }
 
 .ym-menu-logo:hover {
-  color: var(--color-brand-jade);
+  color: var(--color-sisters-buttercup);
 }
 
 .ym-menu-logo:focus-visible {
   border-radius: var(--radius-sm);
-  box-shadow: 0 0 0 3px var(--color-brand-jade);
+  box-shadow: 0 0 0 3px var(--color-sisters-buttercup);
 }
 
 .ym-menu-close {
@@ -440,7 +460,7 @@
 
 .ym-menu-primary-link:hover,
 .ym-menu-primary-link:focus-visible {
-  color: var(--color-brand-jade);
+  color: var(--color-sisters-buttercup);
   transform: translateX(0.5rem);
 }
 
@@ -484,7 +504,7 @@
 
 .ym-menu-secondary-link:hover,
 .ym-menu-secondary-link:focus-visible {
-  color: var(--color-brand-jade);
+  color: var(--color-sisters-buttercup);
 }
 
 .ym-menu-features {
@@ -587,81 +607,6 @@
   .ym-menu-feature {
     transition-duration: 1ms !important;
     transition-delay: 0ms !important;
-  }
-}
-
-/* Persistent top-nav route transition. Only TopNavLink opts into this mask, so
- * drawer links, page sublinks, and browser history navigation remain native. */
-.ym-route-transition {
-  position: fixed;
-  z-index: 2147483647;
-  inset: 0;
-  overflow: hidden;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.ym-route-transition[data-phase="covering"],
-.ym-route-transition[data-phase="covered"],
-.ym-route-transition[data-phase="presenting"],
-.ym-route-transition[data-phase="uncovering"] {
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.ym-route-transition-shape {
-  position: absolute;
-  top: var(--ym-route-origin-y);
-  left: var(--ym-route-origin-x);
-  width: 220vmax;
-  aspect-ratio: 1;
-  border-radius: 43% 57% 39% 61% / 54% 38% 62% 46%;
-  background: var(--ym-route-background, var(--color-brand-warm-snow));
-  transform: translate(-50%, -50%) scale(0);
-  transform-origin: center;
-  will-change: transform;
-}
-
-.ym-route-transition[data-phase="covering"] .ym-route-transition-shape,
-.ym-route-transition[data-phase="covered"] .ym-route-transition-shape,
-.ym-route-transition[data-phase="presenting"] .ym-route-transition-shape {
-  transform: translate(-50%, -50%) scale(1);
-  transition: transform 800ms cubic-bezier(0.77, 0, 0.175, 1);
-}
-
-.ym-route-transition-text {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.ym-route-transition[data-phase="presenting"] .ym-route-transition-text,
-.ym-route-transition[data-phase="uncovering"] .ym-route-transition-text {
-  opacity: 1;
-  transition: opacity 220ms ease;
-}
-
-.ym-route-transition-text-snapshot,
-.ym-route-transition-text-snapshot * {
-  pointer-events: none !important;
-}
-
-.ym-route-transition-text-snapshot *::before,
-.ym-route-transition-text-snapshot *::after {
-  content: none !important;
-}
-
-.ym-route-transition[data-phase="uncovering"] .ym-route-transition-shape {
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 800ms cubic-bezier(0.77, 0, 0.175, 1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ym-route-transition-shape {
-    transition-duration: 1ms !important;
   }
 }
 

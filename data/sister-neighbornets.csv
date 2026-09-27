@@ -1,0 +1,105 @@
+neighbor_net,region,state,latitude,longitude,instagram,source_url,geocode_source
+East Valley,Arizona,AZ,33.415200,-111.831500,@ym.eastvalley.sisters,https://ymsisters.com/locations/,manual city center
+Berkeley,California,CA,37.870839,-122.272863,,https://ymsisters.com/locations/,"Nominatim: Berkeley, Alameda County, California, United States"
+Los Angeles,California,CA,34.053691,-118.242766,@ym.losangeles.sisters,https://ymsisters.com/locations/,"Nominatim: Los Angeles, Los Angeles County, California, United States"
+Sacramento,California,CA,38.581061,-121.493895,@ym.sacramento.sisters,https://ymsisters.com/locations/,"Nominatim: Sacramento, Sacramento County, California, United States"
+Berlin,Connecticut,CT,41.621488,-72.745652,@ym.berlin.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Middletown,Connecticut,CT,41.562318,-72.650906,@ym.middletown.sisters,https://ymsisters.com/locations/,matching brothers chapter
+New Haven,Connecticut,CT,41.308214,-72.925052,,https://ymsisters.com/locations/,matching brothers chapter
+Stamford,Connecticut,CT,41.053430,-73.538734,@ym.stamford.sisters,https://ymsisters.com/locations/,"Nominatim: Stamford, Western Connecticut Planning Region, Connecticut, United States"
+Windsor Locks,Connecticut,CT,41.931210,-72.631385,@ym.locks.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Jacksonville,Florida,FL,30.326225,-81.657918,@ym.jax.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Orlando,Florida,FL,28.542122,-81.379045,@ym.orlando.sisters,https://ymsisters.com/locations/,"Nominatim: Orlando, Orange County, Florida, United States"
+Pompano Beach,Florida,FL,26.237860,-80.124767,@ym.pompano.sisters,https://ymsisters.com/locations/,matching brothers chapter
+SoFlo,Florida,FL,26.191140,-80.293550,@ym.soflo.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Tampa,Florida,FL,27.944985,-82.458311,@ym.tampa.sisters,https://ymsisters.com/locations/,"Nominatim: Tampa, Hillsborough County, Florida, United States"
+Alpharetta,Georgia,GA,34.075596,-84.294596,@ym.alpharetta.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Augusta,Georgia,GA,33.470971,-81.974843,@ym.augusta.sisters,https://ymsisters.com/locations/,"Nominatim: Augusta, Richmond County, Georgia, United States"
+Douglasville,Georgia,GA,33.751497,-84.747714,@ym.dville.sisters,https://ymsisters.com/locations/,"Nominatim: Douglasville, Douglas County, Georgia, United States"
+Duluth,Georgia,GA,34.002857,-84.144105,@ym.duluth.sisters,https://ymsisters.com/locations/,"Nominatim: Duluth, Gwinnett County, Georgia, 30095, United States"
+Forsyth,Georgia,GA,34.235309,-84.133564,@ym.forsyth.sisters,https://ymsisters.com/locations/,"Nominatim: Forsyth County, Georgia, United States"
+Suwanee,Georgia,GA,34.051490,-84.071300,@ym.suwanee.sisters,https://ymsisters.com/locations/,matching brothers chapter
+AMPO,Illinois,IL,41.760600,-88.320100,@ym.ampo.sisters,https://ymsisters.com/locations/,manual city center
+ICCD,Illinois,IL,42.033400,-87.883400,@ym.iccd.sisters,https://ymsisters.com/locations/,manual city center
+IFN,Illinois,IL,42.327889,-87.913117,@ym.lakecounty.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Plainfield,Illinois,IL,41.557076,-88.190503,@ym.plainfield.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Westside,Illinois,IL,41.850030,-87.964508,@ym.westside.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Illiana,Indiana,IN,41.494202,-87.521707,@ym.illiana.sisters,https://ymsisters.com/locations/,"Nominatim: Dyer, Lake County, Indiana, 46311, United States"
+North Indy,Indiana,IN,39.807820,-86.178043,@ym.northindy.sisters,https://ymsisters.com/locations/,"Nominatim: North Indianapolis, Indianapolis, Center Township, Marion County, Indiana, 46208, United States"
+West Indy,Indiana,IN,39.768400,-86.200000,@ym.westindy.sisters,https://ymsisters.com/locations/,manual city center
+Des Moines,Iowa,IA,41.586865,-93.624949,@ym.desmoines.sisters,https://ymsisters.com/locations/,"Nominatim: Des Moines, Polk County, Iowa, United States"
+Bowling Green,Kentucky,KY,36.992920,-86.442868,@ym.bg.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Lexington,Kentucky,KY,38.046407,-84.497039,@ym.lexington.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Baton Rouge,Louisiana,LA,30.449416,-91.186966,@ym.batonrouge.sisters,https://ymsisters.com/locations/,"Nominatim: Baton Rouge, East Baton Rouge Parish, Louisiana, United States"
+Mandeville,Louisiana,LA,30.358231,-90.065748,@ym.mandeville.sisters,https://ymsisters.com/locations/,"Nominatim: Mandeville, St. Tammany Parish, Louisiana, United States"
+New Orleans,Louisiana,LA,29.956142,-90.073393,@ym.nola.sisters,https://ymsisters.com/locations/,"Nominatim: New Orleans, Orleans Parish, Louisiana, United States"
+Portland,Maine,ME,43.657361,-70.258662,@ym.portland.sisters,https://ymsisters.com/locations/,"Nominatim: Portland, Cumberland County, Maine, United States"
+Bel Air,Maryland,MD,39.535900,-76.348300,@ym.belair.sisters,https://ymsisters.com/locations/,manual city center
+Gaithersburg,Maryland,MD,39.139919,-77.192921,@ym.gaithersburg.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Laurel,Maryland,MD,39.098432,-76.848509,@ym.laurel.sisters,https://ymsisters.com/locations/,"Nominatim: Laurel, Prince George's County, Maryland, 20707, United States"
+Salisbury,Maryland,MD,38.366027,-75.600996,@ym.salisbury.sisters,https://ymsisters.com/locations/,matching brothers chapter
+White Marsh,Maryland,MD,39.383655,-76.451127,@ym.whitemarsh.sisters,https://ymsisters.com/locations/,"Nominatim: White Marsh, Baltimore County, Maryland, United States"
+Acton-Boxborough,Massachusetts,MA,42.485093,-71.432840,@ym.actonboxborough.sisters,https://ymsisters.com/locations/,"Nominatim: Acton, Middlesex County, Massachusetts, United States"
+Andover,Massachusetts,MA,42.657170,-71.140878,@ym.methuen.sisters,https://ymsisters.com/locations/,"Nominatim: Andover, Essex County, Massachusetts, United States"
+Boston,Massachusetts,MA,42.358834,-71.057830,@ym.boston.sisters,https://ymsisters.com/locations/,"Nominatim: Boston, Suffolk County, Massachusetts, United States"
+Sharon,Massachusetts,MA,42.123733,-71.178728,@ym.sharon.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Westborough,Massachusetts,MA,42.269431,-71.612991,@ym.westborough.sisters,https://ymsisters.com/locations/,"Nominatim: Westborough, Worcester County, Massachusetts, 01581, United States"
+Worcester,Massachusetts,MA,42.262562,-71.801888,@ym.worcester.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Minneapolis,Minnesota,MN,44.977300,-93.265469,@ym.minneapolis.sisters,https://ymsisters.com/locations/,"Nominatim: Minneapolis, Hennepin County, Minnesota, United States"
+Rochester,Minnesota,MN,44.023439,-92.463018,@ym.rochester.sisters,https://ymsisters.com/locations/,"Nominatim: Rochester, Olmsted County, Minnesota, United States"
+Las Vegas,Nevada,NV,36.167426,-115.148413,@ym.lasvegas.sisters,https://ymsisters.com/locations/,"Nominatim: Las Vegas, Clark County, Nevada, United States"
+571,New Jersey,NJ,40.281318,-74.570406,@ym.571.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Basking Ridge,New Jersey,NJ,40.706409,-74.549273,@ym.baskingridge.sisters,https://ymsisters.com/locations/,"Nominatim: Basking Ridge, Bernards Township, Somerset County, New Jersey, 02794, United States"
+Bridgewater,New Jersey,NJ,40.559813,-74.551715,@ym.bridgewater.sisters,https://ymsisters.com/locations/,"Nominatim: Bridgewater, Main Street, Bridgewater Township, Somerset County, New Jersey, 08805, United States"
+Cherry Hill,New Jersey,NJ,39.934835,-75.030726,@ym.cherryhill.sisters,https://ymsisters.com/locations/,"Nominatim: Cherry Hill Township, Camden County, New Jersey, United States"
+East Brunswick,New Jersey,NJ,40.427884,-74.415984,@ym.eastbrunswick.sisters,https://ymsisters.com/locations/,"Nominatim: East Brunswick Township, Middlesex County, New Jersey, United States"
+Edison,New Jersey,NJ,40.500535,-74.398394,@ym.edison.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Iselin,New Jersey,NJ,40.569335,-74.315112,@ym.iselin.sisters,https://ymsisters.com/locations/,"Nominatim: Iselin, Woodbridge Township, Middlesex County, New Jersey, 08830, United States"
+Jersey City,New Jersey,NJ,40.721568,-74.047455,@ym.jerseycity.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Morris County,New Jersey,NJ,40.842718,-74.392147,@ym.morriscounty.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Old Bridge,New Jersey,NJ,40.399178,-74.340904,,https://ymsisters.com/locations/,matching brothers chapter
+Paramus,New Jersey,NJ,40.945291,-74.073590,@ym.paramus.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Piscataway,New Jersey,NJ,40.546433,-74.466054,@ym.piscataway.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Saddle River,New Jersey,NJ,41.031764,-74.102087,,https://ymsisters.com/locations/,"Nominatim: Saddle River, Bergen County, New Jersey, United States"
+Sayreville,New Jersey,NJ,40.463536,-74.361850,@ym.sayreville.sisters,https://ymsisters.com/locations/,"Nominatim: Sayreville, Middlesex County, New Jersey, United States"
+Teaneck,New Jersey,NJ,40.886016,-74.007257,@ym.teaneck.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Trenton,New Jersey,NJ,40.220307,-74.765900,@ym.trenton.sisters,https://ymsisters.com/locations/,"Nominatim: Trenton, Mercer County, New Jersey, United States"
+Brighton Beach,New York,NY,40.579644,-73.961110,@ym.brightonbeach.sisters,https://ymsisters.com/locations/,"Nominatim: Brighton Beach, Brooklyn, Kings County, New York, United States"
+Flushing,New York,NY,40.765430,-73.817429,@ym.flushing.sisters,https://ymsisters.com/locations/,"Nominatim: Flushing, Queens, Queens County, New York, 11354, United States"
+Jamaica,New York,NY,40.698763,-73.808825,@ym.jamaica.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Kensington,New York,NY,40.646215,-73.970694,@ym.kensington.sisters,https://ymsisters.com/locations/,"Nominatim: Kensington, Flatbush, Brooklyn, Kings County, New York, 11218, United States"
+New Hyde Park,New York,NY,40.735216,-73.688324,@ym.newhydepark.sisters,https://ymsisters.com/locations/,"Nominatim: Village of New Hyde Park, Town of North Hempstead, Nassau County, New York, United States"
+Roslyn,New York,NY,40.799823,-73.650962,@ym.roslyn.sisters,https://ymsisters.com/locations/,"Nominatim: Village of Roslyn, Town of North Hempstead, Nassau County, New York, United States"
+Westbury,New York,NY,40.755656,-73.587627,@ym.westbury.sisters,https://ymsisters.com/locations/,"Nominatim: Village of Westbury, Town of North Hempstead, Nassau County, New York, United States"
+Charlotte,North Carolina,NC,35.227209,-80.843083,@ym.charlotte.sisters,https://ymsisters.com/locations/,"Nominatim: Charlotte, Mecklenburg County, North Carolina, United States"
+Cincinnati,Ohio,OH,39.101281,-84.512741,@ym.cincinnati.sisters,https://ymsisters.com/locations/,"Nominatim: Cincinnati, Hamilton County, Ohio, United States"
+Columbus,Ohio,OH,39.962260,-83.000707,@ym.columbus.sisters,https://ymsisters.com/locations/,"Nominatim: Columbus, Franklin County, Ohio, United States"
+Oklahoma City,Oklahoma,OK,35.472989,-97.517054,@ym.okc.sisters,https://ymsisters.com/locations/,"Nominatim: Oklahoma City, Oklahoma County, Oklahoma, United States"
+Allentown,Pennsylvania,PA,40.602255,-75.471611,@ym.allentown.sisters,https://ymsisters.com/locations/,"Nominatim: Allentown, Lehigh County, Pennsylvania, United States"
+DelCo,Pennsylvania,PA,39.916778,-75.387693,@ym.delco.sisters,https://ymsisters.com/locations/,"Nominatim: Media, Delaware County, Pennsylvania, United States"
+Devon,Pennsylvania,PA,40.047360,-75.422951,@ym.devon.sisters,https://ymsisters.com/locations/,"Nominatim: Devon, North Devon Boulevard, Devon, Easttown Township, Chester County, Pennsylvania, 19333, United States"
+Harrisburg,Pennsylvania,PA,40.266311,-76.886112,@ym.harrisburg.sisters,https://ymsisters.com/locations/,"Nominatim: Harrisburg, Dauphin County, Pennsylvania, United States"
+Philly,Pennsylvania,PA,39.952724,-75.163526,@ym.nephilly.sisters,https://ymsisters.com/locations/,"Nominatim: Philadelphia, Philadelphia County, Pennsylvania, United States"
+Franklin,Tennessee,TN,35.925206,-86.868942,@ym.franklin.sisters,https://ymsisters.com/locations/,"Nominatim: Franklin, Williamson County, Middle Tennessee, Tennessee, United States"
+Bear Creek,Texas,TX,29.848485,-95.703357,@ym.bearcreek.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Clear Lake,Texas,TX,29.592542,-95.180214,@ym.clearlake.sisters,https://ymsisters.com/locations/,matching brothers chapter
+College Station,Texas,TX,30.622258,-96.347468,@ym.cstat.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Cypress,Texas,TX,29.969112,-95.697169,@ym.cypress.sisters,https://ymsisters.com/locations/,matching brothers chapter
+DeZavala,Texas,TX,29.567159,-98.580874,@ym.dezavala.sisters,https://ymsisters.com/locations/,"Nominatim: De Zavala Road, San Antonio, Bexar County, Texas, 78230, United States"
+Euless,Texas,TX,32.837073,-97.081954,@ym.euless.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Frisco,Texas,TX,33.150600,-96.823818,@ym.frisco.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Irving,Texas,TX,32.829518,-96.944218,@ym.irving.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Klein,Texas,TX,30.047720,-95.532441,@ym.klein.sisters,https://ymsisters.com/locations/,"Nominatim: Klein, Harris County, Texas, 77379, United States"
+Murphy,Texas,TX,33.015121,-96.613048,@ym.murphy.sisters,https://ymsisters.com/locations/,"Nominatim: Murphy, Collin County, Texas, 75094, United States"
+Richardson,Texas,TX,32.948179,-96.729721,@ym.richardson.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Round Rock,Texas,TX,30.508592,-97.678806,@ym.roundrock.sisters,https://ymsisters.com/locations/,"Nominatim: Round Rock, Williamson County, Texas, United States"
+Sachse,Texas,TX,32.976233,-96.595270,,https://ymsisters.com/locations/,"Nominatim: Sachse, Dallas County, Texas, 75048, United States"
+Shadow Creek,Texas,TX,29.569242,-95.411818,@ym.shadowcreek.sisters,https://ymsisters.com/locations/,"Nominatim: Shadow Creek Ranch, Pearland, Brazoria County, Texas, United States"
+Sugar Land,Texas,TX,29.619679,-95.634946,@ym.sugarland.sisters,https://ymsisters.com/locations/,"Nominatim: Sugar Land, Fort Bend County, Texas, United States"
+Valley Ranch,Texas,TX,32.934155,-96.953195,@ym.valleyranch.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Alexandria,Virginia,VA,38.805110,-77.047023,@ym.alexandria.sisters,https://ymsisters.com/locations/,"Nominatim: Alexandria, Virginia, United States"
+Gainesville,Virginia,VA,38.792741,-77.629202,@ym.gainesville.sisters,https://ymsisters.com/locations/,matching brothers chapter
+Loudoun,Virginia,VA,39.098459,-77.670501,@ym.loudoun.sisters,https://ymsisters.com/locations/,"Nominatim: Loudoun County, Virginia, United States"
+Woodbridge,Virginia,VA,38.636447,-77.267634,@ym.woodbridgeva.sisters,https://ymsisters.com/locations/,"Nominatim: Woodbridge, Prince William County, Virginia, 22191, United States"
+Redmond,Washington,WA,47.669414,-122.123877,@ym.redmond.sisters,https://ymsisters.com/locations/,"Nominatim: Redmond, King County, Washington, 98052, United States"
+DC,"Washington, DC",DC,38.895098,-77.036385,@ym.dc.sisters,https://ymsisters.com/locations/,"Nominatim: Washington, District of Columbia, United States"
