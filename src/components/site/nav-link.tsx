@@ -5,8 +5,6 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-import { TopNavLink } from "./top-nav-transition";
-
 /**
  * A nav link that knows whether it is the current page.
  *
@@ -20,8 +18,6 @@ type NavLinkProps = {
   href: string;
   children: React.ReactNode;
   className?: string;
-  /** Restricts the full-screen route transition to persistent header links. */
-  topLevel?: boolean;
   /** Called after a successful navigation, so the drawer can close itself. */
   onNavigate?: () => void;
 };
@@ -37,7 +33,6 @@ export function NavLink({
   href,
   children,
   className,
-  topLevel = false,
   onNavigate,
 }: NavLinkProps) {
   const isCurrent = useIsCurrent(href);
@@ -47,18 +42,6 @@ export function NavLink({
     isCurrent ? "text-foreground underline" : "text-muted-foreground",
     className,
   );
-
-  if (topLevel) {
-    return (
-      <TopNavLink
-        href={href}
-        aria-current={isCurrent ? "page" : undefined}
-        className={linkClassName}
-      >
-        {children}
-      </TopNavLink>
-    );
-  }
 
   return (
     <Link

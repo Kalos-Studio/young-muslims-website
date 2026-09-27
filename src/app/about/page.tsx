@@ -7,6 +7,8 @@ import { PageFrame } from "@/components/wireframe/page-frame";
 import { Lorem, Text } from "@/components/wireframe/text";
 import { PersonOutline } from "@/components/wireframe/person-outline";
 
+import { VisionMissionHistory } from "./vision-mission-history";
+
 export const metadata: Metadata = {
   title: "About",
   description: "What Young Muslims is and who it's for.",
@@ -15,21 +17,11 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <PageFrame className="bg-brand-warm-snow pt-16 pb-20 text-brand-obsidian">
-      <Annotate>
-        <div className="grid grid-cols-2 gap-8">
-          <div className="rounded-card bg-brand-royal p-8 text-brand-pure-white">
-            <Text as="h2" tone="dark">
-              Our mission
-            </Text>
-            <Lorem paragraphs={2} tone="dark" className="mt-6" />
-          </div>
-          <div className="rounded-card bg-brand-jade p-8 text-brand-pure-white">
-            <Text as="h2" tone="dark">
-              Our vision
-            </Text>
-            <Lorem paragraphs={2} tone="dark" className="mt-6" />
-          </div>
-        </div>
+      <Annotate
+        note="Vision, Mission, and History share one pinned image position. The copy scrolls while the image crossfades to match the section currently in view. After History, the page returns to its existing structure."
+        placement="top-right"
+      >
+        <VisionMissionHistory />
       </Annotate>
 
       <Annotate

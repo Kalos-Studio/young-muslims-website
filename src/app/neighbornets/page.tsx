@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { brotherLocations } from "@/generated/brother-neighbornets";
+import { sisterLocations } from "@/generated/sister-neighbornets";
 import { NeighborNetsMap } from "./neighbornets-map";
 import { defaultSettings, type MapSettings } from "./map-options";
 // WIREFRAME: wireframe chrome around a real, working map. See WIREFRAME.md.
@@ -41,6 +42,8 @@ const wireframeSettings: MapSettings = {
   infoMode: "click-popup",
 };
 
+const locations = [...brotherLocations, ...sisterLocations];
+
 export default function NeighborNetsPage() {
   return (
     <PageFrame className="bg-brand-warm-snow pt-16 pb-20 text-brand-obsidian">
@@ -69,7 +72,7 @@ export default function NeighborNetsPage() {
             how the dots should look. */}
         <div>
           <NeighborNetsMap
-            locations={brotherLocations}
+            locations={locations}
             initialSettings={wireframeSettings}
             showDebugPanel={false}
             bare
