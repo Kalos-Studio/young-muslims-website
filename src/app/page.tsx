@@ -6,7 +6,9 @@ import cardDecorBottom from "../../design-assets/figma/landing-2026/card-decor-b
 import cardDecorTop from "../../design-assets/figma/landing-2026/card-decor-top.svg";
 import cardWaveObsidian from "../../design-assets/figma/landing-2026/card-wave-obsidian.svg";
 import cardWavePale from "../../design-assets/figma/landing-2026/belonging-wave-pale-lower.svg";
+import cardLeadership from "../../design-assets/figma/landing-2026/card-guidance-source.jpeg";
 import cardGuidance from "../../design-assets/figma/landing-2026/card-guidance.png";
+import cardService from "../../design-assets/figma/landing-2026/card-impact-source.jpeg";
 import cardPeople from "../../design-assets/figma/landing-2026/card-people.jpeg";
 import belongingWaveObsidian from "../../design-assets/figma/landing-2026/belonging-wave-obsidian.svg";
 import belongingWavePale from "../../design-assets/figma/landing-2026/belonging-wave-pale.svg";
@@ -97,14 +99,30 @@ function PhotoCard({
 function SolidCard({
   point,
   className,
+  image,
 }: {
   point: (typeof POINTS)[number];
   className: string;
+  image?: StaticImageData;
 }) {
   return (
     <article
-      className={`absolute h-[482px] w-[298px] rounded-card bg-landing-blush px-7 text-landing-card-ink ${className}`}
+      className={`absolute h-[482px] w-[298px] overflow-hidden rounded-card px-7 ${image ? "text-brand-pure-white" : "bg-landing-blush text-landing-card-ink"} ${className}`}
     >
+      {image ? (
+        <>
+          <Image
+            src={image}
+            alt=""
+            className={
+              point.title === "Become who you're meant to be"
+                ? "absolute top-[-105.51%] left-[-112.75%] h-[291.28%] w-[314.12%] max-w-none"
+                : "absolute inset-0 h-full w-full object-cover"
+            }
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-obsidian/10 to-brand-obsidian/90" />
+        </>
+      ) : null}
       <div className="absolute right-7 bottom-8 left-7">
         <h3 className="text-card-title font-semibold">{point.title}</h3>
         <p className="mt-5 text-body font-normal">{point.body}</p>
@@ -308,7 +326,11 @@ export default function Home() {
               className="top-[130px] left-[720px]"
               crop="people"
             />
-            <SolidCard point={POINTS[1]} className="top-[684px] left-[720px]" />
+            <SolidCard
+              point={POINTS[1]}
+              image={cardLeadership}
+              className="top-[684px] left-[720px]"
+            />
             <PhotoCard
               point={POINTS[2]}
               image={cardGuidance}
@@ -317,6 +339,7 @@ export default function Home() {
             />
             <SolidCard
               point={POINTS[3]}
+              image={cardService}
               className="top-[774px] left-[1071px]"
             />
           </div>
