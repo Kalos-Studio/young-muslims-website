@@ -32,15 +32,15 @@ export function SiteHeader() {
       <HeaderContrastController />
       <div
         data-site-header-inner
-        className="mx-auto grid h-24 max-w-[90rem] grid-cols-[1fr_auto_1fr] items-center gap-8 px-10"
+        className="grid h-[123px] w-full grid-cols-[1fr_auto_1fr] items-center gap-8 px-20"
       >
         <nav
           data-primary-nav
           aria-label="Primary"
-          className="flex items-center justify-start gap-8 text-base"
+          className="flex items-center justify-start gap-4 text-nav"
         >
           {primaryLinks.map((link) => (
-            <NavLink key={link.href} href={link.href}>
+            <NavLink key={link.href} href={link.href} className="p-2.5">
               {link.label}
             </NavLink>
           ))}
@@ -58,12 +58,18 @@ export function SiteHeader() {
         </Link>
 
         <div className="flex shrink-0 items-center justify-end gap-6">
-          <NavLink
-            href={ctaLink.href}
-            className="rounded-full bg-brand-royal px-6 py-4 text-brand-pure-white no-underline hover:bg-brand-royal/80 hover:text-brand-pure-white"
+          <nav
+            aria-label="Find a chapter"
+            className="flex items-center text-nav"
           >
-            {ctaLink.label}
-          </NavLink>
+            <NavLink
+              href={ctaLink.href}
+              className="inline-flex items-center rounded-pill! border border-current px-6 py-4"
+              data-site-cta
+            >
+              {ctaLink.label}
+            </NavLink>
+          </nav>
           <SideNav />
         </div>
       </div>

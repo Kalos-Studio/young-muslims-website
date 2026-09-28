@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Boldonse, Figtree, Geist_Mono } from "next/font/google";
+import { Boldonse, Figtree } from "next/font/google";
 import "./globals.css";
 
+import { FundraiseUpScript } from "@/components/fundraise-up/fundraise-up-script";
 import { FooterSlot } from "@/components/site/footer-slot";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
@@ -26,11 +27,6 @@ const boldonse = Boldonse({
   adjustFontFallback: false,
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   // `template` keeps the site name out of every page's own title, so the
   // separator is defined once here rather than retyped in seven files.
@@ -48,11 +44,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${figtree.variable} ${boldonse.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${figtree.variable} ${boldonse.variable} h-full antialiased`}
     >
+      <head>
+        <FundraiseUpScript />
+      </head>
       <body className="flex min-h-full flex-col">
         <SiteHeader />
-        <div className="flex-1">{children}</div>
+        <div data-page-shell className="flex-1">
+          {children}
+        </div>
         <FooterSlot>
           <SiteFooter />
         </FooterSlot>

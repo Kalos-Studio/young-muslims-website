@@ -7,6 +7,9 @@ import { PageFrame } from "@/components/wireframe/page-frame";
 import { Lorem, Text } from "@/components/wireframe/text";
 import { PersonOutline } from "@/components/wireframe/person-outline";
 
+import { FaqSection } from "./faq-section";
+import { VisionMissionHistory } from "./vision-mission-history";
+
 export const metadata: Metadata = {
   title: "About",
   description: "What Young Muslims is and who it's for.",
@@ -14,146 +17,107 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <PageFrame className="pt-16">
-      <Annotate>
-        <div className="grid grid-cols-2 gap-16">
-          <div>
-            <Text as="h2">Our mission</Text>
-            <Lorem paragraphs={2} className="mt-5" />
-          </div>
-          <div>
-            <Text as="h2">Our vision</Text>
-            <Lorem paragraphs={2} className="mt-5" />
-          </div>
-        </div>
+    <PageFrame className="bg-brand-warm-snow pt-16 pb-20 text-brand-obsidian">
+      <Annotate
+        note="Vision, Mission, and History share one pinned image position. The copy scrolls while the image crossfades to match the section currently in view. After History, the page returns to its existing structure."
+        placement="top-right"
+      >
+        <VisionMissionHistory />
       </Annotate>
 
       <Annotate
-        className="mt-24"
+        className="mt-20"
         note="on scroll, the image swaps to match the event type in view: conferences show a conference photo, retreats show a retreat photo, etc."
         placement="top-right"
       >
-        <Text as="h2">Conferences and retreats</Text>
-        <div className="mt-10 flex flex-col divide-y divide-border">
-          <div className="grid grid-cols-2 items-start gap-12 py-12">
+        <Text as="h2" className="text-brand-jade">
+          Conferences and retreats
+        </Text>
+        <div className="mt-8 flex flex-col divide-y divide-brand-obsidian/10">
+          <div className="grid grid-cols-2 items-start gap-8 py-16">
             <Frame
               variant="fill"
               label="Event image: conferences"
-              className="aspect-video"
+              className="aspect-video rounded-media bg-brothers-slate text-brothers-midnight"
             />
-            <div>
-              <Text as="h3">Conferences</Text>
+            <div className="rounded-card bg-muted p-8">
+              <Text as="h3" className="text-brand-royal">
+                Conferences
+              </Text>
               <Lorem paragraphs={2} className="mt-4" />
             </div>
           </div>
-          <div className="grid grid-cols-2 items-start gap-12 py-12">
+          <div className="grid grid-cols-2 items-start gap-8 py-16">
             <Frame
               variant="fill"
               label="Event image: retreats"
-              className="aspect-video"
+              className="aspect-video rounded-media bg-sisters-brass text-sisters-forest"
             />
-            <div>
-              <Text as="h3">Retreats</Text>
+            <div className="rounded-card bg-muted p-8">
+              <Text as="h3" className="text-brand-jade">
+                Retreats
+              </Text>
               <Lorem paragraphs={2} className="mt-4" />
             </div>
           </div>
-          <div className="grid grid-cols-2 items-start gap-12 py-12">
+          <div className="grid grid-cols-2 items-start gap-8 py-16">
             <Frame
               variant="fill"
               label="Event image: events"
-              className="aspect-video"
+              className="aspect-video rounded-media bg-landing-blush text-brand-obsidian"
             />
-            <div>
-              <Text as="h3">Events</Text>
+            <div className="rounded-card bg-muted p-8">
+              <Text as="h3" className="text-brand-royal">
+                Events
+              </Text>
               <Lorem paragraphs={2} className="mt-4" />
             </div>
           </div>
         </div>
       </Annotate>
 
-      <Annotate className="mt-24">
-        <Text as="h2">Leadership</Text>
-        <div className="mt-8 grid grid-cols-[1fr_1px_1fr] gap-x-12">
-          <div>
-            <Text as="h3">Brothers</Text>
-            <div className="mt-6 grid grid-cols-4 gap-4">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-[90px] text-muted-foreground">
-                  <PersonOutline />
-                </div>
-              ))}
+      <Annotate className="mt-20">
+        <div className="rounded-card bg-brand-obsidian p-8 text-brand-pure-white">
+          <Text as="h2" tone="dark">
+            Leadership
+          </Text>
+          <div className="mt-8 grid grid-cols-2 divide-x divide-brand-pure-white/20">
+            <div>
+              <Text as="h3" tone="dark">
+                Brothers
+              </Text>
+              <div className="mt-6 grid grid-cols-4 gap-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex size-20 items-center justify-center rounded-full bg-brothers-slate text-brothers-midnight"
+                  >
+                    <PersonOutline className="size-12" />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="bg-border" />
-          <div>
-            <Text as="h3">Sisters</Text>
-            <div className="mt-6 grid grid-cols-4 gap-4">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-[90px] text-muted-foreground">
-                  <PersonOutline />
-                </div>
-              ))}
+            <div className="pl-8">
+              <Text as="h3" tone="dark">
+                Sisters
+              </Text>
+              <div className="mt-6 grid grid-cols-4 gap-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex size-20 items-center justify-center rounded-full bg-sisters-brass text-sisters-forest"
+                  >
+                    <PersonOutline className="size-12" />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </Annotate>
 
-      <Annotate className="mt-24">
-        <Text as="h2">FAQ</Text>
-        <div className="mt-10 grid grid-cols-2 gap-12">
-          <div>
-            <Text as="h3">For Youth</Text>
-            <ul className="mt-6 divide-y divide-border border-t border-border">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <li key={i} className="flex items-center justify-between py-4">
-                  <span className="text-sm text-muted-foreground">
-                    Question
-                  </span>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="shrink-0 text-muted-foreground"
-                    aria-hidden
-                  >
-                    <path d="M4 6l4 4 4-4" />
-                  </svg>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <Text as="h3">For Parents</Text>
-            <ul className="mt-6 divide-y divide-border border-t border-border">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <li key={i} className="flex items-center justify-between py-4">
-                  <span className="text-sm text-muted-foreground">
-                    Question
-                  </span>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="shrink-0 text-muted-foreground"
-                    aria-hidden
-                  >
-                    <path d="M4 6l4 4 4-4" />
-                  </svg>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+      <Annotate className="mt-20">
+        <FaqSection />
       </Annotate>
     </PageFrame>
   );

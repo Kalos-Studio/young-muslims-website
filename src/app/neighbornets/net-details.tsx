@@ -3,7 +3,7 @@
 import { AtSign, Mail, Phone, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { branchLabel, type NeighborNet } from "@/lib/neighbornets";
+import { branchLabel, type NeighborNetLocation } from "@/lib/neighbornets";
 import { branchColor } from "./net-marker";
 import type { Palette } from "./map-options";
 
@@ -22,7 +22,7 @@ export function NetDetails({
   onClose,
   className,
 }: {
-  net: NeighborNet;
+  net: NeighborNetLocation;
   palette: Palette;
   /**
    * `peek` is a one-line hover teaser, `compact` fits an on-map popup, `full`
@@ -38,7 +38,7 @@ export function NetDetails({
     return (
       <div
         className={cn(
-          "flex items-center gap-2 rounded-md border border-border bg-popover px-2.5 py-1.5 text-xs text-popover-foreground shadow-md",
+          "flex items-center gap-2 rounded-card border border-border bg-popover px-4 py-2 text-xs text-popover-foreground",
           className,
         )}
       >
@@ -47,9 +47,7 @@ export function NetDetails({
           style={{ backgroundColor: color }}
         />
         <span className="font-medium">{net.name}</span>
-        <span className="text-muted-foreground">
-          {net.city}, {net.state}
-        </span>
+        <span className="text-muted-foreground">{placeLabel(net)}</span>
       </div>
     );
   }
@@ -57,7 +55,7 @@ export function NetDetails({
   return (
     <div
       className={cn(
-        "rounded-lg border border-border bg-popover text-popover-foreground shadow-lg",
+        "rounded-card border border-border bg-popover text-popover-foreground",
         density === "compact" ? "w-64 p-3" : "p-4",
         className,
       )}
@@ -95,7 +93,7 @@ export function NetDetails({
         <Chip style={{ borderColor: color, color }}>
           {branchLabel[net.branch]}
         </Chip>
-        {density === "full" ? (
+        {density === "full" && net.size !== undefined ? (
           <Chip className="border-border text-muted-foreground">
             ~{net.size} regulars
           </Chip>
@@ -103,39 +101,44 @@ export function NetDetails({
       </div>
 
       <dl className="mt-3 space-y-1.5 text-xs">
-        <Row label="Meets">{net.meeting.cadence}</Row>
-        {density === "full" ? (
+        <Row label="Region">{net.region}</Row>
+        {net.meeting ? <Row label="Meets">{net.meeting.cadence}</Row> : null}
+        {density === "full" && net.meeting ? (
           <Row label="Where">{net.meeting.venue}</Row>
         ) : null}
-        <Row label="Contact">
-          {net.contact.name}
-          <span className="text-muted-foreground">, {net.contact.role}</span>
-        </Row>
+        {net.contact ? (
+          <Row label="Contact">
+            {net.contact.name}
+            <span className="text-muted-foreground">, {net.contact.role}</span>
+          </Row>
+        ) : null}
       </dl>
 
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        {net.contact.email ? (
-          <ContactLink href={`mailto:${net.contact.email}`} icon={Mail}>
-            Email
-          </ContactLink>
-        ) : null}
-        {net.contact.phone ? (
-          <ContactLink
-            href={`tel:${net.contact.phone.replace(/[^\d+]/g, "")}`}
-            icon={Phone}
-          >
-            {density === "full" ? net.contact.phone : "Call"}
-          </ContactLink>
-        ) : null}
-        {net.contact.instagram ? (
-          <ContactLink
-            href={`https://instagram.com/${net.contact.instagram.replace("@", "")}`}
-            icon={AtSign}
-          >
-            {net.contact.instagram}
-          </ContactLink>
-        ) : null}
-      </div>
+      {net.contact ? (
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {net.contact.email ? (
+            <ContactLink href={`mailto:${net.contact.email}`} icon={Mail}>
+              Email
+            </ContactLink>
+          ) : null}
+          {net.contact.phone ? (
+            <ContactLink
+              href={`tel:${net.contact.phone.replace(/[^\d+]/g, "")}`}
+              icon={Phone}
+            >
+              {density === "full" ? net.contact.phone : "Call"}
+            </ContactLink>
+          ) : null}
+          {net.contact.instagram ? (
+            <ContactLink
+              href={`https://instagram.com/${net.contact.instagram.replace("@", "")}`}
+              icon={AtSign}
+            >
+              {net.contact.instagram}
+            </ContactLink>
+          ) : null}
+        </div>
+      ) : null}
 
       {density === "full" && net.notes ? (
         <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">
@@ -144,6 +147,11 @@ export function NetDetails({
       ) : null}
     </div>
   );
+}
+
+function placeLabel(net: NeighborNetLocation): string {
+  if (!net.city) return net.region;
+  return net.state ? `${net.city}, ${net.state}` : net.city;
 }
 
 function Chip({
@@ -198,7 +206,7 @@ function ContactLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
-      className="inline-flex items-center gap-1.5 rounded-md border border-border px-2 py-1 text-xs font-medium hover:bg-accent"
+      className="inline-flex items-center gap-2 rounded-pill border border-border px-4 py-2 text-xs font-medium hover:bg-muted"
     >
       <Icon className="size-3" />
       {children}
