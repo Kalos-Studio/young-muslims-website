@@ -219,6 +219,13 @@
     [data-menu-trigger] {
     color: var(--color-brand-obsidian) !important;
   }
+  /* Keep the landing-page chapter CTA readable regardless of section theme. */
+  body:has([data-landing-page])
+    [data-site-header][data-header-theme]
+    nav
+    a[data-site-cta="true"] {
+    color: var(--color-brand-pure-white) !important;
+  }
 }
 
 /*
