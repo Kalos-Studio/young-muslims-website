@@ -4,6 +4,8 @@ import Link from "next/link";
 
 import cardDecorBottom from "../../design-assets/figma/landing-2026/card-decor-bottom.svg";
 import cardDecorTop from "../../design-assets/figma/landing-2026/card-decor-top.svg";
+import cardWaveObsidian from "../../design-assets/figma/landing-2026/card-wave-obsidian.svg";
+import cardWavePale from "../../design-assets/figma/landing-2026/belonging-wave-pale-lower.svg";
 import cardGuidance from "../../design-assets/figma/landing-2026/card-guidance.png";
 import cardPeople from "../../design-assets/figma/landing-2026/card-people.jpeg";
 import belongingWaveObsidian from "../../design-assets/figma/landing-2026/belonging-wave-obsidian.svg";
@@ -239,9 +241,38 @@ export default function Home() {
       >
         <section
           data-header-theme="light"
-          className="relative h-[1386px] w-full overflow-hidden bg-brand-warm-snow"
+          className="relative h-[1791px] w-full overflow-hidden bg-brand-warm-snow"
         >
-          <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
+          <div
+            className="pointer-events-none absolute top-0 left-1/2 z-0 h-full -translate-x-1/2 overflow-hidden"
+            style={{ width: "max(100vw, 1440px)" }}
+          >
+            <div
+              className="absolute top-[-1208px] z-10 flex h-[1453px] w-[2154px] items-center justify-center"
+              style={{ left: "calc(max(100vw, 1440px) / 2 - 1175px)" }}
+            >
+              <div className="rotate-[3.2deg]">
+                <Image
+                  src={cardWaveObsidian}
+                  alt=""
+                  className="block h-[1339px] w-[2082px] max-w-none"
+                />
+              </div>
+            </div>
+            <div
+              className="absolute top-[-1213px] z-0 flex h-[1593px] w-[2361px] items-center justify-center"
+              style={{ left: "calc(max(100vw, 1440px) / 2 - 1283px)" }}
+            >
+              <div className="rotate-[3.2deg]">
+                <Image
+                  src={cardWavePale}
+                  alt=""
+                  className="block h-[1468px] w-[2283px] max-w-none"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="absolute top-[405px] left-1/2 z-10 h-full w-[1440px] -translate-x-1/2">
             <Image
               src={cardDecorTop}
               alt=""
