@@ -8,13 +8,10 @@ import {
   useTransform,
 } from "motion/react";
 
-const RESTING_OFFSET = "calc(var(--spacing) * 0)";
-const FORWARD_OFFSET = "calc(var(--spacing) * 20)";
-const REVERSE_OFFSET = "calc(var(--spacing) * -20)";
-const MARQUEE_COPY =
-  "Tarbiyyah. Community Service. Peer-led. Advocacy. Brotherhood. Sisterhood.";
-const SECOND_ROW_COPY =
-  "Advocacy. Brotherhood. Sisterhood. Tarbiyyah. Community Service. Peer-led.";
+const RESTING_OFFSET = 0;
+const TRAVEL_DISTANCE = 240;
+const MARQUEE_COPY = "Sisterhood. Brotherhood. Community Service. Tarbiyyah.";
+const MARQUEE_REPETITIONS = 5;
 
 export function HighlightReelMarquee() {
   const scrollTargetRef = useRef<HTMLDivElement>(null);
@@ -29,43 +26,52 @@ export function HighlightReelMarquee() {
     [0, 0.5, 1],
     shouldReduceMotion
       ? [RESTING_OFFSET, RESTING_OFFSET, RESTING_OFFSET]
-      : [FORWARD_OFFSET, RESTING_OFFSET, REVERSE_OFFSET],
+      : [TRAVEL_DISTANCE, RESTING_OFFSET, -TRAVEL_DISTANCE],
   );
   const rightwardX = useTransform(
     scrollYProgress,
     [0, 0.5, 1],
     shouldReduceMotion
       ? [RESTING_OFFSET, RESTING_OFFSET, RESTING_OFFSET]
-      : [REVERSE_OFFSET, RESTING_OFFSET, FORWARD_OFFSET],
+      : [-TRAVEL_DISTANCE, RESTING_OFFSET, TRAVEL_DISTANCE],
   );
 
   return (
     <div
       ref={scrollTargetRef}
-      aria-hidden
-      className="pointer-events-none absolute inset-0 overflow-hidden"
+      aria-hidden="true"
+      className="pointer-events-none absolute top-0 left-1/2 h-full w-screen -translate-x-1/2 overflow-hidden"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-show-marquee-top flex flex-col gap-show-marquee-row-gap overflow-hidden font-display text-marquee whitespace-nowrap text-brand-warm-snow uppercase">
+      <div className="absolute inset-x-0 top-[381px] flex flex-col gap-0 font-display text-marquee leading-[1.25] whitespace-nowrap uppercase">
         <motion.div
-          className="-ml-show-marquee-first-offset flex gap-8"
+          className="-ml-[1403px] flex w-max gap-8 text-brand-warm-snow"
           style={{ x: leftwardX }}
         >
-          <span className="shrink-0">{MARQUEE_COPY}</span>
-          <span className="shrink-0">{MARQUEE_COPY}</span>
+          {Array.from({ length: MARQUEE_REPETITIONS }).map((_, index) => (
+            <span key={index} className="shrink-0">
+              {MARQUEE_COPY}
+            </span>
+          ))}
         </motion.div>
         <motion.div
-          className="-ml-show-marquee-second-offset flex gap-8 text-marquee-outline"
+          className="-ml-[1638px] flex w-max gap-8 text-landing-marquee-outline"
           style={{ x: rightwardX }}
         >
-          <span className="shrink-0">{SECOND_ROW_COPY}</span>
-          <span className="shrink-0">{SECOND_ROW_COPY}</span>
+          {Array.from({ length: MARQUEE_REPETITIONS }).map((_, index) => (
+            <span key={index} className="shrink-0">
+              {MARQUEE_COPY}
+            </span>
+          ))}
         </motion.div>
         <motion.div
-          className="ml-show-marquee-third-offset flex gap-6"
+          className="-ml-[983px] flex w-max gap-8 text-brothers-sky"
           style={{ x: leftwardX }}
         >
-          <span className="shrink-0">{MARQUEE_COPY}</span>
-          <span className="shrink-0">{MARQUEE_COPY}</span>
+          {Array.from({ length: MARQUEE_REPETITIONS }).map((_, index) => (
+            <span key={index} className="shrink-0">
+              {MARQUEE_COPY}
+            </span>
+          ))}
         </motion.div>
       </div>
     </div>

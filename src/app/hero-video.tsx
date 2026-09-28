@@ -3,28 +3,31 @@ export function HeroVideo() {
     <section
       data-header-theme="dark"
       aria-label="Young Muslims community introduction"
-      className="relative flex h-[100svh] min-h-[760px] w-full items-center justify-center overflow-hidden bg-brothers-midnight px-6 text-center text-brand-warm-snow"
+      className="relative flex h-[1007px] min-h-[760px] w-full items-center justify-center overflow-hidden bg-brothers-midnight px-6 text-center text-brand-warm-snow"
     >
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(74,144,217,0.42),transparent_34%),radial-gradient(circle_at_72%_68%,rgba(57,116,81,0.48),transparent_38%),linear-gradient(135deg,#16294f,#171725_68%)]"
-      />
-      <div aria-hidden className="absolute inset-0 bg-brand-obsidian/35" />
-
-      <div className="absolute top-36 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center">
-        <p className="text-sm font-medium whitespace-nowrap text-brand-warm-snow/60">
-          Full-bleed community video placeholder
-        </p>
-        <p lang="ar" dir="rtl" className="mt-3 text-4xl font-normal">
-          ﷽
-        </p>
-      </div>
+      <video
+        aria-hidden="true"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        tabIndex={-1}
+        className="absolute inset-0 h-full w-full object-cover"
+      >
+        <source
+          src="/videos/ym-website-hero-dark-overlay.mp4"
+          type="video/mp4"
+        />
+        Your browser does not support background video.
+      </video>
+      <div aria-hidden className="absolute inset-0 bg-brand-obsidian/10" />
 
       <div className="relative z-10 flex w-full max-w-[983px] flex-col items-center gap-4">
-        <h1 className="font-display text-display font-normal md:whitespace-nowrap">
+        <h1 className="font-display text-landing-display font-normal md:whitespace-nowrap">
           FOR THE YOUTH. BY THE YOUTH.
         </h1>
-        <p className="w-full max-w-[893px] text-lead font-semibold md:whitespace-nowrap">
+        <p className="w-full max-w-[893px] text-landing-hero-subtitle font-semibold md:whitespace-nowrap">
           A nationwide brotherhood and sisterhood, built on real friendships and
           a shared Deen.
         </p>
