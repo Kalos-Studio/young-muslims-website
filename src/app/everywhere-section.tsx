@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import {
   animate,
   motion,
@@ -9,17 +10,18 @@ import {
   useReducedMotion,
   useScroll,
   useTransform,
-  type MotionValue,
 } from "motion/react";
 
-import { PersonOutline } from "@/components/wireframe/person-outline";
-
-const RESTING_OFFSET = "calc(var(--spacing) * 0)";
-const LEFT_PORTRAIT_START = "calc(var(--spacing) * 20)";
-const LEFT_PORTRAIT_END = "calc(var(--spacing) * -20)";
-const RIGHT_PORTRAIT_START = "calc(var(--spacing) * -12)";
-const RIGHT_PORTRAIT_END = "calc(var(--spacing) * 12)";
-const COUNT_UP_DURATION_SECONDS = 1.5;
+import globe from "../../design-assets/figma/landing-2026/everywhere-globe.svg";
+import mapCanada from "../../design-assets/figma/landing-2026/everywhere-map/canada.svg";
+import mapMexico from "../../design-assets/figma/landing-2026/everywhere-map/mexico.svg";
+import mapUs from "../../design-assets/figma/landing-2026/everywhere-map/us.svg";
+import bottomLeftPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-left-photo.png";
+import bottomLeftShell from "../../design-assets/figma/landing-2026/everywhere-bottom-left-shell.svg";
+import bottomRightPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-right-photo.png";
+import bottomRightShell from "../../design-assets/figma/landing-2026/everywhere-bottom-right-shell.svg";
+import topPhoto from "../../design-assets/figma/landing-2026/everywhere-top-photo.png";
+import topShell from "../../design-assets/figma/landing-2026/everywhere-top-shell.svg";
 
 const METRICS = [
   { target: 200, suffix: "+", label: "NeighborNets" },
@@ -30,27 +32,28 @@ const METRICS = [
 const numberFormatter = new Intl.NumberFormat("en-US");
 
 function CountUpMetric({
-  isActive,
   target,
   suffix,
   label,
+  isActive,
   reduceMotion,
+  className,
 }: {
-  isActive: boolean;
   target: number;
   suffix: string;
   label: string;
+  isActive: boolean;
   reduceMotion: boolean | null;
+  className?: string;
 }) {
   const numberRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const numberElement = numberRef.current;
-
-    if (!numberElement) return;
+    const element = numberRef.current;
+    if (!element) return;
 
     const setNumber = (value: number) => {
-      numberElement.textContent = `${numberFormatter.format(Math.round(value))}${suffix}`;
+      element.textContent = `${numberFormatter.format(Math.round(value))}${suffix}`;
     };
 
     if (reduceMotion) {
@@ -63,17 +66,19 @@ function CountUpMetric({
       return;
     }
 
-    const countAnimation = animate(0, target, {
-      duration: COUNT_UP_DURATION_SECONDS,
+    const controls = animate(0, target, {
+      duration: 1.5,
       onUpdate: setNumber,
     });
 
-    return () => countAnimation.stop();
+    return () => controls.stop();
   }, [isActive, reduceMotion, suffix, target]);
 
   return (
-    <div className="min-h-[133px]">
-      <p className="font-display text-stat font-normal">
+    <div
+      className={`absolute top-0 text-center text-brand-obsidian ${className ?? ""}`}
+    >
+      <p className="font-display text-landing-stat font-normal">
         <span
           ref={numberRef}
           aria-label={`${numberFormatter.format(target)}${suffix}`}
@@ -82,105 +87,166 @@ function CountUpMetric({
           {suffix}
         </span>
       </p>
-      <p className="mt-2 text-lead font-medium">{label}</p>
+      <p className="text-landing-stat-label font-medium">{label}</p>
     </div>
   );
 }
 
-function YouthPortrait({
-  className,
-  y,
-}: {
-  className?: string;
-  y: MotionValue<string>;
-}) {
-  return (
-    <motion.div
-      className={`flex size-28 shrink-0 items-center justify-center rounded-full border-4 border-brand-jade bg-muted text-muted-foreground ${className ?? ""}`}
-      style={{ y }}
-      aria-label="Portrait image placeholder"
-    >
-      <PersonOutline className="h-1/2 w-1/2" />
-    </motion.div>
-  );
-}
-
-export function EverywhereSection({ children }: { children: ReactNode }) {
+export function EverywhereSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const metricsRef = useRef<HTMLDivElement>(null);
   const [headingIsRevealed, setHeadingIsRevealed] = useState(false);
-  const reduceMotion = useReducedMotion();
   const metricsAreVisible = useInView(metricsRef, { once: true });
+  const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end end"],
+    offset: ["start end", "end start"],
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest > 0 && !headingIsRevealed) {
-      setHeadingIsRevealed(true);
-    }
+    if (latest > 0.08 && !headingIsRevealed) setHeadingIsRevealed(true);
   });
 
-  const leftPortraitY = useTransform(
+  const topPortraitY = useTransform(
     scrollYProgress,
     [0, 1],
-    reduceMotion
-      ? [RESTING_OFFSET, RESTING_OFFSET]
-      : [LEFT_PORTRAIT_START, LEFT_PORTRAIT_END],
+    reduceMotion ? [0, 0] : [80, -80],
   );
-  const rightPortraitY = useTransform(
+  const bottomLeftPortraitY = useTransform(
     scrollYProgress,
     [0, 1],
-    reduceMotion
-      ? [RESTING_OFFSET, RESTING_OFFSET]
-      : [RIGHT_PORTRAIT_START, RIGHT_PORTRAIT_END],
+    reduceMotion ? [0, 0] : [70, -70],
+  );
+  const bottomRightPortraitY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduceMotion ? [0, 0] : [-60, 60],
   );
 
   return (
     <section
       ref={sectionRef}
       data-header-theme="light"
-      className="min-h-[1962px] pt-[280px] text-center"
+      className="relative h-[1615px] w-full overflow-hidden bg-brand-warm-snow"
     >
-      <motion.div
-        className="mx-auto min-h-[219px] w-full max-w-[560px]"
-        initial={false}
-        animate={{ opacity: reduceMotion || headingIsRevealed ? 1 : 0 }}
-      >
-        <h2 className="text-section font-extrabold">
-          And it&apos;s not just here.
-          <br />
-          It&apos;s everywhere.
-        </h2>
-        <p className="mt-8 text-lead font-medium">
-          What started as a few friends in one city is now a network that spans
-          the country.
-        </p>
-      </motion.div>
+      <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
+        <motion.div
+          initial={false}
+          animate={{
+            opacity: reduceMotion || headingIsRevealed ? 1 : 0,
+            y: reduceMotion || headingIsRevealed ? 0 : 32,
+          }}
+          transition={{ duration: 0.65, ease: [0.19, 1, 0.22, 1] }}
+          className="absolute top-[95px] left-1/2 w-[440px] -translate-x-1/2 text-center text-brand-obsidian"
+        >
+          <h2 className="text-landing-section font-extrabold">
+            And it&apos;s not just here. It&apos;s{" "}
+            <span className="text-landing-cyan">everywhere</span>.
+          </h2>
+          <p className="mt-4 text-landing-copy font-medium">
+            What started as a few friends in one city is now a network that
+            spans the country.
+          </p>
+        </motion.div>
 
-      <div ref={metricsRef} className="mt-[171px] grid grid-cols-3 gap-10">
-        {METRICS.map((metric) => (
-          <CountUpMetric
-            key={metric.label}
-            isActive={metricsAreVisible}
-            target={metric.target}
-            suffix={metric.suffix}
-            label={metric.label}
-            reduceMotion={reduceMotion}
+        <div
+          ref={metricsRef}
+          className="absolute top-[485px] left-0 h-[121px] w-full"
+        >
+          {METRICS.map((metric, index) => (
+            <CountUpMetric
+              key={metric.label}
+              {...metric}
+              isActive={metricsAreVisible}
+              reduceMotion={reduceMotion}
+              className={
+                index === 0
+                  ? "left-[181px]"
+                  : index === 1
+                    ? "left-[669px]"
+                    : "left-[1001px]"
+              }
+            />
+          ))}
+        </div>
+
+        <Image
+          src={globe}
+          alt=""
+          className="absolute top-[654px] left-0 max-w-none"
+        />
+        <div
+          className="pointer-events-none absolute top-[654px] left-0 h-[795px] w-[1440px] overflow-hidden rounded-[16px]"
+          style={{ clipPath: "circle(725px at 720px 756.85px)" }}
+        >
+          <div className="absolute top-[-875px] left-[-632px] h-[1891px] w-[2522px]">
+            <Image
+              src={mapCanada}
+              alt=""
+              className="absolute top-[245px] left-[898px] max-w-none"
+            />
+            <Image
+              src={mapUs}
+              alt=""
+              className="absolute top-[500px] left-[373px] max-w-none"
+            />
+            <Image
+              src={mapMexico}
+              alt=""
+              className="absolute top-[1330px] left-[1021px] max-w-none"
+            />
+          </div>
+        </div>
+
+        <motion.div className="absolute inset-0" style={{ y: topPortraitY }}>
+          <Image
+            src={topShell}
+            alt=""
+            className="absolute top-[109px] left-[1025px] max-w-none"
           />
-        ))}
-      </div>
+          <Image
+            src={topPhoto}
+            alt=""
+            className="absolute top-[144px] left-[1061px] h-[202px] w-[211px] object-contain"
+          />
+        </motion.div>
 
-      {children}
+        <motion.div
+          className="absolute inset-0"
+          style={{ y: bottomLeftPortraitY }}
+        >
+          <Image
+            src={bottomLeftShell}
+            alt=""
+            className="absolute top-[1375px] left-[79px] h-auto max-w-none -rotate-30"
+          />
+          <Image
+            src={bottomLeftPhoto}
+            alt=""
+            className="absolute top-[1388px] left-[122px] h-[213px] w-[202px] -rotate-30 object-contain"
+          />
+        </motion.div>
 
-      <div className="mt-[70px] flex items-center justify-center gap-12">
-        <YouthPortrait y={leftPortraitY} />
-        <p className="max-w-[560px] text-lead font-medium">
+        <motion.div
+          className="absolute inset-0"
+          style={{ y: bottomRightPortraitY }}
+        >
+          <Image
+            src={bottomRightShell}
+            alt=""
+            className="absolute top-[1301px] left-[1071px] max-w-none"
+          />
+          <Image
+            src={bottomRightPhoto}
+            alt=""
+            className="absolute top-[1328px] left-[1098px] h-[217px] w-[211px] object-contain"
+          />
+        </motion.div>
+
+        <p className="absolute top-[1406px] left-1/2 w-[560px] -translate-x-1/2 text-center text-landing-copy font-medium text-brand-obsidian">
           Wherever you go, there&apos;s a Young Muslim. A brother or sister in a
-          city you&apos;ve never been to, dealing with the same things you are.
+          city you&apos;ve never been to, dealing with the same things you are
         </p>
-        <YouthPortrait y={rightPortraitY} className="border-landing-cyan" />
       </div>
     </section>
   );

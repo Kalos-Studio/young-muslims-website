@@ -40,7 +40,7 @@ export function SiteHeader() {
           className="flex items-center justify-start gap-4 text-nav"
         >
           {primaryLinks.map((link) => (
-            <NavLink key={link.href} href={link.href}>
+            <NavLink key={link.href} href={link.href} className="p-2.5">
               {link.label}
             </NavLink>
           ))}
@@ -65,6 +65,7 @@ export function SiteHeader() {
             <NavLink
               href={ctaLink.href}
               className="inline-flex items-center rounded-pill! border border-current px-6 py-4"
+              data-site-cta
             >
               {ctaLink.label}
             </NavLink>

@@ -18,6 +18,7 @@ type NavLinkProps = {
   href: string;
   children: React.ReactNode;
   className?: string;
+  "data-site-cta"?: boolean;
   /** Called after a successful navigation, so the drawer can close itself. */
   onNavigate?: () => void;
 };
@@ -33,6 +34,7 @@ export function NavLink({
   href,
   children,
   className,
+  "data-site-cta": siteCta,
   onNavigate,
 }: NavLinkProps) {
   const isCurrent = useIsCurrent(href);
@@ -48,6 +50,7 @@ export function NavLink({
       href={href}
       onClick={onNavigate}
       aria-current={isCurrent ? "page" : undefined}
+      data-site-cta={siteCta ? "true" : undefined}
       className={linkClassName}
     >
       {children}

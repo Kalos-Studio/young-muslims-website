@@ -7,6 +7,7 @@ import { PageFrame } from "@/components/wireframe/page-frame";
 import { Lorem, Text } from "@/components/wireframe/text";
 import { PersonOutline } from "@/components/wireframe/person-outline";
 
+import { FaqSection } from "./faq-section";
 import { VisionMissionHistory } from "./vision-mission-history";
 
 export const metadata: Metadata = {
@@ -116,67 +117,7 @@ export default function AboutPage() {
       </Annotate>
 
       <Annotate className="mt-20">
-        <Text as="h2" className="text-brand-royal">
-          FAQ
-        </Text>
-        <div className="mt-8 grid grid-cols-2 gap-8">
-          <div className="rounded-card bg-muted p-8">
-            <Text as="h3" className="text-brand-jade">
-              For Youth
-            </Text>
-            <ul className="mt-6 divide-y divide-border border-t border-border">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <li key={i} className="flex items-center justify-between py-4">
-                  <span className="text-body text-muted-foreground">
-                    Question
-                  </span>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="shrink-0 text-muted-foreground"
-                    aria-hidden
-                  >
-                    <path d="M4 6l4 4 4-4" />
-                  </svg>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-card bg-muted p-8">
-            <Text as="h3" className="text-brand-jade">
-              For Parents
-            </Text>
-            <ul className="mt-6 divide-y divide-border border-t border-border">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <li key={i} className="flex items-center justify-between py-4">
-                  <span className="text-body text-muted-foreground">
-                    Question
-                  </span>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="shrink-0 text-muted-foreground"
-                    aria-hidden
-                  >
-                    <path d="M4 6l4 4 4-4" />
-                  </svg>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <FaqSection />
       </Annotate>
     </PageFrame>
   );

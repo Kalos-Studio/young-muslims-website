@@ -14,19 +14,19 @@ import { cn } from "@/lib/utils";
 const chapters = [
   {
     title: "Vision",
-    copy: "Placeholder vision statement: the future Young Muslims is working toward and the kind of community young people should be able to find wherever they live.",
+    copy: "American Muslim youth collectively contributing to the betterment of society with God-consciousness and a firm understanding of their Muslim identity.",
     imageLabel: "Vision image: young Muslims looking toward what comes next",
     visualClass: "bg-brand-royal text-brand-pure-white",
   },
   {
     title: "Mission",
-    copy: "Placeholder mission statement: how weekly NeighborNets, mentorship, service, and shared faith help turn that vision into something young Muslims can experience now.",
+    copy: "Young Muslims seeks the pleasure of Allah (SWT) by empowering Muslim youth through companionship, mentorship, education, and service.",
     imageLabel: "Mission image: a local NeighborNet gathering",
     visualClass: "bg-brand-jade text-brand-pure-white",
   },
   {
-    title: "History",
-    copy: "Placeholder history: where Young Muslims began, the people who built it, and how a few local circles grew into a national network.",
+    title: "Our History",
+    copy: "As Muslim youth groups in the early 90s were popping up across the country in northern New Jersey, New York City, and Chicago, a unifying effort was made in order to establish a national network. Out of these collections of youth groups, Young Muslims was born. Our first charter and national coordinator were established in 1995.",
     imageLabel: "History image: an early Young Muslims gathering",
     visualClass: "bg-brothers-slate text-brothers-midnight",
   },
@@ -143,7 +143,7 @@ function ScrollChapter({
         {chapter.title}
       </h2>
       <p className="mt-8 max-w-md text-lead font-medium text-muted-foreground">
-        [{chapter.copy}]
+        {chapter.copy}
       </p>
     </section>
   );
