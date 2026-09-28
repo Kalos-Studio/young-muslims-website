@@ -16,10 +16,10 @@ import globe from "../../design-assets/figma/landing-2026/everywhere-globe.svg";
 import mapCanada from "../../design-assets/figma/landing-2026/everywhere-map/canada.svg";
 import mapMexico from "../../design-assets/figma/landing-2026/everywhere-map/mexico.svg";
 import mapUs from "../../design-assets/figma/landing-2026/everywhere-map/us.svg";
-import bottomLeftPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-left-photo.png";
 import bottomLeftShell from "../../design-assets/figma/landing-2026/everywhere-bottom-left-shell.svg";
 import bottomRightPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-right-photo.png";
 import bottomRightShell from "../../design-assets/figma/landing-2026/everywhere-bottom-right-shell.svg";
+import leftPhoto from "../../design-assets/figma/landing-2026/everywhere-left-photo.png";
 import topPhoto from "../../design-assets/figma/landing-2026/everywhere-top-photo.png";
 import topShell from "../../design-assets/figma/landing-2026/everywhere-top-shell.svg";
 
@@ -215,16 +215,20 @@ export function EverywhereSection() {
           className="absolute inset-0"
           style={{ y: bottomLeftPortraitY }}
         >
-          <Image
-            src={bottomLeftShell}
-            alt=""
-            className="absolute top-[1375px] left-[79px] h-auto max-w-none -rotate-30"
-          />
-          <Image
-            src={bottomLeftPhoto}
-            alt=""
-            className="absolute top-[1388px] left-[122px] h-[213px] w-[202px] -rotate-30 object-contain"
-          />
+          <div className="absolute top-[1375px] left-[79px] h-[371px] w-[366px]">
+            <Image
+              src={bottomLeftShell}
+              alt=""
+              className="absolute top-1/2 left-1/2 h-[277px] w-[263px] -translate-x-1/2 -translate-y-1/2 -rotate-30"
+            />
+          </div>
+          <div className="absolute top-[1388px] left-[122px] h-[285px] w-[282px]">
+            <Image
+              src={leftPhoto}
+              alt=""
+              className="absolute top-1/2 left-1/2 h-[213px] w-[202px] -translate-x-1/2 -translate-y-1/2 -rotate-30 object-contain"
+            />
+          </div>
         </motion.div>
 
         <motion.div
