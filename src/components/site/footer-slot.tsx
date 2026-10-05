@@ -13,12 +13,12 @@ import { usePathname } from "next/navigation";
  * inlined logo never reaches the client bundle. Permanent, and it imports
  * nothing from the wireframe.
  */
-const FULL_SCREEN_ROUTES = ["/store"];
+const ROUTES_WITHOUT_DEFAULT_FOOTER = ["/", "/store"];
 
 export function FooterSlot({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  if (FULL_SCREEN_ROUTES.includes(pathname)) return null;
+  if (ROUTES_WITHOUT_DEFAULT_FOOTER.includes(pathname)) return null;
 
   return <>{children}</>;
 }

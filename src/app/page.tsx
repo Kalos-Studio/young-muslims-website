@@ -12,18 +12,20 @@ import cardService from "../../design-assets/figma/landing-2026/card-impact-sour
 import cardPeople from "../../design-assets/figma/landing-2026/card-people.jpeg";
 import belongingWaveObsidian from "../../design-assets/figma/landing-2026/belonging-wave-obsidian.svg";
 import belongingWavePale from "../../design-assets/figma/landing-2026/belonging-wave-pale.svg";
-import closing01 from "../../design-assets/figma/landing-2026/closing-01.png";
-import closing02 from "../../design-assets/figma/landing-2026/closing-02.png";
-import closing03 from "../../design-assets/figma/landing-2026/closing-03.png";
-import closing04 from "../../design-assets/figma/landing-2026/closing-04.png";
-import closing05 from "../../design-assets/figma/landing-2026/closing-05.png";
-import closing06 from "../../design-assets/figma/landing-2026/closing-06.png";
 import highlightPlay from "../../design-assets/figma/landing-2026/highlight-play.svg";
 import highlightReel from "../../design-assets/figma/landing-2026/highlight-reel.png";
 import { BelongingPortraitOrbit } from "./belonging-portrait-orbit";
 import { EverywhereSection } from "./everywhere-section";
 import { HeroVideo } from "./hero-video";
 import { HighlightReelMarquee } from "./highlight-reel-section";
+import {
+  ChapterFinderSection,
+  LandingCtaSection,
+  LandingFooter,
+  PeopleStoriesSection,
+} from "./landing-new-sections";
+import { WhatWeStandOnSection } from "./what-we-stand-on-section";
+import { WordOnTheStreetSection } from "./word-on-the-street-section";
 
 // WIREFRAME: annotations remain available while the landing page is reviewed.
 // The page imagery and layout below now follow the approved Figma composition.
@@ -129,20 +131,6 @@ function SolidCard({
         <p className="mt-5 text-body font-normal">{point.body}</p>
       </div>
     </article>
-  );
-}
-
-function ClosingPortrait({
-  image,
-  className,
-}: {
-  image: StaticImageData;
-  className: string;
-}) {
-  return (
-    <div className={`absolute ${className}`} aria-hidden="true">
-      <Image src={image} alt="" fill sizes="220px" className="object-contain" />
-    </div>
   );
 }
 
@@ -347,6 +335,8 @@ export default function Home() {
         </section>
       </Annotate>
 
+      <WhatWeStandOnSection />
+
       <Annotate
         bleed
         note="Once this section fills the viewport, the heading appears and the metrics count upward."
@@ -355,44 +345,13 @@ export default function Home() {
       </Annotate>
 
       <Annotate bleed>
-        <section
-          data-header-theme="light"
-          className="relative h-[1038px] w-full overflow-hidden bg-brand-warm-snow text-center"
-        >
-          <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
-            <ClosingPortrait
-              image={closing01}
-              className="top-[123px] left-[1093px] h-[170px] w-[177px]"
-            />
-            <ClosingPortrait
-              image={closing02}
-              className="top-[587px] left-[130px] h-[196px] w-[198px]"
-            />
-            <ClosingPortrait
-              image={closing03}
-              className="top-[763px] left-[599px] h-[193px] w-[203px]"
-            />
-            <ClosingPortrait
-              image={closing04}
-              className="top-[160px] left-[140px] h-[193px] w-[216px]"
-            />
-            <ClosingPortrait
-              image={closing05}
-              className="top-[78px] left-[619px] h-[197px] w-[183px]"
-            />
-            <ClosingPortrait
-              image={closing06}
-              className="top-[545px] left-[1080px] h-[196px] w-[221px] rotate-[165deg]"
-            />
-            <div className="absolute top-[422px] left-1/2 w-[784px] -translate-x-1/2 text-section font-extrabold text-brand-obsidian">
-              <p>
-                But a number can&apos;t show you what it actually feels like.
-              </p>
-              <p className="text-landing-cyan">The people can.</p>
-            </div>
-          </div>
-        </section>
+        <PeopleStoriesSection />
       </Annotate>
+
+      <ChapterFinderSection />
+      <WordOnTheStreetSection />
+      <LandingCtaSection />
+      <LandingFooter />
     </PageFrame>
   );
 }

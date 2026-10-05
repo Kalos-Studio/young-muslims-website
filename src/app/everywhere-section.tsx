@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
   animate,
@@ -12,14 +13,11 @@ import {
   useTransform,
 } from "motion/react";
 
-import globe from "../../design-assets/figma/landing-2026/everywhere-globe.svg";
-import mapCanada from "../../design-assets/figma/landing-2026/everywhere-map/canada.svg";
-import mapMexico from "../../design-assets/figma/landing-2026/everywhere-map/mexico.svg";
-import mapUs from "../../design-assets/figma/landing-2026/everywhere-map/us.svg";
 import bottomLeftShell from "../../design-assets/figma/landing-2026/everywhere-bottom-left-shell.svg";
 import bottomRightPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-right-photo.png";
 import bottomRightShell from "../../design-assets/figma/landing-2026/everywhere-bottom-right-shell.svg";
 import leftPhoto from "../../design-assets/figma/landing-2026/everywhere-left-photo.png";
+import globeMap from "../../design-assets/figma/landing-2026/new-sections/everywhere-globe-map.png";
 import topPhoto from "../../design-assets/figma/landing-2026/everywhere-top-photo.png";
 import topShell from "../../design-assets/figma/landing-2026/everywhere-top-shell.svg";
 
@@ -171,32 +169,10 @@ export function EverywhereSection() {
         </div>
 
         <Image
-          src={globe}
-          alt=""
-          className="absolute top-[654px] left-0 max-w-none"
+          src={globeMap}
+          alt="Map showing Young Muslims NeighborNet communities across the United States"
+          className="absolute top-[654px] left-0 h-[795px] w-[1440px] max-w-none"
         />
-        <div
-          className="pointer-events-none absolute top-[654px] left-0 h-[795px] w-[1440px] overflow-hidden rounded-[16px]"
-          style={{ clipPath: "circle(725px at 720px 756.85px)" }}
-        >
-          <div className="absolute top-[-875px] left-[-632px] h-[1891px] w-[2522px]">
-            <Image
-              src={mapCanada}
-              alt=""
-              className="absolute top-[245px] left-[898px] max-w-none"
-            />
-            <Image
-              src={mapUs}
-              alt=""
-              className="absolute top-[500px] left-[373px] max-w-none"
-            />
-            <Image
-              src={mapMexico}
-              alt=""
-              className="absolute top-[1330px] left-[1021px] max-w-none"
-            />
-          </div>
-        </div>
 
         <motion.div className="absolute inset-0" style={{ y: topPortraitY }}>
           <Image
@@ -251,6 +227,12 @@ export function EverywhereSection() {
           Wherever you go, there&apos;s a Young Muslim. A brother or sister in a
           city you&apos;ve never been to, dealing with the same things you are
         </p>
+        <Link
+          href="/neighbornets"
+          className="absolute top-[1511px] left-1/2 -translate-x-1/2 bg-brand-royal px-6 py-4 text-nav font-bold whitespace-nowrap text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none"
+        >
+          Discover NeighborNets
+        </Link>
       </div>
     </section>
   );

@@ -37,7 +37,7 @@ const posts = [
     author: "YM Brothers",
   },
   {
-    title: "Ramadan Survival Guide",
+    title: "How to Give a Khutbah",
     excerpt:
       "A daily checklist, du'as and challenges to help you get the most out of the month.",
     date: "14 Jan 2025",
