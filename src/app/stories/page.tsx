@@ -8,6 +8,7 @@ import { PersonOutline } from "@/components/wireframe/person-outline";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/stories" },
   title: "Stories",
   description: "The impact YM has had on people, in their words.",
 };

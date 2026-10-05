@@ -6,6 +6,7 @@ import { Annotate } from "@/components/wireframe/annotate";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/store" },
   title: "Store",
   description: "The brothers' and sisters' stores.",
 };

@@ -263,8 +263,8 @@ Work through this list; `grep -rn "WIREFRAME:" src` confirms when you are done.
 | Imports and wrappers in real pages | `src/app/**`                                        | `grep -rn "WIREFRAME:" src/app`                                                                       |
 | CSS tokens                         | `src/app/globals.css`                               | Delete the fenced `WIREFRAME:start`/`end` block                                                       |
 | Map settings override              | `src/app/neighbornets/page.tsx`                     | Drop `initialSettings`/`showDebugPanel`, and the props on `NeighborNetsMap` if nothing else uses them |
-| `noindex` metadata                 | `src/app/layout.tsx`                                | Remove when there is real content to find                                                             |
+| Indexing controls (permanent)      | `src/app/layout.tsx`, `src/lib/seo.ts`              | Keep production/preview indexing controls when removing scaffolding                                   |
 | Feedback toolbar                   | `src/app/layout.tsx`, `package.json`                | Remove `<AnnotationToolbar />`, then `bun remove agentation`                                          |
-| Env gates                          | `netlify.toml`                                      | Delete both `[context.*.environment]` blocks                                                          |
+| Env gates                          | `netlify.toml`                                      | Remove review-tool flags only; retain contexts and `SITE_INDEXABLE` settings                          |
 | Route stubs                        | `about/`, `stories/`, `support/`, `store/`, `blog/` | Replaced as each page is built                                                                        |
 | This file                          | `WIREFRAME.md`                                      | Delete it, and the pointer in `README.md`                                                             |

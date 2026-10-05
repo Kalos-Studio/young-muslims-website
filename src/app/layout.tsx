@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Boldonse, Figtree } from "next/font/google";
 import "./globals.css";
+import { isSiteIndexable, SITE_ORIGIN } from "@/lib/seo";
 
 import { FundraiseUpScript } from "@/components/fundraise-up/fundraise-up-script";
 import { FooterSlot } from "@/components/site/footer-slot";
@@ -28,6 +29,7 @@ const boldonse = Boldonse({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_ORIGIN),
   // `template` keeps the site name out of every page's own title, so the
   // separator is defined once here rather than retyped in seven files.
   title: {
@@ -35,9 +37,7 @@ export const metadata: Metadata = {
     template: "%s | Young Muslims",
   },
   description: "Young Muslims' official website.",
-  // WIREFRAME: the whole site is a wireframe right now, so none of it should be
-  // indexed. Remove when there is real content to find.
-  robots: { index: false, follow: false },
+  robots: { index: isSiteIndexable, follow: isSiteIndexable },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

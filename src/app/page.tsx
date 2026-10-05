@@ -32,6 +32,7 @@ import { Annotate } from "@/components/wireframe/annotate";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/" },
   title: "Young Muslims",
   description:
     "A nationwide brotherhood and sisterhood, built on real friendships and a shared Deen.",

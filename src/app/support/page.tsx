@@ -9,6 +9,7 @@ import { PageFrame } from "@/components/wireframe/page-frame";
 import { PersonOutline } from "@/components/wireframe/person-outline";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/support" },
   title: "Support",
   description: "Give to the work, and see where it goes.",
 };

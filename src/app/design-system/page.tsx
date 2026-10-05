@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/design-system" },
   title: "Design system",
   description: "Young Muslims website design tokens and component reference.",
-  robots: { index: false, follow: false },
 };
 
 const brandColors = [

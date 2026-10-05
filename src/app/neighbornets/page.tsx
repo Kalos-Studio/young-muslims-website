@@ -11,6 +11,7 @@ import { Lorem, Text } from "@/components/wireframe/text";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/neighbornets" },
   title: "Join a NeighborNet",
   description:
     "Find a Young Muslims neighbornet near you: brothers' and sisters' circles across the United States.",

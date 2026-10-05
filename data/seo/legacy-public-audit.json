@@ -1,0 +1,2568 @@
+{
+  "checkedAt": "2026-10-03T02:25:45.713Z",
+  "scope": "Bounded public GET crawl plus targeted PDF HEAD and sitemap checks; no authenticated CMS, search analytics, or backlink data.",
+  "initialLimit": 130,
+  "initialRemainingQueued": 179,
+  "results": [
+    {
+      "url": "https://ymsite.com/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Young Muslims - Largest Muslim Youth Organization in the US",
+      "canonical": "https://ymsite.com/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/about-young-muslims/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/about-young-muslims/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Who We Are | About Young Muslims (YM)",
+      "canonical": "https://ymsite.com/about-young-muslims/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/our-programs/neighbornets/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/our-programs/neighbornets/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM NeighborNets : Brotherhood & Islamic Values Across the US",
+      "canonical": "https://ymsite.com/our-programs/neighbornets/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/resources/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/resources/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Resources | Young Muslims Islamic Library",
+      "canonical": "https://ymsite.com/resources/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/who-we-are-2/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/who-we-are-2/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Who We Are - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/who-we-are-2/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/leadership/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/leadership/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Leadership - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/leadership/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/for-parents/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/for-parents/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "For Parents - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/for-parents/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/faq/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/faq/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "FAQ - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/faq/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/locations/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/locations/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Locations - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/locations/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/start-a-new-neighbornet/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/start-a-new-neighbornet/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "START A NEW NEIGHBORNET! - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/start-a-new-neighbornet/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/our-programs/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/our-programs/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Our Programs - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/our-programs/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/donation-confirmation/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/donation-confirmation/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Donation Confirmation - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/donation-confirmation/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://giving.ymsite.com/page/YM2026",
+      "status": 200,
+      "finalUrl": "https://giving.ymsite.com/page/YM2026",
+      "type": "text/html;charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Support Young Muslims",
+      "canonical": "https://giving.ymsite.com/page/YM2026",
+      "robots": "index,follow"
+    },
+    {
+      "url": "https://ymsite.com/robots.txt",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/robots.txt",
+      "type": "text/plain; charset=utf-8",
+      "redirects": 0,
+      "method": "GET"
+    },
+    {
+      "url": "https://ymsite.com/sitemap_index.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/sitemap_index.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 10
+    },
+    {
+      "url": "https://ymsisters.com/robots.txt",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/robots.txt",
+      "type": "text/plain; charset=utf-8",
+      "redirects": 0,
+      "method": "GET"
+    },
+    {
+      "url": "https://ymsisters.com/sitemap_index.xml",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/sitemap_index.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 5
+    },
+    {
+      "url": "https://youngmuslims.com/robots.txt",
+      "status": 200,
+      "finalUrl": "http://ymsite.com/robots.txt",
+      "type": "text/plain; charset=utf-8",
+      "redirects": 1,
+      "method": "GET"
+    },
+    {
+      "url": "https://youngmuslims.com/sitemap_index.xml",
+      "status": 200,
+      "finalUrl": "http://ymsite.com/sitemap_index.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 1,
+      "method": "GET",
+      "entries": 10
+    },
+    {
+      "url": "https://youngmuslims.com/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 2,
+      "method": "GET",
+      "title": "Young Muslims - Largest Muslim Youth Organization in the US",
+      "canonical": "https://ymsite.com/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/about-young-muslims",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/about-young-muslims/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 1,
+      "method": "GET",
+      "title": "Who We Are | About Young Muslims (YM)",
+      "canonical": "https://ymsite.com/about-young-muslims/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/about-young-muslims/annual-reports/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/about-young-muslims/annual-reports/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Annual Reports - YM Brothers",
+      "canonical": "https://ymsite.com/about-young-muslims/annual-reports/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/about-young-muslims/national-operations-cabinet/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/about-young-muslims/national-operations-cabinet/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "National Operations - Cabinet - YM Brothers",
+      "canonical": "https://ymsite.com/about-young-muslims/national-operations-cabinet/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/portal/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/portal/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Portal - YM Brothers",
+      "canonical": "https://ymsite.com/portal/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/our-programs/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/our-programs/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Our Programs - YM Brothers",
+      "canonical": "https://ymsite.com/our-programs/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/our-programs/retreats-program/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/our-programs/retreats-program/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Young Muslims Retreats: Spiritual Growth, Brotherhood for Muslims",
+      "canonical": "https://ymsite.com/our-programs/retreats-program/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/our-programs/programs-conferences/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/our-programs/programs-conferences/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Young Muslims Conference: Opportunity For Muslim Youth | 2023",
+      "canonical": "https://ymsite.com/our-programs/programs-conferences/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/our-programs/events-calendar/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/our-programs/events-calendar/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Events - YM Brothers",
+      "canonical": "https://ymsite.com/our-programs/events-calendar/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/give/",
+      "status": 200,
+      "finalUrl": "https://giving.ymsite.com/page/YM2026",
+      "type": "text/html;charset=UTF-8",
+      "redirects": 1,
+      "method": "GET",
+      "title": "Support Young Muslims",
+      "canonical": "https://giving.ymsite.com/page/YM2026",
+      "robots": "index,follow"
+    },
+    {
+      "url": "https://ymsite.com/ym-locations/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ym-locations/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Locations - YM Brothers",
+      "canonical": "https://ymsite.com/ym-locations/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/contact-us-2/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/contact-us-2/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Contact Us - YM Brothers",
+      "canonical": "https://ymsite.com/contact-us-2/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/who-we-are-2/",
+      "status": 404,
+      "finalUrl": "https://ymsite.com/who-we-are-2/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Page not found - YM Brothers",
+      "canonical": null,
+      "robots": "noindex, follow"
+    },
+    {
+      "url": "https://ymsite.com/muslim-american-society-mas-insights-on-allahs-laws-of-victory/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/muslim-american-society-mas-insights-on-allahs-laws-of-victory/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Muslim American Society (MAS): Insights on Allah’s Laws of Victory - YM Brothers",
+      "canonical": "https://ymsite.com/muslim-american-society-mas-insights-on-allahs-laws-of-victory/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/author/muneeb/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/author/muneeb/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Muneeb Syed, Author at YM Brothers",
+      "canonical": "https://ymsite.com/author/muneeb/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/launchgood-tips-on-ramadan-fundraising/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/launchgood-tips-on-ramadan-fundraising/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "LaunchGood Tips on Ramadan Fundraising - YM Brothers",
+      "canonical": "https://ymsite.com/launchgood-tips-on-ramadan-fundraising/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/yaqeen-institute-explains-what-shapes-muslim-identity/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/yaqeen-institute-explains-what-shapes-muslim-identity/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Yaqeen Institute: Explains What Shapes Muslim Identity - YM Brothers",
+      "canonical": "https://ymsite.com/yaqeen-institute-explains-what-shapes-muslim-identity/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/issue-reporting-form/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/issue-reporting-form/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Issue Reporting Form - YM Brothers",
+      "canonical": "https://ymsite.com/issue-reporting-form/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/give",
+      "status": 200,
+      "finalUrl": "https://giving.ymsite.com/page/YM2026",
+      "type": "text/html;charset=UTF-8",
+      "redirects": 1,
+      "method": "GET",
+      "title": "Support Young Muslims",
+      "canonical": "https://giving.ymsite.com/page/YM2026",
+      "robots": "index,follow"
+    },
+    {
+      "url": "https://www.ymsisters.com/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 1,
+      "method": "GET",
+      "title": "Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/10/MYI_-Addressing-Mental-Health-Full-Report.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2024/10/MYI_-Addressing-Mental-Health-Full-Report.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/10/Addressing-Pornography-YM-Muslim-Youth-Issues.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2024/10/Addressing-Pornography-YM-Muslim-Youth-Issues.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/how-to-give-a-khutbah/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/how-to-give-a-khutbah/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "How to Give a Khutbah | About Young Muslims (YM)",
+      "canonical": "https://ymsite.com/how-to-give-a-khutbah/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2023/10/Judgment-Stigma-Report-PDF-YM-Muslim-Youth-Issues.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2023/10/Judgment-Stigma-Report-PDF-YM-Muslim-Youth-Issues.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2023/10/Handbook-on-Systemic-Injustices.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2023/10/Handbook-on-Systemic-Injustices.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2023/10/YM-Ramadan-Guide-2020.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2023/10/YM-Ramadan-Guide-2020.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/07/Through-the-Eyes-of-American-Muslims-Final-V4.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2024/07/Through-the-Eyes-of-American-Muslims-Final-V4.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsisters.com/resources/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/resources/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Resources - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/resources/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/donate/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/donate/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Donate - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/donate/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/contact-us/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/contact-us/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Contact Us - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/contact-us/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/donation/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/donation-confirmation/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 1,
+      "method": "GET",
+      "title": "Donation Confirmation - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/donation-confirmation/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/post-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/post-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 6
+    },
+    {
+      "url": "https://ymsite.com/page-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/page-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 129
+    },
+    {
+      "url": "https://ymsite.com/header-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/header-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 9
+    },
+    {
+      "url": "https://ymsite.com/footer-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/footer-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 6
+    },
+    {
+      "url": "https://ymsite.com/osf_story-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/osf_story-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 11
+    },
+    {
+      "url": "https://ymsite.com/elemenfolio-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/elemenfolio-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 17
+    },
+    {
+      "url": "https://ymsite.com/category-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/category-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 2
+    },
+    {
+      "url": "https://ymsite.com/osf_story_category-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/osf_story_category-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 1
+    },
+    {
+      "url": "https://ymsite.com/elemenfoliocategory-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/elemenfoliocategory-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 2
+    },
+    {
+      "url": "https://ymsite.com/author-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/author-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 2
+    },
+    {
+      "url": "https://ymsisters.com/page-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/page-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 26
+    },
+    {
+      "url": "https://ymsisters.com/header-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/header-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 5
+    },
+    {
+      "url": "https://ymsisters.com/footer-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/footer-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 4
+    },
+    {
+      "url": "https://ymsisters.com/osf_story-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/osf_story-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 1
+    },
+    {
+      "url": "https://ymsisters.com/osf_story_category-sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/osf_story_category-sitemap.xml",
+      "type": "text/xml; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "entries": 1
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2026/02/YM-Annual-Report-2025-FINAL-1.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2026/02/YM-Annual-Report-2025-FINAL-1.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2025/02/YM-Annual-Report-2024-Final.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2025/02/YM-Annual-Report-2024-Final.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/02/YM-Annual-Report-2023-STANDARD-1.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2024/02/YM-Annual-Report-2023-STANDARD-1.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/cabinet-recruitment-form/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/cabinet-recruitment-form/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Cabinet Recruitment Form - YM Brothers",
+      "canonical": "https://ymsite.com/cabinet-recruitment-form/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/06/Cabinet-Quarterly-Report-6-25-24.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2024/06/Cabinet-Quarterly-Report-6-25-24.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/11/Cabinet-Quarterly-Report-Q3.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2024/11/Cabinet-Quarterly-Report-Q3.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2025/01/Cabinet-Quarterly-Report-Q4-1.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2025/01/Cabinet-Quarterly-Report-Q4-1.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/neighbornets/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/neighbornets/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM NeighborNets : Brotherhood & Islamic Values Across the US",
+      "canonical": "https://ymsite.com/our-programs/neighbornets/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2022/02/2022-Annual-Calendar-Website-1.pdf",
+      "status": 404,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2022/02/2022-Annual-Calendar-Website-1.pdf",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/young-muslims-leadership-conference-2021-waiver/",
+      "status": 404,
+      "finalUrl": "https://ymsite.com/young-muslims-leadership-conference-2021-waiver/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Page not found - YM Brothers",
+      "canonical": null,
+      "robots": "noindex, follow"
+    },
+    {
+      "url": "https://ymsite.com/blog-2/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/blog-2/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Blog - YM Brothers",
+      "canonical": "https://ymsite.com/blog-2/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/category/uncategorized/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/category/uncategorized/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Uncategorized Archives - YM Brothers",
+      "canonical": "https://ymsite.com/category/uncategorized/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/incredible-muslims-reflecting-on-muslim-crowdfunding-support-for-new-zealand-victims/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/incredible-muslims-reflecting-on-muslim-crowdfunding-support-for-new-zealand-victims/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Incredible Muslims: Reflecting on Muslim Crowdfunding Support for New Zealand Victims - YM Brothers",
+      "canonical": "https://ymsite.com/incredible-muslims-reflecting-on-muslim-crowdfunding-support-for-new-zealand-victims/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/empowering-society-through-holistic-education-insights-from-islamicity/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/empowering-society-through-holistic-education-insights-from-islamicity/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Empowering Society Through Holistic Education: Insights from IslamiCity - YM Brothers",
+      "canonical": "https://ymsite.com/empowering-society-through-holistic-education-insights-from-islamicity/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/2024/02/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/2024/02/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "February 2024 - YM Brothers",
+      "canonical": null,
+      "robots": "noindex, follow"
+    },
+    {
+      "url": "https://ymsite.com/2024/01/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/2024/01/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "January 2024 - YM Brothers",
+      "canonical": null,
+      "robots": "noindex, follow"
+    },
+    {
+      "url": "https://ymsite.com/2023/12/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/2023/12/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "December 2023 - YM Brothers",
+      "canonical": null,
+      "robots": "noindex, follow"
+    },
+    {
+      "url": "https://ymsite.com/2020/11/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/2020/11/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "November 2020 - YM Brothers",
+      "canonical": null,
+      "robots": "noindex, follow"
+    },
+    {
+      "url": "https://ymsite.com/category/latest-articles/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/category/latest-articles/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Latest Articles Archives - YM Brothers",
+      "canonical": "https://ymsite.com/category/latest-articles/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/resources-halaqah-toolkits/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/resources-halaqah-toolkits/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Resources / Halqah Toolkits - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/resources-halaqah-toolkits/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/resources-annual-reports/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/resources-annual-reports/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Resources / Annual Reports - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/resources-annual-reports/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsisters.com/resources-myi-reports/",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/resources-myi-reports/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Resources / MYI Reports - Young Muslims Sisters",
+      "canonical": "https://ymsisters.com/resources-myi-reports/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2022/04/MYI_-Addressing-Mental-Health-Full-Report.pdf",
+      "status": 404,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2022/04/MYI_-Addressing-Mental-Health-Full-Report.pdf",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/judgement-stigma/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/judgement-stigma/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Judgement Stigma - YM Brothers",
+      "canonical": "https://ymsite.com/judgement-stigma/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/domain-fundraiser/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/domain-fundraiser/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Fundraising Campaign: Buy youngmuslims.com domain name - YM Brothers",
+      "canonical": "https://ymsite.com/domain-fundraiser/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/basketball-league-registration/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/basketball-league-registration/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Basketball League Registration - YM Brothers",
+      "canonical": "https://ymsite.com/basketball-league-registration/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/donate/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/donate/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Young Muslims Conference Donation - YM Brothers",
+      "canonical": "https://ymsite.com/donate/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/become-a-volunteer/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/become-a-volunteer/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Become A Volunteer - YM Brothers",
+      "canonical": "https://ymsite.com/become-a-volunteer/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/faq/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/faq/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "FAQ - YM Brothers",
+      "canonical": "https://ymsite.com/faq/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/gallery/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/gallery/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Gallery - YM Brothers",
+      "canonical": "https://ymsite.com/gallery/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/core-values/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/core-values/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Core Values - YM Brothers",
+      "canonical": "https://ymsite.com/core-values/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/our-team/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/our-team/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Our Team - YM Brothers",
+      "canonical": "https://ymsite.com/our-team/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/locations/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/locations/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Locations - YM Brothers",
+      "canonical": "https://ymsite.com/locations/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/our-programs/events/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/our-programs/events/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Events - YM Brothers",
+      "canonical": "https://ymsite.com/our-programs/events/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/ym-online-store/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ym-online-store/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM Online Store - YM Brothers",
+      "canonical": "https://ymsite.com/ym-online-store/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/campaigns/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/campaigns/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Campaigns - YM Brothers",
+      "canonical": "https://ymsite.com/campaigns/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/texas-retreat-donation/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/texas-retreat-donation/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Texas Retreat Donation - YM Brothers",
+      "canonical": "https://ymsite.com/texas-retreat-donation/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/locksfall2023/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/locksfall2023/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "LocksFall2023 - YM Brothers",
+      "canonical": "https://ymsite.com/locksfall2023/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/career/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/career/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Career - YM Brothers",
+      "canonical": "https://ymsite.com/career/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/endowment/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/endowment/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Endowment - YM Brothers",
+      "canonical": "https://ymsite.com/endowment/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/how-we-help/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/how-we-help/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "How We Help - YM Brothers",
+      "canonical": "https://ymsite.com/how-we-help/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/home/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/home/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Home - YM Brothers",
+      "canonical": "https://ymsite.com/home/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/give-old/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/give-old/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Give - YM Brothers",
+      "canonical": "https://ymsite.com/give-old/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/ym-cabinet-oath/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ym-cabinet-oath/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM Cabinet Oath - YM Brothers",
+      "canonical": "https://ymsite.com/ym-cabinet-oath/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/org-updates/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/org-updates/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Org Updates - YM Brothers",
+      "canonical": "https://ymsite.com/org-updates/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/berlin-merch-s2k24/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/berlin-merch-s2k24/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM Berlin Merch Order Form Spring 2k24 - YM Brothers",
+      "canonical": "https://ymsite.com/berlin-merch-s2k24/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/zakat-foundation-of-america/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/zakat-foundation-of-america/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Zakat Foundation of America - YM Brothers",
+      "canonical": "https://ymsite.com/zakat-foundation-of-america/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/ymc2024/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ymc2024/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Young Muslims Conference 2024 - YM Brothers",
+      "canonical": "https://ymsite.com/ymc2024/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/ymc-merch-order-form/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ymc-merch-order-form/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YMC Merchandise Order Form - YM Brothers",
+      "canonical": "https://ymsite.com/ymc-merch-order-form/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/launchgood-resources-helping-unlock-your-campaigns-potential/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/launchgood-resources-helping-unlock-your-campaigns-potential/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "LaunchGood Resources: Helping Unlock Your Campaign's Potential - YM Brothers",
+      "canonical": "https://ymsite.com/launchgood-resources-helping-unlock-your-campaigns-potential/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/islamicity-quran-reader-guiding-your-faith-journey/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/islamicity-quran-reader-guiding-your-faith-journey/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "IslamiCity Quran Reader: Guiding Your Faith Journey - YM Brothers",
+      "canonical": "https://ymsite.com/islamicity-quran-reader-guiding-your-faith-journey/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/ym-njxpa-retreat-2024/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ym-njxpa-retreat-2024/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM NJxPA Retreat 2024 (Aug 26-29) - YM Brothers",
+      "canonical": "https://ymsite.com/ym-njxpa-retreat-2024/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/ym-midwest-retreat-2024/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ym-midwest-retreat-2024/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM Midwest Retreat 2024 (Jul 29 - Aug 2) - YM Brothers",
+      "canonical": "https://ymsite.com/ym-midwest-retreat-2024/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/american-muslims-for-palestine-amp-educating-the-american-public-about-palestine/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/american-muslims-for-palestine-amp-educating-the-american-public-about-palestine/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "American Muslims for Palestine (AMP): Educating the American Public about Palestine - YM Brothers",
+      "canonical": "https://ymsite.com/american-muslims-for-palestine-amp-educating-the-american-public-about-palestine/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/american-muslims-for-palestine-guide-to-supporting-palestine/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/american-muslims-for-palestine-guide-to-supporting-palestine/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "American Muslims for Palestine: Guide to Supporting Palestine - YM Brothers",
+      "canonical": "https://ymsite.com/american-muslims-for-palestine-guide-to-supporting-palestine/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/a-continuous-charity-breaking-the-chains-of-riba-for-muslim-students/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/a-continuous-charity-breaking-the-chains-of-riba-for-muslim-students/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "A Continuous Charity: Breaking The Chains of Riba for Muslim Students - YM Brothers",
+      "canonical": "https://ymsite.com/a-continuous-charity-breaking-the-chains-of-riba-for-muslim-students/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/icna-guide-on-getting-closer-to-allah-this-ramadan/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/icna-guide-on-getting-closer-to-allah-this-ramadan/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "ICNA Guide on Getting Closer to Allah this Ramadan - YM Brothers",
+      "canonical": "https://ymsite.com/icna-guide-on-getting-closer-to-allah-this-ramadan/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/merchshop/",
+      "status": 200,
+      "finalUrl": "https://www.ymsite.com/",
+      "type": "text/html; charset=utf-8",
+      "redirects": 2,
+      "method": "GET",
+      "title": "YM Merch Store",
+      "canonical": "https://www.ymsite.com/",
+      "robots": null
+    },
+    {
+      "url": "https://ymsite.com/hcm-registration/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/hcm-registration/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "HCM Registration - YM Brothers",
+      "canonical": "https://ymsite.com/hcm-registration/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/connecticut-initials/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/connecticut-initials/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Connecticut Initials - YM Brothers",
+      "canonical": "https://ymsite.com/connecticut-initials/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/ym-south-retreat-2024/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ym-south-retreat-2024/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM South Retreat 2024 (Aug 23-25) - YM Brothers",
+      "canonical": "https://ymsite.com/ym-south-retreat-2024/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/ne2024/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ne2024/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM NE 2024 Retreat - YM Brothers",
+      "canonical": "https://ymsite.com/ne2024/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/ym-florida-games-sponsorship/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ym-florida-games-sponsorship/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM Florida Games Sponsorship Form 2024 - YM Brothers",
+      "canonical": "https://ymsite.com/ym-florida-games-sponsorship/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/ctmerch/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/ctmerch/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "YM Connecticut SR Merch Order Form - YM Brothers",
+      "canonical": "https://ymsite.com/ctmerch/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2022/11/Judgment-Stigma-Report-YM-Muslim-Youth-Issues-v2.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2022/11/Judgment-Stigma-Report-YM-Muslim-Youth-Issues-v2.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsisters.com/wp-content/uploads/2024/02/Young-Muslims-Sisters-Q3-1.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/wp-content/uploads/2024/02/Young-Muslims-Sisters-Q3-1.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsisters.com/wp-content/uploads/2024/10/Judgment-Stigma-Report-PDF-YM-Muslim-Youth-Issues.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/wp-content/uploads/2024/10/Judgment-Stigma-Report-PDF-YM-Muslim-Youth-Issues.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsisters.com/wp-content/uploads/2024/10/MYI_-Addressing-Mental-Health-Full-Report.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/wp-content/uploads/2024/10/MYI_-Addressing-Mental-Health-Full-Report.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsisters.com/wp-content/uploads/2024/10/Addressing-Pornography-YM-Muslim-Youth-Issues.pdf",
+      "status": 200,
+      "finalUrl": "https://ymsisters.com/wp-content/uploads/2024/10/Addressing-Pornography-YM-Muslim-Youth-Issues.pdf",
+      "type": "application/pdf",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2021/11/Addressing-Pornography-YM-Muslim-Youth-Issues.pdf",
+      "status": 404,
+      "finalUrl": "https://ymsite.com/wp-content/uploads/2021/11/Addressing-Pornography-YM-Muslim-Youth-Issues.pdf",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "HEAD"
+    },
+    {
+      "url": "https://ymsite.com/blog-2/page/2/",
+      "status": 200,
+      "finalUrl": "https://ymsite.com/blog-2/page/2/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Blog - Page 2 of 2 - YM Brothers",
+      "canonical": "https://ymsite.com/blog-2/page/2/",
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    },
+    {
+      "url": "https://ymsite.com/giving-a-khutbah/",
+      "status": 404,
+      "finalUrl": "https://ymsite.com/giving-a-khutbah/",
+      "type": "text/html; charset=UTF-8",
+      "redirects": 0,
+      "method": "GET",
+      "title": "Page not found - YM Brothers",
+      "canonical": null,
+      "robots": "noindex, follow"
+    }
+  ],
+  "sitemapURLs": [
+    {
+      "url": "https://ymsite.com/post-sitemap.xml",
+      "sources": [
+        "https://ymsite.com/sitemap_index.xml",
+        "http://ymsite.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/page-sitemap.xml",
+      "sources": [
+        "https://ymsite.com/sitemap_index.xml",
+        "http://ymsite.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/header-sitemap.xml",
+      "sources": [
+        "https://ymsite.com/sitemap_index.xml",
+        "http://ymsite.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/footer-sitemap.xml",
+      "sources": [
+        "https://ymsite.com/sitemap_index.xml",
+        "http://ymsite.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/osf_story-sitemap.xml",
+      "sources": [
+        "https://ymsite.com/sitemap_index.xml",
+        "http://ymsite.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/elemenfolio-sitemap.xml",
+      "sources": [
+        "https://ymsite.com/sitemap_index.xml",
+        "http://ymsite.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/category-sitemap.xml",
+      "sources": [
+        "https://ymsite.com/sitemap_index.xml",
+        "http://ymsite.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/osf_story_category-sitemap.xml",
+      "sources": [
+        "https://ymsite.com/sitemap_index.xml",
+        "http://ymsite.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/elemenfoliocategory-sitemap.xml",
+      "sources": [
+        "https://ymsite.com/sitemap_index.xml",
+        "http://ymsite.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/author-sitemap.xml",
+      "sources": [
+        "https://ymsite.com/sitemap_index.xml",
+        "http://ymsite.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://ymsisters.com/page-sitemap.xml",
+      "sources": ["https://ymsisters.com/sitemap_index.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/header-sitemap.xml",
+      "sources": ["https://ymsisters.com/sitemap_index.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/footer-sitemap.xml",
+      "sources": ["https://ymsisters.com/sitemap_index.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/osf_story-sitemap.xml",
+      "sources": ["https://ymsisters.com/sitemap_index.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/osf_story_category-sitemap.xml",
+      "sources": ["https://ymsisters.com/sitemap_index.xml"]
+    },
+    {
+      "url": "https://ymsite.com/judgement-stigma/",
+      "sources": ["https://ymsite.com/post-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/empowering-society-through-holistic-education-insights-from-islamicity/",
+      "sources": ["https://ymsite.com/post-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/incredible-muslims-reflecting-on-muslim-crowdfunding-support-for-new-zealand-victims/",
+      "sources": ["https://ymsite.com/post-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/yaqeen-institute-explains-what-shapes-muslim-identity/",
+      "sources": ["https://ymsite.com/post-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/launchgood-tips-on-ramadan-fundraising/",
+      "sources": ["https://ymsite.com/post-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/muslim-american-society-mas-insights-on-allahs-laws-of-victory/",
+      "sources": ["https://ymsite.com/post-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/domain-fundraiser/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/basketball-league-registration/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/donate/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/become-a-volunteer/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/faq/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/gallery/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/core-values/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/our-team/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/locations/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/our-programs/events/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-online-store/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/campaigns/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/texas-retreat-donation/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/locksfall2023/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/career/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/endowment/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/how-we-help/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/home/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/our-programs/events-calendar/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/our-programs/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/give-old/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/how-to-give-a-khutbah/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/our-programs/neighbornets/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/our-programs/retreats-program/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/contact-us-2/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-cabinet-oath/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/org-updates/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/berlin-merch-s2k24/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/zakat-foundation-of-america/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/our-programs/programs-conferences/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc2024/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portal/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc-merch-order-form/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/launchgood-resources-helping-unlock-your-campaigns-potential/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/islamicity-quran-reader-guiding-your-faith-journey/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-njxpa-retreat-2024/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-midwest-retreat-2024/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/american-muslims-for-palestine-amp-educating-the-american-public-about-palestine/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/american-muslims-for-palestine-guide-to-supporting-palestine/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/a-continuous-charity-breaking-the-chains-of-riba-for-muslim-students/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/icna-guide-on-getting-closer-to-allah-this-ramadan/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/merchshop/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/hcm-registration/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/connecticut-initials/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-south-retreat-2024/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ne2024/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-florida-games-sponsorship/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ctmerch/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymse2024/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/issue-reporting-form/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/midwest-retreat-form/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ctconference/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-locations/connecticut-subregion/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/sr-ski-trip-registration/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/about-young-muslims/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/about-young-muslims/national-operations-cabinet/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-ma-ri-merch/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/elementor-13339/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-leaderboard-ranking/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/fl-ioa-2025/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymlc-2024/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ctymcbus/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/maineretreat25/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/about-young-muslims/project-postman/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ga-retreat/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/neretreat25/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/25ymcttr/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymlc-alumni-room-selection/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/fl-games/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/grad-payment-form/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymct3llc/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymctllc-sponsorship/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/cabinet-recruitment-form/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc-se-program/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/houston-ironman-tournament/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc-se/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-locations/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/new-england-ym-quarter-zips/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc-south/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/berlinmerch/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymne-tarbiyyah-workshop/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-dallas-end-of-year-lock-in/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/myi-god-image-survey/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/about-young-muslims/annual-reports/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc-view-prev-year-form/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc-2025/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc-2026/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc2026-reg/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/give/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-pennsylvania-merch-form/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc-2026-register/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/conference/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymlc-2026-alumni-room-selection/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymlc-2026-financial-aid-form/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/nyw-spring-soccer/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/young-muslims-westchester-soccer-tournament/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc-sharon-registration-26/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymc-2026-florida-transportation/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/conference-schedule/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/postman/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-south-summit-2026/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-houston-basketball-league-2026/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ga-retreat-26/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ymlc-2026-payment-form/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/elementor-15208/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/resources/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/2026-ym-retreat-niles-icws-plainfield/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/conn-lake-compounce-trip-2026/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/se-rlc/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/hk-test/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-nye-six-flags/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/young-muslims-inc-sms-text-message-privacy-policy/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-houston-beach-day-2026/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/private-policy/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/sms-mms-private-policy/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/terms-of-service/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/test/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/young-muslims-ym-tri-state-retreat-form-2026/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/pad-2026/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-ne-retreat-reg-2026/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-sms-mms-onboarding-form/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-south-retreat-form-2026/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/fl-retreat/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/llc4/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-on-skates/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/ym-houston-ironman-tournament-2026/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/nye_merch/",
+      "sources": ["https://ymsite.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/header/",
+      "sources": ["https://ymsite.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/header/header-landing/",
+      "sources": ["https://ymsite.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/header/header-black-white/",
+      "sources": ["https://ymsite.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/header/header-shop/",
+      "sources": ["https://ymsite.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/header/header-black/",
+      "sources": ["https://ymsite.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/header/header-white/",
+      "sources": ["https://ymsite.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/header/header-neighbornets/",
+      "sources": ["https://ymsite.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/header/header-ym-joint-page-header/",
+      "sources": ["https://ymsite.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/header/postman-page-header/",
+      "sources": ["https://ymsite.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/footer/",
+      "sources": ["https://ymsite.com/footer-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/footer/footer-landing/",
+      "sources": ["https://ymsite.com/footer-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/footer/footer-02/",
+      "sources": ["https://ymsite.com/footer-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/footer/footer-shop/",
+      "sources": ["https://ymsite.com/footer-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/footer/footer-01/",
+      "sources": ["https://ymsite.com/footer-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/footer/ym-joint-page-footer/",
+      "sources": ["https://ymsite.com/footer-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/an-inside-look-at-a-viral-instagram-campaign/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/an-inside-look-at-a-viral-instagram-campaign-for-migrants-in-tijuana/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/meet-6-organizations-ensuring-girls-reach-their-full-brilliant-potential/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/why-a-girls-club-in-ghana-changed-its-membership-policy/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/how-one-company-shows-employees-it-cares-about-them-and-the-world/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/these-5-climate-activists-are-committed-to-conservation/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/how-crowdfunding-benefits-nonprofits-and-donors/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/how-a-nonprofit-in-tanzania-raised-44000-in-its-year-end-campaign/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/police-department-recognition-award/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/story/neighbornet/",
+      "sources": ["https://ymsite.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/cabinet-teams-2/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/cloud-teams/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/regional-teams/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/embracing-our-muslim-identity-in-our-careers-lives/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/pieces-of-advice/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/serving-the-community/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/skill-team-development/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/personal-development/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/working-with-and-reaching-out-to-the-youth-the-neighbornet/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/islamic-movement-and-our-history/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/leadership-principles/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/dawah/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/standing-on-shoulders-of-giants/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/standing-on-shoulders-of-giants-2/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/standing-on-shoulders-of-giants-3/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/standing-on-shoulders-of-giants-4/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfolio/standing-on-shoulders-of-giants-5/",
+      "sources": ["https://ymsite.com/elemenfolio-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/category/latest-articles/",
+      "sources": ["https://ymsite.com/category-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/category/uncategorized/",
+      "sources": ["https://ymsite.com/category-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/category-story/stories/",
+      "sources": ["https://ymsite.com/osf_story_category-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfoliocategory/document-resources/",
+      "sources": ["https://ymsite.com/elemenfoliocategory-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/portfoliocategory/video-resources/",
+      "sources": ["https://ymsite.com/elemenfoliocategory-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/author/muneeb/",
+      "sources": ["https://ymsite.com/author-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsite.com/author/omarazad/",
+      "sources": ["https://ymsite.com/author-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/become-a-volunteer/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/gallery/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/campaigns-grid/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/career/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/core-values/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/how-we-help/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/inspring-stories/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/donation-confirmation/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/who-we-are/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/faq/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/ym-brothers/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/who-we-are-2/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/for-parents/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/resources-myi-reports/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/our-programs/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/contact-us/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/locations/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/leadership/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/start-a-new-neighbornet/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/resources/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/resources-halaqah-toolkits/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/resources-annual-reports/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/donate/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/ym-conference/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/nearest-ym/",
+      "sources": ["https://ymsisters.com/page-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/header/",
+      "sources": ["https://ymsisters.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/header/header-landing/",
+      "sources": ["https://ymsisters.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/header/header-black/",
+      "sources": ["https://ymsisters.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/header/header-black-white/",
+      "sources": ["https://ymsisters.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/header/header-white/",
+      "sources": ["https://ymsisters.com/header-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/footer/",
+      "sources": ["https://ymsisters.com/footer-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/footer/footer-landing/",
+      "sources": ["https://ymsisters.com/footer-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/footer/footer-02/",
+      "sources": ["https://ymsisters.com/footer-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/footer/footer-01/",
+      "sources": ["https://ymsisters.com/footer-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/story/",
+      "sources": ["https://ymsisters.com/osf_story-sitemap.xml"]
+    },
+    {
+      "url": "https://ymsisters.com/category-story/stories/",
+      "sources": ["https://ymsisters.com/osf_story_category-sitemap.xml"]
+    }
+  ],
+  "downloads": [
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/10/MYI_-Addressing-Mental-Health-Full-Report.pdf",
+      "sources": ["https://ymsite.com/resources/"]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/10/Addressing-Pornography-YM-Muslim-Youth-Issues.pdf",
+      "sources": ["https://ymsite.com/resources/"]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2023/10/Judgment-Stigma-Report-PDF-YM-Muslim-Youth-Issues.pdf",
+      "sources": [
+        "https://ymsite.com/resources/",
+        "https://ymsite.com/about-young-muslims/annual-reports/",
+        "https://ymsite.com/about-young-muslims/national-operations-cabinet/"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2023/10/Handbook-on-Systemic-Injustices.pdf",
+      "sources": [
+        "https://ymsite.com/resources/",
+        "https://ymsite.com/about-young-muslims/annual-reports/",
+        "https://ymsite.com/about-young-muslims/national-operations-cabinet/"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2023/10/YM-Ramadan-Guide-2020.pdf",
+      "sources": [
+        "https://ymsite.com/resources/",
+        "https://ymsite.com/about-young-muslims/annual-reports/",
+        "https://ymsite.com/about-young-muslims/national-operations-cabinet/"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/07/Through-the-Eyes-of-American-Muslims-Final-V4.pdf",
+      "sources": ["https://ymsite.com/resources/"]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2026/02/YM-Annual-Report-2025-FINAL-1.pdf",
+      "sources": ["https://ymsite.com/about-young-muslims/annual-reports/"]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2025/02/YM-Annual-Report-2024-Final.pdf",
+      "sources": ["https://ymsite.com/about-young-muslims/annual-reports/"]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/02/YM-Annual-Report-2023-STANDARD-1.pdf",
+      "sources": ["https://ymsite.com/about-young-muslims/annual-reports/"]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/06/Cabinet-Quarterly-Report-6-25-24.pdf",
+      "sources": [
+        "https://ymsite.com/about-young-muslims/national-operations-cabinet/"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2024/11/Cabinet-Quarterly-Report-Q3.pdf",
+      "sources": [
+        "https://ymsite.com/about-young-muslims/national-operations-cabinet/"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2025/01/Cabinet-Quarterly-Report-Q4-1.pdf",
+      "sources": [
+        "https://ymsite.com/about-young-muslims/national-operations-cabinet/"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2022/02/2022-Annual-Calendar-Website-1.pdf",
+      "sources": ["https://ymsite.com/our-programs/"]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2022/04/MYI_-Addressing-Mental-Health-Full-Report.pdf",
+      "sources": [
+        "https://ymsisters.com/donate/",
+        "https://ymsite.com/ym-online-store/"
+      ]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2022/11/Judgment-Stigma-Report-YM-Muslim-Youth-Issues-v2.pdf",
+      "sources": [
+        "https://ymsite.com/2020/11/",
+        "https://ymsite.com/category/latest-articles/",
+        "https://ymsite.com/judgement-stigma/"
+      ]
+    },
+    {
+      "url": "https://ymsisters.com/wp-content/uploads/2024/02/Young-Muslims-Sisters-Q3-1.pdf",
+      "sources": ["https://ymsisters.com/resources-halaqah-toolkits/"]
+    },
+    {
+      "url": "https://ymsisters.com/wp-content/uploads/2024/10/Judgment-Stigma-Report-PDF-YM-Muslim-Youth-Issues.pdf",
+      "sources": ["https://ymsisters.com/resources-myi-reports/"]
+    },
+    {
+      "url": "https://ymsisters.com/wp-content/uploads/2024/10/MYI_-Addressing-Mental-Health-Full-Report.pdf",
+      "sources": ["https://ymsisters.com/resources-myi-reports/"]
+    },
+    {
+      "url": "https://ymsisters.com/wp-content/uploads/2024/10/Addressing-Pornography-YM-Muslim-Youth-Issues.pdf",
+      "sources": ["https://ymsisters.com/resources-myi-reports/"]
+    },
+    {
+      "url": "https://ymsite.com/wp-content/uploads/2021/11/Addressing-Pornography-YM-Muslim-Youth-Issues.pdf",
+      "sources": ["https://ymsite.com/ym-online-store/"]
+    }
+  ],
+  "externalResources": [
+    {
+      "url": "https://drive.google.com/file/d/18yFJJQdfRPk4_Nr6ugP3DbQaIkCF_5KO/view",
+      "sources": [
+        "https://ymsisters.com/donate/",
+        "https://ymsisters.com/resources-halaqah-toolkits/"
+      ]
+    },
+    {
+      "url": "https://drive.google.com/file/d/1BV92gDUbJ6NgPgInDQMhHp8ri0Plv6Yq/view?usp=sharing",
+      "sources": ["https://ymsisters.com/resources-halaqah-toolkits/"]
+    },
+    {
+      "url": "https://drive.google.com/file/d/1GW1pRJXFnILbP2alw-FgW3_BLG1YV57T/view?usp=sharing",
+      "sources": ["https://ymsisters.com/resources-halaqah-toolkits/"]
+    },
+    {
+      "url": "https://drive.google.com/file/d/1myRG8Af2xLjlbRhckKrcs6fAq1DpW2x9/view?usp=sharing",
+      "sources": [
+        "https://ymsisters.com/resources-halaqah-toolkits/",
+        "https://ymsisters.com/resources-annual-reports/"
+      ]
+    },
+    {
+      "url": "https://drive.google.com/file/d/10Oyn7BsXQ-WjDdWkH_5Jv3k0lf6itRJz/view?usp=sharing",
+      "sources": ["https://ymsisters.com/resources-halaqah-toolkits/"]
+    },
+    {
+      "url": "https://drive.google.com/file/d/1EUrZN5hGKC835aPSShyBZqMBlxC0Addn/view?usp=sharing",
+      "sources": ["https://ymsisters.com/resources-halaqah-toolkits/"]
+    },
+    {
+      "url": "https://docs.google.com/document/d/1Rl3din9AFWKI38y2HR7DeTg27DxbYPKA51UgMTftxOM/edit?tab=t.0",
+      "sources": ["https://ymsisters.com/resources-halaqah-toolkits/"]
+    },
+    {
+      "url": "https://docs.google.com/document/d/1sASoINxh8-Q4-sTkqoyQjOk55obzULxk5van5fB15-Y/edit?tab=t.0",
+      "sources": ["https://ymsisters.com/resources-halaqah-toolkits/"]
+    },
+    {
+      "url": "https://docs.google.com/document/d/1sASoINxh8-Q4-sTkqoyQjOk55obzULxk5van5fB15-Y/edit",
+      "sources": ["https://ymsisters.com/resources-halaqah-toolkits/"]
+    },
+    {
+      "url": "https://docs.google.com/document/d/1a1UR1x4rtmnAnKKuwlBAjWJE7i-XyYFytR5MhqxtVlg/edit?tab=t.0",
+      "sources": ["https://ymsisters.com/resources-halaqah-toolkits/"]
+    },
+    {
+      "url": "https://drive.google.com/file/d/1XWoq-c92oU50tZCSKhoCerTn_JI5RNet/view?usp=sharing",
+      "sources": ["https://ymsisters.com/resources-annual-reports/"]
+    },
+    {
+      "url": "https://drive.google.com/file/d/1yf6DXASE12s4dDjkS-uG1SCUPJZa_-zp/view?usp=sharing",
+      "sources": ["https://ymsisters.com/resources-annual-reports/"]
+    },
+    {
+      "url": "https://drive.google.com/file/d/1J65bxUH0B8IrVQJ82X6NKf072ILQEGv-/view?usp=sharing",
+      "sources": ["https://ymsisters.com/resources-annual-reports/"]
+    }
+  ]
+}

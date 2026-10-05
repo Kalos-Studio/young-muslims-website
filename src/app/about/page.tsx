@@ -11,6 +11,7 @@ import { FaqSection } from "./faq-section";
 import { VisionMissionHistory } from "./vision-mission-history";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About",
   description: "What Young Muslims is and who it's for.",
 };

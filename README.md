@@ -52,8 +52,10 @@ out.
 Recorded here so they do not get relitigated. Change them deliberately.
 
 **Production domain is `youngmuslims.com`.** `ymsite.com` and `ymsisters.com`
-currently serve separate live sites. Those will be taken down and redirected to
-`youngmuslims.com` at the DNS level.
+currently serve separate live sites. Their URLs will be mapped to relevant
+replacements on `youngmuslims.com` using permanent HTTP redirects at the host or
+CDN, with DNS pointing to that infrastructure. See [SEO-CHECKLIST.md](SEO-CHECKLIST.md)
+for migration dependencies and verification.
 
 **English only.** The site will never be localized, so there is no locale
 segment in the URL structure and no i18n tooling.
@@ -99,19 +101,36 @@ derived from US Census cartographic boundary files, which are public domain.
 - [ ] Embedded form platform. Pick the vendor, then embed.
 - [ ] CMS. Between Sanity, Payload, and Contentful.
 
-### SEO (will be addressed later, but we should expect it to come at the end)
+### SEO
 
-- [ ] Set the production domain and canonical URL handling.
-- [ ] Pick the canonical host and 301 the other to it. Bare
-      `youngmuslims.com` is the modern convention and the suggested default;
-      Netlify DNS handles apex domains natively. Either way users never type
-      `www`, since the one we don't pick redirects to the one we do.
-- [ ] 301 redirect `ymsite.com` and `ymsisters.com` to `youngmuslims.com` at the
-      DNS/host level, once those sites are taken down.
-- [ ] Page metadata: titles, descriptions, canonical tags.
-- [ ] sitemap.xml and robots.txt.
-- [ ] Structured data (Organization / NGO schema).
-- [ ] Google Search Console and Bing Webmaster verification.
+[SEO-CHECKLIST.md](SEO-CHECKLIST.md) is the source of truth for SEO to-dos,
+dependencies, owners, acceptance criteria, and tests before and after deployment.
+SEO work starts during development. Public indexing remains disabled until the
+launch requirements in that tracker are satisfied.
+
+Production indexing is now enabled in `netlify.toml` for all eight inventoried
+pages. It requires `NODE_ENV=production`, `CONTEXT=production`, and
+`SITE_INDEXABLE=true` together. Local development, branch deploys, and previews
+remain non-indexable, even if they inherit the opt-in. Change the production
+opt-in to `false` and rebuild to disable indexing intentionally.
+
+Each page has its own canonical URL. `src/lib/seo.ts` lists the sitemap paths;
+update it when adding pages. Production publishes all eight URLs at `/sitemap.xml`
+and advertises it in `/robots.txt`. Other builds publish an empty sitemap and a
+`noindex, nofollow` response header. Crawling stays allowed so crawlers can read
+the non-indexing directives.
+
+To simulate production locally, build with
+`CONTEXT=production SITE_INDEXABLE=true bun run build`. To test preview isolation,
+build with `CONTEXT=deploy-preview SITE_INDEXABLE=true bun run build`. Rebuild
+between modes; prerendered metadata reflects the build environment. Validate
+Netlify's actual headers and alternate host behavior after deploying; configuring
+indexability does not submit the site to search engines or guarantee indexing.
+
+After building, run `node scripts/check-indexing.mjs production` or
+`node scripts/check-indexing.mjs preview` for the matching mode. This checks
+generated HTML for all eight pages, canonical URLs, sitemap contents, robots,
+and the configured response-header manifest.
 
 ### Branding and sharing
 
