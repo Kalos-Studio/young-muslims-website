@@ -3,7 +3,6 @@ import { Boldonse, Figtree } from "next/font/google";
 import "./globals.css";
 import { isSiteIndexable, SITE_ORIGIN } from "@/lib/seo";
 
-import { FundraiseUpScript } from "@/components/fundraise-up/fundraise-up-script";
 import { FooterSlot } from "@/components/site/footer-slot";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
@@ -46,9 +45,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${figtree.variable} ${boldonse.variable} h-full antialiased`}
     >
-      <head>
-        <FundraiseUpScript />
-      </head>
       <body className="flex min-h-full flex-col">
         <SiteHeader />
         <div data-page-shell className="flex-1">

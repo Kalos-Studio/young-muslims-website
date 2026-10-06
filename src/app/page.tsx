@@ -15,15 +15,12 @@ import belongingWavePale from "../../design-assets/figma/landing-2026/belonging-
 import highlightPlay from "../../design-assets/figma/landing-2026/highlight-play.svg";
 import highlightReel from "../../design-assets/figma/landing-2026/highlight-reel.png";
 import { BelongingPortraitOrbit } from "./belonging-portrait-orbit";
+import { ChapterFinderSection } from "./chapter-finder-section";
 import { EverywhereSection } from "./everywhere-section";
 import { HeroVideo } from "./hero-video";
 import { HighlightReelMarquee } from "./highlight-reel-section";
-import {
-  ChapterFinderSection,
-  LandingCtaSection,
-  LandingFooter,
-  PeopleStoriesSection,
-} from "./landing-new-sections";
+import { LandingCtaSection, LandingFooter } from "./landing-new-sections";
+import { PeopleStoriesSection } from "./people-stories-section";
 import { WhatWeStandOnSection } from "./what-we-stand-on-section";
 import { WordOnTheStreetSection } from "./word-on-the-street-section";
 
@@ -344,7 +341,10 @@ export default function Home() {
         <EverywhereSection />
       </Annotate>
 
-      <Annotate bleed>
+      <Annotate
+        bleed
+        note="The heading reveals first. Once it reaches the center, the portraits appear and begin orbiting. Hovering a portrait reveals a cursor-reactive shape, and selecting it opens a full-screen view."
+      >
         <PeopleStoriesSection />
       </Annotate>
 

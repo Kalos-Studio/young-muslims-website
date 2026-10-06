@@ -6,7 +6,7 @@ const FORM_ONLY_SCRIPT = `(function(d){var ids=['XPEJMZJG','XVPPDXEZ'];function 
 
 /**
  * Fundraise Up's account-level loader. The dashboard-provided bootstrap runs
- * once for the whole site and loads the checkout modal and embedded Elements.
+ * on the Support route and loads the checkout modal and embedded Elements.
  * Account-wide popup and sticky button Elements are removed so only the form
  * placed on the Support page is shown.
  * Local development and Netlify previews use Test mode so they cannot process
@@ -18,10 +18,7 @@ export function FundraiseUpScript() {
     process.env.NEXT_PUBLIC_FUNDRAISE_UP_LIVEMODE === "false";
 
   return (
-    // App Router guidance requires beforeInteractive scripts in the root layout;
-    // this component is rendered only from src/app/layout.tsx.
-    // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
-    <Script id="fundraise-up" strategy="beforeInteractive">
+    <Script id="fundraise-up" strategy="afterInteractive">
       {`${useTestMode ? "window.fundraiseup_livemode=false;" : ""}${FORM_ONLY_SCRIPT}${INSTALLATION_SCRIPT}`}
     </Script>
   );
