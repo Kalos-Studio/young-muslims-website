@@ -76,7 +76,7 @@ function PhotoCard({
 }) {
   return (
     <article
-      className={`absolute h-[482px] w-[298px] overflow-hidden rounded-card text-brand-pure-white ${className}`}
+      className={`all-about-card absolute h-[482px] w-[296px] overflow-hidden rounded-card text-brand-pure-white md:w-[298px] ${className}`}
     >
       {crop ? (
         <Image
@@ -86,7 +86,13 @@ function PhotoCard({
           className={PHOTO_CROP_CLASSES[crop]}
         />
       ) : (
-        <Image src={image} alt="" fill sizes="298px" className="object-cover" />
+        <Image
+          src={image}
+          alt=""
+          fill
+          sizes="(max-width: 767px) 296px, 298px"
+          className="object-cover"
+        />
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-obsidian/10 to-brand-obsidian/90" />
       <div className="absolute right-7 bottom-8 left-7">
@@ -108,7 +114,7 @@ function SolidCard({
 }) {
   return (
     <article
-      className={`absolute h-[482px] w-[298px] overflow-hidden rounded-card px-7 ${image ? "text-brand-pure-white" : "bg-landing-blush text-landing-card-ink"} ${className}`}
+      className={`all-about-card absolute h-[482px] w-[296px] overflow-hidden rounded-card px-7 md:w-[298px] ${image ? "text-brand-pure-white" : "bg-landing-blush text-landing-card-ink"} ${className}`}
     >
       {image ? (
         <>
@@ -165,16 +171,16 @@ export default function Home() {
       >
         <section
           data-header-theme="light"
-          className="relative h-[1830px] w-full overflow-hidden bg-brand-warm-snow"
+          className="relative h-[1298px] w-full overflow-hidden bg-brand-warm-snow md:h-[1830px]"
         >
-          <div className="pointer-events-none absolute top-[1281px] left-[-873px] z-0 flex h-[1880px] w-[2956px] rotate-[-9.8deg] items-center justify-center">
+          <div className="pointer-events-none absolute top-[1060px] left-1/2 z-0 flex h-[470px] w-[739px] -translate-x-1/2 rotate-[-9.8deg] items-center justify-center md:top-[1281px] md:left-[-873px] md:h-[1880px] md:w-[2956px] md:translate-x-0">
             <Image
               src={belongingWavePale}
               alt=""
               className="block max-w-none"
             />
           </div>
-          <div className="pointer-events-none absolute top-[1375px] left-[-781px] z-[1] flex h-[1772px] w-[2787px] rotate-[-9.8deg] items-center justify-center">
+          <div className="pointer-events-none absolute top-[1110px] left-1/2 z-[1] flex h-[443px] w-[697px] -translate-x-1/2 rotate-[-9.8deg] items-center justify-center md:top-[1375px] md:left-[-781px] md:h-[1772px] md:w-[2787px] md:translate-x-0">
             <Image
               src={belongingWaveObsidian}
               alt=""
@@ -184,12 +190,12 @@ export default function Home() {
           <div className="relative z-10 h-full">
             <BelongingPortraitOrbit />
           </div>
-          <div className="absolute top-[743px] left-1/2 z-20 w-full max-w-[784px] -translate-x-1/2 text-center">
-            <h2 className="text-landing-section font-extrabold text-brand-jade">
+          <div className="absolute top-[487px] left-1/2 z-20 w-[290px] -translate-x-1/2 text-center md:top-[743px] md:w-full md:max-w-[784px]">
+            <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-jade md:text-landing-section">
               More than a program.
               <br />A place to belong.
             </h2>
-            <p className="mt-[43px] text-landing-copy font-medium text-brand-obsidian">
+            <p className="mt-6 text-base leading-normal font-medium tracking-[-0.02em] text-brand-obsidian md:mt-[43px] md:text-landing-copy">
               Young Muslims is the nation&apos;s largest Muslim youth
               organization, but that&apos;s not how members describe it. To
               them, it&apos;s the people they see every week, the ones who
@@ -207,30 +213,32 @@ export default function Home() {
       >
         <section
           data-header-theme="dark"
-          className="relative h-[899px] w-full overflow-hidden bg-brand-obsidian"
+          className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian md:h-[899px]"
         >
-          <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
-            <h2 className="absolute top-[113px] left-1/2 w-[784px] -translate-x-1/2 text-center text-landing-section font-extrabold text-brand-warm-snow">
+          <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
+            <h2 className="absolute top-[51px] left-1/2 w-[274px] -translate-x-1/2 text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:top-[113px] md:w-[784px] md:text-landing-section">
               But it&apos;s easier to just show you.
             </h2>
             <HighlightReelMarquee />
-            <div className="absolute top-[269px] left-[503px] h-[529px] w-[833px] overflow-hidden rounded-media shadow-2xl">
+            <div className="absolute top-[190px] left-8 h-[397px] w-[296px] overflow-hidden rounded-media shadow-2xl md:top-[269px] md:left-[503px] md:h-[529px] md:w-[833px]">
               <Image
                 src={highlightReel}
                 alt="Young Muslims gathered together"
                 fill
-                sizes="833px"
+                sizes="(max-width: 767px) 296px, 833px"
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-brand-obsidian/35" />
               <Image
                 src={highlightPlay}
                 alt=""
-                className="absolute top-1/2 left-1/2 h-[88px] w-[88px] -translate-x-1/2 -translate-y-1/2"
+                className="absolute top-1/2 left-1/2 h-[66px] w-[66px] -translate-x-1/2 -translate-y-1/2 md:h-[88px] md:w-[88px]"
               />
-              <div className="absolute right-12 bottom-12 left-12 text-brand-pure-white">
-                <p className="text-base font-extrabold">30 SECOND WATCH</p>
-                <p className="mt-2 text-[32px] leading-tight font-semibold">
+              <div className="absolute right-6 bottom-6 left-6 text-brand-pure-white md:right-12 md:bottom-12 md:left-12">
+                <p className="text-xs font-extrabold md:text-base">
+                  30 SECOND WATCH
+                </p>
+                <p className="mt-1 text-xl leading-tight font-semibold md:mt-2 md:text-[32px]">
                   Young Muslims Highlight Reel
                 </p>
               </div>
@@ -246,7 +254,7 @@ export default function Home() {
       >
         <section
           data-header-theme="light"
-          className="relative h-[1791px] w-full overflow-clip bg-brand-warm-snow"
+          className="relative h-[2873px] w-full overflow-clip bg-brand-warm-snow md:h-[1791px]"
         >
           <div
             className="pointer-events-none absolute top-0 left-1/2 z-0 h-full -translate-x-1/2 overflow-hidden"
@@ -284,30 +292,30 @@ export default function Home() {
                   <Image
                     src={cardDecorTop}
                     alt=""
-                    className="absolute -top-[26px] left-[1111px]"
+                    className="absolute top-[392px] left-[193px] h-[200px] w-[200px] md:-top-[26px] md:left-[1111px] md:h-auto md:w-auto"
                   />
                   <Image
                     src={cardDecorBottom}
                     alt=""
-                    className="absolute top-[1052px] left-[17px]"
+                    className="absolute top-[2627px] left-[-41px] h-[200px] w-[200px] md:top-[1052px] md:left-[17px] md:h-auto md:w-auto"
                   />
                 </>
               }
               intro={
                 <>
-                  <h2 className="text-landing-section font-extrabold">
+                  <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section">
                     This is what we&apos;re
                     <br />
                     all about.
                   </h2>
-                  <p className="mt-8 text-landing-copy font-medium">
+                  <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:mt-8 md:text-landing-copy">
                     It starts as a hangout. It turns into brotherhood,
                     sisterhood, and a reason to show up for something bigger
                     than yourself.
                   </p>
                   <Link
                     href="/about"
-                    className="mt-8 inline-flex rounded-pill bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white outline-none hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow"
+                    className="mt-8 inline-flex w-full justify-center rounded-pill bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white outline-none hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow md:w-auto"
                   >
                     About Us
                   </Link>
@@ -318,27 +326,27 @@ export default function Home() {
                   key={POINTS[0].title}
                   point={POINTS[0]}
                   image={cardPeople}
-                  className="top-[130px] left-[720px]"
+                  className="top-[130px] left-8 md:left-[720px]"
                   crop="people"
                 />,
                 <SolidCard
                   key={POINTS[1].title}
                   point={POINTS[1]}
                   image={cardLeadership}
-                  className="top-[684px] left-[720px]"
+                  className="top-[684px] left-8 md:left-[720px]"
                 />,
                 <PhotoCard
                   key={POINTS[2].title}
                   point={POINTS[2]}
                   image={cardGuidance}
-                  className="top-[220px] left-[1071px]"
+                  className="top-[220px] left-8 md:left-[1071px]"
                   crop="guidance"
                 />,
                 <SolidCard
                   key={POINTS[3].title}
                   point={POINTS[3]}
                   image={cardService}
-                  className="top-[774px] left-[1071px]"
+                  className="top-[774px] left-8 md:left-[1071px]"
                 />,
               ]}
             />

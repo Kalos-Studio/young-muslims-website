@@ -191,7 +191,7 @@ function CountUpMetric({
     <div
       className={`absolute top-0 text-center text-brand-obsidian ${className ?? ""}`}
     >
-      <p className="font-display text-landing-stat font-normal">
+      <p className="font-display text-[32px] leading-normal font-normal tracking-[-0.02em] md:text-landing-stat">
         <span
           ref={numberRef}
           aria-label={`${numberFormatter.format(target)}${suffix}`}
@@ -200,7 +200,9 @@ function CountUpMetric({
           {suffix}
         </span>
       </p>
-      <p className="text-landing-stat-label font-medium">{label}</p>
+      <p className="text-lg leading-normal font-semibold tracking-[-0.02em] md:text-landing-stat-label md:font-medium">
+        {label}
+      </p>
     </div>
   );
 }
@@ -240,9 +242,9 @@ export function EverywhereSection() {
     <section
       ref={sectionRef}
       data-header-theme="light"
-      className="relative h-[1615px] w-full overflow-hidden bg-brand-warm-snow"
+      className="relative h-[1471px] w-full overflow-hidden bg-brand-warm-snow md:h-[1615px]"
     >
-      <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
+      <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
         <motion.div
           initial={false}
           animate={{
@@ -250,13 +252,13 @@ export function EverywhereSection() {
             y: reduceMotion || headingIsRevealed ? 0 : 32,
           }}
           transition={{ duration: 0.65, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute top-[95px] left-1/2 w-[440px] -translate-x-1/2 text-center text-brand-obsidian"
+          className="absolute top-[41px] left-1/2 w-[296px] -translate-x-1/2 text-center text-brand-obsidian md:top-[95px] md:w-[440px]"
         >
-          <h2 className="text-landing-section font-extrabold">
+          <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section">
             And it&apos;s not just here. It&apos;s{" "}
             <span className="text-landing-cyan">everywhere</span>.
           </h2>
-          <p className="mt-4 text-landing-copy font-medium">
+          <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:text-landing-copy">
             What started as a few friends in one city is now a network that
             spans the country.
           </p>
@@ -264,7 +266,7 @@ export function EverywhereSection() {
 
         <div
           ref={metricsRef}
-          className="absolute top-[485px] left-0 h-[121px] w-full"
+          className="absolute top-[281px] left-0 h-[358px] w-full md:top-[485px] md:h-[121px]"
         >
           {METRICS.map((metric, index) => (
             <CountUpMetric
@@ -274,10 +276,10 @@ export function EverywhereSection() {
               reduceMotion={reduceMotion}
               className={
                 index === 0
-                  ? "left-[181px]"
+                  ? "left-1/2 -translate-x-1/2 md:left-[181px] md:translate-x-0"
                   : index === 1
-                    ? "left-[669px]"
-                    : "left-[1001px]"
+                    ? "top-[152px] left-1/2 -translate-x-1/2 md:top-0 md:left-[669px] md:translate-x-0"
+                    : "top-[304px] left-1/2 -translate-x-1/2 md:top-0 md:left-[1001px] md:translate-x-0"
               }
             />
           ))}
@@ -286,7 +288,7 @@ export function EverywhereSection() {
         <div
           role="img"
           aria-label="Map showing Young Muslims NeighborNet communities across the United States"
-          className="absolute top-[654px] left-0 h-[795px] w-[1440px]"
+          className="absolute top-[705px] left-1/2 h-[795px] w-[1440px] origin-top -translate-x-1/2 scale-[0.339] md:top-[654px] md:left-0 md:translate-x-0 md:scale-100"
         >
           <Image
             src={globe}
@@ -366,12 +368,12 @@ export function EverywhereSection() {
           <Image
             src={topShell}
             alt=""
-            className="absolute top-[109px] left-[1025px] max-w-none"
+            className="absolute top-[178px] left-[261px] h-[205px] w-[215px] max-w-none md:top-[109px] md:left-[1025px] md:h-auto md:w-auto"
           />
           <Image
             src={topPhoto}
             alt=""
-            className="absolute top-[144px] left-[1061px] h-[202px] w-[211px] object-contain"
+            className="absolute top-[204px] left-[288px] h-[153px] w-[160px] object-contain md:top-[144px] md:left-[1061px] md:h-[202px] md:w-[211px]"
           />
         </motion.div>
 
@@ -379,14 +381,14 @@ export function EverywhereSection() {
           className="absolute inset-0"
           style={{ y: bottomLeftPortraitY }}
         >
-          <div className="absolute top-[1375px] left-[79px] h-[371px] w-[366px]">
+          <div className="absolute top-[1192px] left-[-113px] h-[272px] w-[269px] md:top-[1375px] md:left-[79px] md:h-[371px] md:w-[366px]">
             <Image
               src={bottomLeftShell}
               alt=""
               className="absolute top-1/2 left-1/2 h-[277px] w-[263px] -translate-x-1/2 -translate-y-1/2 -rotate-30"
             />
           </div>
-          <div className="absolute top-[1388px] left-[122px] h-[285px] w-[282px]">
+          <div className="absolute top-[1224px] left-[-82px] h-[210px] w-[207px] md:top-[1388px] md:left-[122px] md:h-[285px] md:w-[282px]">
             <Image
               src={leftPhoto}
               alt=""
@@ -402,22 +404,22 @@ export function EverywhereSection() {
           <Image
             src={bottomRightShell}
             alt=""
-            className="absolute top-[1301px] left-[1071px] max-w-none"
+            className="absolute top-[1234px] left-[262px] h-[209px] w-[203px] max-w-none md:top-[1301px] md:left-[1071px] md:h-auto md:w-auto"
           />
           <Image
             src={bottomRightPhoto}
             alt=""
-            className="absolute top-[1328px] left-[1098px] h-[217px] w-[211px] object-contain"
+            className="absolute top-[1255px] left-[283px] h-[167px] w-[163px] object-contain md:top-[1328px] md:left-[1098px] md:h-[217px] md:w-[211px]"
           />
         </motion.div>
 
-        <p className="absolute top-[1406px] left-1/2 w-[560px] -translate-x-1/2 text-center text-landing-copy font-medium text-brand-obsidian">
+        <p className="absolute top-[1016px] left-1/2 w-[296px] -translate-x-1/2 text-center text-base leading-normal font-medium tracking-[-0.02em] text-brand-obsidian md:top-[1406px] md:w-[560px] md:text-landing-copy">
           Wherever you go, there&apos;s a Young Muslim. A brother or sister in a
           city you&apos;ve never been to, dealing with the same things you are
         </p>
         <Link
           href="/neighbornets"
-          className="absolute top-[1511px] left-1/2 -translate-x-1/2 bg-brand-royal px-6 py-4 text-nav font-bold whitespace-nowrap text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none"
+          className="absolute top-[1134px] left-1/2 inline-flex w-[296px] -translate-x-1/2 justify-center bg-brand-royal px-6 py-4 text-nav font-bold whitespace-nowrap text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none md:top-[1511px] md:w-auto"
         >
           Discover NeighborNets
         </Link>

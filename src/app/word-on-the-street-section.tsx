@@ -2,6 +2,7 @@
 
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "motion/react";
 
@@ -19,6 +20,7 @@ const ARTICLES = [
     imageAlt: "Hands holding a heart cutout",
     objectPosition: "center",
     shape: "52% 48% 43% 57% / 42% 43% 57% 58%",
+    mobileImageHeight: 292,
     body: "We aim to address the current state of mental health among American Muslim youth and assist with mental health struggles of any kind. This report also helps guide community leaders by providing a toolkit to directly support them wherever they may be.",
   },
   {
@@ -27,6 +29,7 @@ const ARTICLES = [
     imageAlt: "A group of Muslim women embracing outdoors",
     objectPosition: "center",
     shape: "45% 55% 48% 52% / 38% 45% 55% 62%",
+    mobileImageHeight: 263,
     body: "The goal of the YM Presents Muslim Youth Issues: Judgment Stigma campaign is to seek the pleasure of Allah (swt) by raising awareness of judgment and shame within the American Muslim community, providing constructive criticism through education about Islam’s stance on this issue, and presenting practical solutions and strategies to counteract judgment stigma within our communities.",
   },
   {
@@ -35,6 +38,7 @@ const ARTICLES = [
     imageAlt: "Worshippers inside a mosque",
     objectPosition: "center 58%",
     shape: "51% 49% 57% 43% / 42% 53% 47% 58%",
+    mobileImageHeight: 293,
     body: "Young Muslims would like to present its first-ever Ramadan Survival Guide! We pray this guide brings benefits and helps you optimize how to spend your time this Ramadan. In it you can find a daily to-do checklist, duas, exciting challenges, and much more. Share with your friends, family, organizations, and the local community to reap the reward from it.",
   },
 ] as const;
@@ -56,7 +60,7 @@ function ArticleCard({
 
   return (
     <motion.article
-      className="w-[378px] shrink-0 text-brand-obsidian"
+      className="w-[296px] shrink-0 text-brand-obsidian md:w-[378px]"
       initial={false}
       animate={isVisible || reduceMotion ? "visible" : "hidden"}
       whileHover={reduceMotion ? undefined : "hover"}
@@ -70,8 +74,13 @@ function ArticleCard({
       }}
     >
       <motion.div
-        className="relative h-[378px] w-[378px] overflow-hidden bg-brand-pure-white"
-        style={{ borderRadius: article.shape }}
+        className="relative h-[min(var(--article-image-height),78.5vw)] w-[296px] overflow-hidden bg-brand-pure-white md:h-[378px] md:w-[378px]"
+        style={
+          {
+            borderRadius: article.shape,
+            "--article-image-height": `${article.mobileImageHeight}px`,
+          } as CSSProperties
+        }
         variants={{
           hidden: { opacity: 0, scale: 0.72 },
           visible: {
@@ -104,7 +113,7 @@ function ArticleCard({
             src={article.image}
             alt={article.imageAlt}
             fill
-            sizes="378px"
+            sizes="(max-width: 767px) 296px, 378px"
             className="object-cover"
             style={{ objectPosition: article.objectPosition }}
           />
@@ -137,22 +146,22 @@ export function WordOnTheStreetSection() {
   return (
     <section
       data-header-theme="light"
-      className="relative h-[1024px] w-full overflow-hidden bg-brand-warm-snow"
+      className="relative h-[2084px] w-full overflow-hidden bg-brand-warm-snow md:h-[1024px]"
     >
-      <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
-        <div className="absolute top-[129px] left-[90px] flex w-[1270px] items-end gap-8">
+      <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
+        <div className="absolute top-[82px] left-8 flex w-[296px] flex-col items-stretch gap-8 md:top-[129px] md:left-[90px] md:w-[1270px] md:flex-row md:items-end">
           <div className="flex-1 text-brand-obsidian">
-            <h2 className="text-landing-section font-extrabold">
+            <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section">
               Word on the street.
             </h2>
-            <p className="mt-4 text-landing-copy font-medium">
+            <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:text-landing-copy">
               Straight from the NeighborNets — what&apos;s happening,
               what&apos;s coming up, and what we&apos;re thinking about.
             </p>
           </div>
           <Link
             href="/blog"
-            className="bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none"
+            className="inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none md:w-auto"
           >
             View latest
           </Link>
@@ -160,7 +169,7 @@ export function WordOnTheStreetSection() {
 
         <div
           ref={articlesRef}
-          className="absolute top-[285px] left-[90px] flex w-[1270px] gap-[68px]"
+          className="absolute top-[348px] left-8 flex w-[296px] flex-col gap-[52px] md:top-[285px] md:left-[90px] md:w-[1270px] md:flex-row md:gap-[68px]"
         >
           {ARTICLES.map((article, index) => (
             <ArticleCard

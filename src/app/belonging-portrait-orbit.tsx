@@ -232,7 +232,7 @@ export function BelongingPortraitOrbit() {
     <div aria-hidden="true" className="pointer-events-none absolute inset-0">
       <div
         ref={orbitRef}
-        className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2"
+        className="absolute top-0 left-1/2 h-full w-[900px] -translate-x-1/2 scale-[0.56] md:w-[1440px] md:scale-100"
       >
         {PORTRAITS.map((portrait, index) => (
           <OrbitingPortrait

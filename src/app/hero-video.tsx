@@ -3,7 +3,7 @@ export function HeroVideo() {
     <section
       data-header-theme="dark"
       aria-label="Young Muslims community introduction"
-      className="relative flex h-[1007px] min-h-[760px] w-full items-center justify-center overflow-hidden bg-brothers-midnight px-6 text-center text-brand-warm-snow"
+      className="relative flex h-[808px] w-full items-center justify-center overflow-hidden bg-brothers-midnight px-8 text-center text-brand-warm-snow md:h-[1007px] md:min-h-[760px] md:px-6"
     >
       <video
         aria-hidden="true"
@@ -23,11 +23,11 @@ export function HeroVideo() {
       </video>
       <div aria-hidden className="absolute inset-0 bg-brand-obsidian/10" />
 
-      <div className="relative z-10 flex w-full max-w-[983px] flex-col items-center gap-4">
-        <h1 className="font-display text-landing-display font-normal md:whitespace-nowrap">
+      <div className="relative z-10 flex w-full max-w-[983px] flex-col items-center gap-[11px] md:gap-4">
+        <h1 className="font-display text-[32px] leading-normal font-normal tracking-[-0.02em] md:text-landing-display md:whitespace-nowrap">
           FOR THE YOUTH. BY THE YOUTH.
         </h1>
-        <p className="w-full max-w-[893px] text-landing-hero-subtitle font-semibold md:whitespace-nowrap">
+        <p className="w-full max-w-[893px] text-sm leading-normal font-semibold tracking-[-0.02em] md:text-landing-hero-subtitle md:whitespace-nowrap">
           A nationwide brotherhood and sisterhood, built on real friendships and
           a shared Deen.
         </p>

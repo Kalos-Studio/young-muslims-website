@@ -42,9 +42,9 @@ export function HighlightReelMarquee() {
       aria-hidden="true"
       className="pointer-events-none absolute top-0 left-1/2 h-full w-screen -translate-x-1/2 overflow-hidden"
     >
-      <div className="absolute inset-x-0 top-[381px] flex flex-col gap-0 font-display text-marquee leading-[1.25] whitespace-nowrap uppercase">
+      <div className="absolute inset-x-0 top-[508px] flex flex-col gap-0 font-display text-[32px] leading-[1.625] whitespace-nowrap uppercase md:top-[381px] md:text-marquee md:leading-[1.25]">
         <motion.div
-          className="-ml-[1403px] flex w-max gap-8 text-brand-warm-snow"
+          className="-ml-[70px] flex w-max gap-8 text-brand-warm-snow md:-ml-[1403px]"
           style={{ x: leftwardX }}
         >
           {Array.from({ length: MARQUEE_REPETITIONS }).map((_, index) => (
@@ -54,7 +54,7 @@ export function HighlightReelMarquee() {
           ))}
         </motion.div>
         <motion.div
-          className="-ml-[1638px] flex w-max gap-8 text-landing-marquee-outline"
+          className="-ml-[624px] flex w-max gap-8 text-landing-marquee-outline md:-ml-[1638px]"
           style={{ x: rightwardX }}
         >
           {Array.from({ length: MARQUEE_REPETITIONS }).map((_, index) => (
@@ -64,7 +64,7 @@ export function HighlightReelMarquee() {
           ))}
         </motion.div>
         <motion.div
-          className="-ml-[983px] flex w-max gap-8 text-brothers-sky"
+          className="-ml-[238px] flex w-max gap-8 text-brothers-sky md:-ml-[983px]"
           style={{ x: leftwardX }}
         >
           {Array.from({ length: MARQUEE_REPETITIONS }).map((_, index) => (

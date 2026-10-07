@@ -15,26 +15,26 @@ export function LandingCtaSection() {
   return (
     <section
       data-header-theme="dark"
-      className="relative h-[723px] w-full overflow-hidden bg-brand-warm-snow"
+      className="relative h-[894px] w-full overflow-hidden bg-brand-warm-snow md:h-[723px]"
     >
-      <div className="absolute top-[352px] left-0 h-[371px] w-full bg-brand-obsidian" />
-      <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
-        <div className="absolute top-[-79px] left-[-500px] flex h-[904px] w-[2355px] items-center justify-center">
+      <div className="absolute top-[567px] left-0 h-[327px] w-full bg-brand-obsidian md:top-[352px] md:h-[371px]" />
+      <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
+        <div className="absolute top-[-96px] left-[-420px] flex h-[470px] w-[1200px] items-center justify-center md:top-[-79px] md:left-[-500px] md:h-[904px] md:w-[2355px]">
           <div className="rotate-[3.7deg]">
             <Image
               src={ctaCommunity}
               alt="Young Muslims volunteers standing together"
-              sizes="2311px"
+              sizes="(max-width: 767px) 1170px, 2311px"
               width={2311}
               height={756}
-              className="block h-[756px] w-[2311px] max-w-none"
+              className="block h-[383px] w-[1170px] max-w-none md:h-[756px] md:w-[2311px]"
             />
           </div>
         </div>
-        <h2 className="absolute top-[314px] left-[129px] w-[692px] text-landing-section font-extrabold text-brand-warm-snow">
+        <h2 className="absolute top-[155px] left-8 w-[296px] text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:top-[314px] md:left-[129px] md:w-[692px] md:text-left md:text-landing-section">
           Seeking the pleasure of Allah (SWT) by empowering Muslim youth.
         </h2>
-        <div className="absolute top-[285px] left-[902px] flex w-[312px] flex-col gap-8">
+        <div className="absolute top-[490px] left-8 flex w-[296px] flex-col gap-8 md:top-[285px] md:left-[902px] md:w-[312px]">
           <Link
             href="/neighbornets"
             className="flex h-[61px] items-center gap-3 bg-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-obsidian transition-colors hover:bg-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
@@ -70,14 +70,18 @@ const FOOTER_LINKS = [
 
 export function LandingFooter() {
   return (
-    <footer className="relative h-[525px] w-full overflow-hidden bg-brand-obsidian text-brand-warm-snow">
-      <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
-        <div className="absolute top-[60px] left-[80px] flex w-[1280px] items-start justify-between">
-          <Image src={footerLogo} alt="Young Muslims" />
+    <footer className="relative h-[794px] w-full overflow-hidden bg-brand-obsidian text-brand-warm-snow md:h-[525px]">
+      <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
+        <div className="absolute top-0 left-8 flex w-[296px] flex-col items-stretch md:top-[60px] md:left-[80px] md:w-[1280px] md:flex-row md:items-start md:justify-between">
+          <Image
+            src={footerLogo}
+            alt="Young Muslims"
+            className="mx-auto mt-0 w-[278px] md:mx-0 md:mt-0 md:w-auto"
+          />
 
           <nav
             aria-label="Footer navigation"
-            className="flex gap-14 text-nav font-semibold"
+            className="mt-[64px] flex gap-14 text-nav font-semibold md:mt-0"
           >
             {FOOTER_LINKS.map((column, index) => (
               <div key={index} className="flex flex-col gap-6">
@@ -90,14 +94,14 @@ export function LandingFooter() {
             ))}
           </nav>
 
-          <div className="w-[373px]">
+          <div className="mt-[64px] w-[296px] md:mt-0 md:w-[373px]">
             <p className="text-nav font-semibold">
               Want to learn more about Young Muslims, what we do, or how to
               join/create a NeighborNet? Reach out to us via email.
             </p>
             <Link
               href="/about"
-              className="mt-6 inline-flex bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
+              className="mt-6 inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:w-auto"
             >
               Contact us
             </Link>
@@ -107,11 +111,11 @@ export function LandingFooter() {
         <Image
           src={footerTagline}
           alt=""
-          className="absolute top-[334px] left-0 block max-w-none opacity-100"
+          className="absolute top-[514px] left-[-191px] block h-auto w-[741px] max-w-none opacity-100 md:top-[334px] md:left-0 md:w-auto"
         />
 
-        <div className="absolute top-[453px] left-[80px] flex w-[1280px] items-center justify-between text-[10px] font-bold tracking-[-0.02em]">
-          <div className="flex gap-6">
+        <div className="absolute top-[610px] left-8 flex h-[120px] w-[296px] flex-col items-center justify-between text-[10px] font-bold tracking-[-0.02em] md:top-[453px] md:left-[80px] md:h-auto md:w-[1280px] md:flex-row">
+          <div className="flex w-full justify-between gap-6 md:w-auto md:justify-start">
             <span>© Young Muslims 2026</span>
             <span className="text-brothers-slate underline">
               Made by Kalos Studio

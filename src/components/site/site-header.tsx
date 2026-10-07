@@ -31,7 +31,7 @@ export function SiteHeader() {
       <HeaderContrastController />
       <div
         data-site-header-inner
-        className="grid h-[123px] w-full grid-cols-[1fr_auto_1fr] items-center gap-8 px-20"
+        className="grid h-[123px] w-full grid-cols-[1fr_auto] items-center gap-8 px-8 md:grid-cols-[1fr_auto_1fr] md:px-20"
       >
         <div className="flex items-center justify-start">
           <Link
@@ -42,14 +42,14 @@ export function SiteHeader() {
           >
             {/* aria-hidden because the link above already names the destination;
                 without it a screen reader announces the name twice. */}
-            <Logo className="h-5" aria-hidden />
+            <Logo className="h-5 w-auto" aria-hidden />
           </Link>
         </div>
 
         <nav
           data-primary-nav
           aria-label="Primary"
-          className="flex items-center justify-center gap-4 text-nav"
+          className="hidden items-center justify-center gap-4 text-nav md:flex"
         >
           {primaryLinks.map((link) => (
             <NavLink key={link.href} href={link.href} className="p-2.5">
@@ -61,7 +61,7 @@ export function SiteHeader() {
         <div className="flex shrink-0 items-center justify-end gap-6">
           <nav
             aria-label="Find a chapter"
-            className="flex items-center text-nav"
+            className="hidden items-center text-nav md:flex"
           >
             <NavLink
               href={ctaLink.href}
