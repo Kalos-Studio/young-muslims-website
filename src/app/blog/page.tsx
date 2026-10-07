@@ -5,6 +5,7 @@ import { Annotate } from "@/components/wireframe/annotate";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/blog" },
   title: "Blog",
   description: "Writing from across the network.",
 };
@@ -36,7 +37,7 @@ const posts = [
     author: "YM Brothers",
   },
   {
-    title: "Ramadan Survival Guide",
+    title: "How to Give a Khutbah",
     excerpt:
       "A daily checklist, du'as and challenges to help you get the most out of the month.",
     date: "14 Jan 2025",
@@ -81,7 +82,7 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
         <span>{post.date}</span>
         <span>{post.read}</span>
       </p>
-      <h3 className="text-h4 font-semibold">{post.title}</h3>
+      <h3 className="text-card-title font-semibold">{post.title}</h3>
       <p className="text-sm leading-relaxed font-medium text-muted-foreground">
         {post.excerpt}
       </p>
@@ -107,7 +108,7 @@ export default function BlogPage() {
             Featured post image, full bleed, carousel of three
           </p>
 
-          <h2 className="max-w-2xl text-h2 font-bold text-background">
+          <h2 className="max-w-2xl text-section font-extrabold text-background">
             {featured.title}
           </h2>
           <p className="mt-3 max-w-xl text-base font-medium text-background/80">

@@ -17,9 +17,13 @@
  * (the next/font ones set on <html> in layout.tsx).
  */
 @theme inline {
+  /*
+   * Replace Tailwind's font namespace instead of extending it. Only the two
+   * typefaces approved in the brand kit may generate font-family utilities.
+   */
+  --font-*: initial;
   --font-sans: var(--font-figtree);
   --font-display: var(--font-boldonse);
-  --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-figtree);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -60,6 +64,9 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-media: 0.375rem;
+  --radius-card: 1rem;
+  --radius-pill: 9999px;
 }
 
 /*
@@ -88,6 +95,7 @@
   /* Exact landing-page accents from the approved website design. */
   --color-landing-cyan: #23b8c0;
   --color-landing-blush: #e3d6d6;
+  --color-landing-card-ink: #000000;
 
   /* Functional UI color, intentionally separate from the brand palette. */
   --color-system-danger: #b42318;
@@ -182,23 +190,21 @@
   }
 
   /* The landing hero begins behind its navigation, matching the Figma frame. */
+  body:has([data-landing-page]) {
+    overflow-x: clip;
+  }
   body:has([data-landing-page]) [data-site-header] {
     @apply fixed! w-full! border-transparent! bg-transparent! text-brand-pure-white backdrop-blur-none!;
-  }
-  body:has([data-landing-page]) [data-site-header-inner] {
-    height: 123px !important;
-    max-width: none !important;
-    padding-inline: 80px !important;
-  }
-  body:has([data-landing-page]) [data-primary-nav] {
-    gap: 16px !important;
-    font-size: 14px !important;
   }
   body:has([data-landing-page]) [data-site-header] nav a,
   body:has([data-landing-page]) [data-site-logo-link],
   body:has([data-landing-page]) [data-site-header] [data-menu-trigger] {
     color: var(--color-brand-pure-white) !important;
     transition: color 300ms ease;
+  }
+  body:has([data-landing-page]) [data-site-cta="true"] {
+    background: var(--color-brand-royal) !important;
+    color: var(--color-brand-pure-white) !important;
   }
   body:has([data-landing-page])
     [data-site-header][data-header-theme="light"]
@@ -212,44 +218,459 @@
     [data-menu-trigger] {
     color: var(--color-brand-obsidian) !important;
   }
+  /* Keep the landing-page chapter CTA readable regardless of section theme. */
+  body:has([data-landing-page])
+    [data-site-header][data-header-theme]
+    nav
+    a[data-site-cta="true"] {
+    color: var(--color-brand-pure-white) !important;
+  }
+}
+
+.what-we-stand-on-heading {
+  isolation: isolate;
+}
+
+.what-we-stand-on-heading::before {
+  position: absolute;
+  z-index: -1;
+  inset: -2rem -3.5rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--color-brand-obsidian) 72%, transparent) 0%,
+    color-mix(in srgb, var(--color-brand-obsidian) 42%, transparent) 46%,
+    transparent 74%
+  );
+  content: "";
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.what-we-stand-on-heading[data-over-image="true"]::before {
+  opacity: 1;
+}
+
+.everywhere-map-hotspot-core {
+  background: color-mix(
+    in srgb,
+    var(--color-brand-royal) 58%,
+    var(--color-brand-jade)
+  );
+  box-shadow: 0 0 1.25rem 0.5rem
+    color-mix(in srgb, var(--color-brand-royal) 48%, var(--color-brand-jade));
+  opacity: 0.96;
+  filter: blur(0.3rem);
 }
 
 /*
- * Type scale.
+ * Website typography roles.
  *
- * Permanent, and the reason it is here rather than in a component: headings
- * were being sized ad hoc, which left seven different heading sizes across the
- * site, most used exactly once. These are the only sizes a heading may be.
- *
- * Line height and letter spacing are baked into each step, so `text-h2` is the
- * whole decision and no call site repeats `leading-*` or `tracking-tight`.
- * Large type needs tighter tracking and shorter leading than small type, which
- * is precisely what gets forgotten when every heading is assembled by hand.
- *
- * Body sizes stay on Tailwind's defaults (`text-base`, `text-sm`, `text-xs`):
- * they were already consistent, and replacing them would churn the vendored
- * map and shadcn components for nothing.
+ * Exact desktop values from the approved Young Muslims Website Figma landing
+ * frame (RJBqBhkp33opITNp7yXU81, node 26:188). Figma uses Auto line height for
+ * every role, represented by CSS `normal`. Font family and weight remain
+ * explicit at call sites because some sizes intentionally serve two roles.
  */
 @theme {
-  /* Hero only. One per page at most. */
-  --text-display: 4.5rem;
-  --text-display--line-height: 1.05;
-  --text-display--letter-spacing: -0.025em;
+  --text-landing-display: 2.5rem;
+  --text-landing-display--line-height: normal;
+  --text-landing-display--letter-spacing: -0.02em;
 
-  --text-h1: 3.5rem;
-  --text-h1--line-height: 1.1;
-  --text-h1--letter-spacing: -0.02em;
+  --text-landing-section: 2.5rem;
+  --text-landing-section--line-height: normal;
+  --text-landing-section--letter-spacing: -0.02em;
 
-  --text-h2: 2.5rem;
-  --text-h2--line-height: 1.15;
-  --text-h2--letter-spacing: -0.015em;
+  --text-landing-hero-subtitle: 1.125rem;
+  --text-landing-hero-subtitle--line-height: normal;
+  --text-landing-hero-subtitle--letter-spacing: -0.02em;
 
-  --text-h3: 1.75rem;
-  --text-h3--line-height: 1.3;
-  --text-h3--letter-spacing: -0.01em;
+  --text-landing-copy: 1.25rem;
+  --text-landing-copy--line-height: normal;
+  --text-landing-copy--letter-spacing: -0.02em;
 
-  --text-h4: 1.25rem;
-  --text-h4--line-height: 1.4;
+  --text-landing-stat: 3rem;
+  --text-landing-stat--line-height: normal;
+  --text-landing-stat--letter-spacing: -0.02em;
+
+  --text-landing-stat-label: 1.5rem;
+  --text-landing-stat-label--line-height: normal;
+  --text-landing-stat-label--letter-spacing: -0.02em;
+
+  --text-display: 3.5rem;
+  --text-display--line-height: normal;
+  --text-display--letter-spacing: -0.02em;
+
+  --text-section: 3.375rem;
+  --text-section--line-height: normal;
+  --text-section--letter-spacing: -0.02em;
+
+  --text-lead: 1.5rem;
+  --text-lead--line-height: normal;
+  --text-lead--letter-spacing: -0.02em;
+
+  --text-card-title: 1.75rem;
+  --text-card-title--line-height: normal;
+  --text-card-title--letter-spacing: 0;
+
+  --text-body: 1rem;
+  --text-body--line-height: normal;
+  --text-body--letter-spacing: 0;
+
+  --text-nav: 0.875rem;
+  --text-nav--line-height: normal;
+  --text-nav--letter-spacing: -0.02em;
+
+  --text-stat: 3.375rem;
+  --text-stat--line-height: normal;
+  --text-stat--letter-spacing: -0.02em;
+
+  /* Vectorized background lettering in the landing-page highlight reel. */
+  --text-marquee: 4.5rem;
+  --text-marquee--line-height: normal;
+  --text-marquee--letter-spacing: -0.02em;
+
+  --spacing-show-marquee-top: 23.82898rem;
+  --spacing-show-marquee-row-gap: 1.37172rem;
+  --spacing-show-marquee-first-offset: 27.69774rem;
+  --spacing-show-marquee-second-offset: 42.13136rem;
+  --spacing-show-marquee-third-offset: 1.61684rem;
+}
+
+@utility text-marquee-outline {
+  color: transparent;
+  -webkit-text-stroke: 2.94131px var(--color-brand-warm-snow);
+}
+
+@utility text-landing-marquee-outline {
+  color: transparent;
+  -webkit-text-stroke: 2.94131px var(--color-brand-warm-snow);
+}
+
+/* Full-screen site menu ------------------------------------------------------
+ * Opening retains the center-out reveal from the menu trigger. The open state
+ * follows the desktop and mobile Figma frames; closing fades the completed
+ * composition instead of reversing the reveal.
+ */
+.ym-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--color-brand-obsidian) 20%, transparent);
+}
+
+.ym-menu-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  overflow: hidden;
+  color: var(--color-brand-pure-white);
+  outline: none;
+  opacity: 1;
+  transition: opacity 300ms ease;
+}
+
+.ym-menu-popup[data-ending-style] {
+  opacity: 0;
+}
+
+.ym-menu-surface {
+  position: absolute;
+  top: var(--menu-origin-y, 3.85rem);
+  left: var(--menu-origin-x, calc(100vw - 5.75rem));
+  width: 220vmax;
+  aspect-ratio: 1;
+  background: var(--color-brand-obsidian);
+  border-radius: 61% 39% 55% 45% / 44% 61% 39% 56%;
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center;
+  transition: transform 800ms cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: transform;
+}
+
+.ym-menu-popup[data-starting-style] .ym-menu-surface {
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.ym-menu-popup[data-ending-style] .ym-menu-surface {
+  transform: translate(-50%, -50%) scale(1);
+  transition: none;
+}
+
+.ym-menu-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  min-height: 100dvh;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 0 5rem 4rem;
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 250ms ease 180ms,
+    transform 800ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.ym-menu-popup[data-starting-style] .ym-menu-content {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.ym-menu-popup[data-ending-style] .ym-menu-content {
+  opacity: 1;
+  transform: scale(1);
+  transition: none;
+}
+
+.ym-menu-decoration {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ym-menu-mark {
+  position: absolute;
+  max-width: none;
+  filter: brightness(0) invert(1);
+  user-select: none;
+}
+
+.ym-menu-mark--top {
+  top: -4.875rem;
+  left: 47.43%;
+  width: 38.681rem;
+  height: 38.681rem;
+}
+
+.ym-menu-mark--bottom {
+  top: 52.9%;
+  left: 64.42%;
+  width: 38.681rem;
+  height: 38.681rem;
+}
+
+.ym-menu-topbar {
+  display: flex;
+  min-height: 7.6875rem;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ym-menu-logo {
+  color: var(--color-brand-pure-white);
+  outline: none;
+  transition:
+    color 200ms ease,
+    opacity 200ms ease;
+}
+
+.ym-menu-logo:hover {
+  color: var(--color-sisters-buttercup);
+}
+
+.ym-menu-logo:focus-visible {
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 3px var(--color-sisters-buttercup);
+}
+
+.ym-menu-close {
+  display: grid;
+  width: 3.375rem;
+  height: 3.375rem;
+  cursor: pointer;
+  place-items: center;
+  background: var(--color-brand-pure-white);
+  color: var(--color-brand-obsidian);
+  outline: none;
+  transition:
+    opacity 200ms ease,
+    transform 450ms cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.ym-menu-close:hover {
+  transform: rotate(90deg);
+}
+
+.ym-menu-close:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--color-brand-obsidian),
+    0 0 0 4px var(--color-brand-pure-white);
+}
+
+.ym-menu-layout {
+  position: relative;
+  width: 100%;
+  max-width: 90rem;
+  flex: 1;
+  margin-inline: auto;
+  padding-top: 2.0625rem;
+}
+
+.ym-menu-link-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.ym-menu-link-list a {
+  outline: none;
+  transition:
+    color 250ms ease,
+    -webkit-text-stroke-color 250ms ease;
+}
+
+.ym-menu-primary-link {
+  display: block;
+  width: fit-content;
+  font-family: var(--font-boldonse);
+  font-size: var(--text-display);
+  line-height: 1.037;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 0.25rem var(--color-brand-warm-snow);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.ym-menu-primary-list {
+  gap: 2.5rem;
+}
+
+.ym-menu-primary-link:hover,
+.ym-menu-primary-link:focus-visible,
+.ym-menu-primary-link[aria-current="page"] {
+  color: var(--color-brand-warm-snow);
+}
+
+.ym-menu-primary-link:focus-visible {
+  box-shadow: 0 0 0 0.1875rem var(--color-brand-warm-snow);
+}
+
+.ym-menu-footer {
+  position: absolute;
+  bottom: 0.875rem;
+  left: 0;
+  display: flex;
+  width: 24.9375rem;
+  height: 18.25rem;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ym-menu-secondary-list {
+  gap: 1rem;
+}
+
+.ym-menu-secondary-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1rem;
+  color: var(--color-brand-warm-snow);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.ym-menu-secondary-link:hover,
+.ym-menu-secondary-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.ym-menu-secondary-link:focus-visible {
+  box-shadow: 0 0 0 0.1875rem var(--color-brand-warm-snow);
+}
+
+.ym-menu-socials {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+}
+
+.ym-menu-socials img {
+  width: 2rem;
+  height: 2rem;
+}
+
+@media (max-width: 37.5rem) {
+  .ym-menu-content {
+    min-height: 50.5rem;
+    padding: 0 2rem 4rem;
+  }
+
+  .ym-menu-topbar {
+    min-height: 7.6875rem;
+  }
+
+  .ym-menu-close {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .ym-menu-close svg {
+    width: 1.4815rem;
+    height: 1.4815rem;
+  }
+
+  .ym-menu-primary-link {
+    font-size: 3rem;
+    line-height: 1.043;
+    -webkit-text-stroke-width: 0.2154rem;
+  }
+
+  .ym-menu-primary-list {
+    gap: 2rem;
+  }
+
+  .ym-menu-footer {
+    position: static;
+    width: 100%;
+    height: 14.75rem;
+    margin-top: 3.5rem;
+  }
+
+  .ym-menu-secondary-link {
+    font-size: 1.125rem;
+  }
+
+  .ym-menu-secondary-list {
+    gap: 0.25rem;
+  }
+
+  .ym-menu-secondary-link svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .ym-menu-mark--top {
+    top: 0;
+    left: -7.375rem;
+    width: 25.248rem;
+    height: 25.248rem;
+  }
+
+  .ym-menu-mark--bottom {
+    top: 25.252rem;
+    left: 11rem;
+    width: 25.248rem;
+    height: 25.248rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ym-menu-backdrop,
+  .ym-menu-popup,
+  .ym-menu-surface,
+  .ym-menu-content,
+  .ym-menu-close,
+  .ym-menu-link-list a {
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
 }
 
 /* WIREFRAME:start ------------------------------------------------------------

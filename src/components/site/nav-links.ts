@@ -20,7 +20,7 @@ export type NavLink = {
  * first-time visitor to see; everything else is one level down.
  */
 export const primaryLinks = [
-  { href: "/about", label: "About" },
+  { href: "/about", label: "Who We Are" },
   { href: "/stories", label: "Stories" },
   { href: "/support", label: "Support" },
 ] as const satisfies readonly NavLink[];
@@ -43,6 +43,7 @@ export const ctaLink = {
 export const drawerOnlyLinks = [
   { href: "/store", label: "Store" },
   { href: "/blog", label: "Blog" },
+  { href: "/about", label: "Contact" },
 ] as const satisfies readonly NavLink[];
 
 /** Everything the drawer lists, in the order it lists them. */

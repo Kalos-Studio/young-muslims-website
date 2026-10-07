@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Boldonse, Figtree, Geist_Mono } from "next/font/google";
+import { Boldonse, Figtree } from "next/font/google";
 import "./globals.css";
+import { isSiteIndexable, SITE_ORIGIN } from "@/lib/seo";
 
 import { FooterSlot } from "@/components/site/footer-slot";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -26,12 +27,8 @@ const boldonse = Boldonse({
   adjustFontFallback: false,
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_ORIGIN),
   // `template` keeps the site name out of every page's own title, so the
   // separator is defined once here rather than retyped in seven files.
   title: {
@@ -39,20 +36,20 @@ export const metadata: Metadata = {
     template: "%s | Young Muslims",
   },
   description: "Young Muslims' official website.",
-  // WIREFRAME: the whole site is a wireframe right now, so none of it should be
-  // indexed. Remove when there is real content to find.
-  robots: { index: false, follow: false },
+  robots: { index: isSiteIndexable, follow: isSiteIndexable },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${figtree.variable} ${boldonse.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${figtree.variable} ${boldonse.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <SiteHeader />
-        <div className="flex-1">{children}</div>
+        <div data-page-shell className="flex-1">
+          {children}
+        </div>
         <FooterSlot>
           <SiteFooter />
         </FooterSlot>

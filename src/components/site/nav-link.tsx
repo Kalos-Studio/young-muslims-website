@@ -18,6 +18,7 @@ type NavLinkProps = {
   href: string;
   children: React.ReactNode;
   className?: string;
+  "data-site-cta"?: boolean;
   /** Called after a successful navigation, so the drawer can close itself. */
   onNavigate?: () => void;
 };
@@ -33,21 +34,24 @@ export function NavLink({
   href,
   children,
   className,
+  "data-site-cta": siteCta,
   onNavigate,
 }: NavLinkProps) {
   const isCurrent = useIsCurrent(href);
+  const linkClassName = cn(
+    "rounded-xs font-bold underline-offset-8 transition-colors outline-none",
+    "hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+    isCurrent ? "text-foreground underline" : "text-muted-foreground",
+    className,
+  );
 
   return (
     <Link
       href={href}
       onClick={onNavigate}
       aria-current={isCurrent ? "page" : undefined}
-      className={cn(
-        "rounded-xs font-semibold underline-offset-8 transition-colors outline-none",
-        "hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        isCurrent ? "text-foreground underline" : "text-muted-foreground",
-        className,
-      )}
+      data-site-cta={siteCta ? "true" : undefined}
+      className={linkClassName}
     >
       {children}
     </Link>

@@ -1,0 +1,32 @@
+neighbor_net,region,state,latitude,longitude,email,instagram,source_url,geocode_source
+Flushing,New York East,NY,40.765430,-73.817429,nnc.flushing@youngmuslims.com,@ym.flushing.brothers,https://ymsite.com/ym-locations/,matching sisters chapter
+Bronx,New York West,NY,40.839878,-73.875632,nnc.bronx@youngmuslims.com,@ym.bronx.brothers,https://ymsite.com/ym-locations/,"Nominatim: Bronx Park Avenue, West Farms, The Bronx, Bronx County, New York, 10460, United States"
+West Philly,Pennsylvania,PA,39.960002,-75.224886,nnc.westphilly@youngmuslims.com,@ym.westphilly.brothers,https://ymsite.com/ym-locations/,"Nominatim: West Philadelphia, Philadelphia, Philadelphia County, Pennsylvania, United States"
+Westport,Pennsylvania,PA,41.301732,-77.840269,nnc.westport@youngmuslims.com,@ym.westport.brothers,https://ymsite.com/ym-locations/,"Nominatim: Westport, Noyes Township, Clinton County, Pennsylvania, United States"
+Easton,Pennsylvania,PA,40.691608,-75.209987,nnc.easton@youngmuslims.com,@ym.easton.brothers,https://ymsite.com/ym-locations/,"Nominatim: Easton, Northampton County, Pennsylvania, United States"
+Devon,Pennsylvania,PA,40.047360,-75.422951,nnc.devon@youngmuslims.com,@ym.devon.brothers,https://ymsite.com/ym-locations/,matching sisters chapter
+Upper Darby,Pennsylvania,PA,39.943218,-75.301055,nnc.upperdarby@youngmuslims.com,@ym.upperdarby.brothers,https://ymsite.com/ym-locations/,"Nominatim: Upper Darby, Delaware County, Pennsylvania, United States"
+Khair,Pennsylvania,PA,39.968730,-75.239245,nnc.khair@youngmuslims.com,@ym.khair.brothers,https://ymsite.com/ym-locations/,"Nominatim: 435, North 60th Street, Haddington, West Philadelphia, Philadelphia, Philadelphia County, Pennsylvania, 19151, United States"
+West Chester,Pennsylvania,PA,39.959739,-75.604461,nnc.wcpa@youngmuslims.com,@ym.wcpa.brothers,https://ymsite.com/ym-locations/,"Nominatim: West Chester, Chester County, Pennsylvania, 19383, United States"
+Masjid al-Nur,Pennsylvania,PA,40.217728,-76.985195,nnc.masjidalnur@youngmuslims.com,@ym.masjidalnur.brothers,https://ymsite.com/ym-locations/,"Nominatim: 5247, Simpson Ferry Road, Mechanicsburg, Cumberland County, Pennsylvania, 17050, United States"
+Waterbury,Connecticut,CT,41.554114,-73.043561,nnc.waterbury@youngmuslims.com,@ym.waterbury.brothers,https://ymsite.com/ym-locations/,"Nominatim: Waterbury, Naugatuck Valley Planning Region, Connecticut, United States"
+Atlanta,Georgia,GA,33.754466,-84.389815,nnc.atlanta@youngmuslims.com,@ym.atlanta.brothers,https://ymsite.com/ym-locations/,"Nominatim: Atlanta, Fulton County, Georgia, United States"
+Stone Mountain,Georgia,GA,33.806217,-84.145751,nnc.stonemountain@youngmuslims.com,@ym.stonemountain.brothers,https://ymsite.com/ym-locations/,"Nominatim: Stone Mountain, DeKalb County, Georgia, 30087, United States"
+Lake Mary,Florida,FL,28.756275,-81.322093,nnc.lakemary@youngmuslims.com,@ym.lakemary.brothers,https://ymsite.com/ym-locations/,"Nominatim: Lake Mary, Seminole County, Florida, United States"
+Tampa,Florida,FL,27.944985,-82.458311,nnc.tampa@youngmuslims.com,@ym.tampa.brothers,https://ymsite.com/ym-locations/,matching sisters chapter
+Miami,Florida,FL,25.774157,-80.193597,nnc.miami@youngmuslims.com,@ym.miami.brothers,https://ymsite.com/ym-locations/,"Nominatim: Miami, Miami-Dade County, Florida, United States"
+West Palm Beach,Florida,FL,26.715364,-80.053294,nnc.wpb@youngmuslims.com,@ym.wpb.brothers,https://ymsite.com/ym-locations/,"Nominatim: West Palm Beach, Palm Beach County, Florida, United States"
+Nashville,Tennessee,TN,36.162277,-86.774298,nnc.nashville@youngmuslims.com,@ym.nashville.brothers,https://ymsite.com/ym-locations/,"Nominatim: Nashville, Davidson County, Middle Tennessee, Tennessee, United States"
+YM Masjid Hamza,Houston,TX,29.710300,-95.638800,nnc.ym.masjidhamza@youngmuslims.com,@ym.ym.masjidhamza.brothers,https://ymsite.com/ym-locations/,reviewed Masjid Hamza coordinate
+Maskaty,Houston,TX,29.785785,-95.824396,nnc.maskaty@youngmuslims.com,@ym.maskaty.brothers,https://ymsite.com/ym-locations/,"Nominatim: Katy, Fort Bend County, Texas, United States"
+Austin,Austin,TX,30.271129,-97.743700,nnc.austin@youngmuslims.com,@ym.austin.brothers,https://ymsite.com/ym-locations/,reviewed Austin city center
+Fishers,Indiana,IN,39.955593,-86.013873,nnc.brosfishers@youngmuslims.com,@ym.brosfishers.brothers,https://ymsite.com/ym-locations/,"Nominatim: Fishers, Hamilton County, Indiana, United States"
+Minneapolis,Minnesota,MN,44.977300,-93.265469,nnc.minneapolis@youngmuslims.com,@ym.minneapolis.brothers,https://ymsite.com/ym-locations/,matching sisters chapter
+Mississauga,"Ontario, Canada",ON,43.588473,-79.643658,nnc.mississauga@youngmuslims.com,@ym.mississauga.brothers,https://ymsite.com/ym-locations/,"Nominatim: Mississauga, Peel Region, Golden Horseshoe, Ontario, Canada"
+Las Vegas,Nevada,NV,36.167426,-115.148413,nnc.lasvegas@youngmuslims.com,@ym.lasvegas.brothers,https://ymsite.com/ym-locations/,matching sisters chapter
+Metro West,Nevada,NV,36.167426,-115.148413,nnc.metrowest@youngmuslims.com,@ym.metrowest.brothers,https://ymsite.com/ym-locations/,"Nominatim: Las Vegas, Clark County, Nevada, United States"
+Los Angeles,California,CA,34.053691,-118.242766,nnc.losangeles@youngmuslims.com,@ym.losangeles.brothers,https://ymsite.com/ym-locations/,matching sisters chapter
+Berkeley,California,CA,37.870839,-122.272863,nnc.berkeley@youngmuslims.com,@ym.berkeley.brothers,https://ymsite.com/ym-locations/,matching sisters chapter
+Corona,California,CA,33.875295,-117.566444,nnc.corona@youngmuslims.com,@ym.corona.brothers,https://ymsite.com/ym-locations/,"Nominatim: Corona, Riverside County, California, United States"
+Brighton,California,CA,38.549351,-121.417175,nnc.brighton@youngmuslims.com,@ym.brighton.brothers,https://ymsite.com/ym-locations/,"Nominatim: Brighton, Sacramento, Sacramento County, California, 95819, United States"
+La Mirada,California,CA,33.906097,-118.010709,nnc.lamirada@youngmuslims.com,@ym.lamirada.brothers,https://ymsite.com/ym-locations/,"Nominatim: La Mirada, Los Angeles County, California, United States"
