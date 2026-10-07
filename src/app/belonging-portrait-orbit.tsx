@@ -130,13 +130,15 @@ function OrbitingPortrait({
         zIndex,
       }}
     >
-      <Image
-        src={portrait.image}
-        alt=""
-        sizes={`${portrait.width}px`}
-        className="size-full max-w-none object-contain"
-        style={{ transform: `rotate(${portrait.rotate ?? 0}deg)` }}
-      />
+      <div className="size-full scale-[0.62] md:scale-100">
+        <Image
+          src={portrait.image}
+          alt=""
+          sizes={`${portrait.width}px`}
+          className="size-full max-w-none object-contain"
+          style={{ transform: `rotate(${portrait.rotate ?? 0}deg)` }}
+        />
+      </div>
     </motion.div>
   );
 }
@@ -232,7 +234,7 @@ export function BelongingPortraitOrbit() {
     <div aria-hidden="true" className="pointer-events-none absolute inset-0">
       <div
         ref={orbitRef}
-        className="absolute top-0 left-1/2 h-full w-[900px] -translate-x-1/2 scale-[0.56] md:w-[1440px] md:scale-100"
+        className="absolute top-0 left-[calc(50%+41.45px)] h-full w-[900px] -translate-x-1/2 -translate-y-[14px] md:left-1/2 md:w-[1440px] md:translate-y-0"
       >
         {PORTRAITS.map((portrait, index) => (
           <OrbitingPortrait

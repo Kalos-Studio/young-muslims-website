@@ -173,29 +173,33 @@ export default function Home() {
           data-header-theme="light"
           className="relative h-[1298px] w-full overflow-hidden bg-brand-warm-snow md:h-[1830px]"
         >
-          <div className="pointer-events-none absolute top-[1060px] left-1/2 z-0 flex h-[470px] w-[739px] -translate-x-1/2 rotate-[-9.8deg] items-center justify-center md:top-[1281px] md:left-[-873px] md:h-[1880px] md:w-[2956px] md:translate-x-0">
-            <Image
-              src={belongingWavePale}
-              alt=""
-              className="block max-w-none"
-            />
+          <div className="pointer-events-none absolute top-[1671.83px] left-[calc(50%-115.01px)] z-0 flex h-[1879.96px] w-[2955.92px] -translate-x-1/2 -translate-y-1/2 items-center justify-center md:top-[1281px] md:left-[-873px] md:translate-x-0 md:translate-y-0">
+            <div className="rotate-[-9.8deg]">
+              <Image
+                src={belongingWavePale}
+                alt=""
+                className="block max-w-none"
+              />
+            </div>
           </div>
-          <div className="pointer-events-none absolute top-[1110px] left-1/2 z-[1] flex h-[443px] w-[697px] -translate-x-1/2 rotate-[-9.8deg] items-center justify-center md:top-[1375px] md:left-[-781px] md:h-[1772px] md:w-[2787px] md:translate-x-0">
-            <Image
-              src={belongingWaveObsidian}
-              alt=""
-              className="block max-w-none"
-            />
+          <div className="pointer-events-none absolute top-[1712.19px] left-[calc(50%-115.01px)] z-[1] flex h-[1772.44px] w-[2786.86px] -translate-x-1/2 -translate-y-1/2 items-center justify-center md:top-[1375px] md:left-[-781px] md:translate-x-0 md:translate-y-0">
+            <div className="rotate-[-9.8deg]">
+              <Image
+                src={belongingWaveObsidian}
+                alt=""
+                className="block max-w-none"
+              />
+            </div>
           </div>
           <div className="relative z-10 h-full">
             <BelongingPortraitOrbit />
           </div>
           <div className="absolute top-[487px] left-1/2 z-20 w-[290px] -translate-x-1/2 text-center md:top-[743px] md:w-full md:max-w-[784px]">
-            <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-jade md:text-landing-section">
+            <h2 className="text-[30px] leading-[36px] font-extrabold tracking-[-0.02em] text-brand-jade md:text-landing-section md:leading-normal">
               More than a program.
               <br />A place to belong.
             </h2>
-            <p className="mt-6 text-base leading-normal font-medium tracking-[-0.02em] text-brand-obsidian md:mt-[43px] md:text-landing-copy">
+            <p className="mt-6 text-base leading-[18.9px] font-medium tracking-[-0.02em] text-brand-obsidian md:mt-[43px] md:text-landing-copy md:leading-normal">
               Young Muslims is the nation&apos;s largest Muslim youth
               organization, but that&apos;s not how members describe it. To
               them, it&apos;s the people they see every week, the ones who
@@ -326,27 +330,27 @@ export default function Home() {
                   key={POINTS[0].title}
                   point={POINTS[0]}
                   image={cardPeople}
-                  className="top-[130px] left-8 md:left-[720px]"
+                  className="top-[598px] left-8 md:top-[130px] md:left-[720px]"
                   crop="people"
                 />,
                 <SolidCard
                   key={POINTS[1].title}
                   point={POINTS[1]}
                   image={cardLeadership}
-                  className="top-[684px] left-8 md:left-[720px]"
+                  className="top-[1126px] left-8 md:top-[684px] md:left-[720px]"
                 />,
                 <PhotoCard
                   key={POINTS[2].title}
                   point={POINTS[2]}
                   image={cardGuidance}
-                  className="top-[220px] left-8 md:left-[1071px]"
+                  className="top-[1654px] left-8 md:top-[220px] md:left-[1071px]"
                   crop="guidance"
                 />,
                 <SolidCard
                   key={POINTS[3].title}
                   point={POINTS[3]}
                   image={cardService}
-                  className="top-[774px] left-8 md:left-[1071px]"
+                  className="top-[2182px] left-8 md:top-[774px] md:left-[1071px]"
                 />,
               ]}
             />

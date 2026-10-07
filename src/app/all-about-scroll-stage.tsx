@@ -58,12 +58,23 @@ export function AllAboutScrollStage({
     offset: ["start start", "end end"],
   });
 
+  const mobileStage = (
+    <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:hidden">
+      {decorations}
+      <div className="absolute top-[267px] left-8 w-[296px] text-brand-obsidian">
+        {intro}
+      </div>
+      {cards}
+    </div>
+  );
+
   if (reduceMotion) {
     return (
       <div ref={sectionRef} className="relative h-full">
-        <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:top-[405px] md:w-[1440px] max-md:[&>.all-about-card:nth-of-type(1)]:top-[598px] max-md:[&>.all-about-card:nth-of-type(2)]:top-[1126px] max-md:[&>.all-about-card:nth-of-type(3)]:top-[1654px] max-md:[&>.all-about-card:nth-of-type(4)]:top-[2182px]">
+        {mobileStage}
+        <div className="absolute top-[405px] left-1/2 hidden h-full w-[1440px] -translate-x-1/2 md:block">
           {decorations}
-          <div className="absolute top-[267px] left-8 w-[296px] text-brand-obsidian md:top-[130px] md:left-[90px] md:w-[474px]">
+          <div className="absolute top-[130px] left-[90px] w-[474px] text-brand-obsidian">
             {intro}
           </div>
           {cards}
@@ -74,10 +85,11 @@ export function AllAboutScrollStage({
 
   return (
     <div ref={sectionRef} className="relative h-full">
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
+      {mobileStage}
+      <div className="sticky top-0 hidden h-screen overflow-hidden md:block">
+        <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
           {decorations}
-          <div className="absolute top-1/2 left-8 w-[296px] -translate-y-1/2 text-brand-obsidian md:left-[90px] md:w-[474px]">
+          <div className="absolute top-1/2 left-[90px] w-[474px] -translate-y-1/2 text-brand-obsidian">
             {intro}
           </div>
           {cards.map((card, index) => (

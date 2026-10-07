@@ -23,7 +23,7 @@ export function HeroVideo() {
       </video>
       <div aria-hidden className="absolute inset-0 bg-brand-obsidian/10" />
 
-      <div className="relative z-10 flex w-full max-w-[983px] flex-col items-center gap-[11px] md:gap-4">
+      <div className="relative z-10 flex w-full max-w-[983px] translate-y-[60px] flex-col items-center gap-[11px] md:translate-y-0 md:gap-4">
         <h1 className="font-display text-[32px] leading-normal font-normal tracking-[-0.02em] md:text-landing-display md:whitespace-nowrap">
           FOR THE YOUTH. BY THE YOUTH.
         </h1>

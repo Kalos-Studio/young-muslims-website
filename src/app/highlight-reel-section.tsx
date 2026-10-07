@@ -64,7 +64,7 @@ export function HighlightReelMarquee() {
           ))}
         </motion.div>
         <motion.div
-          className="-ml-[238px] flex w-max gap-8 text-brothers-sky md:-ml-[983px]"
+          className="-ml-[238px] flex w-max gap-8 text-brand-warm-snow md:-ml-[983px]"
           style={{ x: leftwardX }}
         >
           {Array.from({ length: MARQUEE_REPETITIONS }).map((_, index) => (

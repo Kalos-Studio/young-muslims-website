@@ -74,7 +74,7 @@ function ArticleCard({
       }}
     >
       <motion.div
-        className="relative h-[min(var(--article-image-height),78.5vw)] w-[296px] overflow-hidden bg-brand-pure-white md:h-[378px] md:w-[378px]"
+        className="relative h-[var(--article-image-height)] w-[296px] overflow-hidden bg-brand-pure-white md:h-[378px] md:w-[378px]"
         style={
           {
             borderRadius: article.shape,
