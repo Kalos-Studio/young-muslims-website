@@ -242,7 +242,7 @@ export function ChapterFinderSection() {
       ref={sectionRef}
       data-header-theme="dark"
       aria-labelledby="chapter-finder-heading"
-      className="relative h-[3790px] w-full overflow-hidden bg-brand-warm-snow md:h-[1943px] lg:h-[2198px]"
+      className="relative h-[3790px] w-full overflow-clip bg-brand-warm-snow md:h-[1943px] lg:h-[2198px]"
     >
       <motion.div
         className="pointer-events-none absolute inset-0"

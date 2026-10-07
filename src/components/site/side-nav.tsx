@@ -2,35 +2,31 @@
 
 import { Dialog } from "@base-ui/react/dialog";
 import { ArrowUpRight, Menu, X } from "lucide-react";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 
+import menuMarkBottom from "../../../design-assets/figma/landing-2026/card-decor-bottom.svg";
+import menuMarkTop from "../../../design-assets/figma/landing-2026/card-decor-top.svg";
+import facebookIcon from "../../../design-assets/figma/landing-2026/new-sections/footer-facebook.svg";
+import instagramIcon from "../../../design-assets/figma/landing-2026/new-sections/footer-instagram.svg";
+import xIcon from "../../../design-assets/figma/landing-2026/new-sections/footer-x.svg";
+import youtubeIcon from "../../../design-assets/figma/landing-2026/new-sections/footer-youtube.svg";
 import { Logo } from "./logo";
 import { ctaLink, drawerOnlyLinks, primaryLinks } from "./nav-links";
 
-const secondaryLinks = [...drawerOnlyLinks, ctaLink];
-
-const featureLinks = [
-  {
-    href: "/blog",
-    eyebrow: "From the blog",
-    title: "Ideas for growing in faith and community",
-    tone: "ym-menu-feature--royal",
-  },
-  {
-    href: "/stories#example-story",
-    eyebrow: "Member story",
-    title: "Amina found the people she calls first",
-    tone: "ym-menu-feature--jade",
-  },
-  {
-    href: "/neighbornets#upcoming-events",
-    eyebrow: "Upcoming events",
-    title: "Find your next place to show up",
-    tone: "ym-menu-feature--brass",
-  },
+const menuPrimaryLinks = [
+  { ...ctaLink, label: "Chapters" },
+  ...primaryLinks,
 ] as const;
+
+const socialIcons: ReadonlyArray<{ label: string; src: StaticImageData }> = [
+  { label: "Facebook", src: facebookIcon },
+  { label: "X", src: xIcon },
+  { label: "YouTube", src: youtubeIcon },
+  { label: "Instagram", src: instagramIcon },
+];
 
 /**
  * The permanent site menu. Base UI supplies focus trapping, Escape-to-close,
@@ -99,14 +95,26 @@ export function SideNav() {
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 z-50 bg-brand-obsidian/20" />
+        <Dialog.Backdrop className="ym-menu-backdrop" />
         <Dialog.Popup className="ym-menu-popup" style={popupStyle}>
           <div className="ym-menu-surface" aria-hidden />
 
           <div className="ym-menu-content">
+            <div className="ym-menu-decoration" aria-hidden>
+              <Image
+                src={menuMarkTop}
+                alt=""
+                className="ym-menu-mark ym-menu-mark--top"
+              />
+              <Image
+                src={menuMarkBottom}
+                alt=""
+                className="ym-menu-mark ym-menu-mark--bottom"
+              />
+            </div>
+
             <div className="ym-menu-topbar">
               <Dialog.Title className="sr-only">Site menu</Dialog.Title>
-              <span aria-hidden />
               <Link
                 href="/"
                 aria-label="Young Muslims, home"
@@ -116,7 +124,7 @@ export function SideNav() {
                 <Logo className="h-5" aria-hidden />
               </Link>
               <Dialog.Close aria-label="Close menu" className="ym-menu-close">
-                <X className="size-7" strokeWidth={2} aria-hidden />
+                <X className="size-8" strokeWidth={2} aria-hidden />
               </Dialog.Close>
             </div>
 
@@ -124,7 +132,7 @@ export function SideNav() {
               <div className="flex min-h-0 flex-col justify-between gap-10">
                 <nav aria-label="Main menu">
                   <ul className="ym-menu-link-list ym-menu-primary-list">
-                    {primaryLinks.map((link) => {
+                    {menuPrimaryLinks.map((link) => {
                       const isCurrent = pathname.startsWith(link.href);
 
                       return (
@@ -142,14 +150,15 @@ export function SideNav() {
                     })}
                   </ul>
                 </nav>
+              </div>
 
+              <div className="ym-menu-footer">
                 <nav aria-label="More pages">
-                  <p className="mb-5 text-nav font-bold text-brand-pure-white/50">
-                    More to explore
-                  </p>
                   <ul className="ym-menu-link-list ym-menu-secondary-list">
-                    {secondaryLinks.map((link) => {
-                      const isCurrent = pathname.startsWith(link.href);
+                    {drawerOnlyLinks.map((link) => {
+                      const isCurrent =
+                        link.label !== "Contact" &&
+                        pathname.startsWith(link.href);
 
                       return (
                         <li key={link.href}>
@@ -161,7 +170,7 @@ export function SideNav() {
                           >
                             <span>{link.label}</span>
                             <ArrowUpRight
-                              className="size-5 shrink-0"
+                              className="size-6 shrink-0"
                               strokeWidth={1.75}
                               aria-hidden
                             />
@@ -171,32 +180,15 @@ export function SideNav() {
                     })}
                   </ul>
                 </nav>
-              </div>
 
-              <aside aria-label="Featured links" className="ym-menu-features">
-                {featureLinks.map((feature) => (
-                  <Link
-                    key={feature.href}
-                    href={feature.href}
-                    onClick={closeMenu}
-                    className={`group ym-menu-feature ${feature.tone}`}
-                  >
-                    <span className="text-nav font-bold opacity-65">
-                      {feature.eyebrow}
-                    </span>
-                    <span className="mt-auto flex items-end justify-between gap-5">
-                      <span className="max-w-sm text-card-title font-semibold">
-                        {feature.title}
-                      </span>
-                      <ArrowUpRight
-                        className="size-6 shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                        strokeWidth={1.75}
-                        aria-hidden
-                      />
-                    </span>
-                  </Link>
-                ))}
-              </aside>
+                <ul className="ym-menu-socials" aria-label="Social media">
+                  {socialIcons.map((social) => (
+                    <li key={social.label}>
+                      <Image src={social.src} alt={social.label} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </Dialog.Popup>

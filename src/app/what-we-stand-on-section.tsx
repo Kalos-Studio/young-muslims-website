@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   type MotionValue,
   motion,
+  useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -19,8 +20,6 @@ import principleTarbiyyah from "../../design-assets/figma/landing-2026/new-secti
 const INTRO_SCROLL_VIEWPORTS = 1;
 const SCROLL_VIEWPORTS_PER_PRINCIPLE = 3;
 const REVEAL_SCROLL_VIEWPORTS = 1;
-const TOTAL_SCROLL_VIEWPORTS =
-  INTRO_SCROLL_VIEWPORTS + 4 * SCROLL_VIEWPORTS_PER_PRINCIPLE;
 
 const PRINCIPLES = [
   {
@@ -62,6 +61,9 @@ const PRINCIPLES = [
 ] as const;
 
 type Principle = (typeof PRINCIPLES)[number];
+
+const TOTAL_SCROLL_VIEWPORTS =
+  INTRO_SCROLL_VIEWPORTS + PRINCIPLES.length * SCROLL_VIEWPORTS_PER_PRINCIPLE;
 
 function PrincipleContent({ principle }: { principle: Principle }) {
   return (
@@ -108,6 +110,17 @@ function PrincipleContent({ principle }: { principle: Principle }) {
   );
 }
 
+function PrincipleSection({ principle }: { principle: Principle }) {
+  return (
+    <section
+      data-header-theme="dark"
+      className="relative h-screen min-h-[860px] w-full overflow-hidden bg-brand-obsidian"
+    >
+      <PrincipleContent principle={principle} />
+    </section>
+  );
+}
+
 function RevealingPrinciple({
   principle,
   index,
@@ -125,32 +138,35 @@ function RevealingPrinciple({
       index * SCROLL_VIEWPORTS_PER_PRINCIPLE +
       REVEAL_SCROLL_VIEWPORTS) /
     TOTAL_SCROLL_VIEWPORTS;
-  const clipPath = useTransform(
+  const panelY = useTransform(
     progress,
     [revealStart, revealEnd],
-    ["inset(100% 0 0 0)", "inset(0% 0 0 0)"],
+    ["100%", "0%"],
+  );
+  const contentY = useTransform(
+    progress,
+    [revealStart, revealEnd],
+    ["-100%", "0%"],
   );
 
   return (
     <motion.div
-      className="absolute inset-0 overflow-hidden bg-brand-obsidian will-change-[clip-path]"
-      style={{ clipPath, zIndex: index + 1 }}
+      className="absolute inset-0 overflow-hidden bg-brand-obsidian will-change-transform"
+      style={{ y: panelY, zIndex: index + 1 }}
     >
-      <PrincipleContent principle={principle} />
+      <motion.div
+        className="absolute inset-0 will-change-transform"
+        style={{ y: contentY }}
+      >
+        <PrincipleContent principle={principle} />
+      </motion.div>
     </motion.div>
-  );
-}
-
-function StaticPrinciple({ principle }: { principle: Principle }) {
-  return (
-    <div className="relative h-screen min-h-[860px] w-full overflow-hidden bg-brand-obsidian">
-      <PrincipleContent principle={principle} />
-    </div>
   );
 }
 
 export function WhatWeStandOnSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [headingOnImage, setHeadingOnImage] = useState(false);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -160,18 +176,34 @@ export function WhatWeStandOnSection() {
   const headingY = useTransform(
     scrollYProgress,
     [0, introEnd],
-    ["calc(100vh - 360px)", "0px"],
+    ["calc(100vh - 132px)", "0px"],
   );
   const headingOpacity = useTransform(
     scrollYProgress,
-    [0, introEnd * 0.45],
+    [0, introEnd * 0.65],
     [0, 1],
   );
+  const darkHeaderStart =
+    (INTRO_SCROLL_VIEWPORTS + REVEAL_SCROLL_VIEWPORTS * 0.9) /
+    TOTAL_SCROLL_VIEWPORTS;
+
+  useMotionValueEvent(scrollYProgress, "change", (progress) => {
+    if (reduceMotion || !sectionRef.current) return;
+
+    const imageHasReachedHeading = progress >= darkHeaderStart;
+    sectionRef.current.dataset.headerTheme = imageHasReachedHeading
+      ? "dark"
+      : "light";
+    setHeadingOnImage(imageHasReachedHeading);
+  });
 
   if (reduceMotion) {
     return (
-      <section data-header-theme="dark" className="bg-brand-obsidian">
-        <div className="flex min-h-screen items-start justify-center px-6 pt-[132px] text-center text-brand-pure-white">
+      <section ref={sectionRef} className="w-full bg-brand-warm-snow">
+        <div
+          data-header-theme="light"
+          className="flex min-h-screen items-start justify-center px-6 pt-[132px] text-center text-brand-obsidian"
+        >
           <div className="w-[538px] max-w-full">
             <h2 className="text-landing-section font-extrabold">
               What we stand on.
@@ -182,8 +214,9 @@ export function WhatWeStandOnSection() {
             </p>
           </div>
         </div>
+
         {PRINCIPLES.map((principle) => (
-          <StaticPrinciple key={principle.title} principle={principle} />
+          <PrincipleSection key={principle.title} principle={principle} />
         ))}
       </section>
     );
@@ -192,13 +225,14 @@ export function WhatWeStandOnSection() {
   return (
     <section
       ref={sectionRef}
-      data-header-theme="dark"
-      className="relative h-[1400vh] w-full bg-brand-obsidian"
+      data-header-theme="light"
+      className="relative h-[1400vh] w-full bg-brand-warm-snow"
     >
-      <div className="sticky top-0 h-screen min-h-[860px] w-full overflow-hidden bg-brand-obsidian">
+      <div className="sticky top-0 h-screen min-h-[860px] w-full overflow-hidden bg-brand-warm-snow">
         <motion.div
-          className="absolute top-[132px] left-1/2 w-[538px] max-w-[calc(100%-48px)] -translate-x-1/2 text-center text-brand-pure-white"
-          style={{ y: headingY, opacity: headingOpacity }}
+          data-over-image={headingOnImage ? "true" : "false"}
+          className={`what-we-stand-on-heading absolute top-[132px] left-1/2 z-20 w-[538px] max-w-[calc(100%-48px)] -translate-x-1/2 text-center transition-colors duration-300 ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
+          style={{ opacity: headingOpacity, y: headingY }}
         >
           <h2 className="text-landing-section font-extrabold">
             What we stand on.

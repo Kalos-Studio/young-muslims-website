@@ -43,6 +43,7 @@ export const ctaLink = {
 export const drawerOnlyLinks = [
   { href: "/store", label: "Store" },
   { href: "/blog", label: "Blog" },
+  { href: "/about", label: "Contact" },
 ] as const satisfies readonly NavLink[];
 
 /** Everything the drawer lists, in the order it lists them. */

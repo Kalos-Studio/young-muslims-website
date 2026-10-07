@@ -14,6 +14,7 @@ import belongingWaveObsidian from "../../design-assets/figma/landing-2026/belong
 import belongingWavePale from "../../design-assets/figma/landing-2026/belonging-wave-pale.svg";
 import highlightPlay from "../../design-assets/figma/landing-2026/highlight-play.svg";
 import highlightReel from "../../design-assets/figma/landing-2026/highlight-reel.png";
+import { AllAboutScrollStage } from "./all-about-scroll-stage";
 import { BelongingPortraitOrbit } from "./belonging-portrait-orbit";
 import { ChapterFinderSection } from "./chapter-finder-section";
 import { EverywhereSection } from "./everywhere-section";
@@ -245,7 +246,7 @@ export default function Home() {
       >
         <section
           data-header-theme="light"
-          className="relative h-[1791px] w-full overflow-hidden bg-brand-warm-snow"
+          className="relative h-[1791px] w-full overflow-clip bg-brand-warm-snow"
         >
           <div
             className="pointer-events-none absolute top-0 left-1/2 z-0 h-full -translate-x-1/2 overflow-hidden"
@@ -276,57 +277,70 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="absolute top-[405px] left-1/2 z-10 h-full w-[1440px] -translate-x-1/2">
-            <Image
-              src={cardDecorTop}
-              alt=""
-              className="absolute -top-[26px] left-[1111px]"
-            />
-            <Image
-              src={cardDecorBottom}
-              alt=""
-              className="absolute top-[1052px] left-[17px]"
-            />
-
-            <div className="absolute top-[130px] left-[90px] w-[474px] text-brand-obsidian">
-              <h2 className="text-landing-section font-extrabold">
-                This is what we&apos;re
-                <br />
-                all about.
-              </h2>
-              <p className="mt-8 text-landing-copy font-medium">
-                It starts as a hangout. It turns into brotherhood, sisterhood,
-                and a reason to show up for something bigger than yourself.
-              </p>
-              <Link
-                href="/about"
-                className="mt-8 inline-flex rounded-pill bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white outline-none hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow"
-              >
-                About Us
-              </Link>
-            </div>
-
-            <PhotoCard
-              point={POINTS[0]}
-              image={cardPeople}
-              className="top-[130px] left-[720px]"
-              crop="people"
-            />
-            <SolidCard
-              point={POINTS[1]}
-              image={cardLeadership}
-              className="top-[684px] left-[720px]"
-            />
-            <PhotoCard
-              point={POINTS[2]}
-              image={cardGuidance}
-              className="top-[220px] left-[1071px]"
-              crop="guidance"
-            />
-            <SolidCard
-              point={POINTS[3]}
-              image={cardService}
-              className="top-[774px] left-[1071px]"
+          <div className="relative z-10 h-full">
+            <AllAboutScrollStage
+              decorations={
+                <>
+                  <Image
+                    src={cardDecorTop}
+                    alt=""
+                    className="absolute -top-[26px] left-[1111px]"
+                  />
+                  <Image
+                    src={cardDecorBottom}
+                    alt=""
+                    className="absolute top-[1052px] left-[17px]"
+                  />
+                </>
+              }
+              intro={
+                <>
+                  <h2 className="text-landing-section font-extrabold">
+                    This is what we&apos;re
+                    <br />
+                    all about.
+                  </h2>
+                  <p className="mt-8 text-landing-copy font-medium">
+                    It starts as a hangout. It turns into brotherhood,
+                    sisterhood, and a reason to show up for something bigger
+                    than yourself.
+                  </p>
+                  <Link
+                    href="/about"
+                    className="mt-8 inline-flex rounded-pill bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white outline-none hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow"
+                  >
+                    About Us
+                  </Link>
+                </>
+              }
+              cards={[
+                <PhotoCard
+                  key={POINTS[0].title}
+                  point={POINTS[0]}
+                  image={cardPeople}
+                  className="top-[130px] left-[720px]"
+                  crop="people"
+                />,
+                <SolidCard
+                  key={POINTS[1].title}
+                  point={POINTS[1]}
+                  image={cardLeadership}
+                  className="top-[684px] left-[720px]"
+                />,
+                <PhotoCard
+                  key={POINTS[2].title}
+                  point={POINTS[2]}
+                  image={cardGuidance}
+                  className="top-[220px] left-[1071px]"
+                  crop="guidance"
+                />,
+                <SolidCard
+                  key={POINTS[3].title}
+                  point={POINTS[3]}
+                  image={cardService}
+                  className="top-[774px] left-[1071px]"
+                />,
+              ]}
             />
           </div>
         </section>
