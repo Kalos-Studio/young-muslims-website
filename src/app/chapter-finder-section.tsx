@@ -244,10 +244,8 @@ export function ChapterFinderSection() {
 
   useEffect(() => {
     const mobileQuery = window.matchMedia("(max-width: 767px)");
-    let animationFrame = 0;
 
-    const updateActiveCity = () => {
-      animationFrame = 0;
+    const updateMode = () => {
       const mobile = mobileQuery.matches;
       setIsMobile(mobile);
 
@@ -277,21 +275,31 @@ export function ChapterFinderSection() {
       );
     };
 
-    const scheduleUpdate = () => {
-      if (animationFrame) return;
-      animationFrame = window.requestAnimationFrame(updateActiveCity);
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!mobileQuery.matches) return;
 
-    scheduleUpdate();
-    window.addEventListener("scroll", scheduleUpdate, { passive: true });
-    window.addEventListener("resize", scheduleUpdate);
-    mobileQuery.addEventListener("change", scheduleUpdate);
+        const centeredEntry = entries.find((entry) => entry.isIntersecting);
+        const cityKey = centeredEntry?.target.getAttribute("data-city-key");
+
+        if (cityKey && cityKey in CITY_BY_KEY) {
+          setScrollActiveKey(cityKey as CityKey);
+        }
+      },
+      { rootMargin: "-44% 0px -44% 0px", threshold: 0 },
+    );
+
+    for (const city of CITIES) {
+      const button = cityButtonRefs.current[city.key];
+      if (button) observer.observe(button);
+    }
+
+    updateMode();
+    mobileQuery.addEventListener("change", updateMode);
 
     return () => {
-      if (animationFrame) window.cancelAnimationFrame(animationFrame);
-      window.removeEventListener("scroll", scheduleUpdate);
-      window.removeEventListener("resize", scheduleUpdate);
-      mobileQuery.removeEventListener("change", scheduleUpdate);
+      observer.disconnect();
+      mobileQuery.removeEventListener("change", updateMode);
     };
   }, []);
 
@@ -352,6 +360,7 @@ export function ChapterFinderSection() {
                   cityButtonRefs.current[city.key] = button;
                 }}
                 key={city.key}
+                data-city-key={city.key}
                 type="button"
                 aria-pressed={isSelected}
                 aria-label={`${city.name}, ${city.state}${isSelected ? ", selected" : ""}`}

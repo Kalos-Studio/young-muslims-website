@@ -82,7 +82,11 @@ function OrbitPortrait({
       <motion.div
         className="size-full"
         animate={{ rotate: isOrbiting ? 360 : 0 }}
-        transition={{ duration: 42, ease: "linear", repeat: Infinity }}
+        transition={
+          isOrbiting
+            ? { duration: 42, ease: "linear", repeat: Infinity }
+            : { duration: 0 }
+        }
       >
         <motion.div
           className="group relative size-full"
@@ -138,12 +142,15 @@ export function PeopleStoriesSection() {
   const headingRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const sectionEntered = useInView(sectionRef, { once: true, amount: 0.16 });
+  const sectionIsVisible = useInView(sectionRef, { margin: "200px 0px" });
   const headingCentered = useInView(headingRef, {
     once: true,
     margin: "-34% 0px -34% 0px",
   });
   const portraitsAreVisible = reduceMotion ? sectionEntered : headingCentered;
-  const isOrbiting = Boolean(portraitsAreVisible && !reduceMotion);
+  const isOrbiting = Boolean(
+    portraitsAreVisible && sectionIsVisible && !reduceMotion,
+  );
 
   return (
     <section
@@ -155,7 +162,11 @@ export function PeopleStoriesSection() {
       <motion.div
         className="absolute top-1/2 left-1/2 h-[620px] w-[700px] -translate-x-1/2 -translate-y-1/2 md:h-[760px] md:w-[860px] xl:h-[880px] xl:w-[1180px]"
         animate={{ rotate: isOrbiting ? -360 : 0 }}
-        transition={{ duration: 42, ease: "linear", repeat: Infinity }}
+        transition={
+          isOrbiting
+            ? { duration: 42, ease: "linear", repeat: Infinity }
+            : { duration: 0 }
+        }
       >
         {PORTRAITS.map((portrait, index) => (
           <OrbitPortrait

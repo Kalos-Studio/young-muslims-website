@@ -5,10 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import {
   type MotionValue,
   motion,
+  useAnimationFrame,
+  useInView,
   useMotionValue,
   useReducedMotion,
   useSpring,
-  useTime,
   useTransform,
 } from "motion/react";
 
@@ -162,7 +163,12 @@ export function BelongingPortraitOrbit() {
     damping: 20,
     mass: 0.8,
   });
-  const time = useTime();
+  const time = useMotionValue(0);
+  const orbitIsVisible = useInView(orbitRef, { margin: "200px 0px" });
+
+  useAnimationFrame((elapsed) => {
+    if (orbitIsVisible && !reduceMotion) time.set(elapsed);
+  });
 
   useEffect(() => {
     const orbit = orbitRef.current;
@@ -181,11 +187,17 @@ export function BelongingPortraitOrbit() {
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) {
+    if (reduceMotion || !orbitIsVisible) {
       cursorXTarget.set(0);
       cursorYTarget.set(0);
       return;
     }
+
+    const finePointerQuery = window.matchMedia(
+      "(hover: hover) and (pointer: fine)",
+    );
+
+    if (!finePointerQuery.matches) return;
 
     const updateCursorPosition = (event: PointerEvent) => {
       const orbit = orbitRef.current;
@@ -228,7 +240,7 @@ export function BelongingPortraitOrbit() {
       window.removeEventListener("pointermove", updateCursorPosition);
       window.removeEventListener("blur", resetCursorPosition);
     };
-  }, [cursorXTarget, cursorYTarget, reduceMotion]);
+  }, [cursorXTarget, cursorYTarget, orbitIsVisible, reduceMotion]);
 
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0">

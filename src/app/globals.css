@@ -189,42 +189,59 @@
     @apply bg-transparent! dark:invert;
   }
 
-  /* The landing hero begins behind its navigation, matching the Figma frame. */
-  body:has([data-landing-page]) {
+  /* Full-bleed page heroes begin behind the navigation, matching Figma. */
+  body:has(:is([data-landing-page], [data-neighbornets-page])) {
     overflow-x: clip;
   }
-  body:has([data-landing-page]) [data-site-header] {
+  body:has(:is([data-landing-page], [data-neighbornets-page]))
+    [data-site-header] {
     @apply fixed! w-full! border-transparent! bg-transparent! text-brand-pure-white backdrop-blur-none!;
   }
-  body:has([data-landing-page]) [data-site-header] nav a,
-  body:has([data-landing-page]) [data-site-logo-link],
-  body:has([data-landing-page]) [data-site-header] [data-menu-trigger] {
+  body:has(:is([data-landing-page], [data-neighbornets-page]))
+    [data-site-header]
+    nav
+    a,
+  body:has(:is([data-landing-page], [data-neighbornets-page]))
+    [data-site-logo-link],
+  body:has(:is([data-landing-page], [data-neighbornets-page]))
+    [data-site-header]
+    [data-menu-trigger] {
     color: var(--color-brand-pure-white) !important;
     transition: color 300ms ease;
   }
-  body:has([data-landing-page]) [data-site-cta="true"] {
+  body:has(:is([data-landing-page], [data-neighbornets-page]))
+    [data-site-cta="true"] {
     background: var(--color-brand-royal) !important;
     color: var(--color-brand-pure-white) !important;
   }
-  body:has([data-landing-page])
+  body:has(:is([data-landing-page], [data-neighbornets-page]))
     [data-site-header][data-header-theme="light"]
     nav
     a,
-  body:has([data-landing-page])
+  body:has(:is([data-landing-page], [data-neighbornets-page]))
     [data-site-header][data-header-theme="light"]
     [data-site-logo-link],
-  body:has([data-landing-page])
+  body:has(:is([data-landing-page], [data-neighbornets-page]))
     [data-site-header][data-header-theme="light"]
     [data-menu-trigger] {
     color: var(--color-brand-obsidian) !important;
   }
   /* Keep the landing-page chapter CTA readable regardless of section theme. */
-  body:has([data-landing-page])
+  body:has(:is([data-landing-page], [data-neighbornets-page]))
     [data-site-header][data-header-theme]
     nav
     a[data-site-cta="true"] {
     color: var(--color-brand-pure-white) !important;
   }
+  body:has([data-neighbornets-page])
+    [data-site-cta="true"][aria-current="page"] {
+    pointer-events: none;
+    opacity: 0;
+  }
+}
+
+.chapter-cta-photo {
+  clip-path: url("#chapter-cta-photo-clip");
 }
 
 .what-we-stand-on-heading {

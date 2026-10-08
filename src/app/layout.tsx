@@ -4,6 +4,7 @@ import "./globals.css";
 import { isSiteIndexable, SITE_ORIGIN } from "@/lib/seo";
 
 import { FooterSlot } from "@/components/site/footer-slot";
+import { EntryAnimation } from "@/components/site/entry-animation";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 // WIREFRAME: the two imports below are prototype scaffolding. See WIREFRAME.md.
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${figtree.variable} ${boldonse.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        <EntryAnimation />
         <SiteHeader />
         <div data-page-shell className="flex-1">
           {children}

@@ -14,12 +14,10 @@ import instagramIcon from "../../../design-assets/figma/landing-2026/new-section
 import xIcon from "../../../design-assets/figma/landing-2026/new-sections/footer-x.svg";
 import youtubeIcon from "../../../design-assets/figma/landing-2026/new-sections/footer-youtube.svg";
 import { Logo } from "./logo";
-import { ctaLink, drawerOnlyLinks, primaryLinks } from "./nav-links";
+import { getNavigationItems, isNavigationItemCurrent } from "./nav-links";
 
-const menuPrimaryLinks = [
-  { ...ctaLink, label: "Chapters" },
-  ...primaryLinks,
-] as const;
+const menuPrimaryLinks = getNavigationItems("drawer-primary");
+const menuSecondaryLinks = getNavigationItems("drawer-secondary");
 
 const socialIcons: ReadonlyArray<{ label: string; src: StaticImageData }> = [
   { label: "Facebook", src: facebookIcon },
@@ -133,10 +131,10 @@ export function SideNav() {
                 <nav aria-label="Main menu">
                   <ul className="ym-menu-link-list ym-menu-primary-list">
                     {menuPrimaryLinks.map((link) => {
-                      const isCurrent = pathname.startsWith(link.href);
+                      const isCurrent = isNavigationItemCurrent(link, pathname);
 
                       return (
-                        <li key={link.href}>
+                        <li key={link.id}>
                           <Link
                             href={link.href}
                             onClick={closeMenu}
@@ -155,13 +153,11 @@ export function SideNav() {
               <div className="ym-menu-footer">
                 <nav aria-label="More pages">
                   <ul className="ym-menu-link-list ym-menu-secondary-list">
-                    {drawerOnlyLinks.map((link) => {
-                      const isCurrent =
-                        link.label !== "Contact" &&
-                        pathname.startsWith(link.href);
+                    {menuSecondaryLinks.map((link) => {
+                      const isCurrent = isNavigationItemCurrent(link, pathname);
 
                       return (
-                        <li key={link.href}>
+                        <li key={link.id}>
                           <Link
                             href={link.href}
                             onClick={closeMenu}

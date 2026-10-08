@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
+import chapterCtaPhoto from "../../../design-assets/figma/neighbornets/footer-lakeside.jpg";
+import chapterHero from "../../../design-assets/figma/neighbornets/find-nn-hero.jpg";
+import ctaArrowDark from "../../../design-assets/figma/landing-2026/new-sections/cta-arrow-dark.svg";
+import ctaArrowLight from "../../../design-assets/figma/landing-2026/new-sections/cta-arrow-light.svg";
+import { LandingFooter } from "../landing-new-sections";
 import { brotherLocations } from "@/generated/brother-neighbornets";
 import { sisterLocations } from "@/generated/sister-neighbornets";
 import { NeighborNetsMap } from "./neighbornets-map";
 import { defaultSettings, type MapSettings } from "./map-options";
-// WIREFRAME: wireframe chrome around a real, working map. See WIREFRAME.md.
-import { Annotate } from "@/components/wireframe/annotate";
-import { Frame } from "@/components/wireframe/frame";
-import { Lorem, Text } from "@/components/wireframe/text";
-import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/neighbornets" },
@@ -17,24 +19,7 @@ export const metadata: Metadata = {
     "Find a Young Muslims neighbornet near you: brothers' and sisters' circles across the United States.",
 };
 
-/**
- * WIREFRAME: settings for the wireframe only. `defaultSettings` is left alone so
- * the marker-comparison prototype still boots the way it always did — this is a
- * per-caller override, not a change to what everyone gets.
- *
- * Greyscale but still colour-coded: black for brothers, grey for sisters, with
- * the ringed marker style giving each dot a white halo so the grey ones do not
- * sink into the state fill. The shape channel is off — one visual difference is
- * easier to read than two.
- *
- * `click-popup` rather than the default `side-panel`, because a bare map has no
- * side column to put details in; the card opens on the map itself.
- *
- * The street basemap gives a searched region enough geographic context to make
- * the result useful: city names, roads, and highways remain visible beneath
- * the density layer and chapter dots.
- */
-const wireframeSettings: MapSettings = {
+const chapterMapSettings: MapSettings = {
   ...defaultSettings,
   basemap: "streets",
   palette: "young-muslims",
@@ -45,99 +30,126 @@ const wireframeSettings: MapSettings = {
 
 const locations = [...brotherLocations, ...sisterLocations];
 
+function ChapterCtaSection() {
+  return (
+    <section
+      data-header-theme="dark"
+      className="relative h-[723px] w-full overflow-hidden bg-brand-warm-snow"
+    >
+      <div className="absolute top-[352px] right-0 bottom-0 left-0 bg-brand-obsidian" />
+
+      <svg aria-hidden="true" className="absolute size-0">
+        <defs>
+          <clipPath
+            id="chapter-cta-photo-clip"
+            clipPathUnits="objectBoundingBox"
+          >
+            <path d="M0 .13 C.23 .035 .7 .015 1 .12 L1 .86 C.69 .98 .31 .985 0 .88Z" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <div className="chapter-cta-photo absolute inset-0">
+        <Image
+          src={chapterCtaPhoto}
+          alt="Young Muslim women gathered beside a lake"
+          fill
+          unoptimized
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-brand-obsidian/30" />
+      </div>
+
+      <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
+        <h2 className="absolute top-[314px] left-[129px] w-[692px] text-landing-section font-extrabold text-brand-warm-snow">
+          Seeking the pleasure of Allah (SWT) by empowering Muslim youth.
+        </h2>
+
+        <div className="absolute top-[285px] left-[902px] flex w-[312px] flex-col gap-8">
+          <Link
+            href="/about"
+            className="flex h-[61px] items-center gap-3 bg-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-obsidian transition-colors hover:bg-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
+          >
+            <span className="flex-1">Get involved</span>
+            <Image src={ctaArrowDark} alt="" />
+          </Link>
+          <Link
+            href="/support"
+            className="flex h-[61px] items-center gap-3 border border-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
+          >
+            <span className="flex-1">Support us</span>
+            <Image src={ctaArrowLight} alt="" />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function NeighborNetsPage() {
   return (
-    <PageFrame className="bg-brand-warm-snow pt-16 pb-20 text-brand-obsidian">
-      {/* Nobody arriving on this site knows what a NeighborNet is, and the map
-          alone does not tell them — so the explanation comes before it, not
-          after. */}
-      <Annotate className="mb-14">
-        <Text
-          as="h1"
-          className="max-w-4xl text-brand-jade"
-          example="Youth from around the country, coming together every week."
-        >
-          Placeholder headline: what a NeighborNet is
-        </Text>
-        <Text as="body" className="mt-6 max-w-2xl">
-          Placeholder supporting line: a local circle you can actually turn up
-          to, and what happens when you do
-        </Text>
-      </Annotate>
+    <main
+      data-neighbornets-page
+      className="w-full overflow-x-clip bg-brand-warm-snow text-brand-obsidian"
+    >
+      <section
+        data-header-theme="dark"
+        className="relative h-[1007px] w-full overflow-hidden bg-brand-obsidian"
+      >
+        <Image
+          src={chapterHero}
+          alt="Young Muslims standing together on a sports field"
+          fill
+          priority
+          unoptimized
+          sizes="100vw"
+          className="object-cover object-[center_58%]"
+        />
+        <div className="absolute inset-0 bg-brand-obsidian/25" />
 
-      <Annotate>
-        {/* WIREFRAME: `bare` drops the prototype's border, side column and zoom
-            controls so this reads as the country sitting on the page rather
-            than a widget in a box. Drop `bare` and `showDebugPanel={false}` to
-            get the marker-comparison tooling back while we are still deciding
-            how the dots should look. */}
-        <div>
+        <div className="absolute top-[458px] left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-4 text-center text-brand-pure-white">
+          <h1 className="font-display text-landing-stat whitespace-nowrap uppercase">
+            Find your NeighborNet
+          </h1>
+          <p className="text-landing-copy font-semibold whitespace-nowrap">
+            There&apos;s one near you, meeting every week. Find it, walk in, and
+            you&apos;re in. That&apos;s really all it takes.
+          </p>
+        </div>
+
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 1440 170"
+          preserveAspectRatio="none"
+          className="absolute right-0 bottom-[-1px] left-0 h-[170px] w-full text-brand-warm-snow"
+        >
+          <path
+            d="M0 32C345 119 1028 126 1440 78V170H0V32Z"
+            fill="currentColor"
+          />
+        </svg>
+      </section>
+
+      <section
+        data-header-theme="light"
+        className="relative h-[1727px] w-full overflow-hidden bg-brand-warm-snow"
+      >
+        <div className="absolute top-[334px] left-1/2 w-[1260px] -translate-x-1/2">
           <NeighborNetsMap
             locations={locations}
-            initialSettings={wireframeSettings}
+            initialSettings={chapterMapSettings}
             showDebugPanel={false}
             bare
             finder
             interactive
+            layout="chapter-page"
           />
         </div>
-      </Annotate>
+      </section>
 
-      <Annotate className="mt-2">
-        <div className="grid grid-cols-2 items-stretch gap-8">
-          <div className="rounded-card bg-sisters-forest p-8 text-brand-pure-white">
-            <Text as="h2" tone="dark">
-              What is a NeighborNet
-            </Text>
-            <Lorem paragraphs={2} tone="dark" className="mt-4" />
-            <button className="mt-6 rounded-pill bg-brand-pure-white px-6 py-4 text-nav font-bold text-sisters-forest outline-none focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-sisters-forest">
-              Don&apos;t have a NN near you? Start one here
-            </button>
-          </div>
-          <Frame
-            variant="muted"
-            label="Slideshow of images here"
-            className="aspect-square w-full rounded-card bg-sisters-brass text-sisters-forest"
-          />
-        </div>
-      </Annotate>
-
-      <Annotate
-        className="mt-16"
-        note="each card links out to its own page: one for events, one for conferences, one for retreats"
-      >
-        <div id="upcoming-events" className="scroll-mt-36">
-          <Text as="h2" className="text-center text-brand-royal">
-            Other Ways to Get Involved
-          </Text>
-        </div>
-        <div className="mt-8 grid grid-cols-3 gap-6">
-          <div>
-            <Frame
-              variant="muted"
-              label="Events"
-              className="aspect-video w-full rounded-media bg-brothers-slate text-brothers-midnight"
-            />
-            <Lorem paragraphs={1} className="mt-3" />
-          </div>
-          <div>
-            <Frame
-              variant="muted"
-              label="Conferences"
-              className="aspect-video w-full rounded-media bg-brand-royal text-brand-pure-white"
-            />
-            <Lorem paragraphs={1} className="mt-3" />
-          </div>
-          <div>
-            <Frame
-              variant="muted"
-              label="Retreats"
-              className="aspect-video w-full rounded-media bg-sisters-brass text-sisters-forest"
-            />
-            <Lorem paragraphs={1} className="mt-3" />
-          </div>
-        </div>
-      </Annotate>
-    </PageFrame>
+      <ChapterCtaSection />
+      <LandingFooter />
+    </main>
   );
 }

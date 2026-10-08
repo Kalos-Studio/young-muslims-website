@@ -212,6 +212,7 @@ export function EverywhereSection() {
   const metricsRef = useRef<HTMLDivElement>(null);
   const [headingIsRevealed, setHeadingIsRevealed] = useState(false);
   const metricsAreVisible = useInView(metricsRef, { once: true });
+  const sectionIsVisible = useInView(sectionRef, { margin: "300px 0px" });
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -336,8 +337,8 @@ export function EverywhereSection() {
                   key={`${glow.className}-${index}`}
                   className={`absolute rounded-full mix-blend-multiply blur-xl ${glow.className}`}
                   animate={
-                    reduceMotion
-                      ? undefined
+                    reduceMotion || !sectionIsVisible
+                      ? { x: 0, y: 0, scale: 1 }
                       : {
                           x: glow.x,
                           y: glow.y,
@@ -345,9 +346,9 @@ export function EverywhereSection() {
                         }
                   }
                   transition={{
-                    duration: glow.duration,
+                    duration: sectionIsVisible ? glow.duration : 0,
                     ease: "easeInOut",
-                    repeat: Infinity,
+                    repeat: sectionIsVisible ? Infinity : 0,
                   }}
                 >
                   <span

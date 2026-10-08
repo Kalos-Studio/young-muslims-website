@@ -11,6 +11,7 @@ import footerLogo from "../../design-assets/figma/landing-2026/new-sections/foot
 import footerTagline from "../../design-assets/figma/landing-2026/new-sections/footer-tagline.svg";
 import footerX from "../../design-assets/figma/landing-2026/new-sections/footer-facebook.svg";
 import footerYoutube from "../../design-assets/figma/landing-2026/new-sections/footer-youtube.svg";
+import { getNavigationItems } from "@/components/site/nav-links";
 
 export function LandingCtaSection() {
   return (
@@ -69,17 +70,10 @@ export function LandingCtaSection() {
 }
 
 const FOOTER_LINKS = [
-  [
-    ["Find a Chapter", "/neighbornets"],
-    ["Who We Are", "/about"],
-    ["Stories", "/stories"],
-    ["Support", "/support"],
-  ],
-  [
-    ["Blog", "/blog"],
-    ["Store", "/store"],
-  ],
+  getNavigationItems("footer-primary"),
+  getNavigationItems("footer-secondary"),
 ] as const;
+const [contactLink] = getNavigationItems("footer-contact");
 
 export function LandingFooter() {
   return (
@@ -98,9 +92,13 @@ export function LandingFooter() {
           >
             {FOOTER_LINKS.map((column, index) => (
               <div key={index} className="flex flex-col gap-6">
-                {column.map(([label, href]) => (
-                  <Link key={href} href={href} className="hover:underline">
-                    {label}
+                {column.map((link) => (
+                  <Link
+                    key={link.id}
+                    href={link.href}
+                    className="hover:underline"
+                  >
+                    {link.label}
                   </Link>
                 ))}
               </div>
@@ -113,10 +111,10 @@ export function LandingFooter() {
               join/create a NeighborNet? Reach out to us via email.
             </p>
             <Link
-              href="/about"
+              href={contactLink.href}
               className="mt-6 inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:w-auto"
             >
-              Contact us
+              {contactLink.label}
             </Link>
           </div>
         </div>

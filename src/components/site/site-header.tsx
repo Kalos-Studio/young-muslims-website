@@ -3,8 +3,11 @@ import Link from "next/link";
 import { HeaderContrastController } from "./header-contrast-controller";
 import { Logo } from "./logo";
 import { NavLink } from "./nav-link";
-import { ctaLink, primaryLinks } from "./nav-links";
+import { getNavigationItems } from "./nav-links";
 import { SideNav } from "./side-nav";
+
+const primaryLinks = getNavigationItems("header-primary");
+const [ctaLink] = getNavigationItems("header-cta");
 
 /**
  * The site header. Permanent: these are the real routes and the real layout.
@@ -52,7 +55,7 @@ export function SiteHeader() {
           className="hidden items-center justify-center gap-4 text-nav md:flex"
         >
           {primaryLinks.map((link) => (
-            <NavLink key={link.href} href={link.href} className="p-2.5">
+            <NavLink key={link.id} item={link} className="p-2.5">
               {link.label}
             </NavLink>
           ))}
@@ -64,7 +67,7 @@ export function SiteHeader() {
             className="hidden items-center text-nav md:flex"
           >
             <NavLink
-              href={ctaLink.href}
+              item={ctaLink}
               className="inline-flex items-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
               data-site-cta
             >
