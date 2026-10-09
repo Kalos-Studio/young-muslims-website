@@ -520,9 +520,12 @@
 
 .ym-menu-layout {
   position: relative;
+  display: flex;
   width: 100%;
   max-width: 90rem;
   flex: 1;
+  flex-direction: column;
+  gap: 2rem;
   margin-inline: auto;
   padding-top: 2.0625rem;
 }
@@ -567,14 +570,14 @@
 }
 
 .ym-menu-footer {
-  position: absolute;
-  bottom: 0.875rem;
-  left: 0;
+  position: static;
   display: flex;
   width: 24.9375rem;
   height: 18.25rem;
+  flex: none;
   flex-direction: column;
   justify-content: space-between;
+  margin-top: auto;
 }
 
 .ym-menu-secondary-list {
@@ -615,7 +618,6 @@
 
 @media (max-width: 37.5rem) {
   .ym-menu-content {
-    min-height: 50.5rem;
     padding: 0 2rem 4rem;
   }
 
@@ -643,8 +645,11 @@
     gap: 2rem;
   }
 
+  .ym-menu-layout {
+    gap: 0;
+  }
+
   .ym-menu-footer {
-    position: static;
     width: 100%;
     height: 14.75rem;
     margin-top: 3.5rem;

@@ -20,7 +20,7 @@ import { ChapterFinderSection } from "./chapter-finder-section";
 import { EverywhereSection } from "./everywhere-section";
 import { HeroVideo } from "./hero-video";
 import { HighlightReelMarquee } from "./highlight-reel-section";
-import { LandingCtaSection, LandingFooter } from "./landing-new-sections";
+import { LandingCtaSection } from "./landing-new-sections";
 import { PeopleStoriesSection } from "./people-stories-section";
 import { WhatWeStandOnSection } from "./what-we-stand-on-section";
 import { WordOnTheStreetSection } from "./word-on-the-street-section";
@@ -377,7 +377,6 @@ export default function Home() {
       <ChapterFinderSection />
       <WordOnTheStreetSection />
       <LandingCtaSection />
-      <LandingFooter />
     </PageFrame>
   );
 }

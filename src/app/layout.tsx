@@ -47,14 +47,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${figtree.variable} ${boldonse.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <EntryAnimation />
-        <SiteHeader />
-        <div data-page-shell className="flex-1">
-          {children}
-        </div>
-        <FooterSlot>
-          <SiteFooter />
-        </FooterSlot>
+        <EntryAnimation>
+          <SiteHeader />
+          <div data-page-shell className="flex-1">
+            {children}
+          </div>
+          <FooterSlot>
+            <SiteFooter />
+          </FooterSlot>
+        </EntryAnimation>
         {/* WIREFRAME: both come out with the wireframe; the header and footer
             above them stay. */}
         <NotesToggle />

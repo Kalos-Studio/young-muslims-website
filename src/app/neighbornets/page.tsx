@@ -6,7 +6,6 @@ import chapterCtaPhoto from "../../../design-assets/figma/neighbornets/footer-la
 import chapterHero from "../../../design-assets/figma/neighbornets/find-nn-hero.jpg";
 import ctaArrowDark from "../../../design-assets/figma/landing-2026/new-sections/cta-arrow-dark.svg";
 import ctaArrowLight from "../../../design-assets/figma/landing-2026/new-sections/cta-arrow-light.svg";
-import { LandingFooter } from "../landing-new-sections";
 import { brotherLocations } from "@/generated/brother-neighbornets";
 import { sisterLocations } from "@/generated/sister-neighbornets";
 import { NeighborNetsMap } from "./neighbornets-map";
@@ -149,7 +148,6 @@ export default function NeighborNetsPage() {
       </section>
 
       <ChapterCtaSection />
-      <LandingFooter />
     </main>
   );
 }

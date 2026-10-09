@@ -5,13 +5,6 @@ import ctaArrowDark from "../../design-assets/figma/landing-2026/new-sections/ct
 import ctaArrowLight from "../../design-assets/figma/landing-2026/new-sections/cta-arrow-light.svg";
 import ctaCommunityMobile from "../../design-assets/figma/landing-2026/new-sections/cta-community-mobile.png";
 import ctaCommunity from "../../design-assets/figma/landing-2026/new-sections/cta-community-ribbon-design.png";
-import footerFacebook from "../../design-assets/figma/landing-2026/new-sections/footer-x.svg";
-import footerInstagram from "../../design-assets/figma/landing-2026/new-sections/footer-instagram.svg";
-import footerLogo from "../../design-assets/figma/landing-2026/new-sections/footer-logo.svg";
-import footerTagline from "../../design-assets/figma/landing-2026/new-sections/footer-tagline.svg";
-import footerX from "../../design-assets/figma/landing-2026/new-sections/footer-facebook.svg";
-import footerYoutube from "../../design-assets/figma/landing-2026/new-sections/footer-youtube.svg";
-import { getNavigationItems } from "@/components/site/nav-links";
 
 export function LandingCtaSection() {
   return (
@@ -66,85 +59,5 @@ export function LandingCtaSection() {
         </div>
       </div>
     </section>
-  );
-}
-
-const FOOTER_LINKS = [
-  getNavigationItems("footer-primary"),
-  getNavigationItems("footer-secondary"),
-] as const;
-const [contactLink] = getNavigationItems("footer-contact");
-
-export function LandingFooter() {
-  return (
-    <footer className="relative h-[794px] w-full overflow-hidden bg-brand-obsidian text-brand-warm-snow md:h-[525px]">
-      <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
-        <div className="absolute top-0 left-8 flex w-[296px] flex-col items-stretch md:top-[60px] md:left-[80px] md:w-[1280px] md:flex-row md:items-start md:justify-between">
-          <Image
-            src={footerLogo}
-            alt="Young Muslims"
-            className="mx-auto mt-0 w-[278px] md:mx-0 md:mt-0 md:w-auto"
-          />
-
-          <nav
-            aria-label="Footer navigation"
-            className="mt-[64px] flex gap-14 text-nav font-semibold md:mt-0"
-          >
-            {FOOTER_LINKS.map((column, index) => (
-              <div key={index} className="flex flex-col gap-6">
-                {column.map((link) => (
-                  <Link
-                    key={link.id}
-                    href={link.href}
-                    className="hover:underline"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            ))}
-          </nav>
-
-          <div className="mt-[64px] w-[296px] md:mt-0 md:w-[373px]">
-            <p className="text-nav font-semibold">
-              Want to learn more about Young Muslims, what we do, or how to
-              join/create a NeighborNet? Reach out to us via email.
-            </p>
-            <Link
-              href={contactLink.href}
-              className="mt-6 inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:w-auto"
-            >
-              {contactLink.label}
-            </Link>
-          </div>
-        </div>
-
-        <Image
-          src={footerTagline}
-          alt=""
-          className="absolute top-[514px] left-[-191px] block h-auto w-[741px] max-w-none opacity-100 md:top-[334px] md:left-0 md:w-auto"
-        />
-
-        <div className="absolute top-[610px] left-8 flex h-[120px] w-[296px] flex-col items-center justify-between text-[10px] font-bold tracking-[-0.02em] md:top-[453px] md:left-[80px] md:h-auto md:w-[1280px] md:flex-row">
-          <div className="flex w-full justify-between gap-6 md:w-auto md:justify-start">
-            <span>© Young Muslims 2026</span>
-            <span className="text-brothers-slate underline">
-              Made by Kalos Studio
-            </span>
-          </div>
-          <div className="flex gap-4" aria-label="Social media">
-            <Image src={footerFacebook} alt="Facebook" />
-            <Image src={footerX} alt="X" />
-            <Image src={footerYoutube} alt="YouTube" />
-            <Image src={footerInstagram} alt="Instagram" />
-          </div>
-          <div className="flex gap-2">
-            <span>Privacy Policy</span>
-            <span>•</span>
-            <span>Donor Privacy</span>
-          </div>
-        </div>
-      </div>
-    </footer>
   );
 }
