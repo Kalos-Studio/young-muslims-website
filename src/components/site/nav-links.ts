@@ -1,54 +1,110 @@
 /**
- * The site's information architecture, in one place.
+ * The site's destination and navigation policy.
  *
- * The header and the side drawer both render from these arrays, so adding a
- * page to the site means adding it here once. Nothing about this file is part
- * of the wireframe: these are the real routes and the real labels, and they
- * outlive the grey boxes.
- *
- * `href` values are `as const` so they stay literal types rather than widening
- * to `string`, which is what Next's typed `<Link href>` expects.
+ * Destination identity, placement, context-specific labels, ordering, and
+ * current-route behavior live here. Rendering modules ask for the projection
+ * they need instead of rebuilding those rules independently.
  */
 
-export type NavLink = {
+type DestinationId =
+  "chapters" | "about" | "stories" | "support" | "store" | "blog" | "contact";
+
+export type NavigationSurface =
+  | "header-primary"
+  | "header-cta"
+  | "drawer-primary"
+  | "drawer-secondary"
+  | "footer-primary"
+  | "footer-secondary"
+  | "footer-contact";
+
+export type NavigationItem = Readonly<{
+  id: DestinationId;
   href: string;
   label: string;
-};
+}>;
 
-/**
- * The three links in the middle of the header. These are the pages we want a
- * first-time visitor to see; everything else is one level down.
- */
-export const primaryLinks = [
-  { href: "/about", label: "Who We Are" },
-  { href: "/stories", label: "Stories" },
-  { href: "/support", label: "Support" },
-] as const satisfies readonly NavLink[];
+type Destination = Readonly<{
+  href: string;
+  label: string;
+  currentRoute: "prefix" | "never";
+  labels?: Partial<Record<NavigationSurface, string>>;
+}>;
 
-/**
- * The header's call to action. Kept separate from `primaryLinks` because it is
- * styled as a button, not a nav link, and because it is the one action the
- * whole site is pointing at.
- */
-export const ctaLink = {
-  href: "/neighbornets",
-  label: "Find a Chapter",
-} as const satisfies NavLink;
+const DESTINATIONS = {
+  chapters: {
+    href: "/neighbornets",
+    label: "Find a Chapter",
+    currentRoute: "prefix",
+    labels: { "drawer-primary": "Chapters" },
+  },
+  about: {
+    href: "/about",
+    label: "Who We Are",
+    currentRoute: "prefix",
+  },
+  stories: {
+    href: "/stories",
+    label: "Stories",
+    currentRoute: "prefix",
+  },
+  support: {
+    href: "/support",
+    label: "Support",
+    currentRoute: "prefix",
+  },
+  store: {
+    href: "/store",
+    label: "Store",
+    currentRoute: "prefix",
+  },
+  blog: {
+    href: "/blog",
+    label: "Blog",
+    currentRoute: "prefix",
+  },
+  contact: {
+    href: "/about",
+    label: "Contact",
+    // Contact currently points at the About page rather than its own route.
+    // It must not compete with Who We Are for aria-current.
+    currentRoute: "never",
+    labels: { "footer-contact": "Contact us" },
+  },
+} as const satisfies Record<DestinationId, Destination>;
 
-/**
- * Pages that live only in the side drawer. They matter, but they are not part
- * of the main path through the site, and putting them in the header would
- * dilute it.
- */
-export const drawerOnlyLinks = [
-  { href: "/store", label: "Store" },
-  { href: "/blog", label: "Blog" },
-  { href: "/about", label: "Contact" },
-] as const satisfies readonly NavLink[];
+const DESTINATIONS_BY_SURFACE = {
+  "header-primary": ["about", "stories", "support"],
+  "header-cta": ["chapters"],
+  "drawer-primary": ["chapters", "about", "stories", "support"],
+  "drawer-secondary": ["store", "blog", "contact"],
+  "footer-primary": ["chapters", "about", "stories", "support"],
+  "footer-secondary": ["blog", "store"],
+  "footer-contact": ["contact"],
+} as const satisfies Record<NavigationSurface, readonly DestinationId[]>;
 
-/** Everything the drawer lists, in the order it lists them. */
-export const drawerLinks = [
-  ...primaryLinks,
-  ctaLink,
-  ...drawerOnlyLinks,
-] as const satisfies readonly NavLink[];
+export function getNavigationItems(
+  surface: NavigationSurface,
+): readonly NavigationItem[] {
+  return DESTINATIONS_BY_SURFACE[surface].map((id) => {
+    const destination: Destination = DESTINATIONS[id];
+
+    return {
+      id,
+      href: destination.href,
+      label: destination.labels?.[surface] ?? destination.label,
+    };
+  });
+}
+
+export function isNavigationItemCurrent(
+  item: NavigationItem,
+  pathname: string,
+): boolean {
+  const destination: Destination = DESTINATIONS[item.id];
+
+  if (destination.currentRoute === "never") return false;
+  return item.href === "/"
+    ? pathname === "/"
+    : pathname === item.href || pathname.startsWith(`${item.href}/`);
+}

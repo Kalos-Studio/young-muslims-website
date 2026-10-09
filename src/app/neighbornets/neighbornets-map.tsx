@@ -8,7 +8,7 @@ import {
   useState,
   type FormEvent,
 } from "react";
-import { RotateCcw, Search } from "lucide-react";
+import { ArrowRight, RotateCcw, Search } from "lucide-react";
 
 // Must come before the map component so our same-origin worker URL is set
 // before mapcn's unpkg fallback runs. See src/lib/maplibre-worker.ts.
@@ -67,6 +67,7 @@ export function NeighborNetsMap({
   bare = false,
   finder = false,
   interactive,
+  layout = "default",
 }: {
   locations: NeighborNetLocation[];
   initialSettings?: MapSettings;
@@ -76,6 +77,8 @@ export function NeighborNetsMap({
   finder?: boolean;
   /** Keep visual chrome and map interaction as separate decisions. */
   interactive?: boolean;
+  /** Repositions the existing finder to match the production chapter page. */
+  layout?: "default" | "chapter-page";
 }) {
   const [settings, setSettings] = useState<MapSettings>(initialSettings);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -188,7 +191,12 @@ export function NeighborNetsMap({
   }
 
   return (
-    <div className={cn(finder && "space-y-6")}>
+    <div
+      className={cn(
+        finder &&
+          (layout === "chapter-page" ? "relative h-[1107px]" : "space-y-6"),
+      )}
+    >
       {finder ? (
         <ChapterSearch
           query={query}
@@ -204,6 +212,7 @@ export function NeighborNetsMap({
           locations={visibleNets}
           hasSearch={hasSearch}
           resultCount={searchResults.length}
+          layout={layout}
         />
       ) : null}
 
@@ -211,7 +220,9 @@ export function NeighborNetsMap({
         ref={mapSectionRef}
         className={cn(
           finder
-            ? "relative h-[70vh] min-h-[32rem] w-full scroll-mt-32"
+            ? layout === "chapter-page"
+              ? "absolute top-[358px] left-[-7px] h-[749px] w-[1274px] scroll-mt-32"
+              : "relative h-[70vh] min-h-[32rem] w-full scroll-mt-32"
             : bare
               ? "relative h-full w-full"
               : // `min-h-0` on both cells is what stops the tall debug panel from
@@ -401,13 +412,19 @@ export function NeighborNetsMap({
       </div>
 
       {finder && hasSearch ? (
-        <SearchResultCards
-          query={submittedQuery}
-          results={searchResults}
-          selectedId={selectedId}
-          palette={settings.palette}
-          onSelect={focusResult}
-        />
+        <div
+          className={cn(
+            layout === "chapter-page" && "absolute top-[1131px] right-0 left-0",
+          )}
+        >
+          <SearchResultCards
+            query={submittedQuery}
+            results={searchResults}
+            selectedId={selectedId}
+            palette={settings.palette}
+            onSelect={focusResult}
+          />
+        </div>
       ) : null}
     </div>
   );
@@ -789,6 +806,7 @@ function ChapterSearch({
   locations,
   hasSearch,
   resultCount,
+  layout,
 }: {
   query: string;
   onQueryChange: (value: string) => void;
@@ -798,6 +816,7 @@ function ChapterSearch({
   locations: NeighborNetLocation[];
   hasSearch: boolean;
   resultCount: number;
+  layout: "default" | "chapter-page";
 }) {
   const suggestions = useMemo(() => {
     const term = normalizeSearchTerm(query);
@@ -808,6 +827,80 @@ function ChapterSearch({
       .sort((a, b) => a.localeCompare(b))
       .slice(0, 6);
   }, [locations, query]);
+
+  if (layout === "chapter-page") {
+    return (
+      <div className="relative w-full">
+        <div>
+          <h2 className="text-landing-section font-extrabold">
+            Find a NeighborNet near you.
+          </h2>
+          <p className="mt-4 text-landing-copy font-medium">
+            Search your city, or select a state to see where Young Muslims
+            meets.
+          </p>
+        </div>
+
+        <form
+          onSubmit={onSubmit}
+          role="search"
+          className="relative mt-[60px] flex w-full items-start gap-8"
+        >
+          <div className="relative flex h-[51px] min-w-0 flex-1 items-center gap-2.5 border-b border-brand-obsidian px-6 py-4">
+            <Search aria-hidden="true" className="size-[18px] shrink-0" />
+            <label htmlFor="chapter-search" className="sr-only">
+              Search for city or ZIP
+            </label>
+            <input
+              id="chapter-search"
+              value={query}
+              onChange={(event) => onQueryChange(event.target.value)}
+              placeholder="Search for city or ZIP"
+              autoComplete="off"
+              className="min-w-0 flex-1 bg-transparent text-nav font-bold text-brand-obsidian outline-none placeholder:text-brand-obsidian"
+            />
+          </div>
+          <button
+            type="submit"
+            aria-label="Search"
+            className="grid size-[51px] shrink-0 place-items-center bg-brand-royal text-brand-pure-white transition-opacity outline-none hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
+          >
+            <ArrowRight aria-hidden="true" className="size-[18px]" />
+          </button>
+          {hasSearch ? (
+            <button
+              type="button"
+              onClick={onReset}
+              className="inline-flex h-[51px] items-center justify-center gap-2 border border-brand-obsidian px-5 text-nav font-bold outline-none hover:bg-brand-obsidian hover:text-brand-warm-snow focus-visible:ring-2 focus-visible:ring-brand-royal"
+            >
+              <RotateCcw aria-hidden="true" className="size-4" />
+              Reset
+            </button>
+          ) : null}
+          {suggestions.length > 0 ? (
+            <ul className="absolute top-[59px] right-[83px] left-0 z-30 grid gap-1 border border-brand-obsidian/15 bg-brand-warm-snow p-2 shadow-lg">
+              {suggestions.map((suggestion) => (
+                <li key={suggestion}>
+                  <button
+                    type="button"
+                    onClick={() => onChoose(suggestion)}
+                    className="w-full px-4 py-2 text-left text-sm outline-none hover:bg-brand-obsidian/5 focus-visible:ring-2 focus-visible:ring-brand-royal"
+                  >
+                    {suggestion}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <span className="sr-only" aria-live="polite">
+            {hasSearch
+              ? `${resultCount} NeighborNets found.`
+              : `${locations.length} NeighborNets available.`}
+          </span>
+        </form>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-card bg-brand-royal p-5 text-brand-pure-white sm:p-7">

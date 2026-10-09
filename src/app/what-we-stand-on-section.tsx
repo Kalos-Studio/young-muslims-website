@@ -67,23 +67,30 @@ const TOTAL_SCROLL_VIEWPORTS =
 
 function PrincipleContent({ principle }: { principle: Principle }) {
   return (
-    <div className="absolute top-1/2 left-1/2 h-[1024px] w-full min-w-[1440px] -translate-x-1/2 -translate-y-1/2">
+    <div className="absolute top-1/2 left-1/2 h-[808px] w-full min-w-[360px] -translate-x-1/2 -translate-y-1/2 md:h-[1024px] md:min-w-[1440px]">
+      <Image
+        src={principle.image}
+        alt=""
+        fill
+        sizes="100vw"
+        className="object-cover md:hidden"
+      />
       <Image
         src={principle.image}
         alt=""
         sizes="1540px"
-        className={principle.imageClass}
+        className={`${principle.imageClass} hidden md:block`}
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(191,206,219,0)_9.5%,rgba(23,23,37,0.48)_109.91%)]" />
 
-      <div className="absolute top-[366px] left-1/2 z-10 h-[414px] w-[560px] -translate-x-1/2 text-center text-brand-pure-white">
+      <div className="absolute top-[229px] left-1/2 z-10 h-[414px] w-[296px] -translate-x-1/2 text-center text-brand-pure-white md:top-[366px] md:w-[560px]">
         {principle.echoes.map((echo, echoIndex) => (
           <p
             key={echo}
             className="absolute left-1/2 -translate-x-1/2 font-display whitespace-nowrap text-transparent"
             style={{
               top: `${82 + echoIndex * 83}px`,
-              fontSize: `${45 + echoIndex * 2.7}px`,
+              fontSize: `clamp(24px, ${3.125 + echoIndex * 0.1875}vw, ${45 + echoIndex * 2.7}px)`,
               letterSpacing: "-0.02em",
               opacity: 0.16 + echoIndex * 0.16,
               WebkitTextStroke: "1px rgba(255,255,255,0.9)",
@@ -92,17 +99,17 @@ function PrincipleContent({ principle }: { principle: Principle }) {
             {echo}
           </p>
         ))}
-        <p className="absolute top-[254px] left-1/2 -translate-x-1/2 font-display text-[54px] tracking-[-0.02em] whitespace-nowrap">
+        <p className="absolute top-[254px] left-1/2 -translate-x-1/2 font-display text-[30px] tracking-[-0.02em] whitespace-nowrap md:text-[54px]">
           {principle.title}
         </p>
-        <p className="absolute top-[361px] left-1/2 w-[465px] -translate-x-1/2 text-base font-medium tracking-[-0.02em]">
+        <p className="absolute top-[361px] left-1/2 w-[296px] -translate-x-1/2 text-base font-medium tracking-[-0.02em] md:w-[465px]">
           {principle.description}
         </p>
       </div>
 
       <Link
         href="/about"
-        className="absolute top-[788px] left-1/2 z-10 -translate-x-1/2 border border-brand-warm-snow px-6 py-4 text-nav font-bold text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
+        className="absolute top-[671px] left-1/2 z-10 inline-flex w-[296px] -translate-x-1/2 justify-center border border-brand-warm-snow px-6 py-4 text-nav font-bold text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:top-[788px] md:w-auto"
       >
         Learn more
       </Link>
@@ -114,7 +121,7 @@ function PrincipleSection({ principle }: { principle: Principle }) {
   return (
     <section
       data-header-theme="dark"
-      className="relative h-screen min-h-[860px] w-full overflow-hidden bg-brand-obsidian"
+      className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian md:h-screen md:min-h-[860px]"
     >
       <PrincipleContent principle={principle} />
     </section>
@@ -202,13 +209,13 @@ export function WhatWeStandOnSection() {
       <section ref={sectionRef} className="w-full bg-brand-warm-snow">
         <div
           data-header-theme="light"
-          className="flex min-h-screen items-start justify-center px-6 pt-[132px] text-center text-brand-obsidian"
+          className="flex min-h-[808px] items-start justify-center px-8 pt-[76px] text-center text-brand-obsidian md:min-h-screen md:px-6 md:pt-[132px]"
         >
-          <div className="w-[538px] max-w-full">
-            <h2 className="text-landing-section font-extrabold">
+          <div className="w-[296px] max-w-full md:w-[538px]">
+            <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section">
               What we stand on.
             </h2>
-            <p className="mt-4 text-landing-copy font-medium">
+            <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:text-landing-copy">
               The friendships are real. So is the foundation underneath them.
               These are what shape everything about Young Muslims.
             </p>
@@ -228,16 +235,16 @@ export function WhatWeStandOnSection() {
       data-header-theme="light"
       className="relative h-[1400vh] w-full bg-brand-warm-snow"
     >
-      <div className="sticky top-0 h-screen min-h-[860px] w-full overflow-hidden bg-brand-warm-snow">
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-brand-warm-snow md:min-h-[860px]">
         <motion.div
           data-over-image={headingOnImage ? "true" : "false"}
-          className={`what-we-stand-on-heading absolute top-[132px] left-1/2 z-20 w-[538px] max-w-[calc(100%-48px)] -translate-x-1/2 text-center transition-colors duration-300 ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
+          className={`what-we-stand-on-heading absolute top-[76px] left-1/2 z-20 w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[132px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
           style={{ opacity: headingOpacity, y: headingY }}
         >
-          <h2 className="text-landing-section font-extrabold">
+          <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section">
             What we stand on.
           </h2>
-          <p className="mt-4 text-landing-copy font-medium">
+          <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:text-landing-copy">
             The friendships are real. So is the foundation underneath them.
             These are what shape everything about Young Muslims.
           </p>

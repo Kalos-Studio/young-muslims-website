@@ -5,10 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import {
   type MotionValue,
   motion,
+  useAnimationFrame,
+  useInView,
   useMotionValue,
   useReducedMotion,
   useSpring,
-  useTime,
   useTransform,
 } from "motion/react";
 
@@ -130,13 +131,15 @@ function OrbitingPortrait({
         zIndex,
       }}
     >
-      <Image
-        src={portrait.image}
-        alt=""
-        sizes={`${portrait.width}px`}
-        className="size-full max-w-none object-contain"
-        style={{ transform: `rotate(${portrait.rotate ?? 0}deg)` }}
-      />
+      <div className="size-full scale-[0.62] md:scale-100">
+        <Image
+          src={portrait.image}
+          alt=""
+          sizes={`${portrait.width}px`}
+          className="size-full max-w-none object-contain"
+          style={{ transform: `rotate(${portrait.rotate ?? 0}deg)` }}
+        />
+      </div>
     </motion.div>
   );
 }
@@ -160,7 +163,12 @@ export function BelongingPortraitOrbit() {
     damping: 20,
     mass: 0.8,
   });
-  const time = useTime();
+  const time = useMotionValue(0);
+  const orbitIsVisible = useInView(orbitRef, { margin: "200px 0px" });
+
+  useAnimationFrame((elapsed) => {
+    if (orbitIsVisible && !reduceMotion) time.set(elapsed);
+  });
 
   useEffect(() => {
     const orbit = orbitRef.current;
@@ -179,11 +187,17 @@ export function BelongingPortraitOrbit() {
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) {
+    if (reduceMotion || !orbitIsVisible) {
       cursorXTarget.set(0);
       cursorYTarget.set(0);
       return;
     }
+
+    const finePointerQuery = window.matchMedia(
+      "(hover: hover) and (pointer: fine)",
+    );
+
+    if (!finePointerQuery.matches) return;
 
     const updateCursorPosition = (event: PointerEvent) => {
       const orbit = orbitRef.current;
@@ -226,13 +240,13 @@ export function BelongingPortraitOrbit() {
       window.removeEventListener("pointermove", updateCursorPosition);
       window.removeEventListener("blur", resetCursorPosition);
     };
-  }, [cursorXTarget, cursorYTarget, reduceMotion]);
+  }, [cursorXTarget, cursorYTarget, orbitIsVisible, reduceMotion]);
 
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0">
       <div
         ref={orbitRef}
-        className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2"
+        className="absolute top-0 left-[calc(50%+41.45px)] h-full w-[900px] -translate-x-1/2 -translate-y-[14px] md:left-1/2 md:w-[1440px] md:translate-y-0"
       >
         {PORTRAITS.map((portrait, index) => (
           <OrbitingPortrait

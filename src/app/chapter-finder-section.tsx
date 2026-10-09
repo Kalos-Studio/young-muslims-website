@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "motion/react";
 
 import brooklynPhoto from "../../design-assets/figma/landing-2026/chapter-cities/brooklyn.jpg";
@@ -230,12 +230,78 @@ function CityMedia({
 
 export function ChapterFinderSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const cityButtonRefs = useRef<
+    Partial<Record<CityKey, HTMLButtonElement | null>>
+  >({});
   const [selectedKey, setSelectedKey] = useState<CityKey>("houston");
   const [previewKey, setPreviewKey] = useState<CityKey | null>(null);
+  const [scrollActiveKey, setScrollActiveKey] = useState<CityKey>("houston");
+  const [isMobile, setIsMobile] = useState(false);
   const reduceMotion = useReducedMotion();
   const shapeHasEntered = useInView(sectionRef, { once: true, amount: 0.25 });
-  const activeKey = previewKey ?? selectedKey;
+  const activeKey = isMobile ? scrollActiveKey : (previewKey ?? selectedKey);
   const activeCity = useMemo(() => CITY_BY_KEY[activeKey], [activeKey]);
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+
+    const updateMode = () => {
+      const mobile = mobileQuery.matches;
+      setIsMobile(mobile);
+
+      if (!mobile) return;
+
+      const activationLine = window.innerHeight / 2;
+      let nearestCity = CITIES[0];
+      let nearestDistance = Number.POSITIVE_INFINITY;
+
+      for (const city of CITIES) {
+        const button = cityButtonRefs.current[city.key];
+        if (!button) continue;
+
+        const bounds = button.getBoundingClientRect();
+        const distance = Math.abs(
+          bounds.top + bounds.height / 2 - activationLine,
+        );
+
+        if (distance < nearestDistance) {
+          nearestCity = city;
+          nearestDistance = distance;
+        }
+      }
+
+      setScrollActiveKey((currentKey) =>
+        currentKey === nearestCity.key ? currentKey : nearestCity.key,
+      );
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!mobileQuery.matches) return;
+
+        const centeredEntry = entries.find((entry) => entry.isIntersecting);
+        const cityKey = centeredEntry?.target.getAttribute("data-city-key");
+
+        if (cityKey && cityKey in CITY_BY_KEY) {
+          setScrollActiveKey(cityKey as CityKey);
+        }
+      },
+      { rootMargin: "-44% 0px -44% 0px", threshold: 0 },
+    );
+
+    for (const city of CITIES) {
+      const button = cityButtonRefs.current[city.key];
+      if (button) observer.observe(button);
+    }
+
+    updateMode();
+    mobileQuery.addEventListener("change", updateMode);
+
+    return () => {
+      observer.disconnect();
+      mobileQuery.removeEventListener("change", updateMode);
+    };
+  }, []);
 
   return (
     <section
@@ -286,26 +352,40 @@ export function ChapterFinderSection() {
         >
           {CITIES.map((city) => {
             const isActive = city.key === activeKey;
-            const isSelected = city.key === selectedKey;
+            const isSelected = isMobile ? isActive : city.key === selectedKey;
 
             return (
               <button
+                ref={(button) => {
+                  cityButtonRefs.current[city.key] = button;
+                }}
                 key={city.key}
+                data-city-key={city.key}
                 type="button"
                 aria-pressed={isSelected}
                 aria-label={`${city.name}, ${city.state}${isSelected ? ", selected" : ""}`}
                 className={`w-fit cursor-pointer rounded-sm font-display text-[42.5px] tracking-[-0.02em] uppercase transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-4 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none lg:text-stat ${isActive ? city.selectedClassName : "text-brand-pure-white"}`}
                 onPointerEnter={(event) => {
-                  if (event.pointerType !== "touch") setPreviewKey(city.key);
+                  if (!isMobile && event.pointerType !== "touch") {
+                    setPreviewKey(city.key);
+                  }
                 }}
                 onPointerLeave={(event) => {
-                  if (event.pointerType !== "touch") setPreviewKey(null);
+                  if (!isMobile && event.pointerType !== "touch") {
+                    setPreviewKey(null);
+                  }
                 }}
-                onFocus={() => setPreviewKey(city.key)}
-                onBlur={() => setPreviewKey(null)}
+                onFocus={() => {
+                  if (isMobile) setScrollActiveKey(city.key);
+                  else setPreviewKey(city.key);
+                }}
+                onBlur={() => {
+                  if (!isMobile) setPreviewKey(null);
+                }}
                 onClick={() => {
                   setSelectedKey(city.key);
                   setPreviewKey(city.key);
+                  setScrollActiveKey(city.key);
                 }}
               >
                 {city.name}

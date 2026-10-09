@@ -3,8 +3,11 @@ import Link from "next/link";
 import { HeaderContrastController } from "./header-contrast-controller";
 import { Logo } from "./logo";
 import { NavLink } from "./nav-link";
-import { ctaLink, primaryLinks } from "./nav-links";
+import { getNavigationItems } from "./nav-links";
 import { SideNav } from "./side-nav";
+
+const primaryLinks = getNavigationItems("header-primary");
+const [ctaLink] = getNavigationItems("header-cta");
 
 /**
  * The site header. Permanent: these are the real routes and the real layout.
@@ -31,7 +34,7 @@ export function SiteHeader() {
       <HeaderContrastController />
       <div
         data-site-header-inner
-        className="grid h-[123px] w-full grid-cols-[1fr_auto_1fr] items-center gap-8 px-20"
+        className="grid h-[123px] w-full grid-cols-[1fr_auto] items-center gap-8 px-8 md:grid-cols-[1fr_auto_1fr] md:px-20"
       >
         <div className="flex items-center justify-start">
           <Link
@@ -42,17 +45,17 @@ export function SiteHeader() {
           >
             {/* aria-hidden because the link above already names the destination;
                 without it a screen reader announces the name twice. */}
-            <Logo className="h-5" aria-hidden />
+            <Logo className="h-5 w-auto" aria-hidden />
           </Link>
         </div>
 
         <nav
           data-primary-nav
           aria-label="Primary"
-          className="flex items-center justify-center gap-4 text-nav"
+          className="hidden items-center justify-center gap-4 text-nav md:flex"
         >
           {primaryLinks.map((link) => (
-            <NavLink key={link.href} href={link.href} className="p-2.5">
+            <NavLink key={link.id} item={link} className="p-2.5">
               {link.label}
             </NavLink>
           ))}
@@ -61,10 +64,10 @@ export function SiteHeader() {
         <div className="flex shrink-0 items-center justify-end gap-6">
           <nav
             aria-label="Find a chapter"
-            className="flex items-center text-nav"
+            className="hidden items-center text-nav md:flex"
           >
             <NavLink
-              href={ctaLink.href}
+              item={ctaLink}
               className="inline-flex items-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
               data-site-cta
             >
