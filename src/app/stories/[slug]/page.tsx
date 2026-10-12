@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 
+import { MaterialIcon } from "@/components/ui/material-icon";
 import { STORIES, getStoryBySlug } from "@/lib/stories";
 
 type StoryPageProps = {
@@ -69,7 +69,7 @@ export default async function StoryPage({ params }: StoryPageProps) {
                 href={`/stories?story=${story.slug}`}
                 className="mb-12 inline-flex items-center gap-2 rounded-pill border border-brand-pure-white px-5 py-3 text-nav font-bold outline-none hover:bg-brand-pure-white hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian"
               >
-                <ArrowLeft className="size-4" aria-hidden="true" />
+                <MaterialIcon name="arrow_back" size={16} aria-hidden="true" />
                 Back to Stories
               </Link>
               {story.editorialDraft ? (

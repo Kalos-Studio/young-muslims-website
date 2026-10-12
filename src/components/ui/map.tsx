@@ -18,9 +18,8 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import { X, Minus, Plus, Locate, Maximize, Loader2 } from "lucide-react";
-
 import { cn } from "@/lib/utils";
+import { MaterialIcon } from "@/components/ui/material-icon";
 
 if (typeof window !== "undefined" && !MapLibreGL.getWorkerUrl()) {
   MapLibreGL.setWorkerUrl(
@@ -619,7 +618,7 @@ function PopupCloseButton({ onClick }: { onClick: () => void }) {
       aria-label="Close popup"
       className="focus-visible:ring-ring hover:bg-muted text-foreground absolute top-1 right-1 z-10 inline-flex size-5 cursor-pointer items-center justify-center rounded-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset"
     >
-      <X className="size-3.5" />
+      <MaterialIcon name="close" size={14} aria-hidden />
     </button>
   );
 }
@@ -931,10 +930,10 @@ function MapControls({
       {showZoom && (
         <ControlGroup>
           <ControlButton onClick={handleZoomIn} label="Zoom in">
-            <Plus className="size-4" />
+            <MaterialIcon name="add" size={16} aria-hidden />
           </ControlButton>
           <ControlButton onClick={handleZoomOut} label="Zoom out">
-            <Minus className="size-4" />
+            <MaterialIcon name="remove" size={16} aria-hidden />
           </ControlButton>
         </ControlGroup>
       )}
@@ -951,9 +950,14 @@ function MapControls({
             disabled={waitingForLocation}
           >
             {waitingForLocation ? (
-              <Loader2 className="size-4 animate-spin" />
+              <MaterialIcon
+                name="progress_activity"
+                size={16}
+                className="animate-spin"
+                aria-hidden
+              />
             ) : (
-              <Locate className="size-4" />
+              <MaterialIcon name="my_location" size={16} aria-hidden />
             )}
           </ControlButton>
         </ControlGroup>
@@ -961,7 +965,7 @@ function MapControls({
       {showFullscreen && (
         <ControlGroup>
           <ControlButton onClick={handleFullscreen} label="Toggle fullscreen">
-            <Maximize className="size-4" />
+            <MaterialIcon name="fullscreen" size={16} aria-hidden />
           </ControlButton>
         </ControlGroup>
       )}

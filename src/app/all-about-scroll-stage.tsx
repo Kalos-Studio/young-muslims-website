@@ -34,7 +34,7 @@ function MovingCard({
 
   return (
     <motion.div
-      className="absolute inset-0 will-change-transform"
+      className="pointer-events-none absolute inset-0 will-change-transform"
       style={{ y }}
     >
       {card}
@@ -73,7 +73,9 @@ export function AllAboutScrollStage({
       <div ref={sectionRef} className="relative h-full">
         {mobileStage}
         <div className="absolute top-[405px] left-1/2 hidden h-full w-[1440px] -translate-x-1/2 md:block">
-          {decorations}
+          <div className="all-about-static-decoration contents">
+            {decorations}
+          </div>
           <div className="absolute top-[130px] left-[90px] w-[538px] text-brand-obsidian">
             {intro}
           </div>
@@ -88,8 +90,10 @@ export function AllAboutScrollStage({
       {mobileStage}
       <div className="sticky top-0 hidden h-screen overflow-hidden md:block">
         <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
-          {decorations}
-          <div className="absolute top-1/2 left-[90px] w-[538px] -translate-y-1/2 text-brand-obsidian">
+          <div className="all-about-sticky-decoration contents">
+            {decorations}
+          </div>
+          <div className="absolute top-[130px] left-[90px] w-[538px] text-brand-obsidian">
             {intro}
           </div>
           {cards.map((card, index) => (

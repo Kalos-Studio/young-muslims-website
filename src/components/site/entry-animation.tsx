@@ -14,8 +14,8 @@ import styles from "./entry-animation.module.css";
 
 const frames = [frame01, frame02, frame03, frame04, frame05, frame06, frame07];
 
-const FLASH_DURATION_MS = 95;
-const FINAL_FRAME_HOLD_MS = 80;
+const FLASH_DURATION_MS = 145;
+const FINAL_FRAME_HOLD_MS = 140;
 const REVEAL_DURATION_MS = 750;
 const REVEAL_PATH =
   "M263.857 1513.96C372.372 1507.59 481.205 1529.56 578.549 1577.84C828.133 1701.67 1126.12 1649.89 1313.36 1390.76C1381.88 1296 1474.65 1223.31 1582.95 1178.96C2056.9 984.771 1930.94 134.167 1141.87 154.329C1035.27 157.088 931.328 132.788 836.857 83.5512C-144.031 -427.066 -730.861 1572 263.857 1513.96Z";
@@ -90,17 +90,7 @@ export function EntryAnimation({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <div
-        className={`${styles.site} ${
-          stage === "revealing"
-            ? styles.siteRevealing
-            : stage === "done"
-              ? styles.siteDone
-              : ""
-        }`}
-      >
-        {children}
-      </div>
+      <div className={styles.site}>{children}</div>
 
       {stage !== "done" ? (
         <div

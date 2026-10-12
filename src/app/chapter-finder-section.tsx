@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "motion/react";
 
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+
 import brooklynPhoto from "../../design-assets/figma/landing-2026/chapter-cities/brooklyn.jpg";
 import brooklynShape from "../../design-assets/figma/landing-2026/chapter-cities/brooklyn-shape.svg";
 import friscoPhoto from "../../design-assets/figma/landing-2026/chapter-cities/frisco.jpg";
@@ -218,9 +220,9 @@ function CityMedia({
           </p>
           <Link
             href="/neighbornets"
-            className="absolute top-[66.4%] left-1/2 inline-flex w-[296px] -translate-x-1/2 items-center justify-center border border-brand-warm-snow px-6 py-4 text-nav font-bold text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:top-[67.2%] md:w-auto"
+            className="ym-cta-trigger absolute top-[66.4%] left-1/2 inline-flex w-[296px] -translate-x-1/2 items-center justify-center gap-2 border border-brand-warm-snow px-6 py-4 text-nav font-bold text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:top-[67.2%] md:w-auto"
           >
-            Visit
+            <AnimatedCtaLabel label="Visit" />
           </Link>
         </div>
       </div>
@@ -404,9 +406,9 @@ export function ChapterFinderSection() {
 
         <Link
           href="/neighbornets"
-          className="absolute bottom-[126px] left-1/2 z-30 inline-flex w-[296px] -translate-x-1/2 items-center justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:bottom-[160px] md:left-16 md:w-auto md:translate-x-0 lg:top-[1591px] lg:bottom-auto lg:left-[97px]"
+          className="ym-cta-trigger absolute bottom-[126px] left-1/2 z-30 inline-flex w-[296px] -translate-x-1/2 items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:bottom-[160px] md:left-16 md:w-auto md:translate-x-0 lg:top-[1591px] lg:bottom-auto lg:left-[97px]"
         >
-          View all
+          <AnimatedCtaLabel label="View all" />
         </Link>
       </div>
     </section>

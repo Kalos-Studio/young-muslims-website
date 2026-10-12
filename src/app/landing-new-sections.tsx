@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import ctaArrowDark from "../../design-assets/figma/landing-2026/new-sections/cta-arrow-dark.svg";
-import ctaArrowLight from "../../design-assets/figma/landing-2026/new-sections/cta-arrow-light.svg";
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+
 import ctaCommunityMobile from "../../design-assets/figma/landing-2026/new-sections/cta-community-mobile.png";
 import ctaCommunity from "../../design-assets/figma/landing-2026/new-sections/cta-community-ribbon-design.png";
 
@@ -44,17 +44,15 @@ export function LandingCtaSection() {
         <div className="absolute top-[490px] left-8 flex w-[296px] flex-col gap-8 md:top-[285px] md:left-[902px] md:w-[312px]">
           <Link
             href="/neighbornets"
-            className="flex h-[61px] items-center gap-3 bg-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-obsidian transition-colors hover:bg-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
+            className="ym-cta-trigger flex h-[61px] items-center gap-3 bg-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-obsidian transition-colors hover:bg-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
           >
-            <span className="flex-1">Get involved</span>
-            <Image src={ctaArrowDark} alt="" />
+            <AnimatedCtaLabel label="Get involved" textClassName="flex-1" />
           </Link>
           <Link
             href="/support"
-            className="flex h-[61px] items-center gap-3 border border-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
+            className="ym-cta-trigger flex h-[61px] items-center gap-3 border border-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
           >
-            <span className="flex-1">Support us</span>
-            <Image src={ctaArrowLight} alt="" />
+            <AnimatedCtaLabel label="Support us" textClassName="flex-1" />
           </Link>
         </div>
       </div>

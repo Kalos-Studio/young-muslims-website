@@ -41,7 +41,7 @@ export function SiteHeader() {
             href="/"
             aria-label="Young Muslims, home"
             data-site-logo-link
-            className="rounded-xs transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="rounded-xs transition-[color,opacity] duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             {/* aria-hidden because the link above already names the destination;
                 without it a screen reader announces the name twice. */}

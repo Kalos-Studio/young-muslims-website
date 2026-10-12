@@ -1,9 +1,11 @@
 "use client";
 
-import { AtSign, Mail, Phone, X } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { branchLabel, type NeighborNetLocation } from "@/lib/neighbornets";
+import {
+  MaterialIcon,
+  type MaterialIconName,
+} from "@/components/ui/material-icon";
 import { branchColor } from "./net-marker";
 import type { Palette } from "./map-options";
 
@@ -106,7 +108,7 @@ export function NetDetails({
               aria-label="Close details"
               className="-m-1 rounded-sm p-1 text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <X className="size-4" aria-hidden="true" />
+              <MaterialIcon name="close" size={16} aria-hidden="true" />
             </button>
           ) : null}
         </div>
@@ -143,14 +145,14 @@ export function NetDetails({
         {net.contact ? (
           <div className="mt-6 flex flex-wrap gap-2">
             {net.contact.email ? (
-              <ContactLink href={`mailto:${net.contact.email}`} icon={Mail}>
+              <ContactLink href={`mailto:${net.contact.email}`} icon="mail">
                 Email
               </ContactLink>
             ) : null}
             {net.contact.phone ? (
               <ContactLink
                 href={`tel:${net.contact.phone.replace(/[^\d+]/g, "")}`}
-                icon={Phone}
+                icon="call"
               >
                 {density === "full" ? net.contact.phone : "Call"}
               </ContactLink>
@@ -158,7 +160,7 @@ export function NetDetails({
             {net.contact.instagram ? (
               <ContactLink
                 href={`https://instagram.com/${net.contact.instagram.replace("@", "")}`}
-                icon={AtSign}
+                icon="alternate_email"
               >
                 {net.contact.instagram}
               </ContactLink>
@@ -222,14 +224,11 @@ function Row({
 
 function ContactLink({
   href,
-  icon: Icon,
+  icon,
   children,
 }: {
   href: string;
-  icon: React.ComponentType<{
-    className?: string;
-    "aria-hidden"?: React.AriaAttributes["aria-hidden"];
-  }>;
+  icon: MaterialIconName;
   children: React.ReactNode;
 }) {
   const external = href.startsWith("http");
@@ -240,7 +239,7 @@ function ContactLink({
       rel={external ? "noreferrer" : undefined}
       className="inline-flex items-center gap-2 rounded-pill border border-brand-royal px-4 py-2 text-nav font-bold text-brand-royal transition-colors outline-none hover:bg-brand-royal hover:text-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-pure-white"
     >
-      <Icon className="size-4" aria-hidden="true" />
+      <MaterialIcon name={icon} size={16} aria-hidden="true" />
       {children}
     </a>
   );

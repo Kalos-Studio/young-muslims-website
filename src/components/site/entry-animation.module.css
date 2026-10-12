@@ -3,18 +3,6 @@
   min-height: 100%;
   flex: 1 0 auto;
   flex-direction: column;
-  transform: translate3d(0, 100vh, 0);
-  will-change: transform;
-}
-
-.siteRevealing {
-  transform: translate3d(0, 0, 0);
-  transition: transform 750ms cubic-bezier(0.76, 0, 0.24, 1);
-}
-
-.siteDone {
-  transform: none;
-  will-change: auto;
 }
 
 .root {
@@ -23,6 +11,11 @@
   inset: 0;
   overflow: hidden;
   pointer-events: auto;
+  background: var(--color-brand-warm-snow);
+}
+
+.root.revealing {
+  background: transparent;
 }
 
 .canvas {
@@ -86,13 +79,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site,
-  .siteRevealing,
-  .siteDone {
-    transform: none;
-    transition: none;
-  }
-
   .root {
     display: none;
   }

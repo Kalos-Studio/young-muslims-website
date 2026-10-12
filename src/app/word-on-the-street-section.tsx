@@ -6,6 +6,8 @@ import type { CSSProperties } from "react";
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "motion/react";
 
+import { AnimatedArrow } from "@/components/ui/animated-arrow";
+
 import articleMentalHealth from "../../design-assets/figma/landing-2026/new-sections/270-449-source-01.png";
 import articleJudgement from "../../design-assets/figma/landing-2026/new-sections/270-488-source-01.jpeg";
 import articleRamadan from "../../design-assets/figma/landing-2026/new-sections/270-503-source-01.png";
@@ -110,14 +112,32 @@ function ArticleCard({
             },
           }}
         >
-          <Image
-            src={article.image}
-            alt={article.imageAlt}
-            fill
-            sizes="(max-width: 767px) 296px, 378px"
-            className="object-cover"
-            style={{ objectPosition: article.objectPosition }}
-          />
+          <Link
+            href="/blog"
+            aria-label={`Read article: ${article.title}`}
+            className="group/article absolute inset-0 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:outline-none focus-visible:ring-inset"
+          >
+            <Image
+              src={article.image}
+              alt={article.imageAlt}
+              fill
+              sizes="(max-width: 767px) 296px, 378px"
+              className="object-cover"
+              style={{ objectPosition: article.objectPosition }}
+            />
+            <span
+              className="absolute inset-0 bg-brand-obsidian/20 transition-colors duration-300 md:group-hover/article:bg-brand-obsidian/40 md:group-focus-visible/article:bg-brand-obsidian/40"
+              aria-hidden
+            />
+            <span className="ym-cta-trigger absolute inset-x-0 bottom-7 z-10 flex items-center justify-center gap-2 text-sm font-bold tracking-[-0.02em] text-brand-pure-white transition-opacity duration-300 md:opacity-0 md:group-hover/article:opacity-100 md:group-focus-visible/article:opacity-100">
+              <span className="ym-cta-roll">
+                <span className="ym-cta-roll__text" data-text="Read article">
+                  Read article
+                </span>
+              </span>
+              <AnimatedArrow size={20} />
+            </span>
+          </Link>
         </motion.div>
       </motion.div>
 
@@ -162,9 +182,14 @@ export function WordOnTheStreetSection() {
           </div>
           <Link
             href="/blog"
-            className="inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none md:w-auto"
+            className="ym-cta-trigger inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none md:w-auto"
           >
-            View latest
+            <span className="ym-cta-roll">
+              <span className="ym-cta-roll__text" data-text="View latest">
+                View latest
+              </span>
+            </span>
+            <AnimatedArrow size={20} />
           </Link>
         </div>
 

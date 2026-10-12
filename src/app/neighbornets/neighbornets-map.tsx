@@ -8,11 +8,10 @@ import {
   useState,
   type FormEvent,
 } from "react";
-import { ArrowRight, RotateCcw, Search } from "lucide-react";
-
 // Must come before the map component so our same-origin worker URL is set
 // before mapcn's unpkg fallback runs. See src/lib/maplibre-worker.ts.
 import "@/lib/maplibre-worker";
+import { MaterialIcon } from "@/components/ui/material-icon";
 import {
   Map,
   MapControls,
@@ -847,7 +846,7 @@ function ChapterSearch({
           className="relative mt-[60px] flex w-full items-start gap-8"
         >
           <div className="relative flex h-[51px] min-w-0 flex-1 items-center gap-2.5 border-b border-brand-obsidian px-6 py-4">
-            <Search aria-hidden="true" className="size-[18px] shrink-0" />
+            <MaterialIcon name="search" size={18} aria-hidden="true" />
             <label htmlFor="chapter-search" className="sr-only">
               Search for city or ZIP
             </label>
@@ -865,7 +864,7 @@ function ChapterSearch({
             aria-label="Search"
             className="grid size-[51px] shrink-0 place-items-center bg-brand-royal text-brand-pure-white transition-opacity outline-none hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
           >
-            <ArrowRight aria-hidden="true" className="size-[18px]" />
+            <MaterialIcon name="arrow_forward" size={18} aria-hidden="true" />
           </button>
           {hasSearch ? (
             <button
@@ -873,7 +872,7 @@ function ChapterSearch({
               onClick={onReset}
               className="inline-flex h-[51px] items-center justify-center gap-2 border border-brand-obsidian px-5 text-nav font-bold outline-none hover:bg-brand-obsidian hover:text-brand-warm-snow focus-visible:ring-2 focus-visible:ring-brand-royal"
             >
-              <RotateCcw aria-hidden="true" className="size-4" />
+              <MaterialIcon name="refresh" size={16} aria-hidden="true" />
               Reset
             </button>
           ) : null}
@@ -910,9 +909,11 @@ function ChapterSearch({
         </label>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
           <div className="relative min-w-0 flex-1">
-            <Search
+            <MaterialIcon
+              name="search"
+              size={20}
               aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-brand-royal"
+              className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-brand-royal"
             />
             <input
               id="chapter-search"
@@ -935,7 +936,7 @@ function ChapterSearch({
               onClick={onReset}
               className="inline-flex h-14 items-center justify-center gap-2 rounded-pill border border-brand-pure-white/45 px-5 font-bold outline-none hover:bg-brand-pure-white/10 focus-visible:ring-2 focus-visible:ring-brand-pure-white"
             >
-              <RotateCcw aria-hidden="true" className="size-4" />
+              <MaterialIcon name="refresh" size={16} aria-hidden="true" />
               Reset
             </button>
           ) : null}

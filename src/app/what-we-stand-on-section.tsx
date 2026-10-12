@@ -12,6 +12,8 @@ import {
   useTransform,
 } from "motion/react";
 
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+
 import principleDiversity from "../../design-assets/figma/landing-2026/new-sections/208-3-source-03.jpeg";
 import principleImpact from "../../design-assets/figma/landing-2026/new-sections/208-3-source-04.jpeg";
 import principleSustainability from "../../design-assets/figma/landing-2026/new-sections/208-3-source-09.jpeg";
@@ -118,9 +120,9 @@ function PrincipleContent({ principle }: { principle: Principle }) {
 
       <Link
         href="/about"
-        className="absolute top-[671px] left-1/2 z-10 inline-flex w-[296px] -translate-x-1/2 justify-center border border-brand-warm-snow px-6 py-4 text-nav font-bold text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:top-[788px] md:w-auto"
+        className="ym-cta-trigger absolute top-[671px] left-1/2 z-10 inline-flex w-[296px] -translate-x-1/2 items-center justify-center gap-2 border border-brand-warm-snow px-6 py-4 text-nav font-bold text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:top-[788px] md:w-auto"
       >
-        Learn more
+        <AnimatedCtaLabel label="Learn more" />
       </Link>
     </div>
   );

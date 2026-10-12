@@ -12,6 +12,7 @@ import {
   useSpring,
 } from "motion/react";
 
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 import { STORIES, type Story } from "@/lib/stories";
 
 type PortraitPlacement = {
@@ -243,9 +244,9 @@ export function PeopleStoriesSection() {
         </h2>
         <Link
           href="/stories"
-          className="inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none sm:w-auto"
+          className="ym-cta-trigger inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none sm:w-auto"
         >
-          View Stories
+          <AnimatedCtaLabel label="View Stories" />
         </Link>
       </motion.div>
     </section>

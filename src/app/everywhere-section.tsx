@@ -13,6 +13,8 @@ import {
   useTransform,
 } from "motion/react";
 
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+
 import bottomLeftShell from "../../design-assets/figma/landing-2026/everywhere-bottom-left-shell.svg";
 import bottomLeftPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-left-photo.png";
 import bottomRightPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-right-photo.png";
@@ -443,9 +445,9 @@ export function EverywhereSection() {
         </p>
         <Link
           href="/neighbornets"
-          className="absolute top-[1134px] left-1/2 inline-flex w-[296px] -translate-x-1/2 justify-center bg-brand-royal px-6 py-4 text-nav font-bold whitespace-nowrap text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none md:top-[1557px] md:w-auto"
+          className="ym-cta-trigger absolute top-[1134px] left-1/2 inline-flex w-[296px] -translate-x-1/2 items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold whitespace-nowrap text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none md:top-[1557px] md:w-auto"
         >
-          Discover NeighborNets
+          <AnimatedCtaLabel label="Discover NeighborNets" />
         </Link>
       </div>
     </section>

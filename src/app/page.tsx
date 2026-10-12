@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+
 import cardDecorBottom from "../../design-assets/figma/landing-2026/card-decor-bottom.svg";
 import cardDecorTop from "../../design-assets/figma/landing-2026/card-decor-top.svg";
 import cardWaveObsidian from "../../design-assets/figma/landing-2026/card-wave-obsidian.svg";
@@ -76,7 +78,7 @@ function PhotoCard({
 }) {
   return (
     <article
-      className={`all-about-card absolute h-[482px] w-[296px] overflow-hidden rounded-card text-brand-pure-white md:w-[298px] ${className}`}
+      className={`all-about-card absolute h-[482px] w-[296px] overflow-hidden text-brand-pure-white md:w-[298px] ${className}`}
     >
       {crop ? (
         <Image
@@ -114,7 +116,7 @@ function SolidCard({
 }) {
   return (
     <article
-      className={`all-about-card absolute h-[482px] w-[296px] overflow-hidden rounded-card px-7 md:w-[298px] ${image ? "text-brand-pure-white" : "bg-landing-blush text-landing-card-ink"} ${className}`}
+      className={`all-about-card absolute h-[482px] w-[296px] overflow-hidden px-7 md:w-[298px] ${image ? "text-brand-pure-white" : "bg-landing-blush text-landing-card-ink"} ${className}`}
     >
       {image ? (
         <>
@@ -301,7 +303,7 @@ export default function Home() {
                   <Image
                     src={cardDecorBottom}
                     alt=""
-                    className="absolute top-[2627px] left-[-41px] h-[200px] w-[200px] md:top-[1052px] md:left-[17px] md:h-auto md:w-auto"
+                    className="all-about-yms-mark absolute top-[2627px] left-[-41px] h-[200px] w-[200px] md:top-[1052px] md:left-[17px] md:h-auto md:w-auto"
                   />
                 </>
               }
@@ -317,9 +319,9 @@ export default function Home() {
                   </p>
                   <Link
                     href="/about"
-                    className="mt-8 inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white outline-none hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow md:w-auto"
+                    className="ym-cta-trigger mt-8 inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white outline-none hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow md:w-auto"
                   >
-                    About us
+                    <AnimatedCtaLabel label="About us" />
                   </Link>
                 </>
               }
@@ -335,20 +337,20 @@ export default function Home() {
                   key={POINTS[1].title}
                   point={POINTS[1]}
                   image={cardLeadership}
-                  className="top-[1126px] left-8 md:top-[684px] md:left-[720px]"
+                  className="top-[1112px] left-8 md:top-[644px] md:left-[720px]"
                 />,
                 <PhotoCard
                   key={POINTS[2].title}
                   point={POINTS[2]}
                   image={cardGuidance}
-                  className="top-[1654px] left-8 md:top-[220px] md:left-[1071px]"
+                  className="top-[1626px] left-8 md:top-[220px] md:left-[1050px]"
                   crop="guidance"
                 />,
                 <SolidCard
                   key={POINTS[3].title}
                   point={POINTS[3]}
                   image={cardService}
-                  className="top-[2182px] left-8 md:top-[774px] md:left-[1071px]"
+                  className="top-[2140px] left-8 md:top-[734px] md:left-[1050px]"
                 />,
               ]}
             />
