@@ -34,7 +34,7 @@ export function SiteHeader() {
       <HeaderContrastController />
       <div
         data-site-header-inner
-        className="grid h-[123px] w-full grid-cols-[1fr_auto] items-center gap-8 px-8 md:grid-cols-[1fr_auto_1fr] md:px-20"
+        className="grid h-[123px] w-full grid-cols-[1fr_auto] items-center gap-8 px-8 md:px-20 xl:grid-cols-[1fr_auto_1fr]"
       >
         <div className="flex items-center justify-start">
           <Link
@@ -52,7 +52,7 @@ export function SiteHeader() {
         <nav
           data-primary-nav
           aria-label="Primary"
-          className="hidden items-center justify-center gap-4 text-nav md:flex"
+          className="hidden items-center justify-center gap-4 text-nav xl:flex"
         >
           {primaryLinks.map((link) => (
             <NavLink key={link.id} item={link} className="p-2.5">

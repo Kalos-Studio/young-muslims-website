@@ -21,6 +21,7 @@ export const metadata: Metadata = {
  */
 const posts = [
   {
+    id: "muslim-youth-issues-mental-health",
     title: "Muslim Youth Issues: Addressing Mental Health",
     excerpt:
       "The current state of mental health among American Muslim youth, and a toolkit for community leaders supporting them.",
@@ -29,6 +30,7 @@ const posts = [
     author: "YM Muslim Youth Issues Team",
   },
   {
+    id: "how-to-give-a-khutbah-2025-01-22",
     title: "How to Give a Khutbah",
     excerpt:
       "A starting point for anyone stepping into the position of khateeb, meant to be gone over with a local imam.",
@@ -37,6 +39,7 @@ const posts = [
     author: "YM Brothers",
   },
   {
+    id: "how-to-give-a-khutbah-2025-01-14",
     title: "How to Give a Khutbah",
     excerpt:
       "A daily checklist, du'as and challenges to help you get the most out of the month.",
@@ -45,6 +48,7 @@ const posts = [
     author: "Young Muslims",
   },
   {
+    id: "muslim-youth-issues-judgement-stigma",
     title: "Muslim Youth Issues: Judgement Stigma",
     excerpt:
       "Raising awareness of judgement and shame in the American Muslim community, and practical ways to counter it.",
@@ -53,6 +57,7 @@ const posts = [
     author: "YM Presents",
   },
   {
+    id: "supporting-the-black-community",
     title: "Supporting the Black Community",
     excerpt:
       "A handbook of civic engagement tools and action items, built around sustainable long-term strategies.",
@@ -61,6 +66,7 @@ const posts = [
     author: "Young Muslims",
   },
   {
+    id: "through-the-eyes-of-american-muslims",
     title: "Through the Eyes of American Muslims",
     excerpt:
       "Survey data from 213 American Muslims on their experiences amid the genocide in Gaza and the West Bank.",
@@ -135,7 +141,7 @@ export default function BlogPage() {
       <Annotate className="mt-14">
         <div className="grid grid-cols-3 gap-x-8 gap-y-14">
           {rest.map((post) => (
-            <PostCard key={post.title} post={post} />
+            <PostCard key={post.id} post={post} />
           ))}
         </div>
       </Annotate>

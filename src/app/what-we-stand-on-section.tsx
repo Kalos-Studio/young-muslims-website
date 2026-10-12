@@ -29,7 +29,10 @@ const PRINCIPLES = [
     image: principleTarbiyyah,
     imageClass:
       "absolute top-0 left-[-3.95%] h-[101.17%] w-[107.9%] max-w-none",
-    echoes: ["SOCIETAL IMPACT", "SUSTAINABILITY", "DIVERSITY"],
+    echoes: [
+      { title: "SUSTAINABILITY", level: 1 },
+      { title: "DIVERSITY", level: 2 },
+    ],
   },
   {
     title: "DIVERSITY",
@@ -38,7 +41,10 @@ const PRINCIPLES = [
     image: principleDiversity,
     imageClass:
       "absolute top-[-2.93%] left-[-4.89%] h-[102.93%] w-[109.78%] max-w-none",
-    echoes: ["SOCIETAL IMPACT", "SUSTAINABILITY"],
+    echoes: [
+      { title: "SOCIETAL IMPACT", level: 1 },
+      { title: "SUSTAINABILITY", level: 2 },
+    ],
   },
   {
     title: "SUSTAINABILITY",
@@ -47,7 +53,7 @@ const PRINCIPLES = [
     image: principleSustainability,
     imageClass:
       "absolute top-[-26.95%] left-[-18.43%] h-[128.32%] w-[136.86%] max-w-none",
-    echoes: ["SOCIETAL IMPACT"],
+    echoes: [{ title: "SOCIETAL IMPACT", level: 2 }],
   },
   {
     title: "SOCIETAL IMPACT",
@@ -84,19 +90,22 @@ function PrincipleContent({ principle }: { principle: Principle }) {
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(191,206,219,0)_9.5%,rgba(23,23,37,0.48)_109.91%)]" />
 
       <div className="absolute top-[229px] left-1/2 z-10 h-[414px] w-[296px] -translate-x-1/2 text-center text-brand-pure-white md:top-[366px] md:w-[560px]">
-        {principle.echoes.map((echo, echoIndex) => (
+        {principle.echoes.map((echo) => (
           <p
-            key={echo}
+            key={echo.title}
             className="absolute left-1/2 -translate-x-1/2 font-display whitespace-nowrap text-transparent"
             style={{
-              top: `${82 + echoIndex * 83}px`,
-              fontSize: `clamp(24px, ${3.125 + echoIndex * 0.1875}vw, ${45 + echoIndex * 2.7}px)`,
+              top: `${82 + (echo.level - 1) * 83}px`,
+              fontSize:
+                echo.level === 1
+                  ? "clamp(24px, 3.125vw, 45.026px)"
+                  : "clamp(27px, 3.498vw, 50.377px)",
               letterSpacing: "-0.02em",
-              opacity: 0.16 + echoIndex * 0.16,
+              opacity: echo.level * 0.16,
               WebkitTextStroke: "1px rgba(255,255,255,0.9)",
             }}
           >
-            {echo}
+            {echo.title}
           </p>
         ))}
         <p className="absolute top-[254px] left-1/2 -translate-x-1/2 font-display text-[30px] tracking-[-0.02em] whitespace-nowrap md:text-[54px]">
@@ -183,12 +192,7 @@ export function WhatWeStandOnSection() {
   const headingY = useTransform(
     scrollYProgress,
     [0, introEnd],
-    ["calc(100vh - 132px)", "0px"],
-  );
-  const headingOpacity = useTransform(
-    scrollYProgress,
-    [0, introEnd * 0.65],
-    [0, 1],
+    ["calc(100vh - 84px)", "0px"],
   );
   const darkHeaderStart =
     (INTRO_SCROLL_VIEWPORTS + REVEAL_SCROLL_VIEWPORTS * 0.9) /
@@ -209,13 +213,13 @@ export function WhatWeStandOnSection() {
       <section ref={sectionRef} className="w-full bg-brand-warm-snow">
         <div
           data-header-theme="light"
-          className="flex min-h-[808px] items-start justify-center px-8 pt-[76px] text-center text-brand-obsidian md:min-h-screen md:px-6 md:pt-[132px]"
+          className="flex min-h-[808px] items-start justify-center px-8 pt-[76px] text-center text-brand-obsidian md:min-h-screen md:px-6 md:pt-[84px]"
         >
           <div className="w-[296px] max-w-full md:w-[538px]">
-            <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section">
+            <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section md:leading-[1.2]">
               What we stand on.
             </h2>
-            <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:text-landing-copy">
+            <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:text-landing-copy md:leading-[1.2]">
               The friendships are real. So is the foundation underneath them.
               These are what shape everything about Young Muslims.
             </p>
@@ -238,13 +242,13 @@ export function WhatWeStandOnSection() {
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-brand-warm-snow md:min-h-[860px]">
         <motion.div
           data-over-image={headingOnImage ? "true" : "false"}
-          className={`what-we-stand-on-heading absolute top-[76px] left-1/2 z-20 w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[132px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
-          style={{ opacity: headingOpacity, y: headingY }}
+          className={`what-we-stand-on-heading absolute top-[76px] left-1/2 z-20 w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[84px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
+          style={{ y: headingY }}
         >
-          <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section">
+          <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section md:leading-[1.2]">
             What we stand on.
           </h2>
-          <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:text-landing-copy">
+          <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:text-landing-copy md:leading-[1.2]">
             The friendships are real. So is the foundation underneath them.
             These are what shape everything about Young Muslims.
           </p>

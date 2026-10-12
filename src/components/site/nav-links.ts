@@ -74,7 +74,7 @@ const DESTINATIONS = {
 } as const satisfies Record<DestinationId, Destination>;
 
 const DESTINATIONS_BY_SURFACE = {
-  "header-primary": ["about", "stories", "support"],
+  "header-primary": ["about", "stories", "support", "blog", "store"],
   "header-cta": ["chapters"],
   "drawer-primary": ["chapters", "about", "stories", "support"],
   "drawer-secondary": ["store", "blog", "contact"],

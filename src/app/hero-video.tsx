@@ -85,7 +85,7 @@ export function HeroVideo() {
         <h1 className="font-display text-[32px] leading-normal font-normal tracking-[-0.02em] md:text-landing-display md:whitespace-nowrap">
           FOR THE YOUTH. BY THE YOUTH.
         </h1>
-        <p className="w-full max-w-[893px] text-sm leading-normal font-semibold tracking-[-0.02em] md:text-landing-hero-subtitle md:whitespace-nowrap">
+        <p className="w-full max-w-[893px] text-sm leading-normal font-semibold tracking-[-0.02em] md:text-landing-hero-subtitle md:leading-[1.2] md:whitespace-nowrap">
           A nationwide brotherhood and sisterhood, built on real friendships and
           a shared Deen.
         </p>

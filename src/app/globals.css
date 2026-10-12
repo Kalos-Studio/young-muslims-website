@@ -210,9 +210,11 @@
     transition: color 300ms ease;
   }
   body:has(:is([data-landing-page], [data-neighbornets-page]))
-    [data-site-cta="true"] {
-    background: var(--color-brand-royal) !important;
-    color: var(--color-brand-pure-white) !important;
+    [data-site-header]
+    nav
+    a[data-site-cta="true"] {
+    background: var(--color-brand-warm-snow) !important;
+    color: var(--color-brand-obsidian) !important;
   }
   body:has(:is([data-landing-page], [data-neighbornets-page]))
     [data-site-header][data-header-theme="light"]
@@ -226,11 +228,12 @@
     [data-menu-trigger] {
     color: var(--color-brand-obsidian) !important;
   }
-  /* Keep the landing-page chapter CTA readable regardless of section theme. */
+  /* Swap the chapter CTA when the fixed header passes over light sections. */
   body:has(:is([data-landing-page], [data-neighbornets-page]))
-    [data-site-header][data-header-theme]
+    [data-site-header][data-header-theme="light"]
     nav
     a[data-site-cta="true"] {
+    background: var(--color-brand-royal) !important;
     color: var(--color-brand-pure-white) !important;
   }
   body:has([data-neighbornets-page])
@@ -268,41 +271,53 @@
   opacity: 1;
 }
 
-.everywhere-map-hotspot-core {
-  background: color-mix(
-    in srgb,
-    var(--color-brand-royal) 58%,
+.everywhere-map-hotspot {
+  background: linear-gradient(
+    180deg,
+    var(--color-brand-royal),
     var(--color-brand-jade)
   );
-  box-shadow: 0 0 1.25rem 0.5rem
-    color-mix(in srgb, var(--color-brand-royal) 48%, var(--color-brand-jade));
-  opacity: 0.96;
-  filter: blur(0.3rem);
+  filter: blur(0.56875rem);
+}
+
+.people-story-portrait {
+  left: var(--portrait-mobile-left);
+  top: var(--portrait-mobile-top);
+  width: var(--portrait-mobile-width);
+}
+
+@media (min-width: 80rem) {
+  .people-story-portrait {
+    left: var(--portrait-desktop-left);
+    top: var(--portrait-desktop-top);
+    width: var(--portrait-desktop-width);
+  }
 }
 
 /*
  * Website typography roles.
  *
  * Exact desktop values from the approved Young Muslims Website Figma landing
- * frame (RJBqBhkp33opITNp7yXU81, node 26:188). Figma uses Auto line height for
- * every role, represented by CSS `normal`. Font family and weight remain
- * explicit at call sites because some sizes intentionally serve two roles.
+ * frame (RJBqBhkp33opITNp7yXU81, node 26:188). Figtree roles use the measured
+ * 1.2 ratio because the browser's `normal` metric renders taller than Figma's
+ * Auto line height. Boldonse roles retain `normal` for its distinct metrics.
+ * Font family and weight remain explicit at call sites.
  */
 @theme {
-  --text-landing-display: 2.5rem;
+  --text-landing-display: 3rem;
   --text-landing-display--line-height: normal;
   --text-landing-display--letter-spacing: -0.02em;
 
   --text-landing-section: 2.5rem;
-  --text-landing-section--line-height: normal;
+  --text-landing-section--line-height: 1.2;
   --text-landing-section--letter-spacing: -0.02em;
 
-  --text-landing-hero-subtitle: 1.125rem;
-  --text-landing-hero-subtitle--line-height: normal;
+  --text-landing-hero-subtitle: 1.25rem;
+  --text-landing-hero-subtitle--line-height: 1.2;
   --text-landing-hero-subtitle--letter-spacing: -0.02em;
 
   --text-landing-copy: 1.25rem;
-  --text-landing-copy--line-height: normal;
+  --text-landing-copy--line-height: 1.2;
   --text-landing-copy--letter-spacing: -0.02em;
 
   --text-landing-stat: 3rem;
@@ -310,7 +325,7 @@
   --text-landing-stat--letter-spacing: -0.02em;
 
   --text-landing-stat-label: 1.5rem;
-  --text-landing-stat-label--line-height: normal;
+  --text-landing-stat-label--line-height: 1.2;
   --text-landing-stat-label--letter-spacing: -0.02em;
 
   --text-display: 3.5rem;

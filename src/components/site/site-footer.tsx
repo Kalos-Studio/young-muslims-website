@@ -22,7 +22,6 @@ import mustafaPhotoAlt from "../../../design-assets/figma/stories/mustafa-photo-
 import footerFacebook from "../../../design-assets/figma/landing-2026/new-sections/footer-x.svg";
 import footerInstagram from "../../../design-assets/figma/landing-2026/new-sections/footer-instagram.svg";
 import footerLogo from "../../../design-assets/figma/landing-2026/new-sections/footer-logo.svg";
-import footerTagline from "../../../design-assets/figma/landing-2026/new-sections/footer-tagline.svg";
 import footerX from "../../../design-assets/figma/landing-2026/new-sections/footer-facebook.svg";
 import footerYoutube from "../../../design-assets/figma/landing-2026/new-sections/footer-youtube.svg";
 import { getNavigationItems } from "./nav-links";
@@ -48,16 +47,15 @@ const REVEAL_DURATION_MS = 560;
 const FLASH_DURATION_MS = 130;
 const FINAL_FRAME_HOLD_MS = 110;
 const RETURN_DURATION_MS = 680;
-const TAGLINE_REPETITIONS = 3;
+const TAGLINE_COPY = "FOR THE YOUTH. BY THE YOUTH.";
+const TAGLINE_REPETITIONS = 5;
+const TAGLINE_TRAVEL_DISTANCE = 240;
 
 type FooterPhase = "idle" | "revealing" | "flashing" | "returning";
 
 function FooterMontage({ frame }: { frame: number }) {
   return (
-    <div
-      aria-hidden="true"
-      className="absolute top-[794px] left-0 h-[200px] w-full overflow-hidden bg-brand-obsidian md:top-[525px]"
-    >
+    <>
       {MONTAGE_IMAGES.map((image, index) => (
         <div
           key={image.src}
@@ -74,7 +72,7 @@ function FooterMontage({ frame }: { frame: number }) {
           />
         </div>
       ))}
-    </div>
+    </>
   );
 }
 
@@ -99,8 +97,10 @@ export function SiteFooter() {
   });
   const taglineX = useTransform(
     scrollYProgress,
-    [0, 1],
-    reduceMotion ? [0, 0] : [-96, 96],
+    [0, 0.5, 1],
+    reduceMotion
+      ? [0, 0, 0]
+      : [-TAGLINE_TRAVEL_DISTANCE, 0, TAGLINE_TRAVEL_DISTANCE],
   );
 
   const clearTimers = useCallback(() => {
@@ -192,95 +192,93 @@ export function SiteFooter() {
       </motion.div>
 
       <div className="absolute inset-0 overflow-hidden bg-brand-obsidian">
+        <div className="absolute top-0 left-1/2 h-[794px] w-[360px] -translate-x-1/2 md:h-[525px] md:w-[1440px]">
+          <div className="absolute top-0 left-8 flex w-[296px] flex-col items-stretch md:top-[60px] md:left-[80px] md:w-[1280px] md:flex-row md:items-start md:justify-between">
+            <Image
+              src={footerLogo}
+              alt="Young Muslims"
+              className="mx-auto mt-0 w-[278px] md:mx-0 md:mt-0 md:w-auto"
+            />
+
+            <nav
+              aria-label="Footer navigation"
+              className="mt-[64px] flex gap-14 text-nav font-semibold md:mt-0"
+            >
+              {FOOTER_LINKS.map((column, index) => (
+                <div key={index} className="flex flex-col gap-6">
+                  {column.map((link) => (
+                    <Link
+                      key={link.id}
+                      href={link.href}
+                      className="hover:underline"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </nav>
+
+            <div className="mt-[64px] w-[296px] md:mt-0 md:w-[373px]">
+              <p className="text-nav font-semibold">
+                Want to learn more about Young Muslims, what we do, or how to
+                join/create a NeighborNet? Reach out to us via email.
+              </p>
+              <Link
+                href={contactLink.href}
+                className="mt-6 inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:w-auto"
+              >
+                {contactLink.label}
+              </Link>
+            </div>
+          </div>
+
+          <div
+            aria-hidden="true"
+            className="absolute top-[514px] left-1/2 w-screen -translate-x-1/2 overflow-hidden md:top-[334px]"
+          >
+            <motion.div
+              className="-ml-[741px] flex w-max gap-8 font-display text-[32px] whitespace-nowrap text-brand-warm-snow/30 uppercase md:-ml-[1995px] md:text-marquee"
+              style={{ x: taglineX }}
+            >
+              {Array.from({ length: TAGLINE_REPETITIONS }).map((_, index) => (
+                <span key={index} className="shrink-0">
+                  {TAGLINE_COPY}
+                </span>
+              ))}
+            </motion.div>
+          </div>
+
+          <div className="absolute top-[610px] left-8 flex h-[120px] w-[296px] flex-col items-center justify-between text-[10px] font-bold tracking-[-0.02em] md:top-[453px] md:left-[80px] md:h-auto md:w-[1280px] md:flex-row">
+            <div className="flex w-full justify-between gap-6 md:w-auto md:justify-start">
+              <span>© Young Muslims 2026</span>
+              <span className="text-brothers-slate underline">
+                Made by Kalos Studio
+              </span>
+            </div>
+            <div className="flex gap-4" aria-label="Social media">
+              <Image src={footerFacebook} alt="Facebook" />
+              <Image src={footerX} alt="X" />
+              <Image src={footerYoutube} alt="YouTube" />
+              <Image src={footerInstagram} alt="Instagram" />
+            </div>
+            <div className="flex gap-2">
+              <span>Privacy Policy</span>
+              <span>•</span>
+              <span>Donor Privacy</span>
+            </div>
+          </div>
+        </div>
+
         <motion.div
           data-footer-stage
-          className="absolute top-0 left-0 h-[994px] w-full bg-brand-obsidian md:h-[725px]"
+          aria-hidden="true"
+          className="absolute top-[794px] left-0 h-[200px] w-full overflow-hidden bg-brand-obsidian md:top-[525px]"
           animate={{
             y: reduceMotion || !montageIsRaised ? 0 : -EASTER_EGG_HEIGHT,
           }}
           transition={stageTransition}
         >
-          <div className="absolute top-0 left-1/2 h-[794px] w-[360px] -translate-x-1/2 md:h-[525px] md:w-[1440px]">
-            <div className="absolute top-0 left-8 flex w-[296px] flex-col items-stretch md:top-[60px] md:left-[80px] md:w-[1280px] md:flex-row md:items-start md:justify-between">
-              <Image
-                src={footerLogo}
-                alt="Young Muslims"
-                className="mx-auto mt-0 w-[278px] md:mx-0 md:mt-0 md:w-auto"
-              />
-
-              <nav
-                aria-label="Footer navigation"
-                className="mt-[64px] flex gap-14 text-nav font-semibold md:mt-0"
-              >
-                {FOOTER_LINKS.map((column, index) => (
-                  <div key={index} className="flex flex-col gap-6">
-                    {column.map((link) => (
-                      <Link
-                        key={link.id}
-                        href={link.href}
-                        className="hover:underline"
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                  </div>
-                ))}
-              </nav>
-
-              <div className="mt-[64px] w-[296px] md:mt-0 md:w-[373px]">
-                <p className="text-nav font-semibold">
-                  Want to learn more about Young Muslims, what we do, or how to
-                  join/create a NeighborNet? Reach out to us via email.
-                </p>
-                <Link
-                  href={contactLink.href}
-                  className="mt-6 inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:w-auto"
-                >
-                  {contactLink.label}
-                </Link>
-              </div>
-            </div>
-
-            <div
-              aria-hidden="true"
-              className="absolute top-[514px] left-1/2 w-screen -translate-x-1/2 overflow-hidden md:top-[334px]"
-            >
-              <motion.div
-                className="-ml-[741px] flex w-max md:-ml-[1995px]"
-                style={{ x: taglineX }}
-              >
-                {Array.from({ length: TAGLINE_REPETITIONS }).map((_, index) => (
-                  <Image
-                    key={index}
-                    src={footerTagline}
-                    alt=""
-                    className="block h-auto w-[741px] max-w-none shrink-0 opacity-100 md:w-auto"
-                  />
-                ))}
-              </motion.div>
-            </div>
-
-            <div className="absolute top-[610px] left-8 flex h-[120px] w-[296px] flex-col items-center justify-between text-[10px] font-bold tracking-[-0.02em] md:top-[453px] md:left-[80px] md:h-auto md:w-[1280px] md:flex-row">
-              <div className="flex w-full justify-between gap-6 md:w-auto md:justify-start">
-                <span>© Young Muslims 2026</span>
-                <span className="text-brothers-slate underline">
-                  Made by Kalos Studio
-                </span>
-              </div>
-              <div className="flex gap-4" aria-label="Social media">
-                <Image src={footerFacebook} alt="Facebook" />
-                <Image src={footerX} alt="X" />
-                <Image src={footerYoutube} alt="YouTube" />
-                <Image src={footerInstagram} alt="Instagram" />
-              </div>
-              <div className="flex gap-2">
-                <span>Privacy Policy</span>
-                <span>•</span>
-                <span>Donor Privacy</span>
-              </div>
-            </div>
-          </div>
-
           <FooterMontage frame={montageFrame} />
         </motion.div>
       </div>

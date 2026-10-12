@@ -336,13 +336,13 @@ export function ChapterFinderSection() {
         <div className="absolute top-[205px] left-8 z-30 w-[296px] text-brand-warm-snow md:top-[181px] md:left-16 md:w-[538px] lg:top-[468px] lg:left-[90px]">
           <h2
             id="chapter-finder-heading"
-            className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-[36px] lg:text-landing-section"
+            className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-[36px] lg:text-landing-section lg:leading-[1.2]"
           >
             Let&apos;s find your story.
           </h2>
           <p className="mt-4 text-base font-medium tracking-[-0.02em] md:text-[18px] lg:text-landing-copy">
-            There&apos;s a NeighborNet near you. Find it, and just show up,
-            someone&apos;s saving you a seat.
+            There&apos;s a NeighborNet near you. Find it, and just show up
+            &mdash; someone&apos;s saving you a seat.
           </p>
         </div>
 

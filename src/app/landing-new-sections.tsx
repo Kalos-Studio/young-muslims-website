@@ -38,7 +38,7 @@ export function LandingCtaSection() {
             />
           </div>
         </div>
-        <h2 className="absolute top-[155px] left-8 w-[296px] text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:top-[314px] md:left-[129px] md:w-[692px] md:text-left md:text-landing-section">
+        <h2 className="absolute top-[155px] left-8 w-[296px] text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:top-[314px] md:left-[129px] md:w-[692px] md:text-left md:text-landing-section md:leading-[1.2]">
           Seeking the pleasure of Allah (SWT) by empowering Muslim youth.
         </h2>
         <div className="absolute top-[490px] left-8 flex w-[296px] flex-col gap-8 md:top-[285px] md:left-[902px] md:w-[312px]">

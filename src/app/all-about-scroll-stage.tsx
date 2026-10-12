@@ -74,7 +74,7 @@ export function AllAboutScrollStage({
         {mobileStage}
         <div className="absolute top-[405px] left-1/2 hidden h-full w-[1440px] -translate-x-1/2 md:block">
           {decorations}
-          <div className="absolute top-[130px] left-[90px] w-[474px] text-brand-obsidian">
+          <div className="absolute top-[130px] left-[90px] w-[538px] text-brand-obsidian">
             {intro}
           </div>
           {cards}
@@ -89,7 +89,7 @@ export function AllAboutScrollStage({
       <div className="sticky top-0 hidden h-screen overflow-hidden md:block">
         <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
           {decorations}
-          <div className="absolute top-1/2 left-[90px] w-[474px] -translate-y-1/2 text-brand-obsidian">
+          <div className="absolute top-1/2 left-[90px] w-[538px] -translate-y-1/2 text-brand-obsidian">
             {intro}
           </div>
           {cards.map((card, index) => (

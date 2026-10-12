@@ -195,11 +195,11 @@ export default function Home() {
             <BelongingPortraitOrbit />
           </div>
           <div className="absolute top-[487px] left-1/2 z-20 w-[290px] -translate-x-1/2 text-center md:top-[743px] md:w-full md:max-w-[784px]">
-            <h2 className="text-[30px] leading-[36px] font-extrabold tracking-[-0.02em] text-brand-jade md:text-landing-section md:leading-normal">
+            <h2 className="text-[30px] leading-[36px] font-extrabold tracking-[-0.02em] text-brand-jade md:text-landing-section md:leading-[1.2]">
               More than a program.
               <br />A place to belong.
             </h2>
-            <p className="mt-6 text-base leading-[18.9px] font-medium tracking-[-0.02em] text-brand-obsidian md:mt-[43px] md:text-landing-copy md:leading-normal">
+            <p className="mt-6 text-base leading-[18.9px] font-medium tracking-[-0.02em] text-brand-obsidian md:mt-[26px] md:text-landing-copy md:leading-[1.2]">
               Young Muslims is the nation&apos;s largest Muslim youth
               organization, but that&apos;s not how members describe it. To
               them, it&apos;s the people they see every week, the ones who
@@ -217,14 +217,14 @@ export default function Home() {
       >
         <section
           data-header-theme="dark"
-          className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian md:h-[899px]"
+          className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian md:h-[1087px]"
         >
           <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
-            <h2 className="absolute top-[51px] left-1/2 w-[274px] -translate-x-1/2 text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:top-[113px] md:w-[784px] md:text-landing-section">
+            <h2 className="absolute top-[51px] left-1/2 w-[274px] -translate-x-1/2 text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:top-[202px] md:w-[784px] md:text-landing-section md:leading-[1.2]">
               But it&apos;s easier to just show you.
             </h2>
             <HighlightReelMarquee />
-            <div className="absolute top-[190px] left-8 h-[397px] w-[296px] overflow-hidden rounded-media shadow-2xl md:top-[269px] md:left-[503px] md:h-[529px] md:w-[833px]">
+            <div className="absolute top-[190px] left-8 h-[397px] w-[296px] overflow-hidden shadow-2xl md:top-[358px] md:left-[503px] md:h-[529px] md:w-[833px]">
               <Image
                 src={highlightReel}
                 alt="Young Muslims gathered together"
@@ -232,17 +232,17 @@ export default function Home() {
                 sizes="(max-width: 767px) 296px, 833px"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-brand-obsidian/35" />
+              <div className="absolute inset-0 bg-black/40" />
               <Image
                 src={highlightPlay}
                 alt=""
                 className="absolute top-1/2 left-1/2 h-[66px] w-[66px] -translate-x-1/2 -translate-y-1/2 md:h-[88px] md:w-[88px]"
               />
-              <div className="absolute right-6 bottom-6 left-6 text-brand-pure-white md:right-12 md:bottom-12 md:left-12">
+              <div className="absolute right-6 bottom-6 left-6 text-brand-pure-white md:right-[39.5px] md:bottom-[37px] md:left-[39.5px]">
                 <p className="text-xs font-extrabold md:text-base">
                   30 SECOND WATCH
                 </p>
-                <p className="mt-1 text-xl leading-tight font-semibold md:mt-2 md:text-[32px]">
+                <p className="mt-1 text-xl leading-tight font-semibold md:mt-[7px] md:text-[32px]">
                   Young Muslims Highlight Reel
                 </p>
               </div>
@@ -258,7 +258,7 @@ export default function Home() {
       >
         <section
           data-header-theme="light"
-          className="relative h-[2873px] w-full overflow-clip bg-brand-warm-snow md:h-[1791px]"
+          className="relative h-[2873px] w-full overflow-clip bg-brand-warm-snow md:h-[1835px]"
         >
           <div
             className="pointer-events-none absolute top-0 left-1/2 z-0 h-full -translate-x-1/2 overflow-hidden"
@@ -307,21 +307,19 @@ export default function Home() {
               }
               intro={
                 <>
-                  <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section">
-                    This is what we&apos;re
-                    <br />
-                    all about.
+                  <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section md:leading-[1.2]">
+                    This is what we&apos;re all about.
                   </h2>
-                  <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:mt-8 md:text-landing-copy">
+                  <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:text-landing-copy md:leading-[1.2]">
                     It starts as a hangout. It turns into brotherhood,
                     sisterhood, and a reason to show up for something bigger
                     than yourself.
                   </p>
                   <Link
                     href="/about"
-                    className="mt-8 inline-flex w-full justify-center rounded-pill bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white outline-none hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow md:w-auto"
+                    className="mt-8 inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white outline-none hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow md:w-auto"
                   >
-                    About Us
+                    About us
                   </Link>
                 </>
               }

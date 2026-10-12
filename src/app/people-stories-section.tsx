@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import {
   motion,
+  type MotionStyle,
   useInView,
   useMotionValue,
   useReducedMotion,
@@ -16,20 +17,54 @@ import { STORIES, type Story } from "@/lib/stories";
 type PortraitPlacement = {
   story: Story;
   angle: number;
+  left: number;
+  top: number;
   width: number;
 };
 
 const STORY_BY_SLUG = new Map(STORIES.map((story) => [story.slug, story]));
 
 const PORTRAITS: PortraitPlacement[] = [
-  { story: STORY_BY_SLUG.get("a-place-to-be-known")!, angle: -34, width: 197 },
-  { story: STORY_BY_SLUG.get("the-seat-they-saved")!, angle: 154, width: 220 },
-  { story: STORY_BY_SLUG.get("growing-by-serving")!, angle: 91, width: 226 },
-  { story: STORY_BY_SLUG.get("rahmah-k")!, angle: 211, width: 240 },
-  { story: STORY_BY_SLUG.get("mustafa-r")!, angle: 270, width: 204 },
+  {
+    story: STORY_BY_SLUG.get("a-place-to-be-known")!,
+    angle: -34,
+    left: 90.24,
+    top: 21.31,
+    width: 197,
+  },
+  {
+    story: STORY_BY_SLUG.get("the-seat-they-saved")!,
+    angle: 154,
+    left: 3.11,
+    top: 77.01,
+    width: 220,
+  },
+  {
+    story: STORY_BY_SLUG.get("growing-by-serving")!,
+    angle: 91,
+    left: 47.57,
+    top: 99.14,
+    width: 226,
+  },
+  {
+    story: STORY_BY_SLUG.get("rahmah-k")!,
+    angle: 211,
+    left: 4.93,
+    top: 22.77,
+    width: 240,
+  },
+  {
+    story: STORY_BY_SLUG.get("mustafa-r")!,
+    angle: 270,
+    left: 48.5,
+    top: 12.65,
+    width: 204,
+  },
   {
     story: STORY_BY_SLUG.get("brotherhood-in-the-everyday")!,
     angle: 25,
+    left: 93.64,
+    top: 71.65,
     width: 246,
   },
 ];
@@ -58,15 +93,20 @@ function OrbitPortrait({
 
   return (
     <motion.div
-      className="absolute"
-      style={{
-        left: `${50 + Math.cos(radians) * 43}%`,
-        top: `${50 + Math.sin(radians) * 40}%`,
-        x: "-50%",
-        y: "-50%",
-        width: `clamp(${Math.round(portrait.width * 0.66)}px, 16vw, ${portrait.width}px)`,
-        aspectRatio: "1 / 1",
-      }}
+      className="people-story-portrait absolute"
+      style={
+        {
+          "--portrait-mobile-left": `${50 + Math.cos(radians) * 43}%`,
+          "--portrait-mobile-top": `${50 + Math.sin(radians) * 40}%`,
+          "--portrait-mobile-width": `clamp(${Math.round(portrait.width * 0.66)}px, 16vw, ${portrait.width}px)`,
+          "--portrait-desktop-left": `${portrait.left}%`,
+          "--portrait-desktop-top": `${portrait.top}%`,
+          "--portrait-desktop-width": `${portrait.width}px`,
+          x: "-50%",
+          y: "-50%",
+          aspectRatio: "1 / 1",
+        } as MotionStyle & Record<`--portrait-${string}`, string>
+      }
       initial={false}
       animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.72 }}
       transition={{
@@ -181,7 +221,7 @@ export function PeopleStoriesSection() {
 
       <motion.div
         ref={headingRef}
-        className="absolute top-1/2 left-1/2 z-20 flex w-[calc(100%-4rem)] max-w-[590px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-8"
+        className="absolute top-1/2 left-1/2 z-20 flex w-[calc(100%-4rem)] max-w-[590px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-8 xl:top-[598.6px] xl:-translate-y-0"
         initial={false}
         animate={{
           opacity: sectionEntered ? 1 : 0,
@@ -195,7 +235,7 @@ export function PeopleStoriesSection() {
       >
         <h2
           id="people-stories-heading"
-          className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-obsidian md:text-[36px] xl:text-landing-section"
+          className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-obsidian md:text-[36px] xl:text-landing-section xl:leading-[1.2]"
         >
           But a number can&apos;t show you what it actually feels like.
           <br />
