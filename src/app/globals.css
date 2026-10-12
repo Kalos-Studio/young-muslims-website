@@ -95,6 +95,7 @@
   /* Exact landing-page accents from the approved website design. */
   --color-landing-cyan: #23b8c0;
   --color-landing-blush: #e3d6d6;
+  --color-landing-twilight: #34344c;
   --color-landing-card-ink: #000000;
 
   /* Functional UI color, intentionally separate from the brand palette. */

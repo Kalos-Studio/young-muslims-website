@@ -50,22 +50,23 @@ role unchanged until a mobile design supplies its corresponding value.
 
 These values are exact and must not be altered.
 
-| Tailwind token      | Brand name        | Value     | Intended use                        |
-| ------------------- | ----------------- | --------- | ----------------------------------- |
-| `brand-obsidian`    | Deep Obsidian     | `#171725` | General dark foundation and text    |
-| `brand-warm-snow`   | Warm Snow         | `#FCFAF8` | General light foundation            |
-| `brand-royal`       | Royal Blue        | `#234080` | General or Brothers accent and text |
-| `brand-jade`        | Jade Foliage      | `#397451` | General or Sisters accent and text  |
-| `brand-pure-white`  | Pure White        | `#FFFFFF` | Reversed content and clean surfaces |
-| `brothers-midnight` | Midnight Blue     | `#16294F` | Brothers dark foundation and text   |
-| `brothers-slate`    | Cool Slate        | `#99ADC8` | Brothers large fills and accents    |
-| `brothers-sky`      | Sky Blue          | `#4A90D9` | Brothers large fills and accents    |
-| `sisters-forest`    | Deep Forest Green | `#043222` | Sisters dark foundation and text    |
-| `sisters-brass`     | Warm Brass        | `#D8AA45` | Sisters large fills and accents     |
-| `sisters-buttercup` | Buttercup Yellow  | `#EBD255` | Sisters large fills and accents     |
-| `landing-cyan`      | Landing Cyan      | `#23B8C0` | Highlighted words on the homepage   |
-| `landing-blush`     | Landing Blush     | `#E3D6D6` | Homepage story-card surfaces        |
-| `landing-card-ink`  | Card Ink          | `#000000` | Homepage story-card text            |
+| Tailwind token      | Brand name        | Value     | Intended use                         |
+| ------------------- | ----------------- | --------- | ------------------------------------ |
+| `brand-obsidian`    | Deep Obsidian     | `#171725` | General dark foundation and text     |
+| `brand-warm-snow`   | Warm Snow         | `#FCFAF8` | General light foundation             |
+| `brand-royal`       | Royal Blue        | `#234080` | General or Brothers accent and text  |
+| `brand-jade`        | Jade Foliage      | `#397451` | General or Sisters accent and text   |
+| `brand-pure-white`  | Pure White        | `#FFFFFF` | Reversed content and clean surfaces  |
+| `brothers-midnight` | Midnight Blue     | `#16294F` | Brothers dark foundation and text    |
+| `brothers-slate`    | Cool Slate        | `#99ADC8` | Brothers large fills and accents     |
+| `brothers-sky`      | Sky Blue          | `#4A90D9` | Brothers large fills and accents     |
+| `sisters-forest`    | Deep Forest Green | `#043222` | Sisters dark foundation and text     |
+| `sisters-brass`     | Warm Brass        | `#D8AA45` | Sisters large fills and accents      |
+| `sisters-buttercup` | Buttercup Yellow  | `#EBD255` | Sisters large fills and accents      |
+| `landing-cyan`      | Landing Cyan      | `#23B8C0` | Highlighted words on the homepage    |
+| `landing-blush`     | Landing Blush     | `#E3D6D6` | Homepage story-card surfaces         |
+| `landing-twilight`  | Landing Twilight  | `#34344C` | Homepage highlight-reel outer curves |
+| `landing-card-ink`  | Card Ink          | `#000000` | Homepage story-card text             |
 
 Slate, Sky, Brass, and Buttercup do not have enough contrast for normal-sized
 text on white or Warm Snow. Use them for fills, decoration, and large graphical

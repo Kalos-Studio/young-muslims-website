@@ -72,6 +72,9 @@ function FooterMontage({ frame }: { frame: number }) {
           />
         </div>
       ))}
+      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+        <Image src={footerLogo} alt="" />
+      </div>
     </>
   );
 }

@@ -138,6 +138,14 @@ const landingColors = [
     ink: "text-brand-obsidian",
   },
   {
+    name: "Landing Twilight",
+    token: "landing-twilight",
+    value: "#34344C",
+    usage: "Homepage highlight-reel outer curves",
+    swatch: "bg-landing-twilight",
+    ink: "text-brand-pure-white",
+  },
+  {
     name: "Card Ink",
     token: "landing-card-ink",
     value: "#000000",

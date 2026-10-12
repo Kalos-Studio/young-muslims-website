@@ -382,11 +382,11 @@ export function EverywhereSection() {
               className="h-[261px] w-[289px] max-w-none rotate-[-126.04deg]"
             />
           </div>
-          <div className="absolute top-[90px] left-[87px] hidden h-[357px] w-[352px] items-center justify-center md:flex">
+          <div className="absolute top-[90px] left-[87px] hidden h-[357px] w-[352px] rotate-[-126.04deg] items-center justify-center md:flex">
             <Image
               src={leftPhoto}
               alt=""
-              className="h-[241px] w-[266px] max-w-none rotate-[-126.04deg] object-contain"
+              className="h-[241px] w-[266px] max-w-none rotate-90 object-contain"
             />
           </div>
           <Image
@@ -412,11 +412,11 @@ export function EverywhereSection() {
               className="absolute top-1/2 left-1/2 h-[277px] w-[263px] -translate-x-1/2 -translate-y-1/2 -rotate-30"
             />
           </div>
-          <div className="absolute top-[1224px] left-[-82px] h-[210px] w-[207px] md:top-[1436px] md:left-[122px] md:h-[285px] md:w-[282px]">
+          <div className="absolute top-[1224px] left-[-82px] h-[210px] w-[207px] -rotate-30 md:top-[1436px] md:left-[122px] md:h-[285px] md:w-[282px]">
             <Image
               src={bottomLeftPhoto}
               alt=""
-              className="absolute top-1/2 left-1/2 h-[213px] w-[202px] -translate-x-1/2 -translate-y-1/2 -rotate-30 object-contain"
+              className="absolute top-1/2 left-1/2 h-[213px] w-[202px] -translate-x-1/2 -translate-y-1/2 -rotate-90 object-contain"
             />
           </div>
         </motion.div>
