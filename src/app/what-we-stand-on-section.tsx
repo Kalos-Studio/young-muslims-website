@@ -20,8 +20,25 @@ import principleSustainability from "../../design-assets/figma/landing-2026/new-
 import principleTarbiyyah from "../../design-assets/figma/landing-2026/new-sections/208-3-source-01.jpeg";
 
 const INTRO_SCROLL_VIEWPORTS = 1;
-const SCROLL_VIEWPORTS_PER_PRINCIPLE = 3;
+const SCROLL_VIEWPORTS_PER_PRINCIPLE = 2;
 const REVEAL_SCROLL_VIEWPORTS = 1;
+const FINAL_EDGE_CURVE =
+  "M 0 350 C 175 45 345 40 520 300 C 705 555 845 105 1000 275";
+
+function shapeCurveAt(reveal: number, width: number, height: number) {
+  const remaining = 1 - Math.max(0, Math.min(1, reveal));
+  const x = (value: number) => Number((value * width).toFixed(5));
+  const y = (value: number) => Number((value * height * remaining).toFixed(5));
+  return `M 0 ${y(0.16)} C ${x(0.22)} ${y(0.04)} ${x(0.32)} ${y(0.02)} ${x(0.5)} ${y(0.1)} C ${x(0.69)} ${y(0.18)} ${x(0.78)} ${y(0.02)} ${x(1)} ${y(0.08)}`;
+}
+
+function shapeClipAt(reveal: number) {
+  return `${shapeCurveAt(reveal, 1, 1)} L 1 1 L 0 1 Z`;
+}
+
+function shapeOutlineAt(reveal: number) {
+  return shapeCurveAt(reveal, 1000, 1000 / 0.18);
+}
 
 const PRINCIPLES = [
   {
@@ -73,9 +90,45 @@ type Principle = (typeof PRINCIPLES)[number];
 const TOTAL_SCROLL_VIEWPORTS =
   INTRO_SCROLL_VIEWPORTS + PRINCIPLES.length * SCROLL_VIEWPORTS_PER_PRINCIPLE;
 
+function ShapeOutline({
+  y,
+  path,
+  opacity,
+  zIndex,
+  stroke,
+}: {
+  y: MotionValue<string>;
+  path: MotionValue<string>;
+  opacity: MotionValue<number>;
+  zIndex: number;
+  stroke: string;
+}) {
+  return (
+    <motion.div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0"
+      style={{ y, opacity, zIndex }}
+    >
+      <svg
+        viewBox="0 0 1000 1000"
+        preserveAspectRatio="none"
+        className="absolute inset-x-0 top-0 h-[18%] w-full overflow-visible"
+      >
+        <motion.path
+          d={path}
+          fill="none"
+          stroke={stroke}
+          strokeWidth="2"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+    </motion.div>
+  );
+}
+
 function PrincipleContent({ principle }: { principle: Principle }) {
   return (
-    <div className="absolute top-1/2 left-1/2 h-[808px] w-full min-w-[360px] -translate-x-1/2 -translate-y-1/2 md:h-[1024px] md:min-w-[1440px]">
+    <div className="absolute top-1/2 left-1/2 h-[808px] min-h-screen w-full min-w-[360px] -translate-x-1/2 -translate-y-1/2 md:h-[1024px] md:min-w-[1440px]">
       <Image
         src={principle.image}
         alt=""
@@ -166,19 +219,75 @@ function RevealingPrinciple({
     [revealStart, revealEnd],
     ["-100%", "0%"],
   );
+  const clipPathD = useTransform(progress, (value) =>
+    shapeClipAt((value - revealStart) / (revealEnd - revealStart)),
+  );
+  const outlinePath = useTransform(progress, (value) =>
+    shapeOutlineAt((value - revealStart) / (revealEnd - revealStart)),
+  );
+  const outlineOpacity = useTransform(
+    progress,
+    [revealStart, revealEnd],
+    [1, 0],
+  );
+  const zIndex = index * 3 + 1;
+  const clipId = `stand-on-reveal-${index}`;
 
   return (
-    <motion.div
-      className="absolute inset-0 overflow-hidden bg-brand-obsidian will-change-transform"
-      style={{ y: panelY, zIndex: index + 1 }}
-    >
+    <>
+      <svg aria-hidden="true" className="absolute size-0">
+        <defs>
+          <clipPath id={clipId} clipPathUnits="objectBoundingBox">
+            <motion.path d={clipPathD} />
+          </clipPath>
+        </defs>
+      </svg>
       <motion.div
-        className="absolute inset-0 will-change-transform"
-        style={{ y: contentY }}
+        data-principle-panel={index}
+        className="absolute inset-0 overflow-hidden bg-brand-obsidian"
+        style={{ y: panelY, clipPath: `url(#${clipId})`, zIndex }}
       >
-        <PrincipleContent principle={principle} />
+        <motion.div className="absolute inset-0" style={{ y: contentY }}>
+          <PrincipleContent principle={principle} />
+        </motion.div>
       </motion.div>
-    </motion.div>
+      <ShapeOutline
+        y={panelY}
+        path={outlinePath}
+        opacity={outlineOpacity}
+        zIndex={zIndex + 1}
+        stroke="#FCFAF8"
+      />
+    </>
+  );
+}
+
+function FinalImageEdge({ progress }: { progress: MotionValue<number> }) {
+  const finalImageRevealed =
+    (INTRO_SCROLL_VIEWPORTS +
+      (PRINCIPLES.length - 1) * SCROLL_VIEWPORTS_PER_PRINCIPLE +
+      REVEAL_SCROLL_VIEWPORTS) /
+    TOTAL_SCROLL_VIEWPORTS;
+  const opacity = useTransform(progress, [finalImageRevealed, 1], [0, 1]);
+
+  return (
+    <motion.svg
+      data-final-image-edge
+      aria-hidden="true"
+      viewBox="0 0 1000 1000"
+      preserveAspectRatio="none"
+      className="pointer-events-none absolute inset-x-0 bottom-0 z-[13] h-[18%] w-full"
+      style={{ opacity }}
+    >
+      <path d={`${FINAL_EDGE_CURVE} L 1000 1000 L 0 1000 Z`} fill="#FCFAF8" />
+      <path
+        d={FINAL_EDGE_CURVE}
+        fill="none"
+        stroke="#171725"
+        strokeWidth="2"
+        vectorEffect="non-scaling-stroke"
+      />
+    </motion.svg>
   );
 }
 
@@ -239,12 +348,13 @@ export function WhatWeStandOnSection() {
     <section
       ref={sectionRef}
       data-header-theme="light"
-      className="relative h-[1400vh] w-full bg-brand-warm-snow"
+      className="relative w-full bg-brand-warm-snow"
+      style={{ height: `${(TOTAL_SCROLL_VIEWPORTS + 1) * 100}vh` }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-brand-warm-snow md:min-h-[860px]">
         <motion.div
           data-over-image={headingOnImage ? "true" : "false"}
-          className={`what-we-stand-on-heading absolute top-[76px] left-1/2 z-20 w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[84px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
+          className={`what-we-stand-on-heading absolute top-[76px] left-1/2 z-[3] w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[84px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
           style={{ y: headingY }}
         >
           <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section md:leading-[1.2]">
@@ -264,6 +374,7 @@ export function WhatWeStandOnSection() {
             progress={scrollYProgress}
           />
         ))}
+        <FinalImageEdge progress={scrollYProgress} />
       </div>
     </section>
   );

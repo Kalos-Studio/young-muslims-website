@@ -2,17 +2,25 @@
 
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { createPortal } from "react-dom";
 import {
+  animate,
   motion,
   useInView,
-  useMotionValueEvent,
-  useReducedMotion,
   useScroll,
   useTransform,
 } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
-import findNnPic from "../../../find a NN Pic.png";
+// Optimized from the original 128 MB "find a NN Pic.png" in the repository root.
+import findNnPic from "../../../design-assets/figma/neighbornets/footer-find-nn.webp";
 import footerPic2 from "../../../footer pic 2.png";
 import footerPic3 from "../../../footer pic 3.png";
 import footerPic4 from "../../../footer pic 4 1.png";
@@ -25,6 +33,8 @@ import footerLogo from "../../../design-assets/figma/landing-2026/new-sections/f
 import footerX from "../../../design-assets/figma/landing-2026/new-sections/footer-facebook.svg";
 import footerYoutube from "../../../design-assets/figma/landing-2026/new-sections/footer-youtube.svg";
 import { getNavigationItems } from "./nav-links";
+import { useFooterPageStage } from "./footer-page-stage";
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 
 const FOOTER_LINKS = [
   getNavigationItems("footer-primary"),
@@ -44,8 +54,8 @@ const MONTAGE_IMAGES: readonly StaticImageData[] = [
 
 const EASTER_EGG_HEIGHT = 200;
 const REVEAL_DURATION_MS = 560;
-const FLASH_DURATION_MS = 130;
-const FINAL_FRAME_HOLD_MS = 110;
+const FLASH_DURATION_MS = 240;
+const FINAL_FRAME_HOLD_MS = 300;
 const RETURN_DURATION_MS = 680;
 const TAGLINE_COPY = "FOR THE YOUTH. BY THE YOUTH.";
 const TAGLINE_REPETITIONS = 5;
@@ -53,7 +63,23 @@ const TAGLINE_TRAVEL_DISTANCE = 240;
 
 type FooterPhase = "idle" | "revealing" | "flashing" | "returning";
 
-function FooterMontage({ frame }: { frame: number }) {
+function subscribeReducedMotion(onChange: () => void) {
+  const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+
+function getReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function FooterMontage({
+  frame,
+  onFrameSettled,
+}: {
+  frame: number;
+  onFrameSettled: (index: number, loaded: boolean) => void;
+}) {
   return (
     <>
       {MONTAGE_IMAGES.map((image, index) => (
@@ -67,7 +93,9 @@ function FooterMontage({ frame }: { frame: number }) {
             alt=""
             fill
             sizes="100vw"
-            preload={index === 0}
+            loading="eager"
+            onLoad={() => onFrameSettled(index, true)}
+            onError={() => onFrameSettled(index, false)}
             className="object-cover"
           />
         </div>
@@ -88,10 +116,22 @@ export function SiteFooter() {
   const footerRef = useRef<HTMLElement>(null);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const runningRef = useRef(false);
-  const armedRef = useRef(true);
-  const previousProgressRef = useRef(0);
-  const reduceMotion = useReducedMotion();
+  const finishedAtRef = useRef(0);
+  const animationRef = useRef<ReturnType<typeof animate> | null>(null);
+  const settledFramesRef = useRef(new Map<number, boolean>());
+  const [availableFrames, setAvailableFrames] = useState<number[] | null>(null);
+  const { pageY, footerEdgeOffset, montageHost } = useFooterPageStage();
+  const pathname = usePathname();
+  const reduceMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotion,
+    () => false,
+  );
   const footerHasEntered = useInView(footerRef, { once: true, amount: 0.05 });
+  const footerIsNearby = useInView(footerRef, {
+    once: true,
+    margin: "1000px 0px",
+  });
   const [phase, setPhase] = useState<FooterPhase>("idle");
   const [montageFrame, setMontageFrame] = useState(0);
   const { scrollYProgress } = useScroll({
@@ -116,60 +156,163 @@ export function SiteFooter() {
     timersRef.current.push(timer);
   }, []);
 
+  const onFrameSettled = useCallback((index: number, loaded: boolean) => {
+    if (settledFramesRef.current.has(index)) return;
+    settledFramesRef.current.set(index, loaded);
+    if (settledFramesRef.current.size === MONTAGE_IMAGES.length) {
+      setAvailableFrames(
+        MONTAGE_IMAGES.flatMap((_, frame) =>
+          settledFramesRef.current.get(frame) ? [frame] : [],
+        ),
+      );
+    }
+  }, []);
+
+  const resetMontage = useCallback(() => {
+    clearTimers();
+    animationRef.current?.stop();
+    pageY.set(0);
+    footerEdgeOffset.set(0);
+    runningRef.current = false;
+    setPhase("idle");
+  }, [clearTimers, footerEdgeOffset, pageY]);
+
   const playMontage = useCallback(() => {
-    if (reduceMotion || runningRef.current || !armedRef.current) return;
+    if (
+      reduceMotion ||
+      runningRef.current ||
+      !availableFrames?.length ||
+      Date.now() - finishedAtRef.current < 350
+    )
+      return;
 
     clearTimers();
     runningRef.current = true;
-    armedRef.current = false;
-    setMontageFrame(0);
+    setMontageFrame(availableFrames[0]);
     setPhase("revealing");
+    animationRef.current?.stop();
+    const footerBottom =
+      footerRef.current?.getBoundingClientRect().bottom ?? window.innerHeight;
+    const edgeOffset = Math.max(0, footerBottom - window.innerHeight);
+    footerEdgeOffset.set(edgeOffset);
+    animationRef.current = animate(pageY, -(edgeOffset + EASTER_EGG_HEIGHT), {
+      duration: REVEAL_DURATION_MS / 1000,
+      ease: [0.22, 1, 0.36, 1],
+    });
 
     queueTimer(() => {
       setPhase("flashing");
 
-      for (let index = 1; index < MONTAGE_IMAGES.length; index += 1) {
-        queueTimer(() => setMontageFrame(index), index * FLASH_DURATION_MS);
+      for (let index = 1; index < availableFrames.length; index += 1) {
+        queueTimer(
+          () => setMontageFrame(availableFrames[index]),
+          index * FLASH_DURATION_MS,
+        );
       }
 
       queueTimer(
         () => {
           setPhase("returning");
+          animationRef.current = animate(pageY, 0, {
+            duration: RETURN_DURATION_MS / 1000,
+            ease: [0.22, 1, 0.36, 1],
+          });
           queueTimer(() => {
             runningRef.current = false;
+            finishedAtRef.current = Date.now();
             setPhase("idle");
-            setMontageFrame(0);
           }, RETURN_DURATION_MS);
         },
-        (MONTAGE_IMAGES.length - 1) * FLASH_DURATION_MS + FINAL_FRAME_HOLD_MS,
+        (availableFrames.length - 1) * FLASH_DURATION_MS + FINAL_FRAME_HOLD_MS,
       );
     }, REVEAL_DURATION_MS);
-  }, [clearTimers, queueTimer, reduceMotion]);
+  }, [
+    availableFrames,
+    clearTimers,
+    footerEdgeOffset,
+    pageY,
+    queueTimer,
+    reduceMotion,
+  ]);
 
-  useMotionValueEvent(scrollYProgress, "change", (progress) => {
-    const isScrollingDown = progress > previousProgressRef.current;
+  useEffect(() => resetMontage, [pathname, reduceMotion, resetMontage]);
 
-    if (progress < 0.72) armedRef.current = true;
-    if (progress >= 0.985 && isScrollingDown) playMontage();
-
-    previousProgressRef.current = progress;
-  });
-
-  useEffect(() => clearTimers, [clearTimers]);
-
-  const montageIsRaised = phase === "revealing" || phase === "flashing";
-  const stageTransition =
-    phase === "revealing"
-      ? { type: "spring" as const, stiffness: 92, damping: 20, mass: 0.9 }
-      : {
-          duration: RETURN_DURATION_MS / 1000,
-          ease: [0.22, 1, 0.36, 1] as const,
-        };
+  useEffect(() => {
+    if (reduceMotion) return;
+    let previousY = window.scrollY;
+    let touchY: number | null = null;
+    const footerIsVisible = () => {
+      const bounds = footerRef.current?.getBoundingClientRect();
+      return Boolean(
+        bounds && bounds.top < window.innerHeight && bounds.bottom > 0,
+      );
+    };
+    const canPlay = () =>
+      footerIsVisible() &&
+      document.documentElement.style.overflow !== "hidden" &&
+      !document.querySelector('dialog[open], [role="dialog"]');
+    const onScroll = () => {
+      const nextY = window.scrollY;
+      if (nextY > previousY && canPlay()) playMontage();
+      if (runningRef.current && !footerIsVisible()) resetMontage();
+      previousY = nextY;
+    };
+    const onWheel = (event: WheelEvent) => {
+      if (!event.ctrlKey && event.deltaY > 0 && canPlay()) playMontage();
+    };
+    const onTouchStart = (event: TouchEvent) => {
+      touchY = event.touches.length === 1 ? event.touches[0].clientY : null;
+    };
+    const onTouchMove = (event: TouchEvent) => {
+      const nextY = event.touches[0]?.clientY;
+      if (
+        nextY !== undefined &&
+        event.touches.length === 1 &&
+        touchY !== null &&
+        touchY - nextY > 8 &&
+        canPlay()
+      )
+        playMontage();
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target;
+      if (
+        event.defaultPrevented ||
+        event.altKey ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        (target instanceof Element &&
+          target.closest(
+            'input, textarea, select, button, a, [contenteditable="true"]',
+          ))
+      )
+        return;
+      if (
+        ["ArrowDown", "PageDown", "End", " "].includes(event.key) &&
+        canPlay()
+      )
+        playMontage();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [playMontage, reduceMotion, resetMontage]);
 
   return (
     <footer
       ref={footerRef}
       data-footer-phase={phase}
+      data-footer-ready={Boolean(availableFrames?.length)}
       className="relative h-[794px] w-full text-brand-warm-snow md:h-[525px]"
     >
       <motion.div
@@ -229,19 +372,20 @@ export function SiteFooter() {
               </p>
               <Link
                 href={contactLink.href}
-                className="mt-6 inline-flex w-full justify-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:w-auto"
+                aria-label={contactLink.label}
+                className="ym-cta-trigger mt-6 inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:w-auto"
               >
-                {contactLink.label}
+                <AnimatedCtaLabel label={contactLink.label} />
               </Link>
             </div>
           </div>
 
           <div
             aria-hidden="true"
-            className="absolute top-[514px] left-1/2 w-screen -translate-x-1/2 overflow-hidden md:top-[334px]"
+            className="absolute top-[514px] left-1/2 -mt-6 w-screen -translate-x-1/2 overflow-hidden py-4 md:top-[334px]"
           >
             <motion.div
-              className="-ml-[741px] flex w-max gap-8 font-display text-[32px] whitespace-nowrap text-brand-warm-snow/30 uppercase md:-ml-[1995px] md:text-marquee"
+              className="-ml-[741px] flex w-max gap-8 font-display text-[32px] whitespace-nowrap text-brand-warm-snow/20 uppercase md:-ml-[1995px] md:text-marquee"
               style={{ x: taglineX }}
             >
               {Array.from({ length: TAGLINE_REPETITIONS }).map((_, index) => (
@@ -272,19 +416,24 @@ export function SiteFooter() {
             </div>
           </div>
         </div>
-
-        <motion.div
-          data-footer-stage
-          aria-hidden="true"
-          className="absolute top-[794px] left-0 h-[200px] w-full overflow-hidden bg-brand-obsidian md:top-[525px]"
-          animate={{
-            y: reduceMotion || !montageIsRaised ? 0 : -EASTER_EGG_HEIGHT,
-          }}
-          transition={stageTransition}
-        >
-          <FooterMontage frame={montageFrame} />
-        </motion.div>
       </div>
+      {montageHost &&
+        footerIsNearby &&
+        !reduceMotion &&
+        createPortal(
+          <div
+            data-footer-stage
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{ visibility: phase === "idle" ? "hidden" : "visible" }}
+          >
+            <FooterMontage
+              frame={montageFrame}
+              onFrameSettled={onFrameSettled}
+            />
+          </div>,
+          montageHost,
+        )}
     </footer>
   );
 }

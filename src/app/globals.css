@@ -281,20 +281,6 @@
   filter: blur(0.56875rem);
 }
 
-.people-story-portrait {
-  left: var(--portrait-mobile-left);
-  top: var(--portrait-mobile-top);
-  width: var(--portrait-mobile-width);
-}
-
-@media (min-width: 80rem) {
-  .people-story-portrait {
-    left: var(--portrait-desktop-left);
-    top: var(--portrait-desktop-top);
-    width: var(--portrait-desktop-width);
-  }
-}
-
 /*
  * Website typography roles.
  *
@@ -358,7 +344,7 @@
   --text-stat--letter-spacing: -0.02em;
 
   /* Vectorized background lettering in the landing-page highlight reel. */
-  --text-marquee: 4.5rem;
+  --text-marquee: 3.75rem;
   --text-marquee--line-height: normal;
   --text-marquee--letter-spacing: -0.02em;
 
@@ -376,7 +362,7 @@
 
 @utility text-landing-marquee-outline {
   color: transparent;
-  -webkit-text-stroke: 2.94131px var(--color-brand-warm-snow);
+  -webkit-text-stroke: 2.45px var(--color-brand-warm-snow);
 }
 
 /* Full-screen site menu ------------------------------------------------------

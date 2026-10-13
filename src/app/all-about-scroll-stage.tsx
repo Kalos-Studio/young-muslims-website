@@ -16,6 +16,11 @@ const CARD_MOTION = [
   { input: [0.12, 1], output: [520, -620] },
 ] as const;
 
+const firstCardInitialY = CARD_MOTION[0].output[0];
+const firstCardSettleProgress =
+  (CARD_MOTION[0].input[1] * firstCardInitialY) /
+  (firstCardInitialY - CARD_MOTION[0].output[1]);
+
 function MovingCard({
   card,
   index,
@@ -57,6 +62,11 @@ export function AllAboutScrollStage({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
+  const introY = useTransform(
+    scrollYProgress,
+    [0, firstCardSettleProgress],
+    [firstCardInitialY, 0],
+  );
 
   const mobileStage = (
     <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:hidden">
@@ -93,9 +103,12 @@ export function AllAboutScrollStage({
           <div className="all-about-sticky-decoration contents">
             {decorations}
           </div>
-          <div className="absolute top-[130px] left-[90px] w-[538px] text-brand-obsidian">
+          <motion.div
+            className="absolute top-[130px] left-[90px] w-[538px] text-brand-obsidian"
+            style={{ y: introY }}
+          >
             {intro}
-          </div>
+          </motion.div>
           {cards.map((card, index) => (
             <MovingCard
               key={index}

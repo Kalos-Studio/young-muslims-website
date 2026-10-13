@@ -2,177 +2,114 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   motion,
-  type MotionStyle,
+  type MotionValue,
+  useAnimationFrame,
   useInView,
   useMotionValue,
   useReducedMotion,
-  useSpring,
+  useTransform,
 } from "motion/react";
 
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 import { STORIES, type Story } from "@/lib/stories";
+import {
+  LandingStoryDialog,
+  type StorySelection,
+} from "./landing-story-dialog";
 
-type PortraitPlacement = {
-  story: Story;
-  angle: number;
-  left: number;
-  top: number;
-  width: number;
-};
-
-const STORY_BY_SLUG = new Map(STORIES.map((story) => [story.slug, story]));
-
-const PORTRAITS: PortraitPlacement[] = [
-  {
-    story: STORY_BY_SLUG.get("a-place-to-be-known")!,
-    angle: -34,
-    left: 90.24,
-    top: 21.31,
-    width: 197,
-  },
-  {
-    story: STORY_BY_SLUG.get("the-seat-they-saved")!,
-    angle: 154,
-    left: 3.11,
-    top: 77.01,
-    width: 220,
-  },
-  {
-    story: STORY_BY_SLUG.get("growing-by-serving")!,
-    angle: 91,
-    left: 47.57,
-    top: 99.14,
-    width: 226,
-  },
-  {
-    story: STORY_BY_SLUG.get("rahmah-k")!,
-    angle: 211,
-    left: 4.93,
-    top: 22.77,
-    width: 240,
-  },
-  {
-    story: STORY_BY_SLUG.get("mustafa-r")!,
-    angle: 270,
-    left: 48.5,
-    top: 12.65,
-    width: 204,
-  },
-  {
-    story: STORY_BY_SLUG.get("brotherhood-in-the-everyday")!,
-    angle: 25,
-    left: 93.64,
-    top: 71.65,
-    width: 246,
-  },
+const PORTRAIT_SLUGS = [
+  "a-place-to-be-known",
+  "brotherhood-in-the-everyday",
+  "growing-by-serving",
+  "the-seat-they-saved",
+  "rahmah-k",
+  "mustafa-r",
 ];
-
-const ACCENT_BY_THEME = {
-  brothers: "var(--color-brand-royal)",
-  sisters: "var(--color-brand-jade)",
-} as const;
+const PORTRAITS = PORTRAIT_SLUGS.map((slug) =>
+  STORIES.find((story) => story.slug === slug)!,
+);
+const ORBIT_DURATION_MS = 42_000;
 
 function OrbitPortrait({
-  portrait,
+  story,
   index,
+  phase,
   isVisible,
-  isOrbiting,
+  reduceMotion,
+  isSelected,
+  onSelect,
 }: {
-  portrait: PortraitPlacement;
+  story: Story;
   index: number;
+  phase: MotionValue<number>;
   isVisible: boolean;
-  isOrbiting: boolean;
+  reduceMotion: boolean;
+  isSelected: boolean;
+  onSelect: (story: Story, trigger: HTMLButtonElement) => void;
 }) {
-  const radians = (portrait.angle * Math.PI) / 180;
-  const xTarget = useMotionValue(0);
-  const yTarget = useMotionValue(0);
-  const x = useSpring(xTarget, { stiffness: 180, damping: 18, mass: 0.45 });
-  const y = useSpring(yTarget, { stiffness: 180, damping: 18, mass: 0.45 });
+  const angle = (index * Math.PI) / 3 - Math.PI / 6;
+  const left = useTransform(
+    phase,
+    (value) => `${50 + Math.cos(angle + value) * 42}%`,
+  );
+  const top = useTransform(
+    phase,
+    (value) => `${50 + Math.sin(angle + value) * 42}%`,
+  );
 
   return (
     <motion.div
-      className="people-story-portrait absolute"
-      style={
-        {
-          "--portrait-mobile-left": `${50 + Math.cos(radians) * 43}%`,
-          "--portrait-mobile-top": `${50 + Math.sin(radians) * 40}%`,
-          "--portrait-mobile-width": `clamp(${Math.round(portrait.width * 0.66)}px, 16vw, ${portrait.width}px)`,
-          "--portrait-desktop-left": `${portrait.left}%`,
-          "--portrait-desktop-top": `${portrait.top}%`,
-          "--portrait-desktop-width": `${portrait.width}px`,
-          x: "-50%",
-          y: "-50%",
-          aspectRatio: "1 / 1",
-        } as MotionStyle & Record<`--portrait-${string}`, string>
-      }
-      initial={false}
-      animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.72 }}
-      transition={{
-        opacity: { duration: 0.55, delay: index * 0.08 },
-        scale: {
-          duration: 0.8,
-          delay: index * 0.08,
-          type: "spring",
-          bounce: 0.18,
-        },
-      }}
+      className="absolute aspect-square w-[clamp(112px,23vw,170px)] xl:w-[224px]"
+      style={{ left, top, x: "-50%", y: "-50%" }}
     >
       <motion.div
+        initial={false}
+        animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.72 }}
+        transition={{
+          duration: reduceMotion ? 0 : 0.65,
+          delay: reduceMotion ? 0 : index * 0.07,
+        }}
         className="size-full"
-        animate={{ rotate: isOrbiting ? 360 : 0 }}
-        transition={
-          isOrbiting
-            ? { duration: 42, ease: "linear", repeat: Infinity }
-            : { duration: 0 }
-        }
       >
-        <motion.div
-          className="group relative size-full"
-          onPointerMove={(event) => {
-            const bounds = event.currentTarget.getBoundingClientRect();
-            xTarget.set(
-              ((event.clientX - bounds.left) / bounds.width - 0.5) * 28,
-            );
-            yTarget.set(
-              ((event.clientY - bounds.top) / bounds.height - 0.5) * 22,
-            );
-          }}
-          onPointerLeave={() => {
-            xTarget.set(0);
-            yTarget.set(0);
-          }}
-          whileHover={{ scale: 1.045 }}
-          whileTap={{ scale: 0.97 }}
+        <button
+          type="button"
+          className="group relative block size-full cursor-pointer rounded-full outline-none focus-visible:ring-4 focus-visible:ring-brand-royal focus-visible:ring-offset-4 focus-visible:ring-offset-brand-warm-snow"
+          aria-label={`Read ${story.name}'s story`}
+          aria-haspopup="dialog"
+          tabIndex={isVisible ? 0 : -1}
+          onClick={(event) => onSelect(story, event.currentTarget)}
+          style={{ visibility: isSelected ? "hidden" : "visible" }}
         >
-          <motion.span
-            aria-hidden="true"
-            className="absolute inset-[7%] rounded-[62%_38%_57%_43%/42%_58%_42%_58%] opacity-0 transition-[opacity,transform] duration-500 ease-out group-focus-within:scale-[1.24] group-focus-within:opacity-90 group-hover:scale-[1.24] group-hover:opacity-90"
-            style={{
-              backgroundColor: ACCENT_BY_THEME[portrait.story.theme],
-              x,
-              y,
-            }}
-          />
-          <Link
-            href={`/stories?story=${portrait.story.slug}&from=landing`}
-            className="absolute inset-0 z-10 cursor-pointer rounded-[58%_42%_55%_45%/47%_58%_42%_53%] outline-none focus-visible:ring-4 focus-visible:ring-brand-royal focus-visible:ring-offset-4 focus-visible:ring-offset-brand-warm-snow"
-            aria-label={`Read ${portrait.story.name}'s story`}
+          <span
+            className="absolute inset-0"
+            style={{ transform: `rotate(${story.rotation ?? 0}deg)` }}
           >
-            <Image
-              src={portrait.story.portrait}
-              alt=""
-              fill
-              sizes="(max-width: 767px) 44vw, (max-width: 1023px) 24vw, 246px"
-              className="pointer-events-none object-contain drop-shadow-[0_18px_28px_rgba(23,23,37,0.12)]"
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 opacity-0 transition-[opacity,scale] duration-300 group-hover:scale-[1.12] group-hover:opacity-100 group-focus-visible:scale-[1.12] group-focus-visible:opacity-100 motion-reduce:transition-none"
               style={{
-                transform: `rotate(${portrait.story.rotation ?? 0}deg)`,
+                backgroundColor:
+                  story.theme === "brothers"
+                    ? "var(--color-brand-royal)"
+                    : "var(--color-brand-jade)",
+                maskImage: `url(${story.portrait.src})`,
+                maskSize: "contain",
+                maskRepeat: "no-repeat",
+                maskPosition: "center",
               }}
             />
-          </Link>
-        </motion.div>
+            <Image
+              src={story.portrait}
+              alt=""
+              fill
+              sizes="(max-width: 1279px) 170px, 224px"
+              className="pointer-events-none object-contain drop-shadow-[0_18px_28px_rgba(23,23,37,0.12)]"
+            />
+          </span>
+        </button>
       </motion.div>
     </motion.div>
   );
@@ -180,18 +117,29 @@ function OrbitPortrait({
 
 export function PeopleStoriesSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
-  const sectionEntered = useInView(sectionRef, { once: true, amount: 0.16 });
-  const sectionIsVisible = useInView(sectionRef, { margin: "200px 0px" });
-  const headingCentered = useInView(headingRef, {
-    once: true,
-    margin: "-34% 0px -34% 0px",
+  const sectionEntered = useInView(sectionRef, { once: true, amount: 0.2 });
+  const sectionIsVisible = useInView(sectionRef, { margin: "100px 0px" });
+  const [selection, setSelection] = useState<StorySelection | null>(null);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const phase = useMotionValue(0);
+
+  // Accumulate active time so a popup or offscreen pause never resets the orbit.
+  useAnimationFrame((_, delta) => {
+    if (
+      sectionIsVisible &&
+      sectionEntered &&
+      !reduceMotion &&
+      !selection &&
+      !isInteracting
+    ) {
+      phase.set(
+        (phase.get() -
+          (Math.min(delta, 64) / ORBIT_DURATION_MS) * Math.PI * 2) %
+          (Math.PI * 2),
+      );
+    }
   });
-  const portraitsAreVisible = reduceMotion ? sectionEntered : headingCentered;
-  const isOrbiting = Boolean(
-    portraitsAreVisible && sectionIsVisible && !reduceMotion,
-  );
 
   return (
     <section
@@ -200,55 +148,78 @@ export function PeopleStoriesSection() {
       aria-labelledby="people-stories-heading"
       className="relative h-[734px] w-full overflow-hidden bg-brand-warm-snow text-center md:h-[886px] xl:h-[1327px]"
     >
-      <motion.div
-        className="absolute top-1/2 left-1/2 h-[620px] w-[700px] -translate-x-1/2 -translate-y-1/2 md:h-[760px] md:w-[860px] xl:h-[880px] xl:w-[1180px]"
-        animate={{ rotate: isOrbiting ? -360 : 0 }}
-        transition={
-          isOrbiting
-            ? { duration: 42, ease: "linear", repeat: Infinity }
-            : { duration: 0 }
-        }
+      <div
+        className="absolute top-1/2 left-1/2 aspect-square w-[calc(100vw+120px)] max-w-[1140px] -translate-x-1/2 -translate-y-1/2"
+        onPointerOver={(event) => {
+          if (
+            event.pointerType === "mouse" &&
+            (event.target as HTMLElement).closest("button")
+          )
+            setIsInteracting(true);
+        }}
+        onPointerOut={() => setIsInteracting(false)}
+        onFocusCapture={() => setIsInteracting(true)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget))
+            setIsInteracting(false);
+        }}
       >
-        {PORTRAITS.map((portrait, index) => (
+        {PORTRAITS.map((story, index) => (
           <OrbitPortrait
-            key={portrait.story.slug}
-            portrait={portrait}
+            key={story.slug}
+            story={story}
             index={index}
-            isVisible={Boolean(portraitsAreVisible)}
-            isOrbiting={isOrbiting}
+            phase={phase}
+            isVisible={Boolean(sectionEntered)}
+            reduceMotion={Boolean(reduceMotion)}
+            isSelected={selection?.story.slug === story.slug}
+            onSelect={(selectedStory, trigger) => {
+              const { left, top, width, height } =
+                trigger.getBoundingClientRect();
+              setSelection({
+                story: selectedStory,
+                trigger,
+                bounds: { left, top, width, height },
+              });
+            }}
           />
         ))}
-      </motion.div>
-
-      <motion.div
-        ref={headingRef}
-        className="absolute top-1/2 left-1/2 z-20 flex w-[calc(100%-4rem)] max-w-[590px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-8 xl:top-[598.6px] xl:-translate-y-0"
-        initial={false}
-        animate={{
-          opacity: sectionEntered ? 1 : 0,
-          y: sectionEntered ? 0 : 56,
-          filter: sectionEntered ? "blur(0px)" : "blur(8px)",
-        }}
-        transition={{
-          duration: reduceMotion ? 0 : 0.9,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-      >
-        <h2
-          id="people-stories-heading"
-          className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-obsidian md:text-[36px] xl:text-landing-section xl:leading-[1.2]"
+      </div>
+      <div className="pointer-events-none absolute top-1/2 left-1/2 z-20 w-[calc(100%-4rem)] max-w-[590px] -translate-x-1/2 -translate-y-1/2">
+        <motion.div
+          className="flex flex-col items-center gap-8"
+          initial={false}
+          animate={{
+            opacity: sectionEntered ? 1 : 0,
+            y: sectionEntered ? 0 : 32,
+          }}
+          transition={{ duration: reduceMotion ? 0 : 0.7 }}
         >
-          But a number can&apos;t show you what it actually feels like.
-          <br />
-          <span className="text-landing-cyan">The people can</span>.
-        </h2>
-        <Link
-          href="/stories"
-          className="ym-cta-trigger inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none sm:w-auto"
-        >
-          <AnimatedCtaLabel label="View Stories" />
-        </Link>
-      </motion.div>
+          <h2
+            id="people-stories-heading"
+            className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-obsidian md:text-[36px] xl:text-landing-section xl:leading-[1.2]"
+          >
+            But a number can&apos;t show you what it actually feels like.
+            <br />
+            <span className="text-landing-cyan">The people can</span>.
+          </h2>
+          <Link
+            href="/stories"
+            className="ym-cta-trigger pointer-events-auto inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none sm:w-auto"
+          >
+            <AnimatedCtaLabel label="View Stories" />
+          </Link>
+        </motion.div>
+      </div>
+      {selection && (
+        <LandingStoryDialog
+          selection={selection}
+          onClose={() => {
+            setSelection(null);
+            setIsInteracting(false);
+          }}
+        />
+      )}
     </section>
   );
 }

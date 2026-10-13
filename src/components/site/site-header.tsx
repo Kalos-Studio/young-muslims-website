@@ -1,5 +1,11 @@
-import Link from "next/link";
+"use client";
 
+import Link from "next/link";
+import { motion } from "motion/react";
+
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+
+import { useFooterPageStage } from "./footer-page-stage";
 import { HeaderContrastController } from "./header-contrast-controller";
 import { Logo } from "./logo";
 import { NavLink } from "./nav-link";
@@ -26,10 +32,12 @@ const [ctaLink] = getNavigationItems("header-cta");
  * below the `md` breakpoint.
  */
 export function SiteHeader() {
+  const { pageY } = useFooterPageStage();
   return (
-    <header
+    <motion.header
       data-site-header
       className="sticky top-0 z-40 border-b border-border bg-background/60 backdrop-blur-md"
+      style={{ y: pageY }}
     >
       <HeaderContrastController />
       <div
@@ -55,8 +63,12 @@ export function SiteHeader() {
           className="hidden items-center justify-center gap-4 text-nav xl:flex"
         >
           {primaryLinks.map((link) => (
-            <NavLink key={link.id} item={link} className="p-2.5">
-              {link.label}
+            <NavLink key={link.id} item={link} className="ym-cta-trigger p-2.5">
+              <span className="ym-cta-roll">
+                <span className="ym-cta-roll__text" data-text={link.label}>
+                  {link.label}
+                </span>
+              </span>
             </NavLink>
           ))}
         </nav>
@@ -68,15 +80,15 @@ export function SiteHeader() {
           >
             <NavLink
               item={ctaLink}
-              className="inline-flex items-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
+              className="ym-cta-trigger inline-flex items-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:text-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
               data-site-cta
             >
-              {ctaLink.label}
+              <AnimatedCtaLabel label={ctaLink.label} arrowSize={18} />
             </NavLink>
           </nav>
           <SideNav />
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

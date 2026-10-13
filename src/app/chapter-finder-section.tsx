@@ -323,7 +323,7 @@ export function ChapterFinderSection() {
         }
         aria-hidden="true"
       >
-        <div className="absolute top-[-900px] left-1/2 flex h-[5809px] w-[5869px] -translate-x-1/2 items-center justify-center md:top-[-462px] md:h-[2984px] md:w-[3015px] lg:top-[-554px] lg:h-[3418px] lg:w-[3453px] lg:-translate-x-[61%]">
+        <div className="absolute top-[-900px] left-1/2 flex h-[5809px] w-[5869px] -translate-x-1/2 items-center justify-center md:top-[-462px] md:h-[2984px] md:w-[3015px] lg:top-[-554px] lg:h-[3418px] lg:w-[3453px]">
           <div className="rotate-[56.37deg]">
             <Image
               src={chapterWave}

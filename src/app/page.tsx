@@ -12,16 +12,21 @@ import cardLeadership from "../../design-assets/figma/landing-2026/card-guidance
 import cardGuidance from "../../design-assets/figma/landing-2026/card-guidance.png";
 import cardService from "../../design-assets/figma/landing-2026/card-impact-source.jpeg";
 import cardPeople from "../../design-assets/figma/landing-2026/card-people.jpeg";
-import belongingWaveObsidian from "../../design-assets/figma/landing-2026/belonging-wave-obsidian.svg";
 import belongingWavePale from "../../design-assets/figma/landing-2026/belonging-wave-pale.svg";
 import highlightPlay from "../../design-assets/figma/landing-2026/highlight-play.svg";
 import highlightReel from "../../design-assets/figma/landing-2026/highlight-reel.png";
 import { AllAboutScrollStage } from "./all-about-scroll-stage";
-import { BelongingPortraitOrbit } from "./belonging-portrait-orbit";
+import {
+  BelongingCopy,
+  BelongingPortraitOrbit,
+} from "./belonging-portrait-orbit";
 import { ChapterFinderSection } from "./chapter-finder-section";
 import { EverywhereSection } from "./everywhere-section";
 import { HeroVideo } from "./hero-video";
-import { HighlightReelMarquee } from "./highlight-reel-section";
+import {
+  HighlightReelIncomingShape,
+  HighlightReelMarquee,
+} from "./highlight-reel-section";
 import { LandingCtaSection } from "./landing-new-sections";
 import { PeopleStoriesSection } from "./people-stories-section";
 import { WhatWeStandOnSection } from "./what-we-stand-on-section";
@@ -169,7 +174,7 @@ export default function Home() {
 
       <Annotate
         bleed
-        note="The updated portraits follow a continuous elliptical orbit, respond subtly to the pointer, and remain intentionally cropped at the viewport edges."
+        note="Portraits swirl in from the upper right and follow scroll direction around the copy. The text fades in as it enters the viewport."
       >
         <section
           data-header-theme="light"
@@ -184,19 +189,11 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="pointer-events-none absolute top-[1712.19px] left-[calc(50%-115.01px)] z-[1] flex h-[1772.44px] w-[2786.86px] -translate-x-1/2 -translate-y-1/2 items-center justify-center md:top-[1375px] md:left-[-781px] md:translate-x-0 md:translate-y-0">
-            <div className="rotate-[-9.8deg]">
-              <Image
-                src={belongingWaveObsidian}
-                alt=""
-                className="block max-w-none"
-              />
-            </div>
-          </div>
+          <HighlightReelIncomingShape />
           <div className="relative z-10 h-full">
             <BelongingPortraitOrbit />
           </div>
-          <div className="absolute top-[487px] left-1/2 z-20 w-[290px] -translate-x-1/2 text-center md:top-[743px] md:w-full md:max-w-[784px]">
+          <BelongingCopy>
             <h2 className="text-[30px] leading-[36px] font-extrabold tracking-[-0.02em] text-brand-jade md:text-landing-section md:leading-[1.2]">
               More than a program.
               <br />A place to belong.
@@ -209,7 +206,7 @@ export default function Home() {
               everyday friendship into a stronger Deen, a stronger self, and a
               lifetime of brotherhood and sisterhood.
             </p>
-          </div>
+          </BelongingCopy>
         </section>
       </Annotate>
 

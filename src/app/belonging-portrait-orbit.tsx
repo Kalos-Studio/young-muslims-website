@@ -1,14 +1,18 @@
 "use client";
 
+// Motion's useTransform overloads have different internal hook layouts.
+// Remount during animation edits instead of preserving incompatible hook state.
+// @refresh reset
+
 import Image, { type StaticImageData } from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   type MotionValue,
   motion,
-  useAnimationFrame,
   useInView,
   useMotionValue,
   useReducedMotion,
+  useScroll,
   useSpring,
   useTransform,
 } from "motion/react";
@@ -47,7 +51,6 @@ type OrbitSize = {
 };
 
 const FULL_CIRCLE = Math.PI * 2;
-const ORBIT_DURATION_MS = 36_000;
 const HORIZONTAL_RADIUS = 0.64;
 const VERTICAL_RADIUS = 0.27;
 const ORBIT_TILT_RADIANS = (-14 * Math.PI) / 180;
@@ -89,7 +92,7 @@ function OrbitingPortrait({
   portrait,
   index,
   orbitSize,
-  time,
+  progress,
   cursorX,
   cursorY,
   reduceMotion,
@@ -97,24 +100,37 @@ function OrbitingPortrait({
   portrait: Portrait;
   index: number;
   orbitSize: OrbitSize;
-  time: MotionValue<number>;
+  progress: MotionValue<number>;
   cursorX: MotionValue<number>;
   cursorY: MotionValue<number>;
   reduceMotion: boolean | null;
 }) {
-  const startingAngle = (index / PORTRAITS.length) * FULL_CIRCLE - Math.PI / 2;
-  const x = useTransform([time, cursorX], ([latestTime, latestCursorX]) => {
+  const startingAngle = -Math.PI / 4 - (index / PORTRAITS.length) * FULL_CIRCLE;
+  const entryStart = index * 0.004;
+  const entryEnd = 0.26 + entryStart;
+  const position = useTransform(progress, (value) => {
+    const entry = Math.max(
+      0,
+      Math.min(1, (value - entryStart) / (entryEnd - entryStart)),
+    );
+    const easedEntry = 1 - Math.pow(1 - entry, 3);
     const angle =
-      startingAngle - (Number(latestTime) / ORBIT_DURATION_MS) * FULL_CIRCLE;
-
-    return getOrbitPosition(angle, orbitSize).x + Number(latestCursorX);
+      -Math.PI / 4 +
+      (startingAngle + Math.PI / 4) * easedEntry -
+      Math.max(0, value - entryEnd) * FULL_CIRCLE * 0.65;
+    const orbit = getOrbitPosition(angle, orbitSize);
+    return {
+      x: orbit.x * easedEntry + orbitSize.width * 0.8 * (1 - easedEntry),
+      y: orbit.y * easedEntry - orbitSize.height * 0.65 * (1 - easedEntry),
+    };
   });
-  const y = useTransform([time, cursorY], ([latestTime, latestCursorY]) => {
-    const angle =
-      startingAngle - (Number(latestTime) / ORBIT_DURATION_MS) * FULL_CIRCLE;
-
-    return getOrbitPosition(angle, orbitSize).y + Number(latestCursorY);
-  });
+  const x = useTransform(() => position.get().x + cursorX.get());
+  const y = useTransform(() => position.get().y + cursorY.get());
+  const opacity = useTransform(
+    progress,
+    [entryStart, entryStart + 0.06],
+    [0, 1],
+  );
   const zIndex = useTransform(y, (latestY) =>
     Math.round(latestY + orbitSize.height),
   );
@@ -122,10 +138,13 @@ function OrbitingPortrait({
 
   return (
     <motion.div
-      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform"
+      className="absolute top-1/2 left-1/2"
       style={{
         width: portrait.width,
         height: portrait.height,
+        marginLeft: -portrait.width / 2,
+        marginTop: -portrait.height / 2,
+        opacity: reduceMotion ? 1 : opacity,
         x: reduceMotion ? restingPosition.x : x,
         y: reduceMotion ? restingPosition.y : y,
         zIndex,
@@ -163,12 +182,11 @@ export function BelongingPortraitOrbit() {
     damping: 20,
     mass: 0.8,
   });
-  const time = useMotionValue(0);
-  const orbitIsVisible = useInView(orbitRef, { margin: "200px 0px" });
-
-  useAnimationFrame((elapsed) => {
-    if (orbitIsVisible && !reduceMotion) time.set(elapsed);
+  const { scrollYProgress } = useScroll({
+    target: orbitRef,
+    offset: ["start end", "end start"],
   });
+  const orbitIsVisible = useInView(orbitRef, { margin: "200px 0px" });
 
   useEffect(() => {
     const orbit = orbitRef.current;
@@ -254,13 +272,35 @@ export function BelongingPortraitOrbit() {
             portrait={portrait}
             index={index}
             orbitSize={orbitSize}
-            time={time}
+            progress={scrollYProgress}
             cursorX={cursorX}
             cursorY={cursorY}
             reduceMotion={reduceMotion}
           />
         ))}
       </div>
+    </div>
+  );
+}
+
+export function BelongingCopy({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 95%", "start 60%"],
+  });
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [24, 0]);
+
+  return (
+    <div
+      ref={ref}
+      className="absolute top-[487px] left-1/2 z-20 w-[290px] -translate-x-1/2 text-center md:top-[743px] md:w-full md:max-w-[784px]"
+    >
+      <motion.div style={reduceMotion ? undefined : { opacity, y }}>
+        {children}
+      </motion.div>
     </div>
   );
 }
