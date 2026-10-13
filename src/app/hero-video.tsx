@@ -5,7 +5,7 @@ export function HeroVideo() {
     <section
       data-header-theme="dark"
       aria-label="Young Muslims community introduction"
-      className="relative z-[1] flex h-[808px] w-full items-center justify-center bg-brand-warm-snow px-8 text-center text-brand-warm-snow md:h-[1007px] md:min-h-[760px] md:px-6"
+      className="relative z-[1] flex h-[808px] w-full items-center justify-center bg-[#f7f3f0] px-8 text-center text-brand-warm-snow md:h-svh md:px-6"
     >
       <svg
         aria-hidden="true"
@@ -57,7 +57,7 @@ export function HeroVideo() {
 
       <svg
         aria-hidden="true"
-        className="pointer-events-none absolute right-0 bottom-[-96px] left-0 z-[5] h-[192px] w-full md:bottom-[-120px] md:h-[240px]"
+        className="pointer-events-none absolute right-0 bottom-[-76px] left-0 z-[5] h-[152px] w-full md:bottom-[-96px] md:h-[192px]"
         viewBox="0 0 1440 240"
         preserveAspectRatio="none"
       >
@@ -71,7 +71,7 @@ export function HeroVideo() {
 
       <svg
         aria-hidden="true"
-        className="pointer-events-none absolute right-0 bottom-[-1px] left-0 z-[15] h-[104px] w-full text-brand-warm-snow md:h-[132px]"
+        className="pointer-events-none absolute right-0 bottom-[-1px] left-0 z-[15] h-[84px] w-full text-[#f7f3f0] md:h-[108px]"
         viewBox="0 0 1440 104"
         preserveAspectRatio="none"
       >

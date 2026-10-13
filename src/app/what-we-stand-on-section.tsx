@@ -276,7 +276,7 @@ function FinalImageEdge({ progress }: { progress: MotionValue<number> }) {
       aria-hidden="true"
       viewBox="0 0 1000 1000"
       preserveAspectRatio="none"
-      className="pointer-events-none absolute inset-x-0 bottom-0 z-[13] h-[18%] w-full"
+      className="pointer-events-none absolute inset-x-0 bottom-[-48px] z-[13] h-[18%] w-full md:bottom-[-64px]"
       style={{ opacity }}
     >
       <path d={`${FINAL_EDGE_CURVE} L 1000 1000 L 0 1000 Z`} fill="#FCFAF8" />

@@ -129,7 +129,7 @@ function ArticleCard({
               className="absolute inset-0 bg-brand-obsidian/20 transition-colors duration-300 md:group-hover/article:bg-brand-obsidian/40 md:group-focus-visible/article:bg-brand-obsidian/40"
               aria-hidden
             />
-            <span className="ym-cta-trigger absolute inset-x-0 bottom-7 z-10 flex items-center justify-center gap-2 text-sm font-bold tracking-[-0.02em] text-brand-pure-white transition-opacity duration-300 md:opacity-0 md:group-hover/article:opacity-100 md:group-focus-visible/article:opacity-100">
+            <span className="ym-cta-trigger absolute inset-0 z-10 flex items-center justify-center gap-2 text-sm font-bold tracking-[-0.02em] text-brand-pure-white transition-opacity duration-300 md:opacity-0 md:group-hover/article:opacity-100 md:group-focus-visible/article:opacity-100">
               <span className="ym-cta-roll">
                 <span className="ym-cta-roll__text" data-text="Read article">
                   Read article

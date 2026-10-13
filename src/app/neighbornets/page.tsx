@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import chapterCtaPhoto from "../../../design-assets/figma/neighbornets/footer-lakeside.jpg";
+import chapterCtaShape from "../../../design-assets/figma/neighbornets/2026-page/2e336.png";
 import chapterHero from "../../../design-assets/figma/neighbornets/find-nn-hero.jpg";
-import ctaArrowDark from "../../../design-assets/figma/landing-2026/new-sections/cta-arrow-dark.svg";
-import ctaArrowLight from "../../../design-assets/figma/landing-2026/new-sections/cta-arrow-light.svg";
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 import { brotherLocations } from "@/generated/brother-neighbornets";
 import { sisterLocations } from "@/generated/sister-neighbornets";
+import {
+  ChapterImageGrid,
+  NeighborNetExplainer,
+  OtherWaysSection,
+} from "./chapter-page-sections";
 import { NeighborNetsMap } from "./neighbornets-map";
 import { defaultSettings, type MapSettings } from "./map-options";
 
@@ -20,7 +24,7 @@ export const metadata: Metadata = {
 
 const chapterMapSettings: MapSettings = {
   ...defaultSettings,
-  basemap: "streets",
+  basemap: "blank",
   palette: "young-muslims",
   differentiator: "color",
   markerStyle: "ring",
@@ -33,52 +37,36 @@ function ChapterCtaSection() {
   return (
     <section
       data-header-theme="dark"
-      className="relative h-[723px] w-full overflow-hidden bg-brand-warm-snow"
+      className="relative h-[560px] w-full overflow-hidden bg-brand-warm-snow md:h-[723px]"
     >
-      <div className="absolute top-[352px] right-0 bottom-0 left-0 bg-brand-obsidian" />
-
-      <svg aria-hidden="true" className="absolute size-0">
-        <defs>
-          <clipPath
-            id="chapter-cta-photo-clip"
-            clipPathUnits="objectBoundingBox"
-          >
-            <path d="M0 .13 C.23 .035 .7 .015 1 .12 L1 .86 C.69 .98 .31 .985 0 .88Z" />
-          </clipPath>
-        </defs>
-      </svg>
-
-      <div className="chapter-cta-photo absolute inset-0">
+      <div className="absolute inset-x-0 bottom-0 h-[55%] bg-brand-obsidian" />
+      <div className="absolute top-0 left-1/2 h-full w-[1720px] -translate-x-1/2 md:top-[-79px] md:h-[756px] md:w-[2311px] md:rotate-[3.7deg]">
         <Image
-          src={chapterCtaPhoto}
+          src={chapterCtaShape}
           alt="Young Muslim women gathered beside a lake"
           fill
-          unoptimized
-          sizes="100vw"
-          className="object-cover object-center"
+          sizes="(max-width: 767px) 1720px, 2311px"
+          className="object-contain"
         />
-        <div className="absolute inset-0 bg-brand-obsidian/30" />
       </div>
 
-      <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
-        <h2 className="absolute top-[314px] left-[129px] w-[692px] text-landing-section font-extrabold text-brand-warm-snow">
+      <div className="relative z-10 mx-auto flex h-full max-w-[1182px] flex-col justify-center gap-8 px-6 pt-10 md:flex-row md:items-center md:justify-between md:gap-16 md:px-0 md:pt-0">
+        <h2 className="max-w-[692px] text-[30px] leading-[1.2] font-extrabold tracking-[-0.02em] text-brand-warm-snow md:text-landing-section">
           Seeking the pleasure of Allah (SWT) by empowering Muslim youth.
         </h2>
 
-        <div className="absolute top-[285px] left-[902px] flex w-[312px] flex-col gap-8">
+        <div className="flex w-full shrink-0 flex-col gap-5 md:mr-[97px] md:w-[312px] md:gap-8">
           <Link
             href="/about"
-            className="flex h-[61px] items-center gap-3 bg-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-obsidian transition-colors hover:bg-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
+            className="ym-cta-trigger flex h-[61px] items-center gap-3 bg-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-obsidian transition-colors hover:bg-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
           >
-            <span className="flex-1">Get involved</span>
-            <Image src={ctaArrowDark} alt="" />
+            <AnimatedCtaLabel label="Get involved" textClassName="flex-1" />
           </Link>
           <Link
             href="/support"
-            className="flex h-[61px] items-center gap-3 border border-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
+            className="ym-cta-trigger flex h-[61px] items-center gap-3 border border-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-warm-snow transition-colors hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
           >
-            <span className="flex-1">Support us</span>
-            <Image src={ctaArrowLight} alt="" />
+            <AnimatedCtaLabel label="Support us" textClassName="flex-1" />
           </Link>
         </div>
       </div>
@@ -94,7 +82,7 @@ export default function NeighborNetsPage() {
     >
       <section
         data-header-theme="dark"
-        className="relative h-[1007px] w-full overflow-hidden bg-brand-obsidian"
+        className="relative h-[720px] w-full overflow-hidden bg-brand-obsidian md:h-svh"
       >
         <Image
           src={chapterHero}
@@ -107,11 +95,11 @@ export default function NeighborNetsPage() {
         />
         <div className="absolute inset-0 bg-brand-obsidian/25" />
 
-        <div className="absolute top-[458px] left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-4 text-center text-brand-pure-white">
-          <h1 className="font-display text-landing-stat whitespace-nowrap uppercase">
+        <div className="absolute top-1/2 left-1/2 z-10 flex w-full max-w-[1260px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 px-5 text-center text-brand-pure-white md:px-0">
+          <h1 className="font-display text-[36px] leading-[1.2] tracking-[-0.02em] uppercase sm:text-[48px] md:text-landing-stat md:whitespace-nowrap">
             Find your NeighborNet
           </h1>
-          <p className="text-landing-copy font-semibold whitespace-nowrap">
+          <p className="max-w-[1000px] text-base font-semibold md:text-landing-copy md:whitespace-nowrap">
             There&apos;s one near you, meeting every week. Find it, walk in, and
             you&apos;re in. That&apos;s really all it takes.
           </p>
@@ -121,7 +109,7 @@ export default function NeighborNetsPage() {
           aria-hidden="true"
           viewBox="0 0 1440 170"
           preserveAspectRatio="none"
-          className="absolute right-0 bottom-[-1px] left-0 h-[170px] w-full text-brand-warm-snow"
+          className="absolute right-0 bottom-[-1px] left-0 h-[100px] w-full text-[#f7f3f0] md:h-[170px]"
         >
           <path
             d="M0 32C345 119 1028 126 1440 78V170H0V32Z"
@@ -132,9 +120,20 @@ export default function NeighborNetsPage() {
 
       <section
         data-header-theme="light"
-        className="relative h-[1727px] w-full overflow-hidden bg-brand-warm-snow"
+        className="relative w-full bg-brand-warm-snow px-5 pt-20 pb-28 md:min-h-[1727px] md:px-8 md:pt-[334px] md:pb-[286px]"
       >
-        <div className="absolute top-[334px] left-1/2 w-[1260px] -translate-x-1/2">
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 1440 180"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute top-0 left-0 h-[120px] w-full text-[#f7f3f0] md:h-[180px]"
+        >
+          <path
+            d="M0 0H1440V94C1110 30 910 8 720 80C480 155 260 172 0 126V0Z"
+            fill="currentColor"
+          />
+        </svg>
+        <div className="mx-auto w-full max-w-[1260px]">
           <NeighborNetsMap
             locations={locations}
             initialSettings={chapterMapSettings}
@@ -147,6 +146,9 @@ export default function NeighborNetsPage() {
         </div>
       </section>
 
+      <NeighborNetExplainer />
+      <ChapterImageGrid />
+      <OtherWaysSection />
       <ChapterCtaSection />
     </main>
   );

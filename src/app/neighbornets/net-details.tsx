@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 import { cn } from "@/lib/utils";
 import { branchLabel, type NeighborNetLocation } from "@/lib/neighbornets";
 import {
@@ -21,6 +22,7 @@ export function NetDetails({
   net,
   palette,
   density,
+  ctaMotion = false,
   onClose,
   className,
 }: {
@@ -31,6 +33,7 @@ export function NetDetails({
    * is the side panel with every contact method.
    */
   density: Density;
+  ctaMotion?: boolean;
   onClose?: () => void;
   className?: string;
 }) {
@@ -145,7 +148,11 @@ export function NetDetails({
         {net.contact ? (
           <div className="mt-6 flex flex-wrap gap-2">
             {net.contact.email ? (
-              <ContactLink href={`mailto:${net.contact.email}`} icon="mail">
+              <ContactLink
+                href={`mailto:${net.contact.email}`}
+                icon="mail"
+                ctaMotion={ctaMotion}
+              >
                 Email
               </ContactLink>
             ) : null}
@@ -153,6 +160,7 @@ export function NetDetails({
               <ContactLink
                 href={`tel:${net.contact.phone.replace(/[^\d+]/g, "")}`}
                 icon="call"
+                ctaMotion={ctaMotion}
               >
                 {density === "full" ? net.contact.phone : "Call"}
               </ContactLink>
@@ -161,6 +169,7 @@ export function NetDetails({
               <ContactLink
                 href={`https://instagram.com/${net.contact.instagram.replace("@", "")}`}
                 icon="alternate_email"
+                ctaMotion={ctaMotion}
               >
                 {net.contact.instagram}
               </ContactLink>
@@ -225,11 +234,13 @@ function Row({
 function ContactLink({
   href,
   icon,
+  ctaMotion,
   children,
 }: {
   href: string;
   icon: MaterialIconName;
-  children: React.ReactNode;
+  ctaMotion: boolean;
+  children: string;
 }) {
   const external = href.startsWith("http");
   return (
@@ -237,10 +248,19 @@ function ContactLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
-      className="inline-flex items-center gap-2 rounded-pill border border-brand-royal px-4 py-2 text-nav font-bold text-brand-royal transition-colors outline-none hover:bg-brand-royal hover:text-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-pure-white"
+      className={cn(
+        "inline-flex items-center gap-2 rounded-pill border border-brand-royal px-4 py-2 text-nav font-bold text-brand-royal transition-colors outline-none hover:bg-brand-royal hover:text-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-pure-white",
+        ctaMotion && "ym-cta-trigger",
+      )}
     >
-      <MaterialIcon name={icon} size={16} aria-hidden="true" />
-      {children}
+      {ctaMotion ? (
+        <AnimatedCtaLabel label={children} arrowSize={16} />
+      ) : (
+        <>
+          <MaterialIcon name={icon} size={16} aria-hidden="true" />
+          {children}
+        </>
+      )}
     </a>
   );
 }

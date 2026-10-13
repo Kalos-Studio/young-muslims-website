@@ -11,6 +11,10 @@ import {
 // Must come before the map component so our same-origin worker URL is set
 // before mapcn's unpkg fallback runs. See src/lib/maplibre-worker.ts.
 import "@/lib/maplibre-worker";
+import {
+  AnimatedArrow,
+  AnimatedCtaLabel,
+} from "@/components/ui/animated-arrow";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import {
   Map,
@@ -192,8 +196,7 @@ export function NeighborNetsMap({
   return (
     <div
       className={cn(
-        finder &&
-          (layout === "chapter-page" ? "relative h-[1107px]" : "space-y-6"),
+        finder && (layout === "chapter-page" ? "relative" : "space-y-6"),
       )}
     >
       {finder ? (
@@ -220,7 +223,7 @@ export function NeighborNetsMap({
         className={cn(
           finder
             ? layout === "chapter-page"
-              ? "absolute top-[358px] left-[-7px] h-[749px] w-[1274px] scroll-mt-32"
+              ? "relative mt-16 h-[360px] w-full scroll-mt-32 sm:h-[520px] md:mt-[159px] md:h-[749px]"
               : "relative h-[70vh] min-h-[32rem] w-full scroll-mt-32"
             : bare
               ? "relative h-full w-full"
@@ -344,6 +347,7 @@ export function NeighborNetsMap({
                         net={net}
                         palette={settings.palette}
                         density="compact"
+                        ctaMotion={layout === "chapter-page"}
                       />
                     </MarkerPopup>
                   ) : null}
@@ -361,12 +365,14 @@ export function NeighborNetsMap({
             )}
           </Map>
 
-          <Legend
-            settings={settings}
-            branches={availableBranches}
-            hasInactive={locations.some((net) => net.status !== "active")}
-            densityMode={showHeatmap}
-          />
+          {layout === "chapter-page" ? null : (
+            <Legend
+              settings={settings}
+              branches={availableBranches}
+              hasInactive={locations.some((net) => net.status !== "active")}
+              densityMode={showHeatmap}
+            />
+          )}
         </div>
 
         {bare ? null : (
@@ -411,17 +417,14 @@ export function NeighborNetsMap({
       </div>
 
       {finder && hasSearch ? (
-        <div
-          className={cn(
-            layout === "chapter-page" && "absolute top-[1131px] right-0 left-0",
-          )}
-        >
+        <div className={cn(layout === "chapter-page" && "mt-10")}>
           <SearchResultCards
             query={submittedQuery}
             results={searchResults}
             selectedId={selectedId}
             palette={settings.palette}
             onSelect={focusResult}
+            layout={layout}
           />
         </div>
       ) : null}
@@ -831,10 +834,10 @@ function ChapterSearch({
     return (
       <div className="relative w-full">
         <div>
-          <h2 className="text-landing-section font-extrabold">
+          <h2 className="text-[30px] leading-[1.2] font-extrabold tracking-[-0.02em] md:text-landing-section">
             Find a NeighborNet near you.
           </h2>
-          <p className="mt-4 text-landing-copy font-medium">
+          <p className="mt-4 text-base font-medium md:text-landing-copy">
             Search your city, or select a state to see where Young Muslims
             meets.
           </p>
@@ -843,7 +846,7 @@ function ChapterSearch({
         <form
           onSubmit={onSubmit}
           role="search"
-          className="relative mt-[60px] flex w-full items-start gap-8"
+          className="relative mt-10 flex w-full items-start gap-3 md:mt-[60px] md:gap-8"
         >
           <div className="relative flex h-[51px] min-w-0 flex-1 items-center gap-2.5 border-b border-brand-obsidian px-6 py-4">
             <MaterialIcon name="search" size={18} aria-hidden="true" />
@@ -862,22 +865,21 @@ function ChapterSearch({
           <button
             type="submit"
             aria-label="Search"
-            className="grid size-[51px] shrink-0 place-items-center bg-brand-royal text-brand-pure-white transition-opacity outline-none hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
+            className="ym-cta-trigger grid size-[51px] shrink-0 place-items-center bg-brand-royal text-brand-pure-white transition-opacity outline-none hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
           >
-            <MaterialIcon name="arrow_forward" size={18} aria-hidden="true" />
+            <AnimatedArrow size={18} />
           </button>
           {hasSearch ? (
             <button
               type="button"
               onClick={onReset}
-              className="inline-flex h-[51px] items-center justify-center gap-2 border border-brand-obsidian px-5 text-nav font-bold outline-none hover:bg-brand-obsidian hover:text-brand-warm-snow focus-visible:ring-2 focus-visible:ring-brand-royal"
+              className="ym-cta-trigger inline-flex h-[51px] items-center justify-center gap-2 border border-brand-obsidian px-5 text-nav font-bold outline-none hover:bg-brand-obsidian hover:text-brand-warm-snow focus-visible:ring-2 focus-visible:ring-brand-royal"
             >
-              <MaterialIcon name="refresh" size={16} aria-hidden="true" />
-              Reset
+              <AnimatedCtaLabel label="Reset" arrowSize={16} />
             </button>
           ) : null}
           {suggestions.length > 0 ? (
-            <ul className="absolute top-[59px] right-[83px] left-0 z-30 grid gap-1 border border-brand-obsidian/15 bg-brand-warm-snow p-2 shadow-lg">
+            <ul className="absolute top-[59px] right-[63px] left-0 z-30 grid gap-1 border border-brand-obsidian/15 bg-brand-warm-snow p-2 shadow-lg md:right-[83px]">
               {suggestions.map((suggestion) => (
                 <li key={suggestion}>
                   <button
@@ -975,12 +977,14 @@ function SearchResultCards({
   selectedId,
   palette,
   onSelect,
+  layout,
 }: {
   query: string;
   results: NeighborNetLocation[];
   selectedId: string | null;
   palette: MapSettings["palette"];
   onSelect: (net: NeighborNetLocation) => void;
+  layout: "default" | "chapter-page";
 }) {
   if (results.length === 0) {
     return (
@@ -1019,6 +1023,7 @@ function SearchResultCards({
             aria-pressed={selectedId === net.id}
             className={cn(
               "rounded-card border bg-brand-pure-white p-5 text-left transition-transform outline-none hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-brand-royal",
+              layout === "chapter-page" && "ym-cta-trigger",
               selectedId === net.id
                 ? "border-brand-royal shadow-md"
                 : "border-brand-obsidian/15",
@@ -1040,8 +1045,12 @@ function SearchResultCards({
               <span className="rounded-pill bg-brothers-sky/15 px-3 py-1 text-xs font-bold text-brothers-midnight">
                 {branchLabel[net.branch]}
               </span>
-              <span className="text-sm font-bold text-brand-royal">
-                View on map
+              <span className="inline-flex items-center gap-1 text-sm font-bold text-brand-royal">
+                {layout === "chapter-page" ? (
+                  <AnimatedCtaLabel label="View on map" arrowSize={16} />
+                ) : (
+                  "View on map"
+                )}
               </span>
             </div>
           </button>

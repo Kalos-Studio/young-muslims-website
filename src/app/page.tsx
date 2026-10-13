@@ -23,6 +23,7 @@ import {
 } from "./belonging-portrait-orbit";
 import { ChapterFinderSection } from "./chapter-finder-section";
 import { EverywhereSection } from "./everywhere-section";
+import { HeroFollowupCurve } from "./hero-followup-curve";
 import { HeroVideo } from "./hero-video";
 import { HighlightReelMarquee } from "./highlight-reel-section";
 import { LandingCtaSection } from "./landing-new-sections";
@@ -178,6 +179,7 @@ export default function Home() {
           data-header-theme="light"
           className="relative isolate h-[1298px] w-full overflow-hidden bg-brand-warm-snow md:h-[1830px]"
         >
+          <HeroFollowupCurve />
           <div className="pointer-events-none absolute top-[1671.83px] left-[calc(50%-115.01px)] z-0 flex h-[1879.96px] w-[2955.92px] -translate-x-1/2 -translate-y-1/2 items-center justify-center md:top-[1281px] md:left-[-873px] md:translate-x-0 md:translate-y-0">
             <div className="rotate-[-9.8deg]">
               <Image
