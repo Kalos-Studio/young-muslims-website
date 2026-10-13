@@ -12,6 +12,7 @@ import cardLeadership from "../../design-assets/figma/landing-2026/card-guidance
 import cardGuidance from "../../design-assets/figma/landing-2026/card-guidance.png";
 import cardService from "../../design-assets/figma/landing-2026/card-impact-source.jpeg";
 import cardPeople from "../../design-assets/figma/landing-2026/card-people.jpeg";
+import belongingWaveObsidian from "../../design-assets/figma/landing-2026/belonging-wave-obsidian.svg";
 import belongingWavePale from "../../design-assets/figma/landing-2026/belonging-wave-pale.svg";
 import highlightPlay from "../../design-assets/figma/landing-2026/highlight-play.svg";
 import highlightReel from "../../design-assets/figma/landing-2026/highlight-reel.png";
@@ -23,10 +24,7 @@ import {
 import { ChapterFinderSection } from "./chapter-finder-section";
 import { EverywhereSection } from "./everywhere-section";
 import { HeroVideo } from "./hero-video";
-import {
-  HighlightReelIncomingShape,
-  HighlightReelMarquee,
-} from "./highlight-reel-section";
+import { HighlightReelMarquee } from "./highlight-reel-section";
 import { LandingCtaSection } from "./landing-new-sections";
 import { PeopleStoriesSection } from "./people-stories-section";
 import { WhatWeStandOnSection } from "./what-we-stand-on-section";
@@ -178,7 +176,7 @@ export default function Home() {
       >
         <section
           data-header-theme="light"
-          className="relative h-[1298px] w-full overflow-hidden bg-brand-warm-snow md:h-[1830px]"
+          className="relative isolate h-[1298px] w-full overflow-hidden bg-brand-warm-snow md:h-[1830px]"
         >
           <div className="pointer-events-none absolute top-[1671.83px] left-[calc(50%-115.01px)] z-0 flex h-[1879.96px] w-[2955.92px] -translate-x-1/2 -translate-y-1/2 items-center justify-center md:top-[1281px] md:left-[-873px] md:translate-x-0 md:translate-y-0">
             <div className="rotate-[-9.8deg]">
@@ -189,7 +187,15 @@ export default function Home() {
               />
             </div>
           </div>
-          <HighlightReelIncomingShape />
+          <div className="pointer-events-none absolute top-[1712.19px] left-[calc(50%-115.01px)] z-[15] flex h-[1772.44px] w-[2786.86px] -translate-x-1/2 -translate-y-1/2 items-center justify-center md:top-[1375px] md:left-[-781px] md:translate-x-0 md:translate-y-0">
+            <div className="rotate-[-9.8deg]">
+              <Image
+                src={belongingWaveObsidian}
+                alt=""
+                className="block max-w-none"
+              />
+            </div>
+          </div>
           <div className="relative z-10 h-full">
             <BelongingPortraitOrbit />
           </div>
@@ -219,11 +225,11 @@ export default function Home() {
           className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian md:h-[1087px]"
         >
           <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
-            <h2 className="absolute top-[51px] left-1/2 w-[274px] -translate-x-1/2 text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:top-[202px] md:w-[784px] md:text-landing-section md:leading-[1.2]">
+            <h2 className="absolute top-[21px] left-1/2 w-[274px] -translate-x-1/2 text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:top-[122px] md:w-[784px] md:text-landing-section md:leading-[1.2]">
               But it&apos;s easier to just show you.
             </h2>
             <HighlightReelMarquee />
-            <div className="absolute top-[190px] left-8 h-[397px] w-[296px] overflow-hidden shadow-2xl md:top-[358px] md:left-[503px] md:h-[529px] md:w-[833px]">
+            <div className="absolute top-[160px] left-8 h-[397px] w-[296px] overflow-hidden shadow-2xl md:top-[278px] md:left-[503px] md:h-[529px] md:w-[833px]">
               <Image
                 src={highlightReel}
                 alt="Young Muslims gathered together"

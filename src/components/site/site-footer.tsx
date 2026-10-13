@@ -101,7 +101,7 @@ function FooterMontage({
         </div>
       ))}
       <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
-        <Image src={footerLogo} alt="" />
+        <Image src={footerLogo} alt="" className="block h-auto w-7/8" />
       </div>
     </>
   );
@@ -177,6 +177,17 @@ export function SiteFooter() {
     setPhase("idle");
   }, [clearTimers, footerEdgeOffset, pageY]);
 
+  const syncFooterEdge = useCallback(() => {
+    const footerBottom = footerRef.current?.getBoundingClientRect().bottom;
+    if (footerBottom === undefined) return;
+
+    // The footer rect includes the animated page translation. Remove that
+    // translation so the photo clip follows native scrolling independently.
+    footerEdgeOffset.set(
+      Math.max(0, footerBottom - window.innerHeight - pageY.get()),
+    );
+  }, [footerEdgeOffset, pageY]);
+
   const playMontage = useCallback(() => {
     if (
       reduceMotion ||
@@ -191,11 +202,8 @@ export function SiteFooter() {
     setMontageFrame(availableFrames[0]);
     setPhase("revealing");
     animationRef.current?.stop();
-    const footerBottom =
-      footerRef.current?.getBoundingClientRect().bottom ?? window.innerHeight;
-    const edgeOffset = Math.max(0, footerBottom - window.innerHeight);
-    footerEdgeOffset.set(edgeOffset);
-    animationRef.current = animate(pageY, -(edgeOffset + EASTER_EGG_HEIGHT), {
+    syncFooterEdge();
+    animationRef.current = animate(pageY, -EASTER_EGG_HEIGHT, {
       duration: REVEAL_DURATION_MS / 1000,
       ease: [0.22, 1, 0.36, 1],
     });
@@ -229,10 +237,10 @@ export function SiteFooter() {
   }, [
     availableFrames,
     clearTimers,
-    footerEdgeOffset,
     pageY,
     queueTimer,
     reduceMotion,
+    syncFooterEdge,
   ]);
 
   useEffect(() => resetMontage, [pathname, reduceMotion, resetMontage]);
@@ -253,6 +261,7 @@ export function SiteFooter() {
       !document.querySelector('dialog[open], [role="dialog"]');
     const onScroll = () => {
       const nextY = window.scrollY;
+      if (runningRef.current) syncFooterEdge();
       if (nextY > previousY && canPlay()) playMontage();
       if (runningRef.current && !footerIsVisible()) resetMontage();
       previousY = nextY;
@@ -294,19 +303,24 @@ export function SiteFooter() {
       )
         playMontage();
     };
+    const onResize = () => {
+      if (runningRef.current) syncFooterEdge();
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
     window.addEventListener("wheel", onWheel, { passive: true });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [playMontage, reduceMotion, resetMontage]);
+  }, [playMontage, reduceMotion, resetMontage, syncFooterEdge]);
 
   return (
     <footer
