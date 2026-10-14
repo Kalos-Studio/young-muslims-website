@@ -8,6 +8,7 @@ import Image, { type StaticImageData } from "next/image";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   type MotionValue,
+  animate,
   motion,
   useInView,
   useMotionValue,
@@ -92,7 +93,10 @@ function OrbitingPortrait({
   portrait,
   index,
   orbitSize,
-  progress,
+  entryProgress,
+  scrollYProgress,
+  entryScrollProgress,
+  rotationEnabled,
   cursorX,
   cursorY,
   reduceMotion,
@@ -100,24 +104,34 @@ function OrbitingPortrait({
   portrait: Portrait;
   index: number;
   orbitSize: OrbitSize;
-  progress: MotionValue<number>;
+  entryProgress: MotionValue<number>;
+  scrollYProgress: MotionValue<number>;
+  entryScrollProgress: MotionValue<number>;
+  rotationEnabled: MotionValue<number>;
   cursorX: MotionValue<number>;
   cursorY: MotionValue<number>;
   reduceMotion: boolean | null;
 }) {
   const startingAngle = -Math.PI / 4 - (index / PORTRAITS.length) * FULL_CIRCLE;
-  const entryStart = index * 0.004;
-  const entryEnd = 0.26 + entryStart;
-  const position = useTransform(progress, (value) => {
+  const entryStart = index * 0.023;
+  const entryEnd = 0.54 + entryStart;
+  const position = useTransform(() => {
+    const value = entryProgress.get();
     const entry = Math.max(
       0,
       Math.min(1, (value - entryStart) / (entryEnd - entryStart)),
     );
     const easedEntry = 1 - Math.pow(1 - entry, 3);
+    // Read scroll values on every render so Motion subscribes to them before
+    // the entrance finishes; only apply their rotation after the handoff.
+    const scrollDelta = scrollYProgress.get() - entryScrollProgress.get();
+    const scrollRotation = rotationEnabled.get()
+      ? scrollDelta * FULL_CIRCLE * 0.65
+      : 0;
     const angle =
       -Math.PI / 4 +
       (startingAngle + Math.PI / 4) * easedEntry -
-      Math.max(0, value - entryEnd) * FULL_CIRCLE * 0.65;
+      scrollRotation;
     const orbit = getOrbitPosition(angle, orbitSize);
     return {
       x: orbit.x * easedEntry + orbitSize.width * 0.8 * (1 - easedEntry),
@@ -127,8 +141,8 @@ function OrbitingPortrait({
   const x = useTransform(() => position.get().x + cursorX.get());
   const y = useTransform(() => position.get().y + cursorY.get());
   const opacity = useTransform(
-    progress,
-    [entryStart, entryStart + 0.06],
+    entryProgress,
+    [entryStart, entryStart + 0.15],
     [0, 1],
   );
   const zIndex = useTransform(y, (latestY) =>
@@ -186,7 +200,17 @@ export function BelongingPortraitOrbit() {
     target: orbitRef,
     offset: ["start end", "end start"],
   });
+  const entryProgress = useMotionValue(0);
+  const entryScrollProgress = useMotionValue(0);
+  const rotationEnabled = useMotionValue(0);
+  const entryStarted = useRef(false);
+  const shouldReduceMotion = reduceMotion === true;
+  const orbitHasEnteredView = useInView(orbitRef, {
+    once: true,
+    margin: "0px 0px -15% 0px",
+  });
   const orbitIsVisible = useInView(orbitRef, { margin: "200px 0px" });
+  const orbitIsSized = orbitSize.width > 0;
 
   useEffect(() => {
     const orbit = orbitRef.current;
@@ -203,6 +227,35 @@ export function BelongingPortraitOrbit() {
 
     return () => resizeObserver.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (!orbitHasEnteredView || !orbitIsSized || entryStarted.current) return;
+    entryStarted.current = true;
+
+    if (shouldReduceMotion) {
+      entryProgress.set(1);
+      return;
+    }
+
+    const controls = animate(entryProgress, 1, {
+      duration: 1.7,
+      ease: [0.22, 1, 0.36, 1],
+      onComplete: () => {
+        entryScrollProgress.set(scrollYProgress.get());
+        rotationEnabled.set(1);
+      },
+    });
+
+    return () => controls.stop();
+  }, [
+    entryProgress,
+    entryScrollProgress,
+    orbitHasEnteredView,
+    orbitIsSized,
+    shouldReduceMotion,
+    rotationEnabled,
+    scrollYProgress,
+  ]);
 
   useEffect(() => {
     if (reduceMotion || !orbitIsVisible) {
@@ -272,7 +325,10 @@ export function BelongingPortraitOrbit() {
             portrait={portrait}
             index={index}
             orbitSize={orbitSize}
-            progress={scrollYProgress}
+            entryProgress={entryProgress}
+            scrollYProgress={scrollYProgress}
+            entryScrollProgress={entryScrollProgress}
+            rotationEnabled={rotationEnabled}
             cursorX={cursorX}
             cursorY={cursorY}
             reduceMotion={reduceMotion}

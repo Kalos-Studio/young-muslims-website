@@ -1,6 +1,10 @@
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+import {
+  ChapterImageMarquee,
+  ExplainerImageMarquee,
+} from "./chapter-image-marquee";
 
 import collageLogo from "../../../design-assets/figma/neighbornets/2026-page/a0c41.svg";
 import collageTopLeft from "../../../design-assets/figma/neighbornets/2026-page/abef6.jpg";
@@ -42,32 +46,26 @@ const collagePhotos = [
   {
     image: collageTopLeft,
     alt: "Young Muslim standing beside a red car",
-    position: "md:top-[44px] md:left-[-239px] md:w-[540px]",
   },
   {
     image: collageTopMiddle,
     alt: "Friends reaching their hands together outdoors",
-    position: "md:top-[44px] md:left-[400px] md:w-[524px]",
   },
   {
     image: collageTopRight,
     alt: "Young Muslims gathered for a group photo",
-    position: "md:top-[44px] md:left-[1023px] md:w-[540px]",
   },
   {
     image: collageBottomLeft,
     alt: "Young Muslim women together at a community gathering",
-    position: "md:top-[492px] md:left-[-448px] md:w-[524px]",
   },
   {
     image: collageBottomMiddle,
     alt: "Young Muslims talking at an event",
-    position: "md:top-[492px] md:left-[227px] md:w-[540px]",
   },
   {
     image: collageBottomRight,
     alt: "Young Muslim women seated together for a halaqa",
-    position: "md:top-[492px] md:left-[918px] md:w-[524px]",
   },
 ] as const;
 
@@ -76,12 +74,6 @@ const chapterTileRows: StaticImageData[][] = [
   [tile10, tile09, tile11, tile12, tile13, tile14, tile15, tile16, tile17],
   [tile18, tile17, tile19, tile20, tile21, tile22, tile23, tile24, tile25],
 ];
-
-const rowPositions = [
-  "top-0",
-  "top-[223px] md:top-[360px]",
-  "top-[446px] md:top-[720px]",
-] as const;
 
 const involvementCards = [
   {
@@ -118,27 +110,10 @@ export function NeighborNetExplainer() {
         What&apos;s a NeighborNet?
       </h2>
 
-      <div className="relative mx-auto mt-14 grid max-w-[1440px] grid-cols-2 gap-4 px-4 md:mt-[99px] md:block md:h-[875px] md:overflow-hidden md:px-0">
-        <Image
-          src={collageLogo}
-          alt=""
-          className="pointer-events-none absolute top-1/2 left-1/2 hidden w-[1442px] max-w-none -translate-x-1/2 -translate-y-1/2 md:block"
-        />
-        {collagePhotos.map(({ image, alt, position }) => (
-          <div
-            key={alt}
-            className={`relative aspect-[3/2] min-w-0 overflow-hidden md:absolute md:aspect-auto md:h-[360px] ${position}`}
-          >
-            <Image
-              src={image}
-              alt={alt}
-              fill
-              sizes="(max-width: 767px) 50vw, 540px"
-              className="object-cover"
-            />
-          </div>
-        ))}
-      </div>
+      <ExplainerImageMarquee
+        logo={collageLogo}
+        rows={[collagePhotos.slice(0, 3), collagePhotos.slice(3)]}
+      />
 
       <div className="mx-auto mt-14 flex max-w-[872px] flex-col items-center px-6 text-center text-base leading-normal font-medium tracking-[-0.02em] md:mt-[69px] md:px-0 md:text-[20px]">
         <p>
@@ -174,34 +149,7 @@ export function NeighborNetExplainer() {
 }
 
 export function ChapterImageGrid() {
-  return (
-    <section
-      aria-label="Young Muslims chapters across the country"
-      className="relative h-[669px] w-full overflow-hidden bg-brand-warm-snow md:h-[1080px]"
-    >
-      {chapterTileRows.map((row, rowIndex) => (
-        <div
-          key={rowIndex}
-          className={`absolute left-1/2 flex w-max -translate-x-1/2 ${rowPositions[rowIndex]}`}
-        >
-          {row.map((tile, tileIndex) => (
-            <div
-              key={`${rowIndex}-${tileIndex}`}
-              className="relative h-[223px] w-[140px] shrink-0 md:h-[360px] md:w-[226px]"
-            >
-              <Image
-                src={tile}
-                alt=""
-                fill
-                sizes="(max-width: 767px) 140px, 226px"
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      ))}
-    </section>
-  );
+  return <ChapterImageMarquee rows={chapterTileRows} />;
 }
 
 export function OtherWaysSection() {

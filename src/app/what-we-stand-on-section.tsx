@@ -19,9 +19,10 @@ import principleImpact from "../../design-assets/figma/landing-2026/new-sections
 import principleSustainability from "../../design-assets/figma/landing-2026/new-sections/208-3-source-09.jpeg";
 import principleTarbiyyah from "../../design-assets/figma/landing-2026/new-sections/208-3-source-01.jpeg";
 
-const INTRO_SCROLL_VIEWPORTS = 1;
-const SCROLL_VIEWPORTS_PER_PRINCIPLE = 2;
-const REVEAL_SCROLL_VIEWPORTS = 1;
+const INTRO_PHASE_UNITS = 1;
+const PHASE_UNITS_PER_PRINCIPLE = 2;
+const REVEAL_PHASE_UNITS = 1;
+const SCROLL_RUNWAY_VIEWPORTS = 1;
 const FINAL_EDGE_CURVE =
   "M 0 350 C 175 45 345 40 520 300 C 705 555 845 105 1000 275";
 
@@ -87,8 +88,8 @@ const PRINCIPLES = [
 
 type Principle = (typeof PRINCIPLES)[number];
 
-const TOTAL_SCROLL_VIEWPORTS =
-  INTRO_SCROLL_VIEWPORTS + PRINCIPLES.length * SCROLL_VIEWPORTS_PER_PRINCIPLE;
+const TOTAL_PHASE_UNITS =
+  INTRO_PHASE_UNITS + PRINCIPLES.length * PHASE_UNITS_PER_PRINCIPLE;
 
 function ShapeOutline({
   y,
@@ -202,13 +203,12 @@ function RevealingPrinciple({
   progress: MotionValue<number>;
 }) {
   const revealStart =
-    (INTRO_SCROLL_VIEWPORTS + index * SCROLL_VIEWPORTS_PER_PRINCIPLE) /
-    TOTAL_SCROLL_VIEWPORTS;
+    (INTRO_PHASE_UNITS + index * PHASE_UNITS_PER_PRINCIPLE) / TOTAL_PHASE_UNITS;
   const revealEnd =
-    (INTRO_SCROLL_VIEWPORTS +
-      index * SCROLL_VIEWPORTS_PER_PRINCIPLE +
-      REVEAL_SCROLL_VIEWPORTS) /
-    TOTAL_SCROLL_VIEWPORTS;
+    (INTRO_PHASE_UNITS +
+      index * PHASE_UNITS_PER_PRINCIPLE +
+      REVEAL_PHASE_UNITS) /
+    TOTAL_PHASE_UNITS;
   const panelY = useTransform(
     progress,
     [revealStart, revealEnd],
@@ -264,10 +264,10 @@ function RevealingPrinciple({
 
 function FinalImageEdge({ progress }: { progress: MotionValue<number> }) {
   const finalImageRevealed =
-    (INTRO_SCROLL_VIEWPORTS +
-      (PRINCIPLES.length - 1) * SCROLL_VIEWPORTS_PER_PRINCIPLE +
-      REVEAL_SCROLL_VIEWPORTS) /
-    TOTAL_SCROLL_VIEWPORTS;
+    (INTRO_PHASE_UNITS +
+      (PRINCIPLES.length - 1) * PHASE_UNITS_PER_PRINCIPLE +
+      REVEAL_PHASE_UNITS) /
+    TOTAL_PHASE_UNITS;
   const opacity = useTransform(progress, [finalImageRevealed, 1], [0, 1]);
 
   return (
@@ -299,15 +299,14 @@ export function WhatWeStandOnSection() {
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  const introEnd = INTRO_SCROLL_VIEWPORTS / TOTAL_SCROLL_VIEWPORTS;
+  const introEnd = INTRO_PHASE_UNITS / TOTAL_PHASE_UNITS;
   const headingY = useTransform(
     scrollYProgress,
     [0, introEnd],
     ["calc(100vh - 84px)", "0px"],
   );
   const darkHeaderStart =
-    (INTRO_SCROLL_VIEWPORTS + REVEAL_SCROLL_VIEWPORTS * 0.9) /
-    TOTAL_SCROLL_VIEWPORTS;
+    (INTRO_PHASE_UNITS + REVEAL_PHASE_UNITS * 0.9) / TOTAL_PHASE_UNITS;
 
   useMotionValueEvent(scrollYProgress, "change", (progress) => {
     if (reduceMotion || !sectionRef.current) return;
@@ -349,7 +348,7 @@ export function WhatWeStandOnSection() {
       ref={sectionRef}
       data-header-theme="light"
       className="relative w-full bg-brand-warm-snow"
-      style={{ height: `${(TOTAL_SCROLL_VIEWPORTS + 1) * 100}vh` }}
+      style={{ height: `${(SCROLL_RUNWAY_VIEWPORTS + 1) * 100}vh` }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-brand-warm-snow md:min-h-[860px]">
         <motion.div

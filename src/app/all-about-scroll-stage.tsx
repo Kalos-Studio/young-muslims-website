@@ -11,9 +11,9 @@ import {
 
 const CARD_MOTION = [
   { input: [0, 0.85], output: [560, -600] },
-  { input: [0.05, 1], output: [620, -480] },
-  { input: [0, 1], output: [300, -780] },
-  { input: [0.12, 1], output: [520, -620] },
+  { input: [0, 0.85], output: [580, -600] },
+  { input: [0, 0.85], output: [540, -590] },
+  { input: [0, 0.85], output: [560, -590] },
 ] as const;
 
 const firstCardInitialY = CARD_MOTION[0].output[0];
@@ -71,10 +71,15 @@ export function AllAboutScrollStage({
   const mobileStage = (
     <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:hidden">
       {decorations}
-      <div className="absolute top-[267px] left-8 w-[296px] text-brand-obsidian">
+      <div className="absolute top-[420px] left-8 w-[296px] text-brand-obsidian">
         {intro}
       </div>
       {cards}
+    </div>
+  );
+  const desktopDecorations = (
+    <div className="pointer-events-none absolute top-[405px] left-1/2 hidden h-full w-[1440px] -translate-x-1/2 md:block">
+      {decorations}
     </div>
   );
 
@@ -82,10 +87,8 @@ export function AllAboutScrollStage({
     return (
       <div ref={sectionRef} className="relative h-full">
         {mobileStage}
-        <div className="absolute top-[405px] left-1/2 hidden h-full w-[1440px] -translate-x-1/2 md:block">
-          <div className="all-about-static-decoration contents">
-            {decorations}
-          </div>
+        {desktopDecorations}
+        <div className="absolute top-[405px] left-1/2 hidden h-screen w-[1440px] -translate-x-1/2 md:block">
           <div className="absolute top-[130px] left-[90px] w-[538px] text-brand-obsidian">
             {intro}
           </div>
@@ -98,17 +101,12 @@ export function AllAboutScrollStage({
   return (
     <div ref={sectionRef} className="relative h-full">
       {mobileStage}
+      {desktopDecorations}
       <div className="sticky top-0 hidden h-screen overflow-hidden md:block">
         <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
-          <div className="all-about-sticky-decoration contents">
-            {decorations}
+          <div className="absolute top-[130px] left-[90px] w-[538px] text-brand-obsidian">
+            <motion.div style={{ y: introY }}>{intro}</motion.div>
           </div>
-          <motion.div
-            className="absolute top-[130px] left-[90px] w-[538px] text-brand-obsidian"
-            style={{ y: introY }}
-          >
-            {intro}
-          </motion.div>
           {cards.map((card, index) => (
             <MovingCard
               key={index}

@@ -88,11 +88,12 @@ export function LandingStoryDialog({
       }}
     >
       <motion.article
-        className="absolute overflow-hidden"
+        className="absolute"
         initial={selection.bounds}
         animate={closing ? returnBounds : destination}
         transition={{
           duration: reduceMotion ? 0 : 0.55,
+          delay: reduceMotion || !closing ? 0 : 0.2,
           ease: [0.22, 1, 0.36, 1],
         }}
         onAnimationComplete={() => {
@@ -114,8 +115,8 @@ export function LandingStoryDialog({
           initial={{ opacity: 1 }}
           animate={{ opacity: closing ? 1 : 0 }}
           transition={{
-            duration: reduceMotion ? 0 : 0.2,
-            delay: reduceMotion ? 0 : closing ? 0.15 : 0,
+            duration: reduceMotion ? 0 : 0.25,
+            delay: reduceMotion || closing ? 0 : 0.35,
           }}
           aria-hidden="true"
         >
@@ -133,8 +134,8 @@ export function LandingStoryDialog({
           initial={{ opacity: 0 }}
           animate={{ opacity: closing ? 0 : 1 }}
           transition={{
-            duration: reduceMotion ? 0 : 0.2,
-            delay: closing || reduceMotion ? 0 : 0.3,
+            duration: reduceMotion ? 0 : 0.25,
+            delay: closing || reduceMotion ? 0 : 0.35,
           }}
           inert={closing}
         >
@@ -145,9 +146,7 @@ export function LandingStoryDialog({
                 alt={story.heroAlt}
                 fill
                 sizes="(max-width: 767px) 100vw, 490px"
-                className={
-                  story.editorialDraft ? "object-contain p-8" : "object-cover"
-                }
+                className={`${story.editorialDraft ? "object-contain p-8" : "object-cover"} ${story.slug === "brotherhood-in-the-everyday" ? "rotate-180" : ""}`}
               />
             </div>
             <div className="flex flex-col justify-center gap-6 p-7 text-left md:px-10 md:py-16">

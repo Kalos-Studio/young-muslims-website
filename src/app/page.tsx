@@ -173,7 +173,7 @@ export default function Home() {
 
       <Annotate
         bleed
-        note="Portraits swirl in from the upper right and follow scroll direction around the copy. The text fades in as it enters the viewport."
+        note="Portraits swirl in from the upper right once, then rotate with scroll direction around the copy. The text fades in as it enters the viewport."
       >
         <section
           data-header-theme="light"
@@ -261,11 +261,11 @@ export default function Home() {
       <Annotate
         bleed
         placement="top-right"
-        note="The introduction stays fixed while the four cards move at different speeds during scroll."
+        note="The introduction aligns with the first card while the four closely spaced cards move during scroll. The background marks travel with the section."
       >
         <section
           data-header-theme="light"
-          className="relative h-[2873px] w-full overflow-clip bg-brand-warm-snow md:h-[1835px]"
+          className="relative h-[3026px] w-full overflow-clip bg-brand-warm-snow md:h-[1835px]"
         >
           <div
             className="pointer-events-none absolute top-0 left-1/2 z-0 h-full -translate-x-1/2 overflow-hidden"
@@ -308,7 +308,7 @@ export default function Home() {
                   <Image
                     src={cardDecorBottom}
                     alt=""
-                    className="all-about-yms-mark absolute top-[2627px] left-[-41px] h-[200px] w-[200px] md:top-[1052px] md:left-[17px] md:h-auto md:w-auto"
+                    className="all-about-yms-mark absolute top-[2780px] left-[-41px] h-[200px] w-[200px] md:top-[1052px] md:left-[17px] md:h-auto md:w-auto"
                   />
                 </>
               }
@@ -335,27 +335,27 @@ export default function Home() {
                   key={POINTS[0].title}
                   point={POINTS[0]}
                   image={cardPeople}
-                  className="top-[598px] left-8 md:top-[130px] md:left-[720px]"
+                  className="top-[751px] left-8 md:top-[130px] md:left-[720px]"
                   crop="people"
                 />,
                 <SolidCard
                   key={POINTS[1].title}
                   point={POINTS[1]}
                   image={cardLeadership}
-                  className="top-[1112px] left-8 md:top-[644px] md:left-[720px]"
+                  className="top-[1265px] left-8 md:top-[632px] md:left-[720px]"
                 />,
                 <PhotoCard
                   key={POINTS[2].title}
                   point={POINTS[2]}
                   image={cardGuidance}
-                  className="top-[1626px] left-8 md:top-[220px] md:left-[1050px]"
+                  className="top-[1779px] left-8 md:top-[220px] md:left-[1038px]"
                   crop="guidance"
                 />,
                 <SolidCard
                   key={POINTS[3].title}
                   point={POINTS[3]}
                   image={cardService}
-                  className="top-[2140px] left-8 md:top-[734px] md:left-[1050px]"
+                  className="top-[2293px] left-8 md:top-[722px] md:left-[1038px]"
                 />,
               ]}
             />

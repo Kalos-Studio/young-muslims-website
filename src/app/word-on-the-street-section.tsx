@@ -93,7 +93,7 @@ function ArticleCard({
             transition: {
               opacity: { duration: 0.25, delay },
               scale: { duration: 0.8, delay, ease: REVEAL_EASE },
-              borderRadius: { duration: 0 },
+              borderRadius: { duration: 0.65, ease: REVEAL_EASE },
             },
           },
           hover: {

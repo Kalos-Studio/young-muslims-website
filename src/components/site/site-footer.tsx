@@ -247,8 +247,13 @@ export function SiteFooter() {
 
   useEffect(() => {
     if (reduceMotion) return;
-    let previousY = window.scrollY;
     let touchY: number | null = null;
+    let touchStartedAtBottom = false;
+    let lastWheelAt = 0;
+    let wheelStartedBeforeBottom = false;
+    const isAtPageBottom = () =>
+      window.scrollY + window.innerHeight >=
+      document.documentElement.scrollHeight - 2;
     const footerIsVisible = () => {
       const bounds = footerRef.current?.getBoundingClientRect();
       return Boolean(
@@ -260,17 +265,27 @@ export function SiteFooter() {
       document.documentElement.style.overflow !== "hidden" &&
       !document.querySelector('dialog[open], [role="dialog"]');
     const onScroll = () => {
-      const nextY = window.scrollY;
       if (runningRef.current) syncFooterEdge();
-      if (nextY > previousY && canPlay()) playMontage();
       if (runningRef.current && !footerIsVisible()) resetMontage();
-      previousY = nextY;
     };
     const onWheel = (event: WheelEvent) => {
-      if (!event.ctrlKey && event.deltaY > 0 && canPlay()) playMontage();
+      const now = Date.now();
+      if (now - lastWheelAt > 200) {
+        wheelStartedBeforeBottom = !isAtPageBottom();
+      }
+      lastWheelAt = now;
+      if (
+        !event.ctrlKey &&
+        event.deltaY > 0 &&
+        !wheelStartedBeforeBottom &&
+        isAtPageBottom() &&
+        canPlay()
+      )
+        playMontage();
     };
     const onTouchStart = (event: TouchEvent) => {
       touchY = event.touches.length === 1 ? event.touches[0].clientY : null;
+      touchStartedAtBottom = isAtPageBottom();
     };
     const onTouchMove = (event: TouchEvent) => {
       const nextY = event.touches[0]?.clientY;
@@ -279,14 +294,21 @@ export function SiteFooter() {
         event.touches.length === 1 &&
         touchY !== null &&
         touchY - nextY > 8 &&
+        touchStartedAtBottom &&
+        isAtPageBottom() &&
         canPlay()
       )
         playMontage();
+    };
+    const onTouchEnd = () => {
+      touchY = null;
+      touchStartedAtBottom = false;
     };
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target;
       if (
         event.defaultPrevented ||
+        event.repeat ||
         event.altKey ||
         event.metaKey ||
         event.ctrlKey ||
@@ -299,6 +321,7 @@ export function SiteFooter() {
         return;
       if (
         ["ArrowDown", "PageDown", "End", " "].includes(event.key) &&
+        isAtPageBottom() &&
         canPlay()
       )
         playMontage();
@@ -311,6 +334,8 @@ export function SiteFooter() {
     window.addEventListener("wheel", onWheel, { passive: true });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd);
+    window.addEventListener("touchcancel", onTouchEnd);
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("scroll", onScroll);
@@ -318,6 +343,8 @@ export function SiteFooter() {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [playMontage, reduceMotion, resetMontage, syncFooterEdge]);

@@ -17,7 +17,6 @@ import {
 
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 
-import bottomLeftShell from "../../design-assets/figma/landing-2026/everywhere-bottom-left-shell.svg";
 import bottomLeftPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-left-photo.png";
 import bottomRightPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-right-photo.png";
 import bottomRightShell from "../../design-assets/figma/landing-2026/everywhere-bottom-right-shell.svg";
@@ -228,6 +227,7 @@ export function EverywhereSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const metricsRef = useRef<HTMLDivElement>(null);
   const [headingIsRevealed, setHeadingIsRevealed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const metricsAreVisible = useInView(metricsRef, { once: true });
   const sectionIsVisible = useInView(sectionRef, { margin: "300px 0px" });
   const reduceMotion = useReducedMotion();
@@ -239,6 +239,15 @@ export function EverywhereSection() {
     target: sectionRef,
     offset: ["start end", "end start"],
   });
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+    const updateMobile = () => setIsMobile(mobileQuery.matches);
+
+    updateMobile();
+    mobileQuery.addEventListener("change", updateMobile);
+    return () => mobileQuery.removeEventListener("change", updateMobile);
+  }, []);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (latest > 0.08 && !headingIsRevealed) setHeadingIsRevealed(true);
@@ -257,7 +266,7 @@ export function EverywhereSection() {
   const bottomRightPortraitY = useTransform(
     scrollYProgress,
     [0, 1],
-    reduceMotion ? [0, 0] : [-100, 100],
+    reduceMotion ? [0, 0] : isMobile ? [-16, 16] : [-100, 100],
   );
   const topLeftPortraitX = useTransform(smoothPointerX, (value) => value * -24);
   const topLeftPortraitY = useTransform(smoothPointerY, (value) => value * -18);
@@ -461,12 +470,21 @@ export function EverywhereSection() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
           >
-            <Image
-              src={bottomLeftShell}
-              alt=""
-              className="absolute top-1/2 left-1/2 h-[277px] w-[263px] -translate-x-1/2 -translate-y-1/2 -rotate-30"
-            />
             <div className="absolute top-[13px] left-[43px] h-[285px] w-[282px] -rotate-30">
+              <div
+                aria-hidden="true"
+                className="absolute top-1/2 left-1/2 h-[208px] w-[230px] -translate-x-1/2 -translate-y-1/2 -rotate-90 bg-[#e3f2ed]"
+                style={{
+                  maskImage: `url("${bottomLeftPhoto.src}")`,
+                  WebkitMaskImage: `url("${bottomLeftPhoto.src}")`,
+                  maskSize: "contain",
+                  WebkitMaskSize: "contain",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskPosition: "center",
+                  WebkitMaskPosition: "center",
+                }}
+              />
               <Image
                 src={bottomLeftPhoto}
                 alt=""
@@ -527,7 +545,7 @@ export function EverywhereSection() {
         </motion.div>
 
         <motion.div
-          className="absolute top-[1234px] left-[262px] h-[209px] w-[203px] md:top-[1349px] md:left-[1071px] md:h-[271px] md:w-[264px]"
+          className="absolute top-[1234px] left-[36%] h-[209px] w-[203px] md:top-[1349px] md:left-[1071px] md:h-[271px] md:w-[264px]"
           style={{ y: bottomRightPortraitY }}
         >
           <motion.div

@@ -3,41 +3,31 @@ import Link from "next/link";
 
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 
-import ctaCommunityMobile from "../../design-assets/figma/landing-2026/new-sections/cta-community-mobile.png";
-import ctaCommunity from "../../design-assets/figma/landing-2026/new-sections/cta-community-ribbon-design.png";
+import landingPageFooter from "../../landing page footer.png";
 
 export function LandingCtaSection() {
   return (
     <section
       data-header-theme="dark"
-      className="relative h-[894px] w-full overflow-hidden bg-brand-warm-snow md:h-[723px]"
+      className="relative h-[894px] w-full overflow-hidden bg-brand-obsidian md:h-[723px]"
     >
-      <div className="absolute top-[567px] left-0 h-[371px] w-full bg-brand-obsidian md:top-[352px]" />
+      <Image
+        src={landingPageFooter}
+        alt="Young Muslims volunteers standing together"
+        fill
+        sizes="100vw"
+        className="object-cover object-center md:object-[center_70%]"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(23,23,37,0.7),rgba(23,23,37,0.22)_60%,rgba(23,23,37,0.45))] md:bg-brand-obsidian/30" />
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 1440 96"
+        preserveAspectRatio="none"
+        className="pointer-events-none absolute top-0 left-0 h-24 w-full text-brand-warm-snow"
+      >
+        <path d="M0 0H1440V72C1100 -18 340 -18 0 72Z" fill="currentColor" />
+      </svg>
       <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
-        <div className="absolute top-[-96.05px] left-1/2 flex h-[1107.17px] w-[2884.5px] -translate-x-1/2 items-center justify-center md:hidden">
-          <div className="rotate-[3.7deg]">
-            <Image
-              src={ctaCommunityMobile}
-              alt="Young Muslims volunteers standing together"
-              sizes="2831px"
-              width={2831}
-              height={926}
-              className="block h-[926.3px] w-[2830.59px] max-w-none"
-            />
-          </div>
-        </div>
-        <div className="absolute top-[-79px] left-[-500px] hidden h-[904px] w-[2355px] items-center justify-center md:flex">
-          <div className="rotate-[3.7deg]">
-            <Image
-              src={ctaCommunity}
-              alt="Young Muslims volunteers standing together"
-              sizes="2311px"
-              width={2311}
-              height={756}
-              className="block h-[756px] w-[2311px] max-w-none"
-            />
-          </div>
-        </div>
         <h2 className="absolute top-[155px] left-8 w-[296px] text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:top-[314px] md:left-[129px] md:w-[692px] md:text-left md:text-landing-section md:leading-[1.2]">
           Seeking the pleasure of Allah (SWT) by empowering Muslim youth.
         </h2>

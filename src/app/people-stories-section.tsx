@@ -9,7 +9,9 @@ import {
   useAnimationFrame,
   useInView,
   useMotionValue,
+  useMotionValueEvent,
   useReducedMotion,
+  useScroll,
   useTransform,
 } from "motion/react";
 
@@ -39,7 +41,6 @@ function OrbitPortrait({
   phase,
   isVisible,
   reduceMotion,
-  isSelected,
   onSelect,
 }: {
   story: Story;
@@ -47,7 +48,6 @@ function OrbitPortrait({
   phase: MotionValue<number>;
   isVisible: boolean;
   reduceMotion: boolean;
-  isSelected: boolean;
   onSelect: (story: Story, trigger: HTMLButtonElement) => void;
 }) {
   const angle = (index * Math.PI) / 3 - Math.PI / 6;
@@ -81,7 +81,6 @@ function OrbitPortrait({
           aria-haspopup="dialog"
           tabIndex={isVisible ? 0 : -1}
           onClick={(event) => onSelect(story, event.currentTarget)}
-          style={{ visibility: isSelected ? "hidden" : "visible" }}
         >
           <span
             className="absolute inset-0"
@@ -121,8 +120,31 @@ export function PeopleStoriesSection() {
   const sectionEntered = useInView(sectionRef, { once: true, amount: 0.2 });
   const sectionIsVisible = useInView(sectionRef, { margin: "100px 0px" });
   const [selection, setSelection] = useState<StorySelection | null>(null);
-  const [isInteracting, setIsInteracting] = useState(false);
+  const [hasKeyboardFocus, setHasKeyboardFocus] = useState(false);
   const phase = useMotionValue(0);
+  const previousScrollProgress = useRef<number | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const previous = previousScrollProgress.current;
+    previousScrollProgress.current = latest;
+    if (
+      previous === null ||
+      !window.matchMedia("(max-width: 767px)").matches ||
+      !sectionIsVisible ||
+      !sectionEntered ||
+      reduceMotion ||
+      selection ||
+      hasKeyboardFocus
+    ) {
+      return;
+    }
+
+    phase.set(phase.get() - (latest - previous) * Math.PI * 1.5);
+  });
 
   // Accumulate active time so a popup or offscreen pause never resets the orbit.
   useAnimationFrame((_, delta) => {
@@ -131,7 +153,7 @@ export function PeopleStoriesSection() {
       sectionEntered &&
       !reduceMotion &&
       !selection &&
-      !isInteracting
+      !hasKeyboardFocus
     ) {
       phase.set(
         (phase.get() -
@@ -150,18 +172,14 @@ export function PeopleStoriesSection() {
     >
       <div
         className="absolute top-1/2 left-1/2 aspect-square w-[calc(100vw+120px)] max-w-[1140px] -translate-x-1/2 -translate-y-1/2"
-        onPointerOver={(event) => {
-          if (
-            event.pointerType === "mouse" &&
-            (event.target as HTMLElement).closest("button")
-          )
-            setIsInteracting(true);
+        onFocusCapture={(event) => {
+          if ((event.target as HTMLElement).matches(":focus-visible")) {
+            setHasKeyboardFocus(true);
+          }
         }}
-        onPointerOut={() => setIsInteracting(false)}
-        onFocusCapture={() => setIsInteracting(true)}
         onBlurCapture={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget))
-            setIsInteracting(false);
+            setHasKeyboardFocus(false);
         }}
       >
         {PORTRAITS.map((story, index) => (
@@ -172,7 +190,6 @@ export function PeopleStoriesSection() {
             phase={phase}
             isVisible={Boolean(sectionEntered)}
             reduceMotion={Boolean(reduceMotion)}
-            isSelected={selection?.story.slug === story.slug}
             onSelect={(selectedStory, trigger) => {
               const { left, top, width, height } =
                 trigger.getBoundingClientRect();
@@ -216,7 +233,7 @@ export function PeopleStoriesSection() {
           selection={selection}
           onClose={() => {
             setSelection(null);
-            setIsInteracting(false);
+            setHasKeyboardFocus(false);
           }}
         />
       )}

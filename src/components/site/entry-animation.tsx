@@ -20,6 +20,64 @@ const REVEAL_DURATION_MS = 750;
 
 type Stage = "flashing" | "revealing" | "done";
 
+async function preloadImage(src: string) {
+  const image = new window.Image();
+  image.src = src;
+  try {
+    await image.decode();
+  } catch {
+    // A failed asset should not leave the entry overlay on screen forever.
+  }
+}
+
+async function waitForPageImage(image: HTMLImageElement) {
+  image.loading = "eager";
+
+  if (!image.complete) {
+    await new Promise<void>((resolve) => {
+      image.addEventListener("load", () => resolve(), { once: true });
+      image.addEventListener("error", () => resolve(), { once: true });
+    });
+  }
+
+  try {
+    await image.decode();
+  } catch {
+    // Decode can reject for an image that failed to load.
+  }
+}
+
+function waitForVideo(video: HTMLVideoElement) {
+  if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA || video.error) {
+    return Promise.resolve();
+  }
+
+  return new Promise<void>((resolve) => {
+    video.addEventListener("loadeddata", () => resolve(), { once: true });
+    video.addEventListener("error", () => resolve(), { once: true });
+  });
+}
+
+async function waitForLandingContent() {
+  const landingPage = document.querySelector<HTMLElement>(
+    "[data-landing-page]",
+  );
+  if (!landingPage) return;
+
+  const pageImages = Array.from(landingPage.querySelectorAll("img"));
+  const svgImageSources = Array.from(landingPage.querySelectorAll("svg image"))
+    .map((image) => image.getAttribute("href"))
+    .filter((src): src is string => Boolean(src));
+  const videos = Array.from(landingPage.querySelectorAll("video"));
+
+  await Promise.all([
+    document.fonts.ready,
+    ...pageImages.map(waitForPageImage),
+    ...[...new Set(svgImageSources)].map(preloadImage),
+    ...videos.map(waitForVideo),
+  ]);
+}
+
 export function EntryAnimation({ children }: { children: ReactNode }) {
   const [frameIndex, setFrameIndex] = useState(0);
   const [stage, setStage] = useState<Stage>("flashing");
@@ -27,6 +85,21 @@ export function EntryAnimation({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
     const shouldResetScroll = window.location.hash === "";
     const previousScrollRestoration = window.history.scrollRestoration;
+    const isLandingPage = Boolean(
+      document.querySelector("[data-landing-page]"),
+    );
+    let cancelled = false;
+    let frameTimer: number | undefined;
+    const timers: number[] = [];
+    const previousOverflow = document.documentElement.style.overflow;
+
+    const finish = () => {
+      if (cancelled) return;
+      if (shouldResetScroll) window.scrollTo(0, 0);
+      window.history.scrollRestoration = previousScrollRestoration;
+      document.documentElement.style.overflow = previousOverflow;
+      setStage("done");
+    };
 
     if (shouldResetScroll) {
       window.history.scrollRestoration = "manual";
@@ -34,55 +107,54 @@ export function EntryAnimation({ children }: { children: ReactNode }) {
     }
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      const reducedMotionTimer = window.setTimeout(() => {
-        if (shouldResetScroll) {
-          window.scrollTo(0, 0);
-          window.history.scrollRestoration = previousScrollRestoration;
-        }
-
-        setStage("done");
-      }, 0);
+      timers.push(window.setTimeout(finish, 0));
 
       return () => {
-        window.clearTimeout(reducedMotionTimer);
+        cancelled = true;
+        timers.forEach(window.clearTimeout);
         window.history.scrollRestoration = previousScrollRestoration;
       };
     }
 
-    const previousOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
+    const landingContentReady = isLandingPage
+      ? waitForLandingContent()
+      : Promise.resolve();
 
-    const timers: number[] = [];
+    const entryFramesReady = isLandingPage
+      ? Promise.all(frames.map((frame) => preloadImage(frame.src)))
+      : Promise.resolve();
 
-    frames.slice(1).forEach((_, index) => {
-      timers.push(
-        window.setTimeout(
-          () => setFrameIndex(index + 1),
-          FLASH_DURATION_MS * (index + 1),
-        ),
-      );
+    void entryFramesReady.then(() => {
+      if (cancelled) return;
+
+      frameTimer = window.setInterval(() => {
+        setFrameIndex((index) => (index + 1) % frames.length);
+      }, FLASH_DURATION_MS);
+
+      const minimumCycle = new Promise<void>((resolve) => {
+        timers.push(
+          window.setTimeout(resolve, FLASH_DURATION_MS * (frames.length - 1)),
+        );
+      });
+
+      void Promise.all([minimumCycle, landingContentReady]).then(() => {
+        if (cancelled) return;
+        window.clearInterval(frameTimer);
+        setFrameIndex(frames.length - 1);
+        timers.push(
+          window.setTimeout(() => {
+            if (cancelled) return;
+            setStage("revealing");
+            timers.push(window.setTimeout(finish, REVEAL_DURATION_MS + 50));
+          }, FINAL_FRAME_HOLD_MS),
+        );
+      });
     });
 
-    const revealAt =
-      FLASH_DURATION_MS * (frames.length - 1) + FINAL_FRAME_HOLD_MS;
-
-    timers.push(window.setTimeout(() => setStage("revealing"), revealAt));
-    timers.push(
-      window.setTimeout(
-        () => {
-          if (shouldResetScroll) {
-            window.scrollTo(0, 0);
-            window.history.scrollRestoration = previousScrollRestoration;
-          }
-
-          document.documentElement.style.overflow = previousOverflow;
-          setStage("done");
-        },
-        revealAt + REVEAL_DURATION_MS + 50,
-      ),
-    );
-
     return () => {
+      cancelled = true;
+      window.clearInterval(frameTimer);
       timers.forEach(window.clearTimeout);
       document.documentElement.style.overflow = previousOverflow;
       window.history.scrollRestoration = previousScrollRestoration;

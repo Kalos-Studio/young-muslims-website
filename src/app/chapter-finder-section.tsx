@@ -240,7 +240,10 @@ export function ChapterFinderSection() {
   const [scrollActiveKey, setScrollActiveKey] = useState<CityKey>("houston");
   const [isMobile, setIsMobile] = useState(false);
   const reduceMotion = useReducedMotion();
-  const shapeHasEntered = useInView(sectionRef, { once: true, amount: 0.25 });
+  const shapeHasEntered = useInView(sectionRef, {
+    once: true,
+    amount: isMobile ? 0.05 : 0.25,
+  });
   const activeKey = isMobile ? scrollActiveKey : (previewKey ?? selectedKey);
   const activeCity = useMemo(() => CITY_BY_KEY[activeKey], [activeKey]);
 
@@ -323,7 +326,7 @@ export function ChapterFinderSection() {
         }
         aria-hidden="true"
       >
-        <div className="absolute top-[-900px] left-1/2 flex h-[5809px] w-[5869px] -translate-x-1/2 items-center justify-center md:top-[-462px] md:h-[2984px] md:w-[3015px] lg:top-[-554px] lg:h-[3418px] lg:w-[3453px]">
+        <div className="absolute top-[-750px] left-[calc(50%+160px)] flex h-[5809px] w-[5869px] -translate-x-1/2 items-center justify-center md:top-[-352px] md:left-1/2 md:h-[2984px] md:w-[3015px] lg:top-[-424px] lg:h-[3418px] lg:w-[3453px]">
           <div className="rotate-[56.37deg]">
             <Image
               src={chapterWave}
@@ -335,7 +338,7 @@ export function ChapterFinderSection() {
       </motion.div>
 
       <div className="absolute inset-y-0 left-1/2 w-full max-w-[1440px] -translate-x-1/2">
-        <div className="absolute top-[205px] left-8 z-30 w-[296px] text-brand-warm-snow md:top-[181px] md:left-16 md:w-[538px] lg:top-[468px] lg:left-[90px]">
+        <div className="absolute top-[225px] left-8 z-30 w-[296px] text-brand-warm-snow md:top-[181px] md:left-16 md:w-[538px] lg:top-[468px] lg:left-[90px]">
           <h2
             id="chapter-finder-heading"
             className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-[36px] lg:text-landing-section lg:leading-[1.2]"
@@ -396,7 +399,7 @@ export function ChapterFinderSection() {
           })}
         </div>
 
-        <aside className="absolute top-[384px] bottom-[230px] left-0 z-20 w-[360px] md:top-[332px] md:bottom-[190px] md:left-1/2 md:w-[384px] lg:top-[468px] lg:bottom-[260px] lg:left-[816px] lg:w-[484px]">
+        <aside className="absolute top-[384px] bottom-[230px] left-1/2 z-20 w-[360px] -translate-x-1/2 md:top-[332px] md:bottom-[190px] md:left-1/2 md:w-[384px] md:translate-x-0 lg:top-[468px] lg:bottom-[260px] lg:left-[816px] lg:w-[484px]">
           <CityMedia activeKey={activeKey} reduceMotion={reduceMotion} />
         </aside>
 
