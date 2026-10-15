@@ -33,6 +33,15 @@ const THEME = {
   },
 } as const;
 
+const PORTRAIT_ACCENTS = [
+  "var(--color-brand-royal)",
+  "var(--color-sisters-brass)",
+  "var(--color-brand-jade)",
+  "var(--color-landing-cyan)",
+  "var(--color-brothers-sky)",
+  "var(--color-sisters-buttercup)",
+] as const;
+
 type Expansion = {
   id: number;
   story: Story;
@@ -154,8 +163,20 @@ function PortraitSelector({
         <div className={styles.portraitField}>
           <Image src={galleryMarkLeft} alt="" className={styles.markLeft} />
           <Image src={galleryMarkRight} alt="" className={styles.markRight} />
-          {PORTRAIT_SLOTS.map((slot) => {
+          {PORTRAIT_SLOTS.map((slot, index) => {
             const story = STORIES.find((entry) => entry.slug === slot.slug);
+            const backdrop = (
+              <span
+                aria-hidden="true"
+                className={styles.portraitBackdrop}
+                style={{
+                  backgroundColor:
+                    PORTRAIT_ACCENTS[index % PORTRAIT_ACCENTS.length],
+                  maskImage: `url(${(story?.portrait ?? slot.image).src})`,
+                  rotate: `${story?.rotation ?? 0}deg`,
+                }}
+              />
+            );
             const geometry = {
               left: `${slot.x / 14.4}%`,
               top: `${(slot.y - 556) / 6.61}%`,
@@ -165,6 +186,7 @@ function PortraitSelector({
             if (!story)
               return (
                 <div key={slot.id} className={styles.portrait} style={geometry}>
+                  {backdrop}
                   <Image
                     src={slot.image}
                     alt=""
@@ -186,6 +208,7 @@ function PortraitSelector({
                 className={`${styles.portrait} ${styles.selectable} ${THEME[story.theme].ring}`}
                 style={geometry}
               >
+                {backdrop}
                 <Image
                   src={story.portrait}
                   alt=""

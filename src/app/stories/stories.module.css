@@ -59,6 +59,34 @@
 .portrait {
   position: absolute;
 }
+.portraitBackdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  opacity: 0;
+  scale: 1;
+  transition:
+    opacity 300ms ease,
+    scale 300ms ease;
+}
+@media (hover: hover) {
+  .portrait:hover .portraitBackdrop {
+    opacity: 1;
+    scale: 1.12;
+  }
+}
+.portrait:focus-visible .portraitBackdrop {
+  opacity: 1;
+  scale: 1.12;
+}
+@media (prefers-reduced-motion: reduce) {
+  .portraitBackdrop {
+    transition: none;
+  }
+}
 .selectable {
   z-index: 1;
   cursor: pointer;
