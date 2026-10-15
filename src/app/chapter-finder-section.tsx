@@ -313,7 +313,7 @@ export function ChapterFinderSection() {
       ref={sectionRef}
       data-header-theme="dark"
       aria-labelledby="chapter-finder-heading"
-      className="relative h-[3790px] w-full overflow-clip bg-brand-warm-snow md:h-[2700px] xl:h-[3060px]"
+      className="relative h-[3790px] w-full overflow-clip bg-brand-warm-snow md:h-[2640px] xl:h-[3000px]"
     >
       <motion.div
         className="pointer-events-none absolute inset-0"
@@ -399,7 +399,7 @@ export function ChapterFinderSection() {
           })}
         </div>
 
-        <aside className="absolute top-[384px] bottom-[230px] left-1/2 z-20 w-[360px] -translate-x-1/2 md:top-[332px] md:bottom-[947px] md:left-1/2 md:w-[384px] md:translate-x-0 xl:top-[468px] xl:bottom-[1122px] xl:left-[816px] xl:w-[484px]">
+        <aside className="absolute top-[384px] bottom-[230px] left-1/2 z-20 w-[360px] -translate-x-1/2 md:top-[332px] md:bottom-[887px] md:left-1/2 md:w-[384px] md:translate-x-0 xl:top-[468px] xl:bottom-[1062px] xl:left-[816px] xl:w-[484px]">
           <CityMedia activeKey={activeKey} reduceMotion={reduceMotion} />
         </aside>
 
