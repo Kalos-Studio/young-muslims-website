@@ -354,7 +354,7 @@ export function SiteFooter() {
       ref={footerRef}
       data-footer-phase={phase}
       data-footer-ready={Boolean(availableFrames?.length)}
-      className="relative h-[794px] w-full text-brand-warm-snow md:h-[525px]"
+      className="relative h-[794px] w-full text-brand-warm-snow xl:h-[525px]"
     >
       <motion.div
         aria-hidden="true"
@@ -379,17 +379,17 @@ export function SiteFooter() {
       </motion.div>
 
       <div className="absolute inset-0 overflow-hidden bg-brand-obsidian">
-        <div className="absolute top-0 left-1/2 h-[794px] w-[360px] -translate-x-1/2 md:h-[525px] md:w-[1440px]">
-          <div className="absolute top-0 left-8 flex w-[296px] flex-col items-stretch md:top-[60px] md:left-[80px] md:w-[1280px] md:flex-row md:items-start md:justify-between">
+        <div className="absolute top-0 left-1/2 h-[794px] w-[360px] -translate-x-1/2 md:w-full xl:h-[525px] xl:w-[1440px]">
+          <div className="absolute top-0 left-8 flex w-[296px] flex-col items-stretch md:right-10 md:left-10 md:w-auto xl:top-[60px] xl:right-auto xl:left-[80px] xl:w-[1280px] xl:flex-row xl:items-start xl:justify-between">
             <Image
               src={footerLogo}
               alt="Young Muslims"
-              className="mx-auto mt-0 w-[278px] md:mx-0 md:mt-0 md:w-auto"
+              className="mx-auto mt-0 w-[278px] xl:mx-0 xl:mt-0 xl:w-auto"
             />
 
             <nav
               aria-label="Footer navigation"
-              className="mt-[64px] flex gap-14 text-nav font-semibold md:mt-0"
+              className="mt-[64px] flex gap-14 self-center text-nav font-semibold xl:mt-0 xl:self-auto"
             >
               {FOOTER_LINKS.map((column, index) => (
                 <div key={index} className="flex flex-col gap-6">
@@ -406,7 +406,7 @@ export function SiteFooter() {
               ))}
             </nav>
 
-            <div className="mt-[64px] w-[296px] md:mt-0 md:w-[373px]">
+            <div className="mx-auto mt-[64px] w-[296px] xl:mx-0 xl:mt-0 xl:w-[373px]">
               <p className="text-nav font-semibold">
                 Want to learn more about Young Muslims, what we do, or how to
                 join/create a NeighborNet? Reach out to us via email.
@@ -414,7 +414,7 @@ export function SiteFooter() {
               <Link
                 href={contactLink.href}
                 aria-label={contactLink.label}
-                className="ym-cta-trigger mt-6 inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:w-auto"
+                className="ym-cta-trigger mt-6 inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none xl:w-auto"
               >
                 <AnimatedCtaLabel label={contactLink.label} />
               </Link>
@@ -423,10 +423,10 @@ export function SiteFooter() {
 
           <div
             aria-hidden="true"
-            className="absolute top-[514px] left-1/2 -mt-6 w-screen -translate-x-1/2 overflow-hidden py-4 md:top-[334px]"
+            className="absolute top-[514px] left-1/2 -mt-6 w-screen -translate-x-1/2 overflow-hidden py-4 xl:top-[334px]"
           >
             <motion.div
-              className="-ml-[741px] flex w-max gap-8 font-display text-[32px] whitespace-nowrap text-brand-warm-snow/20 uppercase md:-ml-[1995px] md:text-marquee"
+              className="-ml-[741px] flex w-max gap-8 font-display text-[32px] whitespace-nowrap text-brand-warm-snow/20 uppercase xl:-ml-[1995px] xl:text-marquee"
               style={{ x: taglineX }}
             >
               {Array.from({ length: TAGLINE_REPETITIONS }).map((_, index) => (
@@ -437,8 +437,8 @@ export function SiteFooter() {
             </motion.div>
           </div>
 
-          <div className="absolute top-[610px] left-8 flex h-[120px] w-[296px] flex-col items-center justify-between text-[10px] font-bold tracking-[-0.02em] md:top-[453px] md:left-[80px] md:h-auto md:w-[1280px] md:flex-row">
-            <div className="flex w-full justify-between gap-6 md:w-auto md:justify-start">
+          <div className="absolute top-[610px] left-8 flex h-[120px] w-[296px] flex-col items-center justify-between text-[10px] font-bold tracking-[-0.02em] md:right-10 md:left-10 md:w-auto xl:top-[453px] xl:right-auto xl:left-[80px] xl:h-auto xl:w-[1280px] xl:flex-row">
+            <div className="flex w-full justify-between gap-6 xl:w-auto xl:justify-start">
               <span>© Young Muslims 2026</span>
               <span className="text-brothers-slate underline">
                 Made by Kalos Studio

@@ -317,7 +317,7 @@ export function BelongingPortraitOrbit() {
     <div aria-hidden="true" className="pointer-events-none absolute inset-0">
       <div
         ref={orbitRef}
-        className="absolute top-0 left-[calc(50%+41.45px)] h-full w-[900px] -translate-x-1/2 -translate-y-[14px] md:left-1/2 md:w-[1440px] md:translate-y-0"
+        className="absolute top-0 left-[calc(50%+41.45px)] h-full w-[900px] -translate-x-1/2 -translate-y-[14px] xl:left-1/2 xl:w-[1440px] xl:translate-y-0"
       >
         {PORTRAITS.map((portrait, index) => (
           <OrbitingPortrait
@@ -352,7 +352,7 @@ export function BelongingCopy({ children }: { children: ReactNode }) {
   return (
     <div
       ref={ref}
-      className="absolute top-[487px] left-1/2 z-20 w-[290px] -translate-x-1/2 text-center md:top-[743px] md:w-full md:max-w-[784px]"
+      className="absolute top-[487px] left-1/2 z-20 w-[290px] -translate-x-1/2 text-center xl:top-[743px] xl:w-full xl:max-w-[784px]"
     >
       <motion.div style={reduceMotion ? undefined : { opacity, y }}>
         {children}

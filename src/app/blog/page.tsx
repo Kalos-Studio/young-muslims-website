@@ -109,8 +109,8 @@ export default function BlogPage() {
       <h1 className="sr-only">Blog</h1>
 
       <Annotate>
-        <div className="relative flex aspect-[21/9] flex-col justify-end bg-wf-fill-muted p-12">
-          <p className="absolute top-12 left-12 text-sm text-background/80">
+        <div className="relative flex flex-col justify-end bg-wf-fill-muted p-6 pt-40 md:aspect-[21/9] md:p-12">
+          <p className="absolute top-6 left-6 text-sm text-background/80 md:top-12 md:left-12">
             Featured post image, full bleed, carousel of three
           </p>
 
@@ -139,7 +139,7 @@ export default function BlogPage() {
       </Annotate>
 
       <Annotate className="mt-14">
-        <div className="grid grid-cols-3 gap-x-8 gap-y-14">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2 xl:grid-cols-3">
           {rest.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}

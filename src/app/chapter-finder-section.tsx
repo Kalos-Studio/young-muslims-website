@@ -147,7 +147,7 @@ function CityMedia({
   const shapeTransition = reduceMotion ? { duration: 0 } : transition;
 
   return (
-    <div className="sticky top-[max(5rem,calc(50svh-203.5px))] h-[407px] w-[360px] md:top-[calc(50svh-217.5px)] md:h-[435px] md:w-[384px] lg:top-[calc(50svh-274px)] lg:h-[548px] lg:w-[484px]">
+    <div className="sticky top-[max(5rem,calc(50svh-203.5px))] h-[407px] w-[360px] md:top-[calc(50svh-217.5px)] md:h-[435px] md:w-[384px] xl:top-[calc(50svh-274px)] xl:h-[548px] xl:w-[484px]">
       <div className="pointer-events-none absolute top-1/2 left-1/2 -z-10 size-0">
         {CITIES.map((city) => {
           const isActive = city.key === activeKey;
@@ -212,10 +212,10 @@ function CityMedia({
         <div className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(191,206,219,0)_9.5%,rgba(23,23,37,0.48)_109.91%)]" />
 
         <div className="absolute inset-0 z-20 text-center text-brand-pure-white">
-          <p className="absolute top-[39.6%] hidden w-full font-display text-[42.86px] uppercase md:block lg:text-stat">
+          <p className="absolute top-[39.6%] hidden w-full font-display text-[42.86px] uppercase md:block xl:text-stat">
             {activeCity.name}
           </p>
-          <p className="absolute top-[58.6%] w-full text-[15px] font-bold tracking-[-0.02em] uppercase md:text-[16px] lg:text-landing-copy">
+          <p className="absolute top-[58.6%] w-full text-[15px] font-bold tracking-[-0.02em] uppercase md:text-[16px] xl:text-landing-copy">
             {activeCity.state}
           </p>
           <Link
@@ -313,7 +313,7 @@ export function ChapterFinderSection() {
       ref={sectionRef}
       data-header-theme="dark"
       aria-labelledby="chapter-finder-heading"
-      className="relative h-[3790px] w-full overflow-clip bg-brand-warm-snow md:h-[1943px] lg:h-[2198px]"
+      className="relative h-[3790px] w-full overflow-clip bg-brand-warm-snow md:h-[1943px] xl:h-[2198px]"
     >
       <motion.div
         className="pointer-events-none absolute inset-0"
@@ -326,33 +326,33 @@ export function ChapterFinderSection() {
         }
         aria-hidden="true"
       >
-        <div className="absolute top-[-750px] left-[calc(50%+160px)] flex h-[5809px] w-[5869px] -translate-x-1/2 items-center justify-center md:top-[-352px] md:left-1/2 md:h-[2984px] md:w-[3015px] lg:top-[-424px] lg:h-[3418px] lg:w-[3453px]">
+        <div className="absolute top-[-750px] left-[calc(50%+160px)] flex h-[5809px] w-[5869px] -translate-x-1/2 items-center justify-center md:top-[-352px] md:left-1/2 md:h-[2984px] md:w-[3015px] xl:top-[-424px] xl:h-[3418px] xl:w-[3453px]">
           <div className="rotate-[56.37deg]">
             <Image
               src={chapterWave}
               alt=""
-              className="block h-auto w-[4104px] max-w-none md:w-[2108px] lg:w-[2415px]"
+              className="block h-auto w-[4104px] max-w-none md:w-[2108px] xl:w-[2415px]"
             />
           </div>
         </div>
       </motion.div>
 
       <div className="absolute inset-y-0 left-1/2 w-full max-w-[1440px] -translate-x-1/2">
-        <div className="absolute top-[225px] left-8 z-30 w-[296px] text-brand-warm-snow md:top-[181px] md:left-16 md:w-[538px] lg:top-[468px] lg:left-[90px]">
+        <div className="absolute top-[225px] left-8 z-30 w-[296px] text-brand-warm-snow md:top-[181px] md:left-16 md:w-[538px] xl:top-[468px] xl:left-[90px]">
           <h2
             id="chapter-finder-heading"
-            className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-[36px] lg:text-landing-section lg:leading-[1.2]"
+            className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-[36px] xl:text-landing-section xl:leading-[1.2]"
           >
             Let&apos;s find your story.
           </h2>
-          <p className="mt-4 text-base font-medium tracking-[-0.02em] md:text-[18px] lg:text-landing-copy">
+          <p className="mt-4 text-base font-medium tracking-[-0.02em] md:text-[18px] xl:text-landing-copy">
             There&apos;s a NeighborNet near you. Find it, and just show up
             &mdash; someone&apos;s saving you a seat.
           </p>
         </div>
 
         <div
-          className="absolute top-[542px] left-1/2 z-40 flex w-[279px] -translate-x-1/2 flex-col items-center gap-[342px] md:top-[500px] md:left-16 md:translate-x-0 md:items-start md:gap-[100px] lg:top-[688px] lg:left-[97px] lg:gap-[23px]"
+          className="absolute top-[542px] left-1/2 z-40 flex w-[279px] -translate-x-1/2 flex-col items-center gap-[342px] md:top-[500px] md:left-16 md:translate-x-0 md:items-start md:gap-[100px] xl:top-[688px] xl:left-[97px] xl:gap-[23px]"
           aria-label="Choose a NeighborNet city"
         >
           {CITIES.map((city) => {
@@ -369,7 +369,7 @@ export function ChapterFinderSection() {
                 type="button"
                 aria-pressed={isSelected}
                 aria-label={`${city.name}, ${city.state}${isSelected ? ", selected" : ""}`}
-                className={`w-fit cursor-pointer rounded-sm font-display text-[42.5px] tracking-[-0.02em] uppercase transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-4 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none lg:text-stat ${isActive ? city.selectedClassName : "text-brand-pure-white"}`}
+                className={`w-fit cursor-pointer rounded-sm font-display text-[42.5px] tracking-[-0.02em] uppercase transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-4 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none xl:text-stat ${isActive ? city.selectedClassName : "text-brand-pure-white"}`}
                 onPointerEnter={(event) => {
                   if (!isMobile && event.pointerType !== "touch") {
                     setPreviewKey(city.key);
@@ -399,7 +399,7 @@ export function ChapterFinderSection() {
           })}
         </div>
 
-        <aside className="absolute top-[384px] bottom-[230px] left-1/2 z-20 w-[360px] -translate-x-1/2 md:top-[332px] md:bottom-[190px] md:left-1/2 md:w-[384px] md:translate-x-0 lg:top-[468px] lg:bottom-[260px] lg:left-[816px] lg:w-[484px]">
+        <aside className="absolute top-[384px] bottom-[230px] left-1/2 z-20 w-[360px] -translate-x-1/2 md:top-[332px] md:bottom-[190px] md:left-1/2 md:w-[384px] md:translate-x-0 xl:top-[468px] xl:bottom-[260px] xl:left-[816px] xl:w-[484px]">
           <CityMedia activeKey={activeKey} reduceMotion={reduceMotion} />
         </aside>
 
@@ -409,7 +409,7 @@ export function ChapterFinderSection() {
 
         <Link
           href="/neighbornets"
-          className="ym-cta-trigger absolute bottom-[126px] left-1/2 z-30 inline-flex w-[296px] -translate-x-1/2 items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:bottom-[160px] md:left-16 md:w-auto md:translate-x-0 lg:top-[1591px] lg:bottom-auto lg:left-[97px]"
+          className="ym-cta-trigger absolute bottom-[126px] left-1/2 z-30 inline-flex w-[296px] -translate-x-1/2 items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none md:bottom-[160px] md:left-16 md:w-auto md:translate-x-0 xl:top-[1591px] xl:bottom-auto xl:left-[97px]"
         >
           <AnimatedCtaLabel label="View all" />
         </Link>

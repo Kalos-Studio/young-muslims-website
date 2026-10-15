@@ -34,7 +34,7 @@ export default function StorePage() {
         bleed
         note="brothers and sisters cover images; clicking either side navigates you out to that store"
       >
-        <section className="grid h-[calc(100dvh-6rem)] grid-cols-2 overflow-hidden">
+        <section className="grid min-h-svh grid-cols-1 grid-rows-2 overflow-hidden md:h-[calc(100dvh-6rem)] md:grid-cols-2 md:grid-rows-1">
           <a
             href="https://www.ymsite.com/"
             className="group relative flex items-center justify-center overflow-hidden bg-wf-fill outline-none"

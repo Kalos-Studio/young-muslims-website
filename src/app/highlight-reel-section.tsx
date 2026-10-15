@@ -39,7 +39,7 @@ export function HighlightReelMarquee() {
       aria-hidden="true"
       className="pointer-events-none absolute top-0 left-1/2 h-full w-screen -translate-x-1/2 overflow-hidden"
     >
-      <div className="absolute inset-x-0 top-[300px] flex flex-col gap-2 font-display text-[30px] leading-[1.05] whitespace-nowrap uppercase md:top-[421px] md:gap-[19px] md:text-marquee md:leading-none">
+      <div className="absolute inset-x-0 top-[300px] flex flex-col gap-2 font-display text-[30px] leading-[1.05] whitespace-nowrap uppercase xl:top-[421px] xl:gap-[19px] xl:text-marquee xl:leading-none">
         <motion.div
           className="-ml-[400px] flex w-max gap-6 text-brand-warm-snow md:-ml-[1200px] md:gap-8"
           style={{ x: leftwardX }}

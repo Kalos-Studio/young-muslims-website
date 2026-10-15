@@ -53,11 +53,11 @@ function OrbitPortrait({
   const angle = (index * Math.PI) / 3 - Math.PI / 6;
   const left = useTransform(
     phase,
-    (value) => `${50 + Math.cos(angle + value) * 42}%`,
+    (value) => `${50 + Math.cos(angle + value) * 33}%`,
   );
   const top = useTransform(
     phase,
-    (value) => `${50 + Math.sin(angle + value) * 42}%`,
+    (value) => `${50 + Math.sin(angle + value) * 33}%`,
   );
 
   return (

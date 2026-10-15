@@ -42,7 +42,7 @@ export function SiteHeader() {
       <HeaderContrastController />
       <div
         data-site-header-inner
-        className="grid h-[123px] w-full grid-cols-[1fr_auto] items-center gap-8 px-8 md:px-20 xl:grid-cols-[1fr_auto_1fr]"
+        className="mx-auto grid h-[123px] w-full max-w-[1440px] grid-cols-[1fr_auto] items-center gap-8 px-8 md:px-20 xl:grid-cols-[1fr_auto_1fr]"
       >
         <div className="flex items-center justify-start">
           <Link

@@ -177,10 +177,10 @@ export default function Home() {
       >
         <section
           data-header-theme="light"
-          className="relative isolate h-[1298px] w-full overflow-hidden bg-brand-warm-snow md:h-[1830px]"
+          className="relative isolate h-[1298px] w-full overflow-hidden bg-brand-warm-snow xl:h-[1830px]"
         >
           <HeroFollowupCurve />
-          <div className="pointer-events-none absolute top-[1671.83px] left-[calc(50%-115.01px)] z-0 flex h-[1879.96px] w-[2955.92px] -translate-x-1/2 -translate-y-1/2 items-center justify-center md:top-[1281px] md:left-[-873px] md:translate-x-0 md:translate-y-0">
+          <div className="pointer-events-none absolute top-[1671.83px] left-[calc(50%-115.01px)] z-0 flex h-[1879.96px] w-[2955.92px] -translate-x-1/2 -translate-y-1/2 items-center justify-center xl:top-[1281px] xl:left-[-873px] xl:translate-x-0 xl:translate-y-0">
             <div className="rotate-[-9.8deg]">
               <Image
                 src={belongingWavePale}
@@ -189,7 +189,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="pointer-events-none absolute top-[1712.19px] left-[calc(50%-115.01px)] z-[15] flex h-[1772.44px] w-[2786.86px] -translate-x-1/2 -translate-y-1/2 items-center justify-center md:top-[1375px] md:left-[-781px] md:translate-x-0 md:translate-y-0">
+          <div className="pointer-events-none absolute top-[1712.19px] left-[calc(50%-115.01px)] z-[15] flex h-[1772.44px] w-[2786.86px] -translate-x-1/2 -translate-y-1/2 items-center justify-center xl:top-[1375px] xl:left-[-781px] xl:translate-x-0 xl:translate-y-0">
             <div className="rotate-[-9.8deg]">
               <Image
                 src={belongingWaveObsidian}
@@ -224,14 +224,14 @@ export default function Home() {
       >
         <section
           data-header-theme="dark"
-          className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian md:h-[1087px]"
+          className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian xl:h-[1087px]"
         >
-          <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
-            <h2 className="absolute top-[21px] left-1/2 w-[274px] -translate-x-1/2 text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:top-[122px] md:w-[784px] md:text-landing-section md:leading-[1.2]">
+          <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 xl:w-[1440px] 2xl:left-0 2xl:w-full 2xl:translate-x-0">
+            <h2 className="absolute top-[21px] left-1/2 w-[274px] -translate-x-1/2 text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:text-landing-section md:leading-[1.2] xl:top-[122px] xl:w-[784px]">
               But it&apos;s easier to just show you.
             </h2>
             <HighlightReelMarquee />
-            <div className="absolute top-[160px] left-8 h-[397px] w-[296px] overflow-hidden shadow-2xl md:top-[278px] md:left-[503px] md:h-[529px] md:w-[833px]">
+            <div className="absolute top-[160px] left-8 h-[397px] w-[296px] overflow-hidden shadow-2xl xl:top-[278px] xl:left-[503px] xl:h-[529px] xl:w-[833px] 2xl:left-1/2 2xl:-translate-x-1/2">
               <Image
                 src={highlightReel}
                 alt="Young Muslims gathered together"
@@ -265,7 +265,7 @@ export default function Home() {
       >
         <section
           data-header-theme="light"
-          className="relative h-[3026px] w-full overflow-clip bg-brand-warm-snow md:h-[1835px]"
+          className="relative h-[3026px] w-full overflow-clip bg-brand-warm-snow xl:h-[1835px]"
         >
           <div
             className="pointer-events-none absolute top-0 left-1/2 z-0 h-full -translate-x-1/2 overflow-hidden"
@@ -303,12 +303,12 @@ export default function Home() {
                   <Image
                     src={cardDecorTop}
                     alt=""
-                    className="absolute top-[392px] left-[193px] h-[200px] w-[200px] md:-top-[26px] md:left-[1111px] md:h-auto md:w-auto"
+                    className="absolute top-[392px] left-[193px] h-[200px] w-[200px] xl:-top-[26px] xl:left-[1111px] xl:h-auto xl:w-auto"
                   />
                   <Image
                     src={cardDecorBottom}
                     alt=""
-                    className="all-about-yms-mark absolute top-[2780px] left-[-41px] h-[200px] w-[200px] md:top-[1052px] md:left-[17px] md:h-auto md:w-auto"
+                    className="all-about-yms-mark absolute top-[2780px] left-[-41px] h-[200px] w-[200px] xl:top-[1052px] xl:left-[17px] xl:h-auto xl:w-auto"
                   />
                 </>
               }
@@ -335,27 +335,27 @@ export default function Home() {
                   key={POINTS[0].title}
                   point={POINTS[0]}
                   image={cardPeople}
-                  className="top-[751px] left-8 md:top-[130px] md:left-[720px]"
+                  className="top-[751px] left-8 xl:top-[130px] xl:left-[720px]"
                   crop="people"
                 />,
                 <SolidCard
                   key={POINTS[1].title}
                   point={POINTS[1]}
                   image={cardLeadership}
-                  className="top-[1265px] left-8 md:top-[632px] md:left-[720px]"
+                  className="top-[1265px] left-8 xl:top-[632px] xl:left-[720px]"
                 />,
                 <PhotoCard
                   key={POINTS[2].title}
                   point={POINTS[2]}
                   image={cardGuidance}
-                  className="top-[1779px] left-8 md:top-[220px] md:left-[1038px]"
+                  className="top-[1779px] left-8 xl:top-[220px] xl:left-[1038px]"
                   crop="guidance"
                 />,
                 <SolidCard
                   key={POINTS[3].title}
                   point={POINTS[3]}
                   image={cardService}
-                  className="top-[2293px] left-8 md:top-[722px] md:left-[1038px]"
+                  className="top-[2293px] left-8 xl:top-[722px] xl:left-[1038px]"
                 />,
               ]}
             />

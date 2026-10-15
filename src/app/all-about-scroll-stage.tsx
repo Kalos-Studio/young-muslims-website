@@ -69,7 +69,7 @@ export function AllAboutScrollStage({
   );
 
   const mobileStage = (
-    <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:hidden">
+    <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 xl:hidden">
       {decorations}
       <div className="absolute top-[420px] left-8 w-[296px] text-brand-obsidian">
         {intro}
@@ -78,7 +78,7 @@ export function AllAboutScrollStage({
     </div>
   );
   const desktopDecorations = (
-    <div className="pointer-events-none absolute top-[405px] left-1/2 hidden h-full w-[1440px] -translate-x-1/2 md:block">
+    <div className="pointer-events-none absolute top-[405px] left-1/2 hidden h-full w-[1440px] -translate-x-1/2 xl:block">
       {decorations}
     </div>
   );
@@ -88,7 +88,7 @@ export function AllAboutScrollStage({
       <div ref={sectionRef} className="relative h-full">
         {mobileStage}
         {desktopDecorations}
-        <div className="absolute top-[405px] left-1/2 hidden h-screen w-[1440px] -translate-x-1/2 md:block">
+        <div className="absolute top-[405px] left-1/2 hidden h-screen w-[1440px] -translate-x-1/2 xl:block">
           <div className="absolute top-[130px] left-[90px] w-[538px] text-brand-obsidian">
             {intro}
           </div>
@@ -102,7 +102,7 @@ export function AllAboutScrollStage({
     <div ref={sectionRef} className="relative h-full">
       {mobileStage}
       {desktopDecorations}
-      <div className="sticky top-0 hidden h-screen overflow-hidden md:block">
+      <div className="sticky top-0 hidden h-screen overflow-hidden xl:block">
         <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
           <div className="absolute top-[130px] left-[90px] w-[538px] text-brand-obsidian">
             <motion.div style={{ y: introY }}>{intro}</motion.div>

@@ -35,7 +35,7 @@ export default function AboutPage() {
           Conferences and retreats
         </Text>
         <div className="mt-8 flex flex-col divide-y divide-brand-obsidian/10">
-          <div className="grid grid-cols-2 items-start gap-8 py-16">
+          <div className="grid grid-cols-1 items-start gap-8 py-16 md:grid-cols-2">
             <Frame
               variant="fill"
               label="Event image: conferences"
@@ -48,7 +48,7 @@ export default function AboutPage() {
               <Lorem paragraphs={2} className="mt-4" />
             </div>
           </div>
-          <div className="grid grid-cols-2 items-start gap-8 py-16">
+          <div className="grid grid-cols-1 items-start gap-8 py-16 md:grid-cols-2">
             <Frame
               variant="fill"
               label="Event image: retreats"
@@ -61,7 +61,7 @@ export default function AboutPage() {
               <Lorem paragraphs={2} className="mt-4" />
             </div>
           </div>
-          <div className="grid grid-cols-2 items-start gap-8 py-16">
+          <div className="grid grid-cols-1 items-start gap-8 py-16 md:grid-cols-2">
             <Frame
               variant="fill"
               label="Event image: events"
@@ -78,16 +78,16 @@ export default function AboutPage() {
       </Annotate>
 
       <Annotate className="mt-20">
-        <div className="rounded-card bg-brand-obsidian p-8 text-brand-pure-white">
+        <div className="rounded-card bg-brand-obsidian p-6 text-brand-pure-white md:p-8">
           <Text as="h2" tone="dark">
             Leadership
           </Text>
-          <div className="mt-8 grid grid-cols-2 divide-x divide-brand-pure-white/20">
+          <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 md:divide-x md:divide-brand-pure-white/20">
             <div>
               <Text as="h3" tone="dark">
                 Brothers
               </Text>
-              <div className="mt-6 grid grid-cols-4 gap-4">
+              <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div
                     key={i}
@@ -98,11 +98,11 @@ export default function AboutPage() {
                 ))}
               </div>
             </div>
-            <div className="pl-8">
+            <div className="md:pl-8">
               <Text as="h3" tone="dark">
                 Sisters
               </Text>
-              <div className="mt-6 grid grid-cols-4 gap-4">
+              <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div
                     key={i}

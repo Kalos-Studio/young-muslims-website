@@ -31,10 +31,10 @@ const THEME = {
 const POSITIONS = [
   "top-[4%] left-[2%] md:top-[5%] md:left-[6%]",
   "top-[2%] left-[38%] md:left-[42%]",
-  "top-[8%] right-[-10%] md:right-[5%]",
-  "bottom-[4%] left-[-10%] md:bottom-[8%] md:left-[8%]",
+  "top-[8%] right-0 md:right-[5%]",
+  "bottom-[4%] left-0 md:bottom-[8%] md:left-[8%]",
   "bottom-[1%] left-[37%] md:left-[42%]",
-  "right-[-12%] bottom-[8%] md:right-[4%] md:bottom-[11%]",
+  "right-0 bottom-[8%] md:right-[4%] md:bottom-[11%]",
 ] as const;
 
 type Expansion = {

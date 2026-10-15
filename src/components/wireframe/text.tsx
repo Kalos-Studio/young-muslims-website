@@ -62,7 +62,7 @@ export function Text({
 
   return (
     <div className={cn(onDark && "text-brand-pure-white", className)}>
-      <Tag className={levels[as]}>[{children}]</Tag>
+      <Tag className={cn(levels[as], "break-words")}>[{children}]</Tag>
       {example ? (
         <p
           className={`mt-2 text-sm font-medium ${

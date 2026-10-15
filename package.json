@@ -16,6 +16,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
+    "test:responsive": "node scripts/responsive-audit.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

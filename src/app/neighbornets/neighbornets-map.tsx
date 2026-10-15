@@ -90,6 +90,15 @@ export function NeighborNetsMap({
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [focusedResultId, setFocusedResultId] = useState<string | null>(null);
   const [mapZoom, setMapZoom] = useState(US_VIEW.zoom);
+  const [selectedState, setSelectedState] = useState<{
+    name: string;
+    bounds: [[number, number], [number, number]];
+  } | null>(null);
+  const [hoveredState, setHoveredState] = useState<{
+    name: string;
+    bounds: [[number, number], [number, number]];
+  } | null>(null);
+  const isHoveringStateRef = useRef(false);
   const mapSectionRef = useRef<HTMLDivElement>(null);
 
   const visibleNets = useMemo(
@@ -175,6 +184,9 @@ export function NeighborNetsMap({
     setSubmittedQuery(query.trim());
     setFocusedResultId(null);
     setSelectedId(null);
+    setSelectedState(null);
+    setHoveredState(null);
+    isHoveringStateRef.current = false;
   }
 
   function resetSearch() {
@@ -182,9 +194,15 @@ export function NeighborNetsMap({
     setSubmittedQuery("");
     setFocusedResultId(null);
     setSelectedId(null);
+    setSelectedState(null);
+    setHoveredState(null);
+    isHoveringStateRef.current = false;
   }
 
   function focusResult(net: NeighborNetLocation) {
+    setSelectedState(null);
+    setHoveredState(null);
+    isHoveringStateRef.current = false;
     setFocusedResultId(net.id);
     setSelectedId(net.id);
     mapSectionRef.current?.scrollIntoView({
@@ -209,6 +227,9 @@ export function NeighborNetsMap({
             setSubmittedQuery(value);
             setFocusedResultId(null);
             setSelectedId(null);
+            setSelectedState(null);
+            setHoveredState(null);
+            isHoveringStateRef.current = false;
           }}
           onReset={resetSearch}
           locations={visibleNets}
@@ -235,135 +256,235 @@ export function NeighborNetsMap({
         <div
           className={cn(
             "relative",
-            bare
-              ? "h-full w-full"
-              : "h-[60vh] min-h-0 overflow-hidden rounded-lg border border-border lg:h-full",
+            layout === "chapter-page"
+              ? "flex h-full min-h-0 w-full flex-col overflow-hidden rounded-[2px] bg-brand-warm-snow"
+              : bare
+                ? "h-full w-full"
+                : "h-[60vh] min-h-0 overflow-hidden rounded-lg border border-border lg:h-full",
           )}
         >
-          <Map
-            className="h-full w-full"
-            // mapcn otherwise picks its theme from prefers-color-scheme, which
-            // would flip the map to dark while the rest of the page stays light:
-            // the app has no dark mode wired up yet. Drop this once it does.
-            theme="light"
-            blank={settings.basemap === "blank"}
-            center={US_VIEW.center}
-            zoom={US_VIEW.zoom}
-            // MapCamera raises this to the exact zoom needed to keep the whole
-            // country in frame once it knows the rendered container size.
-            minZoom={1.5}
-            maxZoom={14}
-            // A bare map is a picture of the country, not something to fly
-            // around in. This disables MapLibre's own drag/zoom/keyboard
-            // handlers; markers are separate DOM overlays, so they stay
-            // clickable, and fitBounds still drives the camera.
-            interactive={interactive ?? !bare}
-            onViewportChange={(viewport) => setMapZoom(viewport.zoom)}
-          >
-            <MapCamera focusLocations={cameraNets} />
-
-            {showHeatmap ? <RegionHeatmap nets={visibleNets} /> : null}
-
-            {settings.showStateOutlines ? (
-              <MapGeoJSON
-                // Remounting on basemap change avoids re-tuning paint in place
-                // while MapLibre is mid style-swap.
-                key={`states-${settings.basemap}`}
-                data={US_STATES_GEOJSON}
-                fillPaint={
-                  settings.basemap === "blank"
-                    ? { "fill-opacity": 0.55 }
-                    : { "fill-opacity": 0 }
-                }
-                linePaint={{
-                  "line-color":
-                    settings.basemap === "blank" ? "#ffffff" : "#94a3b8",
-                  "line-width": 0.6,
-                }}
+          <div className="relative min-h-0 flex-1 bg-brand-warm-snow">
+            <Map
+              className="absolute inset-0 h-full w-full"
+              // mapcn otherwise picks its theme from prefers-color-scheme, which
+              // would flip the map to dark while the rest of the page stays light:
+              // the app has no dark mode wired up yet. Drop this once it does.
+              theme="light"
+              blank={settings.basemap === "blank"}
+              center={US_VIEW.center}
+              zoom={US_VIEW.zoom}
+              // MapCamera raises this to the exact zoom needed to keep the whole
+              // country in frame once it knows the rendered container size.
+              minZoom={1.5}
+              maxZoom={14}
+              // A bare map is a picture of the country, not something to fly
+              // around in. This disables MapLibre's own drag/zoom/keyboard
+              // handlers; markers are separate DOM overlays, so they stay
+              // clickable, and fitBounds still drives the camera.
+              interactive={interactive ?? !bare}
+              onViewportChange={(viewport) => setMapZoom(viewport.zoom)}
+            >
+              <MapCamera
+                focusLocations={cameraNets}
+                focusBounds={selectedState?.bounds ?? null}
+                hoverBounds={hoveredState?.bounds ?? null}
               />
-            ) : null}
+              {layout === "chapter-page" ? (
+                <MapCursorFocus isHoveringStateRef={isHoveringStateRef} />
+              ) : null}
 
-            {showMarkers && settings.cluster ? (
-              <ClusterLayers
-                nets={mappedNets}
-                settings={settings}
-                onSelect={handleSelect}
-              />
-            ) : showMarkers ? (
-              mappedNets.map((net) => (
-                <MapMarker
-                  key={net.id}
-                  longitude={net.longitude}
-                  latitude={net.latitude}
-                  // A screen-space nudge, so the two nets stay separated at every
-                  // zoom instead of merging as you zoom out.
-                  offset={
-                    coordinateOffsets[net.id] ??
-                    (settings.pairOffset && pairedCities.has(cityKey(net))
-                      ? [net.branch === "brothers" ? -9 : 9, 0]
-                      : [0, 0])
+              {showHeatmap ? <RegionHeatmap nets={visibleNets} /> : null}
+
+              {settings.showStateOutlines ? (
+                <MapGeoJSON
+                  // Remounting on basemap change avoids re-tuning paint in place
+                  // while MapLibre is mid style-swap.
+                  key={`states-${settings.basemap}`}
+                  id={layout === "chapter-page" ? "chapter-states" : undefined}
+                  promoteId={layout === "chapter-page" ? "name" : undefined}
+                  data={US_STATES_GEOJSON}
+                  fillPaint={
+                    layout === "chapter-page"
+                      ? {
+                          "fill-color": selectedState
+                            ? [
+                                "case",
+                                ["==", ["get", "name"], selectedState.name],
+                                "#99adc8",
+                                "#fcfaf8",
+                              ]
+                            : "#fcfaf8",
+                          "fill-opacity": 0.94,
+                        }
+                      : settings.basemap === "blank"
+                        ? { "fill-opacity": 0.55 }
+                        : { "fill-opacity": 0 }
                   }
-                  onMouseEnter={() => setHoveredId(net.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                  onClick={() => handleSelect(net)}
-                >
-                  <MarkerContent className="cursor-pointer">
-                    <NetMarker
-                      net={net}
-                      markerStyle={settings.markerStyle}
-                      differentiator={settings.differentiator}
-                      palette={settings.palette}
-                      sizeMode={settings.sizeMode}
-                      dimInactive={settings.dimInactive}
-                      emphasized={hoveredId === net.id || selectedId === net.id}
-                    />
-                    {/* MarkerLabel is positioned, not portaled, so it has to sit
+                  linePaint={{
+                    "line-color":
+                      layout === "chapter-page"
+                        ? "#234080"
+                        : settings.basemap === "blank"
+                          ? "#ffffff"
+                          : "#94a3b8",
+                    "line-width": layout === "chapter-page" ? 0.85 : 0.6,
+                  }}
+                  fillHoverPaint={
+                    layout === "chapter-page"
+                      ? { "fill-color": "#99adc8" }
+                      : undefined
+                  }
+                  interactive={layout === "chapter-page"}
+                  onClick={(event) => {
+                    if (layout !== "chapter-page") return;
+                    const name = event.feature.properties?.name;
+                    const geometry = event.feature.geometry;
+                    const bounds = boundsFromCoordinates(
+                      "coordinates" in geometry ? geometry.coordinates : null,
+                    );
+                    if (typeof name !== "string" || !bounds) return;
+                    setSelectedState({ name, bounds });
+                    setHoveredState({ name, bounds });
+                    isHoveringStateRef.current = true;
+                    setSubmittedQuery("");
+                    setQuery("");
+                    setFocusedResultId(null);
+                    setSelectedId(null);
+                  }}
+                  onHover={(event) => {
+                    if (!event) {
+                      isHoveringStateRef.current = false;
+                      return;
+                    }
+                    const name = event.feature.properties?.name;
+                    const geometry = event.feature.geometry;
+                    const bounds = boundsFromCoordinates(
+                      "coordinates" in geometry ? geometry.coordinates : null,
+                    );
+                    if (typeof name !== "string" || !bounds) return;
+                    isHoveringStateRef.current = true;
+                    setHoveredState({ name, bounds });
+                  }}
+                />
+              ) : null}
+
+              {showMarkers && settings.cluster ? (
+                <ClusterLayers
+                  nets={mappedNets}
+                  settings={settings}
+                  onSelect={handleSelect}
+                />
+              ) : showMarkers ? (
+                mappedNets.map((net) => (
+                  <MapMarker
+                    key={net.id}
+                    longitude={net.longitude}
+                    latitude={net.latitude}
+                    // A screen-space nudge, so the two nets stay separated at every
+                    // zoom instead of merging as you zoom out.
+                    offset={
+                      coordinateOffsets[net.id] ??
+                      (settings.pairOffset && pairedCities.has(cityKey(net))
+                        ? [net.branch === "brothers" ? -9 : 9, 0]
+                        : [0, 0])
+                    }
+                    onMouseEnter={() => setHoveredId(net.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                    onClick={() => handleSelect(net)}
+                  >
+                    <MarkerContent className="cursor-pointer">
+                      <NetMarker
+                        net={net}
+                        markerStyle={settings.markerStyle}
+                        differentiator={settings.differentiator}
+                        palette={settings.palette}
+                        sizeMode={settings.sizeMode}
+                        dimInactive={settings.dimInactive}
+                        emphasized={
+                          hoveredId === net.id || selectedId === net.id
+                        }
+                      />
+                      {/* MarkerLabel is positioned, not portaled, so it has to sit
                       inside MarkerContent to anchor to the marker. Only the
                       first net in a city gets one, or paired nets print the
                       same city name twice on top of each other. */}
-                    {settings.showLabels && labelledNets.has(net.id) ? (
-                      <MarkerLabel className="rounded bg-background/85 px-1 py-px">
-                        {net.city ?? net.name}
-                      </MarkerLabel>
+                      {settings.showLabels && labelledNets.has(net.id) ? (
+                        <MarkerLabel className="rounded bg-background/85 px-1 py-px">
+                          {net.city ?? net.name}
+                        </MarkerLabel>
+                      ) : null}
+                    </MarkerContent>
+
+                    {settings.infoMode === "hover-tooltip" ||
+                    settings.infoMode === "both" ? (
+                      <MarkerTooltip className="bg-transparent! p-0! shadow-none!">
+                        <NetDetails
+                          net={net}
+                          palette={settings.palette}
+                          density={
+                            settings.infoMode === "both" ? "peek" : "compact"
+                          }
+                        />
+                      </MarkerTooltip>
                     ) : null}
-                  </MarkerContent>
 
-                  {settings.infoMode === "hover-tooltip" ||
-                  settings.infoMode === "both" ? (
-                    <MarkerTooltip className="bg-transparent! p-0! shadow-none!">
-                      <NetDetails
-                        net={net}
-                        palette={settings.palette}
-                        density={
-                          settings.infoMode === "both" ? "peek" : "compact"
-                        }
-                      />
-                    </MarkerTooltip>
-                  ) : null}
+                    {settings.infoMode === "click-popup" ? (
+                      <MarkerPopup className="border-0! bg-transparent! p-0! shadow-none!">
+                        <NetDetails
+                          net={net}
+                          palette={settings.palette}
+                          density="compact"
+                          ctaMotion={layout === "chapter-page"}
+                        />
+                      </MarkerPopup>
+                    ) : null}
+                  </MapMarker>
+                ))
+              ) : null}
 
-                  {settings.infoMode === "click-popup" ? (
-                    <MarkerPopup className="border-0! bg-transparent! p-0! shadow-none!">
-                      <NetDetails
-                        net={net}
-                        palette={settings.palette}
-                        density="compact"
-                        ctaMotion={layout === "chapter-page"}
-                      />
-                    </MarkerPopup>
-                  ) : null}
-                </MapMarker>
-              ))
-            ) : null}
-
-            {bare ? null : (
-              <MapControls
-                position="top-right"
-                showZoom
-                showCompass
-                showFullscreen
+              {bare ? null : (
+                <MapControls
+                  position="top-right"
+                  showZoom
+                  showCompass
+                  showFullscreen
+                />
+              )}
+            </Map>
+            {layout === "chapter-page" ? (
+              <div
+                aria-hidden="true"
+                data-cursor-focus-zone
+                className="pointer-events-none absolute inset-0 z-10 border border-brand-royal/45 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.35)]"
               />
-            )}
-          </Map>
+            ) : null}
+          </div>
+
+          {layout === "chapter-page" ? (
+            <div className="relative z-10 flex min-h-[68px] items-center justify-between gap-4 border-t border-brand-royal/25 bg-brand-warm-snow px-5 text-brand-obsidian sm:px-8">
+              <div>
+                <p className="text-[11px] font-medium tracking-[0.16em] text-brand-obsidian/60 uppercase">
+                  Find a location
+                </p>
+                <p className="mt-1 text-sm font-semibold sm:text-base">
+                  {selectedState?.name ?? "Select a state"}
+                </p>
+              </div>
+              {selectedState ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedState(null);
+                    setHoveredState(null);
+                    isHoveringStateRef.current = false;
+                  }}
+                  className="shrink-0 border-b border-brand-royal/70 pb-1 text-xs font-semibold text-brand-royal transition-colors hover:border-brand-royal hover:text-brand-royal/75 sm:text-sm"
+                >
+                  View all states
+                </button>
+              ) : null}
+            </div>
+          ) : null}
 
           {layout === "chapter-page" ? null : (
             <Legend
@@ -436,10 +557,47 @@ export function NeighborNetsMap({
  * Frames the lower 48 once the map is ready. Without this the map opens at a
  * fixed zoom, which crops the country badly on a phone-width container.
  */
+function boundsFromCoordinates(
+  coordinates: unknown,
+): [[number, number], [number, number]] | null {
+  let west = Infinity;
+  let south = Infinity;
+  let east = -Infinity;
+  let north = -Infinity;
+
+  const visit = (value: unknown) => {
+    if (!Array.isArray(value)) return;
+    if (
+      value.length >= 2 &&
+      typeof value[0] === "number" &&
+      typeof value[1] === "number"
+    ) {
+      west = Math.min(west, value[0]);
+      south = Math.min(south, value[1]);
+      east = Math.max(east, value[0]);
+      north = Math.max(north, value[1]);
+      return;
+    }
+    value.forEach(visit);
+  };
+
+  visit(coordinates);
+  return Number.isFinite(west)
+    ? [
+        [west, south],
+        [east, north],
+      ]
+    : null;
+}
+
 function MapCamera({
   focusLocations,
+  focusBounds,
+  hoverBounds,
 }: {
   focusLocations: NeighborNetLocation[] | null;
+  focusBounds: [[number, number], [number, number]] | null;
+  hoverBounds: [[number, number], [number, number]] | null;
 }) {
   const { map, isLoaded } = useMap();
 
@@ -464,6 +622,27 @@ function MapCamera({
     const fit = (animated = false) => {
       if (userDriven) return;
       setCountryZoomFloor();
+      if (focusBounds) {
+        map.fitBounds(focusBounds, {
+          padding: { top: 48, right: 48, bottom: 48, left: 48 },
+          maxZoom: 8,
+          duration: animated ? 900 : 0,
+          easing: (t) => 1 - (1 - t) ** 3,
+        });
+        return;
+      }
+      if (hoverBounds) {
+        map.easeTo({
+          center: [
+            (hoverBounds[0][0] + hoverBounds[1][0]) / 2,
+            (hoverBounds[0][1] + hoverBounds[1][1]) / 2,
+          ],
+          zoom: map.getZoom(),
+          duration: animated ? 2000 : 0,
+          easing: (t) => 1 - (1 - t) ** 3,
+        });
+        return;
+      }
       if (!focusLocations || focusLocations.length === 0) {
         map.fitBounds(US_BOUNDS, { padding: 32, duration: animated ? 900 : 0 });
         return;
@@ -499,6 +678,10 @@ function MapCamera({
     // The container can still be settling when the map first loads (and it
     // changes size on rotate or fullscreen), so refit until the user takes over.
     const observer = new ResizeObserver(() => {
+      map.resize();
+      // A non-animated fit here would cancel the smooth state-hover transition.
+      // Once a state is focused, preserve its camera and just resize the canvas.
+      if (focusBounds || hoverBounds) return;
       setCountryZoomFloor();
       fit(false);
     });
@@ -508,7 +691,163 @@ function MapCamera({
       observer.disconnect();
       map.off("movestart", markUserDriven);
     };
-  }, [map, isLoaded, focusLocations]);
+  }, [map, isLoaded, focusLocations, focusBounds, hoverBounds]);
+
+  return null;
+}
+
+/**
+ * Uses the cursor as the zoom anchor on entry, then adds a restrained parallax
+ * pan while the cursor remains inside the visible square focus zone.
+ */
+function MapCursorFocus({
+  isHoveringStateRef,
+}: {
+  isHoveringStateRef: { current: boolean };
+}) {
+  const { map, isLoaded } = useMap();
+
+  useEffect(() => {
+    if (!map || !isLoaded) return;
+
+    const canvas = map.getCanvas();
+    const focusZone = map
+      .getContainer()
+      .parentElement?.querySelector<HTMLElement>("[data-cursor-focus-zone]");
+    if (!focusZone) return;
+    let hasFocusedOnEntry = false;
+    let isInsideFocusZone = false;
+    let focusAnimating = false;
+    let previousPoint: [number, number] | null = null;
+    let pendingDelta: [number, number] = [0, 0];
+    let animationFrame = 0;
+    let focusEndHandler: (() => void) | null = null;
+
+    const pointFromEvent = (event: MouseEvent): [number, number] => {
+      const rect = canvas.getBoundingClientRect();
+      return [event.clientX - rect.left, event.clientY - rect.top];
+    };
+
+    const isInFocusZone = (event: MouseEvent) => {
+      const rect = focusZone.getBoundingClientRect();
+      return (
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom
+      );
+    };
+
+    const moveWithCursor = () => {
+      animationFrame = 0;
+      const [deltaX, deltaY] = pendingDelta;
+      const maxDeltaPerFrame = 24;
+      const sensitivity = 0.18;
+      const panX = Math.max(
+        -maxDeltaPerFrame,
+        Math.min(maxDeltaPerFrame, deltaX),
+      );
+      const panY = Math.max(
+        -maxDeltaPerFrame,
+        Math.min(maxDeltaPerFrame, deltaY),
+      );
+      if (
+        Math.abs(panX * sensitivity) < 0.5 &&
+        Math.abs(panY * sensitivity) < 0.5
+      ) {
+        // Keep sub-pixel motion so small pointer changes accumulate instead
+        // of disappearing before MapLibre can render a pan.
+        return;
+      }
+
+      pendingDelta = [0, 0];
+      map.panBy([-panX * sensitivity, -panY * sensitivity], {
+        duration: 90,
+        easing: (t) => t,
+      });
+    };
+
+    const schedulePan = () => {
+      if (!animationFrame) {
+        animationFrame = window.requestAnimationFrame(moveWithCursor);
+      }
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isInFocusZone(event)) {
+        isInsideFocusZone = false;
+        previousPoint = null;
+        pendingDelta = [0, 0];
+        return;
+      }
+
+      const point = pointFromEvent(event);
+      if (isHoveringStateRef.current) {
+        previousPoint = point;
+        pendingDelta = [0, 0];
+        return;
+      }
+      if (!isInsideFocusZone) {
+        isInsideFocusZone = true;
+        previousPoint = point;
+        if (!hasFocusedOnEntry) {
+          hasFocusedOnEntry = true;
+          const anchor = map.unproject([point[0], point[1]]);
+          const targetZoom = Math.min(5.25, Math.max(map.getZoom(), 4.25));
+          focusAnimating = targetZoom > map.getZoom() + 0.01;
+          if (focusAnimating) {
+            focusEndHandler = () => {
+              focusAnimating = false;
+              focusEndHandler = null;
+              if (pendingDelta[0] || pendingDelta[1]) schedulePan();
+            };
+            map.once("moveend", focusEndHandler);
+          }
+          map.easeTo({
+            zoom: targetZoom,
+            around: anchor,
+            duration: focusAnimating ? 800 : 0,
+            easing: (t) => 1 - (1 - t) ** 3,
+          });
+        }
+        return;
+      }
+      if (!previousPoint) {
+        previousPoint = point;
+        return;
+      }
+
+      const [deltaX, deltaY] = [
+        point[0] - previousPoint[0],
+        point[1] - previousPoint[1],
+      ];
+      previousPoint = point;
+
+      // Keep pointer motion queued through the initial focus animation, then
+      // apply it. Only a real drag suppresses the cursor follow.
+      if (event.buttons > 0) return;
+      pendingDelta = [pendingDelta[0] + deltaX, pendingDelta[1] + deltaY];
+      if (!focusAnimating) schedulePan();
+    };
+
+    const handleMouseLeave = () => {
+      hasFocusedOnEntry = false;
+      isInsideFocusZone = false;
+      previousPoint = null;
+      pendingDelta = [0, 0];
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+    };
+
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
+    return () => {
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseleave", handleMouseLeave);
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      if (focusEndHandler) map.off("moveend", focusEndHandler);
+    };
+  }, [map, isLoaded, isHoveringStateRef]);
 
   return null;
 }

@@ -45,17 +45,17 @@ const NOTES_ENABLED =
   process.env.NODE_ENV === "development";
 
 /** The shared content width. */
-const CONTAINER = "mx-auto w-full max-w-[80rem] px-10";
+const CONTAINER = "mx-auto w-full max-w-[80rem] px-6 md:px-10";
 
 const placements = {
-  "top-right": "top-6 right-6",
-  "top-left": "top-6 left-6",
-  "bottom-right": "right-6 bottom-6",
-  "bottom-left": "bottom-6 left-6",
+  "top-right": "md:absolute md:top-6 md:right-6",
+  "top-left": "md:absolute md:top-6 md:left-6",
+  "bottom-right": "md:absolute md:right-6 md:bottom-6",
+  "bottom-left": "md:absolute md:bottom-6 md:left-6",
   /** Vertically centred, for notes that would otherwise sit in a dead corner
       or collide with the fixed notes toggle in the bottom left. */
-  "center-left": "top-1/2 left-10 -translate-y-1/2",
-  "center-right": "top-1/2 right-10 -translate-y-1/2",
+  "center-left": "md:absolute md:top-1/2 md:left-10 md:-translate-y-1/2",
+  "center-right": "md:absolute md:top-1/2 md:right-10 md:-translate-y-1/2",
 } as const;
 
 export type Placement = keyof typeof placements;
@@ -92,12 +92,12 @@ export function Annotate({
 
   return (
     <div className={cn("relative", !bleed && CONTAINER, className)}>
-      {children}
       {all.map((entry, index) => (
         <div
           key={index}
           className={cn(
-            "pointer-events-none absolute z-20",
+            "pointer-events-none relative z-20 mb-4 md:mb-0",
+            bleed && "mx-6 md:mx-0",
             placements[entry.placement],
           )}
         >
@@ -106,6 +106,7 @@ export function Annotate({
           </NoteSlot>
         </div>
       ))}
+      {children}
     </div>
   );
 }

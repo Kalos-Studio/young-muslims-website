@@ -62,7 +62,7 @@ function ArticleCard({
 
   return (
     <motion.article
-      className="w-[296px] shrink-0 text-brand-obsidian md:w-[378px]"
+      className="w-[296px] shrink-0 text-brand-obsidian xl:w-[378px]"
       initial={false}
       animate={isVisible || reduceMotion ? "visible" : "hidden"}
       whileHover={reduceMotion ? undefined : "hover"}
@@ -77,7 +77,7 @@ function ArticleCard({
     >
       <motion.div
         data-article-reveal-shape
-        className="relative h-[var(--article-image-height)] w-[296px] overflow-hidden bg-brand-pure-white md:h-[378px] md:w-[378px]"
+        className="relative h-[var(--article-image-height)] w-[296px] overflow-hidden bg-brand-pure-white xl:h-[378px] xl:w-[378px]"
         style={
           {
             borderRadius: article.shape,
@@ -167,10 +167,10 @@ export function WordOnTheStreetSection() {
   return (
     <section
       data-header-theme="light"
-      className="relative h-[2084px] w-full overflow-hidden bg-brand-warm-snow md:h-[1024px]"
+      className="relative h-[2084px] w-full overflow-hidden bg-brand-warm-snow xl:h-[1024px]"
     >
-      <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 md:w-[1440px]">
-        <div className="absolute top-[82px] left-8 flex w-[296px] flex-col items-stretch gap-8 md:top-[129px] md:left-[90px] md:w-[1270px] md:flex-row md:items-end">
+      <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 xl:w-[1440px] 2xl:left-0 2xl:w-full 2xl:translate-x-0">
+        <div className="absolute top-[82px] left-8 flex w-[296px] flex-col items-stretch gap-8 xl:top-[129px] xl:left-[90px] xl:w-[1270px] xl:flex-row xl:items-end 2xl:right-20 2xl:left-20 2xl:w-auto">
           <div className="flex-1 text-brand-obsidian">
             <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section md:leading-[1.2]">
               Word on the street.
@@ -182,7 +182,7 @@ export function WordOnTheStreetSection() {
           </div>
           <Link
             href="/blog"
-            className="ym-cta-trigger inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none md:w-auto"
+            className="ym-cta-trigger inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-colors hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow focus-visible:outline-none xl:w-auto"
           >
             <span className="ym-cta-roll">
               <span className="ym-cta-roll__text" data-text="View latest">
@@ -195,7 +195,7 @@ export function WordOnTheStreetSection() {
 
         <div
           ref={articlesRef}
-          className="absolute top-[348px] left-8 flex w-[296px] flex-col gap-[52px] md:top-[285px] md:left-[90px] md:w-[1270px] md:flex-row md:gap-[68px]"
+          className="absolute top-[348px] left-8 flex w-[296px] flex-col gap-[52px] xl:top-[285px] xl:left-[90px] xl:w-[1270px] xl:flex-row xl:gap-[68px] 2xl:right-20 2xl:left-20 2xl:w-auto 2xl:justify-between 2xl:gap-0"
         >
           {ARTICLES.map((article, index) => (
             <ArticleCard

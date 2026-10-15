@@ -71,11 +71,11 @@ export default function SupportPage() {
       </Annotate>
 
       <Annotate className="mt-16">
-        <div className="grid grid-cols-3 items-stretch gap-4">
+        <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
           <Frame
             variant="muted"
             label="Full-bleed image"
-            className="col-span-2 rounded-card bg-brothers-slate text-brothers-midnight"
+            className="aspect-video rounded-card bg-brothers-slate text-brothers-midnight lg:col-span-2 lg:aspect-auto"
           />
           <FundraiseUpDonationForm />
         </div>
@@ -85,15 +85,15 @@ export default function SupportPage() {
           for giving, which is a different job and a different shape. Two notes
           because the row makes a different point in each column. */}
       <Annotate className="mt-16">
-        <div className="grid grid-cols-3 items-stretch gap-4">
+        <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
           {/* A note per column, each sitting on the column it is about. */}
           <Annotate
             bleed
-            className="col-span-2"
+            className="lg:col-span-2"
             placement="bottom-right"
             note="include something about advocacy"
           >
-            <div className="flex h-full flex-col justify-center rounded-card bg-landing-blush px-16 py-16">
+            <div className="flex h-full flex-col justify-center rounded-card bg-landing-blush px-6 py-8 md:px-16 md:py-16">
               <Text as="h2" className="text-brand-jade">
                 Placeholder heading: the case for giving
               </Text>
@@ -115,7 +115,7 @@ export default function SupportPage() {
         <Text as="h2" className="text-brand-royal">
           Where Your Support Goes
         </Text>
-        <div className="mt-8 grid grid-cols-3 gap-6">
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
           <div>
             <Frame
               variant="muted"
