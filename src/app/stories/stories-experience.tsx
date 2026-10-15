@@ -9,6 +9,11 @@ import closeIcon from "../../../design-assets/figma/stories/close.svg";
 import mustafaWave from "../../../design-assets/figma/stories/mustafa-wave-front.svg";
 import quoteMark from "../../../design-assets/figma/stories/quote-mark.svg";
 import rahmahWave from "../../../design-assets/figma/stories/rahmah-wave-front.svg";
+import { StoriesHero, StoriesCta } from "./stories-sections";
+import styles from "./stories.module.css";
+import { PORTRAIT_SLOTS } from "./portrait-slots";
+import galleryMarkLeft from "../../../design-assets/figma/stories-redesign/d7f59.svg";
+import galleryMarkRight from "../../../design-assets/figma/stories-redesign/e2a16.svg";
 import { STORIES, getStoryBySlug, type Story } from "@/lib/stories";
 
 const THEME = {
@@ -27,15 +32,6 @@ const THEME = {
     wave: rahmahWave,
   },
 } as const;
-
-const POSITIONS = [
-  "top-[4%] left-[2%] md:top-[5%] md:left-[6%]",
-  "top-[2%] left-[38%] md:left-[42%]",
-  "top-[8%] right-0 md:right-[5%]",
-  "bottom-[4%] left-0 md:bottom-[8%] md:left-[8%]",
-  "bottom-[1%] left-[37%] md:left-[42%]",
-  "right-0 bottom-[8%] md:right-[4%] md:bottom-[11%]",
-] as const;
 
 type Expansion = {
   id: number;
@@ -113,54 +109,66 @@ function PortraitSelector({
 }) {
   return (
     <section
+      data-header-theme="light"
       aria-labelledby="stories-heading"
-      className="relative min-h-[720px] overflow-hidden bg-brand-warm-snow px-6 py-16 text-brand-obsidian md:min-h-[820px] md:px-20 md:py-20"
+      className={styles.gallery}
     >
-      <div className="relative mx-auto min-h-[590px] max-w-[1280px] md:min-h-[660px]">
-        <div className="absolute top-1/2 left-1/2 z-10 w-[min(82vw,650px)] -translate-x-1/2 -translate-y-1/2 text-center">
-          <p className="mb-4 text-nav font-bold text-brand-royal">
-            Real people, real belonging
-          </p>
-          <h1
-            id="stories-heading"
-            tabIndex={-1}
-            className="text-[40px] leading-normal font-extrabold tracking-[-0.02em] text-brand-obsidian md:text-section"
-          >
-            Stories of real Young Muslims
-          </h1>
-          <p className="mx-auto mt-6 max-w-xl text-body font-medium text-brand-obsidian/70">
-            Choose a portrait to meet the people behind the numbers.
-          </p>
-        </div>
-
-        {STORIES.map((story, index) => {
+      <div className={styles.galleryHeading}>
+        <h2
+          id="stories-heading"
+          tabIndex={-1}
+          className="text-landing-section font-extrabold outline-none"
+        >
+          Pick someone. Get their story.
+        </h2>
+        <p className="mt-4 text-landing-copy font-medium">
+          Every person here found something at Young Muslims worth talking
+          about. Select any one to see their experience.
+        </p>
+      </div>
+      <div className={styles.portraitField}>
+        <Image src={galleryMarkLeft} alt="" className={styles.markLeft} />
+        <Image src={galleryMarkRight} alt="" className={styles.markRight} />
+        {PORTRAIT_SLOTS.map((slot) => {
+          const story = STORIES.find((entry) => entry.slug === slot.slug);
+          const geometry = {
+            left: `${slot.x / 14.4}%`,
+            top: `${(slot.y - 556) / 6.61}%`,
+            width: `${slot.width / 14.4}%`,
+            height: `${slot.height / 6.61}%`,
+          };
+          if (!story)
+            return (
+              <div key={slot.id} className={styles.portrait} style={geometry}>
+                <Image
+                  src={slot.image}
+                  alt=""
+                  fill
+                  sizes="12vw"
+                  className="object-contain"
+                />
+              </div>
+            );
           const isSelected = story.slug === selectedStory?.slug;
-          const theme = THEME[story.theme];
           return (
             <button
-              key={story.slug}
+              key={slot.id}
               type="button"
-              aria-label={`Show ${story.name}'s story`}
+              aria-label={`Show ${story.name}'s story: ${story.title}`}
               aria-pressed={isSelected}
-              aria-controls="selected-story"
+              aria-controls={selectedStory ? "selected-story" : undefined}
               onClick={(event) => onSelect(story, event.currentTarget)}
-              className={`group absolute size-[132px] cursor-pointer rounded-[58%_42%_55%_45%/47%_58%_42%_53%] transition-transform duration-300 outline-none hover:scale-105 focus-visible:ring-4 focus-visible:ring-offset-4 focus-visible:ring-offset-brand-warm-snow md:size-[190px] ${POSITIONS[index]} ${theme.ring}`}
+              className={`${styles.portrait} ${styles.selectable} ${THEME[story.theme].ring}`}
+              style={geometry}
             >
-              <span
-                aria-hidden="true"
-                className={`absolute -inset-2 -z-10 rounded-[44%_56%_38%_62%/60%_42%_58%_40%] transition-all duration-300 group-hover:-inset-5 group-focus-visible:-inset-5 ${theme.background} ${isSelected ? "-inset-5 opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"}`}
-              />
               <Image
                 src={story.portrait}
                 alt=""
                 fill
-                sizes="(max-width: 767px) 132px, 190px"
-                className="object-contain drop-shadow-[0_16px_24px_rgba(23,23,37,0.16)]"
+                sizes="(max-width: 600px) 90px, 12vw"
+                className="object-contain"
                 style={{ transform: `rotate(${story.rotation ?? 0}deg)` }}
               />
-              <span className="sr-only">
-                {isSelected ? "Selected" : "Not selected"}
-              </span>
             </button>
           );
         })}
@@ -382,6 +390,7 @@ export function StoriesExperience({
 
   return (
     <>
+      <StoriesHero />
       <PortraitSelector selectedStory={selectedStory} onSelect={selectStory} />
 
       <div aria-live="polite" className="sr-only">
@@ -394,22 +403,9 @@ export function StoriesExperience({
           panelRef={panelRef}
           onClose={closeStory}
         />
-      ) : (
-        <section className="bg-brand-obsidian px-6 py-24 text-center text-brand-warm-snow md:px-20">
-          <h2 className="text-section font-extrabold">
-            Every story starts by showing up.
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lead font-medium">
-            Select a portrait above, or find the NeighborNet closest to you.
-          </p>
-          <Link
-            href="/neighbornets"
-            className="mt-8 inline-flex rounded-pill border border-brand-warm-snow px-6 py-4 text-nav font-bold outline-none hover:bg-brand-warm-snow hover:text-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-warm-snow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian"
-          >
-            Find a NeighborNet
-          </Link>
-        </section>
-      )}
+      ) : null}
+
+      <StoriesCta />
 
       <AnimatePresence initial={false}>
         {expansion ? (

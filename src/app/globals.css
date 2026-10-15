@@ -245,46 +245,46 @@
   }
 
   /* Full-bleed page heroes begin behind the navigation, matching Figma. */
-  body:has(:is([data-landing-page], [data-neighbornets-page])) {
+  body:has(:is([data-landing-page], [data-neighbornets-page], [data-stories-page])) {
     overflow-x: clip;
   }
-  body:has(:is([data-landing-page], [data-neighbornets-page]))
+  body:has(:is([data-landing-page], [data-neighbornets-page], [data-stories-page]))
     [data-site-header] {
     @apply fixed! w-full! border-transparent! bg-transparent! text-brand-pure-white backdrop-blur-none!;
   }
-  body:has(:is([data-landing-page], [data-neighbornets-page]))
+  body:has(:is([data-landing-page], [data-neighbornets-page], [data-stories-page]))
     [data-site-header]
     nav
     a,
-  body:has(:is([data-landing-page], [data-neighbornets-page]))
+  body:has(:is([data-landing-page], [data-neighbornets-page], [data-stories-page]))
     [data-site-logo-link],
-  body:has(:is([data-landing-page], [data-neighbornets-page]))
+  body:has(:is([data-landing-page], [data-neighbornets-page], [data-stories-page]))
     [data-site-header]
     [data-menu-trigger] {
     color: var(--color-brand-pure-white) !important;
     transition: color 300ms ease;
   }
-  body:has(:is([data-landing-page], [data-neighbornets-page]))
+  body:has(:is([data-landing-page], [data-neighbornets-page], [data-stories-page]))
     [data-site-header]
     nav
     a[data-site-cta="true"] {
     background: var(--color-brand-warm-snow) !important;
     color: var(--color-brand-obsidian) !important;
   }
-  body:has(:is([data-landing-page], [data-neighbornets-page]))
+  body:has(:is([data-landing-page], [data-neighbornets-page], [data-stories-page]))
     [data-site-header][data-header-theme="light"]
     nav
     a,
-  body:has(:is([data-landing-page], [data-neighbornets-page]))
+  body:has(:is([data-landing-page], [data-neighbornets-page], [data-stories-page]))
     [data-site-header][data-header-theme="light"]
     [data-site-logo-link],
-  body:has(:is([data-landing-page], [data-neighbornets-page]))
+  body:has(:is([data-landing-page], [data-neighbornets-page], [data-stories-page]))
     [data-site-header][data-header-theme="light"]
     [data-menu-trigger] {
     color: var(--color-brand-obsidian) !important;
   }
   /* Swap the chapter CTA when the fixed header passes over light sections. */
-  body:has(:is([data-landing-page], [data-neighbornets-page]))
+  body:has(:is([data-landing-page], [data-neighbornets-page], [data-stories-page]))
     [data-site-header][data-header-theme="light"]
     nav
     a[data-site-cta="true"] {

@@ -1,0 +1,163 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-brand-warm-snow);
+}
+
+/* The two Figma curves share their geometry, with the pale edge below the photo.
+   Both finish within the first viewport, as on the other full-bleed heroes. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 3%;
+  background: #f7f3f0;
+  border-radius: 0 0 50% 50% / 0 0 5% 5%;
+}
+.heroMedia {
+  position: absolute;
+  inset: 0 0 9%;
+  overflow: hidden;
+  border-radius: 0 0 50% 50% / 0 0 5% 5%;
+}
+.heroPhoto {
+  position: absolute;
+  inset: 0;
+}
+.heroPhoto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(23 23 37 / 25%);
+}
+.heroCopy {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  width: min(92%, 1260px);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--color-brand-pure-white);
+}
+.gallery {
+  overflow: hidden;
+  padding: clamp(80px, 13vw, 190px) 0 clamp(80px, 11.25vw, 162px);
+  color: var(--color-brand-obsidian);
+}
+.galleryHeading {
+  max-width: 1308px;
+  padding: 0 24px;
+  margin: 0 auto clamp(64px, 8.6vw, 124px);
+  text-align: center;
+}
+.portraitField {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1440 / 661;
+}
+.portrait {
+  position: absolute;
+}
+.selectable {
+  z-index: 1;
+  cursor: pointer;
+  border-radius: 50%;
+  outline-offset: 6px;
+}
+.selectable:focus-visible,
+.selectable[aria-pressed="true"] {
+  outline: 3px solid var(--color-brand-royal);
+}
+.markLeft,
+.markRight {
+  position: absolute;
+  top: 39%;
+  width: 13.06%;
+  height: auto;
+}
+.markLeft {
+  left: 35.94%;
+}
+.markRight {
+  left: 51.03%;
+}
+.cta {
+  position: relative;
+  isolation: isolate;
+  height: clamp(560px, 50.2vw, 850px);
+  overflow: hidden;
+  color: var(--color-brand-warm-snow);
+}
+.ctaBackground {
+  position: absolute;
+  inset: 48.7% 0 0;
+  background: var(--color-brand-obsidian);
+}
+.ctaPhoto {
+  position: absolute;
+  top: 0;
+  left: -34.7%;
+  width: 160.48%;
+  height: 104.6%;
+  transform: rotate(3.7deg);
+}
+.ctaContent {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 64px;
+  height: 100%;
+  max-width: 1230px;
+  margin: auto;
+  padding: 0 24px;
+}
+@media (max-width: 767px) {
+  .heroCopy h1 {
+    font-size: var(--text-card-title);
+  }
+  .heroCopy p {
+    font-size: 1rem;
+  }
+  .galleryHeading h2,
+  .ctaContent h2 {
+    font-size: var(--text-card-title);
+  }
+  .galleryHeading p {
+    font-size: 1rem;
+  }
+  /* Keep every portrait visible and each existing story easy to select on phones. */
+  .portraitField {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: center;
+    gap: 28px 16px;
+    padding: 0 20px;
+    aspect-ratio: auto;
+  }
+  .portrait {
+    position: relative;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1;
+    min-height: 44px;
+  }
+  .markLeft,
+  .markRight {
+    top: 40%;
+  }
+  .ctaPhoto {
+    width: 1720px;
+    left: calc(50% - 860px);
+    height: 100%;
+    top: 0;
+  }
+  .ctaContent {
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: 32px;
+  }
+}
