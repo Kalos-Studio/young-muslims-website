@@ -106,3 +106,13 @@ export const PORTRAIT_SLOTS: {
   },
   { id: "2b3b4", image: image2b3b4, x: 1420, y: 1099, width: 47, height: 41 },
 ];
+
+export type PortraitSlot = (typeof PORTRAIT_SLOTS)[number];
+
+export function portraitSlug(slot: PortraitSlot) {
+  return slot.slug ?? `community-${slot.id}`;
+}
+
+export function getPortraitBySlug(slug: string) {
+  return PORTRAIT_SLOTS.find((slot) => portraitSlug(slot) === slug);
+}

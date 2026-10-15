@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { getImageProps, type StaticImageData } from "next/image";
 import Link from "next/link";
 
 import hero from "../../../design-assets/figma/stories-redesign/hero.jpg";
@@ -37,18 +37,33 @@ export function StoriesHero() {
   );
 }
 
-export function StoriesCta() {
+export function StoriesCta({
+  mobilePhoto,
+}: { mobilePhoto?: StaticImageData } = {}) {
+  const mobileImage = mobilePhoto
+    ? getImageProps({ src: mobilePhoto, alt: "", fill: true, sizes: "2831px" })
+        .props
+    : undefined;
   return (
     <section data-header-theme="dark" className={styles.cta}>
       <div className={styles.ctaBackground} />
       <div className={styles.ctaPhoto}>
-        <Image
-          src={cta}
-          alt="Young Muslims celebrating together"
-          fill
-          sizes="(max-width: 767px) 2831px, 165vw"
-          className="object-contain"
-        />
+        <picture>
+          {mobilePhoto ? (
+            <source
+              media="(max-width: 767px)"
+              srcSet={mobileImage?.srcSet}
+              sizes={mobileImage?.sizes}
+            />
+          ) : null}
+          <Image
+            src={cta}
+            alt="Young Muslims celebrating together"
+            fill
+            sizes="(max-width: 767px) 2831px, 165vw"
+            className="object-contain"
+          />
+        </picture>
       </div>
       <div className={styles.ctaContent}>
         <h2 className="max-w-[692px] text-landing-section font-extrabold">

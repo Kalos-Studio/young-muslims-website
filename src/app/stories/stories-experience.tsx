@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import closeIcon from "../../../design-assets/figma/stories/close.svg";
 import mustafaWave from "../../../design-assets/figma/stories/mustafa-wave-front.svg";
@@ -11,7 +10,8 @@ import quoteMark from "../../../design-assets/figma/stories/quote-mark.svg";
 import rahmahWave from "../../../design-assets/figma/stories/rahmah-wave-front.svg";
 import { StoriesHero, StoriesCta } from "./stories-sections";
 import styles from "./stories.module.css";
-import { PORTRAIT_SLOTS } from "./portrait-slots";
+import { PORTRAIT_SLOTS, portraitSlug } from "./portrait-slots";
+import { usePortraitField } from "./use-portrait-field";
 import galleryMarkLeft from "../../../design-assets/figma/stories-redesign/d7f59.svg";
 import galleryMarkRight from "../../../design-assets/figma/stories-redesign/e2a16.svg";
 import { STORIES, getStoryBySlug, type Story } from "@/lib/stories";
@@ -42,97 +42,8 @@ const PORTRAIT_ACCENTS = [
   "var(--color-sisters-buttercup)",
 ] as const;
 
-type Expansion = {
-  id: number;
-  story: Story;
-  bounds: { left: number; top: number; width: number; height: number };
-};
-
-function ExpansionOverlay({
-  expansion,
-  onComplete,
-}: {
-  expansion: Expansion;
-  onComplete: (id: number) => void;
-}) {
-  const theme = THEME[expansion.story.theme];
-
-  return (
-    <motion.div
-      key={expansion.id}
-      className="pointer-events-none fixed z-[60] overflow-hidden text-brand-pure-white"
-      style={{ backgroundColor: theme.color }}
-      initial={{
-        left: expansion.bounds.left,
-        top: expansion.bounds.top,
-        width: expansion.bounds.width,
-        height: expansion.bounds.height,
-        borderRadius: "58% 42% 55% 45% / 47% 58% 42% 53%",
-      }}
-      animate={{
-        left: 0,
-        top: 0,
-        width: "100vw",
-        height: "100dvh",
-        borderRadius: "0% 0% 0% 0% / 0% 0% 0% 0%",
-      }}
-      exit={{ opacity: 0, transition: { duration: 0.12 } }}
-      transition={{ duration: 0.82, ease: [0.22, 1, 0.36, 1] }}
-      onAnimationComplete={() => onComplete(expansion.id)}
-      aria-hidden="true"
-    >
-      <Image
-        src={expansion.story.overviewImage ?? expansion.story.heroImage}
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover opacity-80"
-        style={{ rotate: `${expansion.story.heroRotation ?? 0}deg` }}
-      />
-      <motion.div
-        className="absolute inset-0"
-        style={{ backgroundColor: theme.color }}
-        initial={{ clipPath: "ellipse(42% 18% at 50% 112%)" }}
-        animate={{ clipPath: "ellipse(105% 78% at 50% 105%)" }}
-        transition={{ duration: 0.68, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-      />
-      <motion.blockquote
-        className="absolute bottom-[14%] left-1/2 w-[min(82vw,720px)] -translate-x-1/2 text-center text-[clamp(1.25rem,3vw,2rem)] font-bold tracking-[-0.02em]"
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, delay: 0.34 }}
-      >
-        “{expansion.story.quote}”
-      </motion.blockquote>
-    </motion.div>
-  );
-}
-
-function PortraitSelector({
-  selectedStory,
-  onSelect,
-}: {
-  selectedStory: Story | null;
-  onSelect: (story: Story, trigger: HTMLButtonElement) => void;
-}) {
-  const galleryRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const viewport = galleryRef.current;
-    if (!viewport) return;
-    const mobile = window.matchMedia("(max-width: 767px)");
-    const centerPortraits = () => {
-      const fieldWidth = viewport.firstElementChild?.clientWidth ?? 0;
-      viewport.scrollLeft = mobile.matches
-        ? (fieldWidth - viewport.clientWidth) / 2 + 8
-        : 0;
-    };
-    centerPortraits();
-    const observer = new ResizeObserver(centerPortraits);
-    observer.observe(viewport);
-    return () => observer.disconnect();
-  }, []);
+function PortraitSelector() {
+  const { viewportRef, suppressClickRef } = usePortraitField();
 
   return (
     <section
@@ -154,10 +65,17 @@ function PortraitSelector({
         </p>
       </div>
       <div
-        ref={galleryRef}
+        ref={viewportRef}
         className={styles.galleryViewport}
         role="region"
-        aria-label="Community portraits, scroll horizontally to explore"
+        aria-label="Community portraits. Move your cursor or drag to explore. Use arrow keys to pan, or Tab to select a story."
+        onClickCapture={(event) => {
+          if (suppressClickRef.current && event.detail !== 0) {
+            event.preventDefault();
+            event.stopPropagation();
+            suppressClickRef.current = false;
+          }
+        }}
         tabIndex={0}
       >
         <div className={styles.portraitField}>
@@ -172,7 +90,7 @@ function PortraitSelector({
                 style={{
                   backgroundColor:
                     PORTRAIT_ACCENTS[index % PORTRAIT_ACCENTS.length],
-                  maskImage: `url(${(story?.portrait ?? slot.image).src})`,
+                  maskImage: `url(${(story?.slug === "rahmah-k" ? slot.image : (story?.portrait ?? slot.image)).src})`,
                   rotate: `${story?.rotation ?? 0}deg`,
                 }}
               />
@@ -183,41 +101,33 @@ function PortraitSelector({
               width: `${slot.width / 14.4}%`,
               height: `${slot.height / 6.61}%`,
             };
-            if (!story)
-              return (
-                <div key={slot.id} className={styles.portrait} style={geometry}>
-                  {backdrop}
-                  <Image
-                    src={slot.image}
-                    alt=""
-                    fill
-                    sizes="(max-width: 767px) 115px, 12vw"
-                    className="object-contain"
-                  />
-                </div>
-              );
-            const isSelected = story.slug === selectedStory?.slug;
             return (
-              <button
+              <Link
                 key={slot.id}
-                type="button"
-                aria-label={`Show ${story.name}'s story: ${story.title}`}
-                aria-pressed={isSelected}
-                aria-controls={selectedStory ? "selected-story" : undefined}
-                onClick={(event) => onSelect(story, event.currentTarget)}
-                className={`${styles.portrait} ${styles.selectable} ${THEME[story.theme].ring}`}
+                data-portrait={index}
+                href={`/stories/${portraitSlug(slot)}`}
+                aria-label={
+                  story
+                    ? `Read ${story.name}'s story`
+                    : `Read community story ${index + 1}`
+                }
+                className={`${styles.portrait} ${styles.selectable}`}
                 style={geometry}
               >
                 {backdrop}
                 <Image
-                  src={story.portrait}
+                  src={
+                    story?.slug === "rahmah-k"
+                      ? slot.image
+                      : (story?.portrait ?? slot.image)
+                  }
                   alt=""
                   fill
-                  sizes="(max-width: 767px) 115px, 12vw"
+                  sizes="(max-width: 767px) 120px, 170px"
                   className="object-contain"
-                  style={{ transform: `rotate(${story.rotation ?? 0}deg)` }}
+                  style={{ transform: `rotate(${story?.rotation ?? 0}deg)` }}
                 />
-              </button>
+              </Link>
             );
           })}
         </div>
@@ -332,15 +242,11 @@ export function StoriesExperience({
   initialSlug: string | null;
   fromLanding: boolean;
 }) {
-  const reduceMotion = useReducedMotion();
   const panelRef = useRef<HTMLElement>(null);
-  const expansionId = useRef(0);
-  const panelPositionTimer = useRef<number | null>(null);
   const didHandleLandingArrival = useRef(false);
   const [selectedStory, setSelectedStory] = useState<Story | null>(() =>
     getStoryBySlug(initialSlug),
   );
-  const [expansion, setExpansion] = useState<Expansion | null>(null);
 
   const revealPanel = useCallback((focus = true) => {
     window.requestAnimationFrame(() => {
@@ -351,20 +257,13 @@ export function StoriesExperience({
 
   useEffect(() => {
     const handlePopState = () => {
-      if (panelPositionTimer.current) {
-        window.clearTimeout(panelPositionTimer.current);
-      }
       const params = new URLSearchParams(window.location.search);
       setSelectedStory(getStoryBySlug(params.get("story")));
-      setExpansion(null);
     };
 
     window.addEventListener("popstate", handlePopState);
     return () => {
       window.removeEventListener("popstate", handlePopState);
-      if (panelPositionTimer.current) {
-        window.clearTimeout(panelPositionTimer.current);
-      }
     };
   }, []);
 
@@ -375,61 +274,7 @@ export function StoriesExperience({
     }
   }, [fromLanding, revealPanel, selectedStory]);
 
-  const selectStory = useCallback(
-    (story: Story, trigger: HTMLButtonElement) => {
-      const url = `/stories?story=${story.slug}`;
-      window.history.pushState(null, "", url);
-      setSelectedStory(story);
-
-      if (reduceMotion) {
-        setExpansion(null);
-        revealPanel();
-        return;
-      }
-
-      const rect = trigger.getBoundingClientRect();
-      expansionId.current += 1;
-      const nextExpansionId = expansionId.current;
-      setExpansion({
-        id: nextExpansionId,
-        story,
-        bounds: {
-          left: rect.left,
-          top: rect.top,
-          width: rect.width,
-          height: rect.height,
-        },
-      });
-
-      if (panelPositionTimer.current) {
-        window.clearTimeout(panelPositionTimer.current);
-      }
-      panelPositionTimer.current = window.setTimeout(() => {
-        if (nextExpansionId === expansionId.current) revealPanel(false);
-      }, 360);
-    },
-    [reduceMotion, revealPanel],
-  );
-
-  const finishExpansion = useCallback((id: number) => {
-    if (id !== expansionId.current) return;
-    if (panelPositionTimer.current) {
-      window.clearTimeout(panelPositionTimer.current);
-      panelPositionTimer.current = null;
-    }
-    setExpansion(null);
-    window.requestAnimationFrame(() => {
-      panelRef.current?.focus({ preventScroll: true });
-    });
-  }, []);
-
   const closeStory = useCallback(() => {
-    expansionId.current += 1;
-    if (panelPositionTimer.current) {
-      window.clearTimeout(panelPositionTimer.current);
-      panelPositionTimer.current = null;
-    }
-    setExpansion(null);
     setSelectedStory(null);
     window.history.pushState(null, "", "/stories");
     window.requestAnimationFrame(() => {
@@ -440,7 +285,7 @@ export function StoriesExperience({
   return (
     <>
       <StoriesHero />
-      <PortraitSelector selectedStory={selectedStory} onSelect={selectStory} />
+      <PortraitSelector />
 
       <div aria-live="polite" className="sr-only">
         {selectedStory ? `${selectedStory.name}'s story selected.` : ""}
@@ -455,15 +300,6 @@ export function StoriesExperience({
       ) : null}
 
       <StoriesCta />
-
-      <AnimatePresence initial={false}>
-        {expansion ? (
-          <ExpansionOverlay
-            expansion={expansion}
-            onComplete={finishExpansion}
-          />
-        ) : null}
-      </AnimatePresence>
     </>
   );
 }

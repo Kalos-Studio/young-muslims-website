@@ -53,8 +53,9 @@
 }
 .portraitField {
   position: relative;
-  width: 100%;
+  width: max(100%, 1440px);
   aspect-ratio: 1440 / 661;
+  will-change: transform;
 }
 .portrait {
   position: absolute;
@@ -141,9 +142,13 @@
   margin: auto;
   padding: 0 24px;
 }
-/* Mobile frame 414:790 keeps the desktop portrait composition at 67.17%.
-   The viewport starts at its center; native scrolling keeps offscreen stories accessible. */
+/* Leave vertical gestures available for page scrolling in this taller gallery. */
 .galleryViewport {
+  position: relative;
+  /* Reserve room above and below the full field for enlarged silhouettes. */
+  height: max(861px, calc(45.9028vw + 200px));
+  overflow: clip;
+  touch-action: pan-y pinch-zoom;
   outline-offset: -3px;
 }
 @media (max-width: 767px) {
@@ -179,17 +184,11 @@
     font-size: var(--text-body);
     line-height: 1.2;
   }
-  .galleryViewport {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    overscroll-behavior-x: contain;
-  }
-  .galleryViewport::-webkit-scrollbar {
-    display: none;
-  }
   .portraitField {
     width: 967.27px;
+  }
+  .galleryViewport {
+    height: 604px;
   }
   .cta {
     height: 894px;
