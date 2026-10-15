@@ -113,51 +113,86 @@
   margin: auto;
   padding: 0 24px;
 }
+/* Mobile frame 414:790 keeps the desktop portrait composition at 67.17%.
+   The viewport starts at its center; native scrolling keeps offscreen stories accessible. */
+.galleryViewport {
+  outline-offset: -3px;
+}
 @media (max-width: 767px) {
+  .heroCopy {
+    width: min(296px, calc(100% - 64px));
+  }
   .heroCopy h1 {
-    font-size: var(--text-card-title);
+    font-size: var(--text-mobile-display);
+    letter-spacing: -0.02em;
   }
   .heroCopy p {
-    font-size: 1rem;
+    margin-top: 11px;
+    font-size: var(--text-nav);
+  }
+  .gallery {
+    padding: 178px 0 115px;
+  }
+  .galleryHeading {
+    width: min(400px, calc(100% - 64px));
+    padding: 0;
+    margin-bottom: 61px;
   }
   .galleryHeading h2,
   .ctaContent h2 {
-    font-size: var(--text-card-title);
+    font-size: var(--text-mobile-section);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .galleryHeading h2 span {
+    display: block;
   }
   .galleryHeading p {
-    font-size: 1rem;
+    font-size: var(--text-body);
+    line-height: 1.2;
   }
-  /* Keep every portrait visible and each existing story easy to select on phones. */
+  .galleryViewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .galleryViewport::-webkit-scrollbar {
+    display: none;
+  }
   .portraitField {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    align-items: center;
-    gap: 28px 16px;
-    padding: 0 20px;
-    aspect-ratio: auto;
+    width: 967.27px;
   }
-  .portrait {
-    position: relative;
-    inset: auto !important;
-    width: 100% !important;
-    height: auto !important;
-    aspect-ratio: 1;
-    min-height: 44px;
+  .cta {
+    height: 894px;
   }
-  .markLeft,
-  .markRight {
-    top: 40%;
+  .ctaBackground {
+    top: 567px;
   }
   .ctaPhoto {
-    width: 1720px;
-    left: calc(50% - 860px);
-    height: 100%;
-    top: 0;
+    width: 2830.59px;
+    left: calc(50% - 1415.295px);
+    height: 926.305px;
+    top: -6px;
   }
   .ctaContent {
     flex-direction: column;
-    justify-content: center;
-    align-items: stretch;
-    gap: 32px;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0;
+    padding: 155px 32px 0;
+    text-align: center;
+  }
+  .ctaContent h2 {
+    width: min(100%, 400px);
+  }
+  .ctaContent > div {
+    position: absolute;
+    top: 490px;
+    width: min(400px, calc(100% - 64px));
+  }
+  .ctaContent a {
+    font-size: 1.125rem;
+    padding-block: 19px;
   }
 }

@@ -302,6 +302,12 @@
   }
 }
 
+@media (max-width: 767px) {
+  body:has([data-stories-page]) [data-site-header-inner] {
+    height: 80px;
+  }
+}
+
 @media (max-width: 1279px) {
   [data-landing-page] [data-hero-video-frame] {
     clip-path: inset(0) !important;
@@ -352,6 +358,14 @@
  * Font family and weight remain explicit at call sites.
  */
 @theme {
+  --text-mobile-display: 2rem;
+  --text-mobile-display--line-height: normal;
+  --text-mobile-display--letter-spacing: -0.02em;
+
+  --text-mobile-section: 1.875rem;
+  --text-mobile-section--line-height: 1.2;
+  --text-mobile-section--letter-spacing: -0.02em;
+
   --text-landing-display: 3rem;
   --text-landing-display--line-height: normal;
   --text-landing-display--letter-spacing: -0.02em;

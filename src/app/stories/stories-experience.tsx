@@ -107,6 +107,24 @@ function PortraitSelector({
   selectedStory: Story | null;
   onSelect: (story: Story, trigger: HTMLButtonElement) => void;
 }) {
+  const galleryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const viewport = galleryRef.current;
+    if (!viewport) return;
+    const mobile = window.matchMedia("(max-width: 767px)");
+    const centerPortraits = () => {
+      const fieldWidth = viewport.firstElementChild?.clientWidth ?? 0;
+      viewport.scrollLeft = mobile.matches
+        ? (fieldWidth - viewport.clientWidth) / 2 + 8
+        : 0;
+    };
+    centerPortraits();
+    const observer = new ResizeObserver(centerPortraits);
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       data-header-theme="light"
@@ -119,59 +137,67 @@ function PortraitSelector({
           tabIndex={-1}
           className="text-landing-section font-extrabold outline-none"
         >
-          Pick someone. Get their story.
+          <span>Pick someone.</span> <span>Get their story.</span>
         </h2>
         <p className="mt-4 text-landing-copy font-medium">
           Every person here found something at Young Muslims worth talking
           about. Select any one to see their experience.
         </p>
       </div>
-      <div className={styles.portraitField}>
-        <Image src={galleryMarkLeft} alt="" className={styles.markLeft} />
-        <Image src={galleryMarkRight} alt="" className={styles.markRight} />
-        {PORTRAIT_SLOTS.map((slot) => {
-          const story = STORIES.find((entry) => entry.slug === slot.slug);
-          const geometry = {
-            left: `${slot.x / 14.4}%`,
-            top: `${(slot.y - 556) / 6.61}%`,
-            width: `${slot.width / 14.4}%`,
-            height: `${slot.height / 6.61}%`,
-          };
-          if (!story)
+      <div
+        ref={galleryRef}
+        className={styles.galleryViewport}
+        role="region"
+        aria-label="Community portraits, scroll horizontally to explore"
+        tabIndex={0}
+      >
+        <div className={styles.portraitField}>
+          <Image src={galleryMarkLeft} alt="" className={styles.markLeft} />
+          <Image src={galleryMarkRight} alt="" className={styles.markRight} />
+          {PORTRAIT_SLOTS.map((slot) => {
+            const story = STORIES.find((entry) => entry.slug === slot.slug);
+            const geometry = {
+              left: `${slot.x / 14.4}%`,
+              top: `${(slot.y - 556) / 6.61}%`,
+              width: `${slot.width / 14.4}%`,
+              height: `${slot.height / 6.61}%`,
+            };
+            if (!story)
+              return (
+                <div key={slot.id} className={styles.portrait} style={geometry}>
+                  <Image
+                    src={slot.image}
+                    alt=""
+                    fill
+                    sizes="(max-width: 767px) 115px, 12vw"
+                    className="object-contain"
+                  />
+                </div>
+              );
+            const isSelected = story.slug === selectedStory?.slug;
             return (
-              <div key={slot.id} className={styles.portrait} style={geometry}>
+              <button
+                key={slot.id}
+                type="button"
+                aria-label={`Show ${story.name}'s story: ${story.title}`}
+                aria-pressed={isSelected}
+                aria-controls={selectedStory ? "selected-story" : undefined}
+                onClick={(event) => onSelect(story, event.currentTarget)}
+                className={`${styles.portrait} ${styles.selectable} ${THEME[story.theme].ring}`}
+                style={geometry}
+              >
                 <Image
-                  src={slot.image}
+                  src={story.portrait}
                   alt=""
                   fill
-                  sizes="12vw"
+                  sizes="(max-width: 767px) 115px, 12vw"
                   className="object-contain"
+                  style={{ transform: `rotate(${story.rotation ?? 0}deg)` }}
                 />
-              </div>
+              </button>
             );
-          const isSelected = story.slug === selectedStory?.slug;
-          return (
-            <button
-              key={slot.id}
-              type="button"
-              aria-label={`Show ${story.name}'s story: ${story.title}`}
-              aria-pressed={isSelected}
-              aria-controls={selectedStory ? "selected-story" : undefined}
-              onClick={(event) => onSelect(story, event.currentTarget)}
-              className={`${styles.portrait} ${styles.selectable} ${THEME[story.theme].ring}`}
-              style={geometry}
-            >
-              <Image
-                src={story.portrait}
-                alt=""
-                fill
-                sizes="(max-width: 600px) 90px, 12vw"
-                className="object-contain"
-                style={{ transform: `rotate(${story.rotation ?? 0}deg)` }}
-              />
-            </button>
-          );
-        })}
+          })}
+        </div>
       </div>
     </section>
   );

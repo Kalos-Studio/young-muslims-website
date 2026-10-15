@@ -46,7 +46,7 @@ export function StoriesCta() {
           src={cta}
           alt="Young Muslims celebrating together"
           fill
-          sizes="(max-width: 767px) 1720px, 165vw"
+          sizes="(max-width: 767px) 2831px, 165vw"
           className="object-contain"
         />
       </div>
