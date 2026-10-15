@@ -83,6 +83,7 @@ function ExpansionOverlay({
         priority
         sizes="100vw"
         className="object-cover opacity-80"
+        style={{ rotate: `${expansion.story.heroRotation ?? 0}deg` }}
       />
       <motion.div
         className="absolute inset-0"
@@ -209,6 +210,7 @@ function ExpandedStoryPanel({
               priority
               sizes="100vw"
               className="object-cover object-center"
+              style={{ rotate: `${story.heroRotation ?? 0}deg` }}
             />
           </div>
         )}

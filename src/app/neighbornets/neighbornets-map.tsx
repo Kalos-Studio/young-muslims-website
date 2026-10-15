@@ -293,8 +293,6 @@ export function NeighborNetsMap({
                 <MapCursorFocus isHoveringStateRef={isHoveringStateRef} />
               ) : null}
 
-              {showHeatmap ? <RegionHeatmap nets={visibleNets} /> : null}
-
               {settings.showStateOutlines ? (
                 <MapGeoJSON
                   // Remounting on basemap change avoids re-tuning paint in place
@@ -365,6 +363,13 @@ export function NeighborNetsMap({
                     isHoveringStateRef.current = true;
                     setHoveredState({ name, bounds });
                   }}
+                />
+              ) : null}
+
+              {showHeatmap ? (
+                <RegionHeatmap
+                  nets={visibleNets}
+                  aboveStates={layout === "chapter-page"}
                 />
               ) : null}
 
@@ -852,7 +857,13 @@ function MapCursorFocus({
   return null;
 }
 
-function RegionHeatmap({ nets }: { nets: NeighborNetLocation[] }) {
+function RegionHeatmap({
+  nets,
+  aboveStates = false,
+}: {
+  nets: NeighborNetLocation[];
+  aboveStates?: boolean;
+}) {
   const netsByDominance = useMemo(() => {
     const counts: Record<string, Record<Branch, number>> = {};
     for (const net of nets) {
@@ -878,6 +889,7 @@ function RegionHeatmap({ nets }: { nets: NeighborNetLocation[] }) {
           nets={netsByDominance.brothers}
           colorToken="--color-brothers-sky"
           fallbackColor="#4a90d9"
+          beforeId={aboveStates ? "geojson-line-chapter-states" : undefined}
         />
       ) : null}
       {netsByDominance.sisters.length ? (
@@ -886,6 +898,7 @@ function RegionHeatmap({ nets }: { nets: NeighborNetLocation[] }) {
           nets={netsByDominance.sisters}
           colorToken="--color-brand-jade"
           fallbackColor="#397451"
+          beforeId={aboveStates ? "geojson-line-chapter-states" : undefined}
         />
       ) : null}
     </>
@@ -897,11 +910,13 @@ function HeatmapLayer({
   nets,
   colorToken,
   fallbackColor,
+  beforeId,
 }: {
   branch: Branch;
   nets: NeighborNetLocation[];
   colorToken: string;
   fallbackColor: string;
+  beforeId?: string;
 }) {
   const { map, isLoaded } = useMap();
   const reactId = useId().replaceAll(":", "");
@@ -921,6 +936,9 @@ function HeatmapLayer({
     const firstLabelLayer = map
       .getStyle()
       .layers?.find((layer) => layer.type === "symbol")?.id;
+
+    const layerAnchor =
+      beforeId && map.getLayer(beforeId) ? beforeId : firstLabelLayer;
 
     map.addLayer(
       {
@@ -966,14 +984,23 @@ function HeatmapLayer({
           ],
         },
       },
-      firstLabelLayer,
+      layerAnchor,
     );
 
     return () => {
       if (map.getLayer(layerId)) map.removeLayer(layerId);
       if (map.getSource(sourceId)) map.removeSource(sourceId);
     };
-  }, [colorToken, data, fallbackColor, isLoaded, layerId, map, sourceId]);
+  }, [
+    beforeId,
+    colorToken,
+    data,
+    fallbackColor,
+    isLoaded,
+    layerId,
+    map,
+    sourceId,
+  ]);
 
   return null;
 }

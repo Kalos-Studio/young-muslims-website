@@ -30,6 +30,7 @@ export function LandingStoryDialog({
   const [returnBounds, setReturnBounds] = useState(selection.bounds);
   const reduceMotion = useReducedMotion();
   const { story, trigger } = selection;
+  const portraitRotation = story.heroRotation ?? story.rotation ?? 0;
   const color =
     story.theme === "brothers"
       ? "var(--color-brand-royal)"
@@ -126,7 +127,7 @@ export function LandingStoryDialog({
             fill
             sizes="(max-width: 767px) 100vw, 520px"
             className="object-contain"
-            style={{ transform: `rotate(${story.rotation ?? 0}deg)` }}
+            style={{ transform: `rotate(${portraitRotation}deg)` }}
           />
         </motion.div>
         <motion.div
@@ -146,7 +147,10 @@ export function LandingStoryDialog({
                 alt={story.heroAlt}
                 fill
                 sizes="(max-width: 767px) 100vw, 490px"
-                className={`${story.editorialDraft ? "object-contain p-8" : "object-cover"} ${story.slug === "brotherhood-in-the-everyday" ? "rotate-180" : ""}`}
+                className={
+                  story.editorialDraft ? "object-contain p-8" : "object-cover"
+                }
+                style={{ rotate: `${story.heroRotation ?? 0}deg` }}
               />
             </div>
             <div className="flex flex-col justify-center gap-6 p-7 text-left md:px-10 md:py-16">

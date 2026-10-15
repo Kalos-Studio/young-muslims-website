@@ -5,6 +5,8 @@ import Link from "next/link";
 import chapterCtaShape from "../../../design-assets/figma/neighbornets/2026-page/2e336.png";
 import chapterHero from "../../../design-assets/figma/neighbornets/find-nn-hero.jpg";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+// WIREFRAME: Remove the temporary map review note when the map is complete.
+import { MapReviewNote } from "@/components/wireframe/map-review-note";
 import { brotherLocations } from "@/generated/brother-neighbornets";
 import { sisterLocations } from "@/generated/sister-neighbornets";
 import {
@@ -134,6 +136,8 @@ export default function NeighborNetsPage() {
           />
         </svg>
         <div className="mx-auto w-full max-w-[1260px]">
+          {/* WIREFRAME: Temporary explanation of the map prototype's scope. */}
+          <MapReviewNote />
           <NeighborNetsMap
             locations={locations}
             initialSettings={chapterMapSettings}

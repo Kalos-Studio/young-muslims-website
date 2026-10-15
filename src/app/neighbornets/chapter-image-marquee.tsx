@@ -73,7 +73,7 @@ export function ExplainerImageMarquee({
   return (
     <div
       ref={containerRef}
-      className="relative mx-auto mt-14 h-[376px] w-full max-w-[1440px] overflow-hidden md:mt-[99px] md:h-[875px]"
+      className="relative mx-[-16px] mt-14 h-[400px] w-[calc(100%+32px)] max-w-none overflow-hidden md:mt-[99px] md:h-[899px]"
       onPointerMove={handlePointerMove}
       onPointerLeave={resetCursor}
     >
@@ -85,18 +85,21 @@ export function ExplainerImageMarquee({
       {rows.map((row, rowIndex) => (
         <motion.div
           key={rowIndex}
-          className={`absolute w-max ${rowIndex === 0 ? "top-0 left-1/2 md:top-[44px] md:left-[calc(50%-58px)]" : "top-[196px] left-1/2 md:top-[492px] md:left-[calc(50%-148px)]"}`}
+          className={`absolute w-max ${rowIndex === 0 ? "top-0 left-0 md:top-[44px]" : "top-[196px] left-0 md:top-[492px]"}`}
           style={{ x: cursorX, y: cursorY }}
         >
           <div
             className="nn-image-marquee-track nn-explainer-marquee-track flex w-max"
-            data-direction={rowIndex === 0 ? "left" : "right"}
-            style={{ animationPlayState: isVisible ? "running" : "paused" }}
+            data-direction={rowIndex === 0 ? "right" : "left"}
+            style={{
+              animationDirection: rowIndex === 0 ? "reverse" : "normal",
+              animationPlayState: isVisible ? "running" : "paused",
+            }}
           >
-            {[0, 1].map((copy) => (
+            {[0, 1, 2, 3].map((copy) => (
               <div
                 key={copy}
-                aria-hidden={copy === 1}
+                aria-hidden={copy > 0}
                 className={`flex shrink-0 gap-4 pr-4 ${rowIndex === 0 ? "md:gap-[99px] md:pr-[99px]" : "md:gap-[151px] md:pr-[151px]"}`}
               >
                 {row.map(({ image, alt }, imageIndex) => (
@@ -136,7 +139,7 @@ export function ChapterImageMarquee({ rows }: { rows: StaticImageData[][] }) {
     <section
       ref={containerRef}
       aria-label="Young Muslims chapters across the country"
-      className="relative h-[669px] w-full overflow-hidden bg-brand-warm-snow md:h-[1080px]"
+      className="relative h-[693px] w-full overflow-hidden bg-brand-warm-snow md:h-[1104px]"
       onPointerMove={handlePointerMove}
       onPointerLeave={resetCursor}
     >
@@ -148,8 +151,11 @@ export function ChapterImageMarquee({ rows }: { rows: StaticImageData[][] }) {
         >
           <div
             className="nn-image-marquee-track flex w-max"
-            data-direction={rowIndex === rows.length - 1 ? "right" : "left"}
-            style={{ animationPlayState: isVisible ? "running" : "paused" }}
+            data-direction={rowIndex === 1 ? "left" : "right"}
+            style={{
+              animationDirection: rowIndex === 1 ? "normal" : "reverse",
+              animationPlayState: isVisible ? "running" : "paused",
+            }}
           >
             {[0, 1].map((copy) => (
               <div key={copy} aria-hidden="true" className="flex shrink-0">

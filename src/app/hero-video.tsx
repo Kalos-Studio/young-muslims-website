@@ -30,6 +30,7 @@ export function HeroVideo() {
       </svg>
 
       <div
+        data-hero-video-frame
         className="absolute inset-0 z-10 overflow-hidden bg-brothers-midnight"
         style={{
           clipPath: "url(#hero-video-clip)",

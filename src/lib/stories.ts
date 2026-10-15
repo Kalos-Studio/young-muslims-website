@@ -23,6 +23,7 @@ export type Story = {
   context: string;
   portrait: StaticImageData;
   heroImage: StaticImageData;
+  heroRotation?: number;
   overviewImage?: StaticImageData;
   heroAlt: string;
   theme: StoryTheme;
@@ -160,6 +161,7 @@ export const STORIES = [
       "This is an editorial draft entry included to complete the interaction while additional member interviews are gathered.",
     portrait: portraitSix,
     heroImage: portraitSix,
+    heroRotation: 180,
     heroAlt: "A Young Muslims community member outdoors with friends.",
     theme: "brothers",
     rotation: 165,

@@ -17,6 +17,7 @@ const frames = [frame01, frame02, frame03, frame04, frame05, frame06, frame07];
 const FLASH_DURATION_MS = 145;
 const FINAL_FRAME_HOLD_MS = 140;
 const REVEAL_DURATION_MS = 750;
+const VIDEO_READY_TIMEOUT_MS = 5_000;
 
 type Stage = "flashing" | "revealing" | "done";
 
@@ -53,8 +54,21 @@ function waitForVideo(video: HTMLVideoElement) {
   }
 
   return new Promise<void>((resolve) => {
-    video.addEventListener("loadeddata", () => resolve(), { once: true });
-    video.addEventListener("error", () => resolve(), { once: true });
+    const finish = () => {
+      window.clearTimeout(timeout);
+      video.removeEventListener("loadeddata", finish);
+      video.removeEventListener("error", finish);
+      resolve();
+    };
+    const timeout = window.setTimeout(finish, VIDEO_READY_TIMEOUT_MS);
+
+    video.addEventListener("loadeddata", finish, { once: true });
+    video.addEventListener("error", finish, { once: true });
+
+    // The media can become ready between the initial check and listener setup.
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA || video.error) {
+      finish();
+    }
   });
 }
 

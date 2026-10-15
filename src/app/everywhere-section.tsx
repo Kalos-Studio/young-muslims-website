@@ -316,7 +316,7 @@ export function EverywhereSection() {
     <section
       ref={sectionRef}
       data-header-theme="light"
-      className="relative h-[1471px] w-full overflow-hidden bg-brand-warm-snow md:h-[1663px]"
+      className="relative h-[1495px] w-full overflow-hidden bg-brand-warm-snow md:h-[1963px]"
       onPointerMove={updatePointer}
       onPointerLeave={() => {
         pointerX.set(0);
@@ -473,7 +473,7 @@ export function EverywhereSection() {
             <div className="absolute top-[13px] left-[43px] h-[285px] w-[282px] -rotate-30">
               <div
                 aria-hidden="true"
-                className="absolute top-1/2 left-1/2 h-[208px] w-[230px] -translate-x-1/2 -translate-y-1/2 -rotate-90 bg-[#e3f2ed]"
+                className="absolute top-1/2 left-1/2 h-[208px] w-[230px] -translate-x-1/2 -translate-y-1/2 scale-110 -rotate-90 bg-[#e3f2ed]"
                 style={{
                   maskImage: `url("${bottomLeftPhoto.src}")`,
                   WebkitMaskImage: `url("${bottomLeftPhoto.src}")`,
@@ -516,7 +516,7 @@ export function EverywhereSection() {
         </motion.div>
 
         <motion.div
-          className="absolute top-[1192px] left-[-113px] h-[272px] w-[269px] md:top-[1385px] md:left-[43px] md:h-[446px] md:w-[439px]"
+          className="absolute top-[1192px] left-[-113px] h-[272px] w-[269px] -translate-y-34 md:top-[1385px] md:left-[43px] md:h-[446px] md:w-[439px] md:translate-y-0"
           style={{ y: bottomLeftPortraitY }}
         >
           <motion.div
@@ -545,7 +545,7 @@ export function EverywhereSection() {
         </motion.div>
 
         <motion.div
-          className="absolute top-[1234px] left-[36%] h-[209px] w-[203px] md:top-[1349px] md:left-[1071px] md:h-[271px] md:w-[264px]"
+          className="absolute top-[1234px] left-[36%] h-[209px] w-[203px] -translate-y-11 md:top-[1349px] md:left-[1071px] md:h-[271px] md:w-[264px] md:translate-y-0"
           style={{ y: bottomRightPortraitY }}
         >
           <motion.div

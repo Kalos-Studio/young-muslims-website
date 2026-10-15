@@ -61,6 +61,7 @@ export default async function StoryPage({ params }: StoryPageProps) {
                 priority
                 sizes="(max-width: 767px) 100vw, 58vw"
                 className={`object-cover ${story.theme === "sisters" ? "object-[50%_68%]" : "object-center"}`}
+                style={{ rotate: `${story.heroRotation ?? 0}deg` }}
               />
             </div>
 
