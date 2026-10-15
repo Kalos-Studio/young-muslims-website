@@ -145,3 +145,15 @@ and the configured response-header manifest.
 - [ ] Accessibility pass (WCAG AA).
 - [ ] Analytics, and a consent banner if one is needed.
 - [ ] Security headers, including a CSP once the vendor list is settled.
+
+## Shared footer behavior
+
+Every page inherits `SiteFooter` and `FooterPageStage` from the root layout.
+Keep page content inside that shared shell: new pages must not add their own
+footer or opt out of the footer stage. The bottom-edge Easter egg, including
+its photo montage, applies to all routes automatically. Continuing to scroll
+or swipe down at the page bottom reveals it; keyboard scrolling works too.
+The animation respects reduced-motion preferences and pauses while a dialog
+is open. Check this behavior when adding a page or changing its scroll layout.
+With the dev server running, `bun run test:footer` checks wheel, touch, keyboard,
+and reduced-motion behavior across the current routes using headless Chrome.

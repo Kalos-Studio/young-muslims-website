@@ -16,3 +16,11 @@ Agentation feedback toolbar work, and how to remove the wireframe when the time
 comes. Read it before changing anything under `src/`.
 
 `grep -rn "WIREFRAME:" src` is the complete inventory of temporary code.
+
+# Keep the shared footer on every page
+
+Every existing and future page must inherit `SiteFooter` and `FooterPageStage`
+from the root layout, including the bottom-edge Easter egg animation. Do not
+replace them with page-specific footers or introduce route allowlists for the
+animation. Preserve reduced-motion handling. When changing page scrolling or
+the shared footer, run `bun run test:footer` against the local dev server.

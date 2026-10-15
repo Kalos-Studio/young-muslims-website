@@ -248,9 +248,6 @@ export function SiteFooter() {
   useEffect(() => {
     if (reduceMotion) return;
     let touchY: number | null = null;
-    let touchStartedAtBottom = false;
-    let lastWheelAt = 0;
-    let wheelStartedBeforeBottom = false;
     const isAtPageBottom = () =>
       window.scrollY + window.innerHeight >=
       document.documentElement.scrollHeight - 2;
@@ -269,23 +266,13 @@ export function SiteFooter() {
       if (runningRef.current && !footerIsVisible()) resetMontage();
     };
     const onWheel = (event: WheelEvent) => {
-      const now = Date.now();
-      if (now - lastWheelAt > 200) {
-        wheelStartedBeforeBottom = !isAtPageBottom();
-      }
-      lastWheelAt = now;
-      if (
-        !event.ctrlKey &&
-        event.deltaY > 0 &&
-        !wheelStartedBeforeBottom &&
-        isAtPageBottom() &&
-        canPlay()
-      )
+      // Continuing a gesture after reaching the bottom must work too; requiring
+      // a new gesture made the shared Easter egg appear absent on long pages.
+      if (!event.ctrlKey && event.deltaY > 0 && isAtPageBottom() && canPlay())
         playMontage();
     };
     const onTouchStart = (event: TouchEvent) => {
       touchY = event.touches.length === 1 ? event.touches[0].clientY : null;
-      touchStartedAtBottom = isAtPageBottom();
     };
     const onTouchMove = (event: TouchEvent) => {
       const nextY = event.touches[0]?.clientY;
@@ -294,7 +281,6 @@ export function SiteFooter() {
         event.touches.length === 1 &&
         touchY !== null &&
         touchY - nextY > 8 &&
-        touchStartedAtBottom &&
         isAtPageBottom() &&
         canPlay()
       )
@@ -302,7 +288,6 @@ export function SiteFooter() {
     };
     const onTouchEnd = () => {
       touchY = null;
-      touchStartedAtBottom = false;
     };
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target;
