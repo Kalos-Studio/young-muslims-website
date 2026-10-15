@@ -7,9 +7,9 @@ export function MapReviewNote() {
     >
       <p className="mb-2 font-bold">Map prototype note</p>
       <p>
-        Cards will be added when a user clicks into a region. More map detail,
-        including city names, will also be added. This prototype demonstrates
-        the map&apos;s hover and interaction states, plus search functionality.
+        Select a state or search for a city to reveal city names, highways, and
+        local NeighborNet locations. Select a map logo or a result card to keep
+        the matching location highlighted.
       </p>
     </aside>
   );

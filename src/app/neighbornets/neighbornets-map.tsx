@@ -8,6 +8,7 @@ import {
   useState,
   type FormEvent,
 } from "react";
+import type { Geometry, Position } from "geojson";
 // Must come before the map component so our same-origin worker URL is set
 // before mapcn's unpkg fallback runs. See src/lib/maplibre-worker.ts.
 import "@/lib/maplibre-worker";
@@ -15,7 +16,10 @@ import {
   AnimatedArrow,
   AnimatedCtaLabel,
 } from "@/components/ui/animated-arrow";
-import { MaterialIcon } from "@/components/ui/material-icon";
+import {
+  MaterialIcon,
+  type MaterialIconName,
+} from "@/components/ui/material-icon";
 import {
   Map,
   MapControls,
@@ -37,7 +41,7 @@ import {
 } from "@/lib/neighbornets";
 import { DebugPanel } from "./debug-panel";
 import { NetDetails } from "./net-details";
-import { NetMarker, branchColor } from "./net-marker";
+import { BranchLogo, NetMarker, branchColor } from "./net-marker";
 import {
   US_BOUNDS,
   US_STATES_GEOJSON,
@@ -93,6 +97,7 @@ export function NeighborNetsMap({
   const [selectedState, setSelectedState] = useState<{
     name: string;
     bounds: [[number, number], [number, number]];
+    geometry: Geometry;
   } | null>(null);
   const [hoveredState, setHoveredState] = useState<{
     name: string;
@@ -143,18 +148,40 @@ export function NeighborNetsMap({
   }, [normalizedQuery, visibleNets]);
   const hasSearch = normalizedQuery.length > 0;
   const hasSearchResults = hasSearch && searchResults.length > 0;
+  const selectedStateResults = useMemo(() => {
+    if (!selectedState) return [];
+
+    return visibleNets
+      .filter((net) =>
+        geometryContainsPoint(selectedState.geometry, [
+          net.longitude,
+          net.latitude,
+        ]),
+      )
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [selectedState, visibleNets]);
+  const chapterResults = hasSearch ? searchResults : selectedStateResults;
+  const showChapterResults =
+    layout === "chapter-page" && (hasSearch || selectedState !== null);
   const mappedNets = hasSearchResults ? searchResults : visibleNets;
   const cameraNets = useMemo(() => {
-    if (!hasSearchResults) return null;
-    if (!focusedResultId) return searchResults;
-    const focused = searchResults.find((net) => net.id === focusedResultId);
-    return focused ? [focused] : searchResults;
-  }, [focusedResultId, hasSearchResults, searchResults]);
+    if (focusedResultId) {
+      const focused = visibleNets.find((net) => net.id === focusedResultId);
+      if (focused) return [focused];
+    }
+    return hasSearchResults ? searchResults : null;
+  }, [focusedResultId, hasSearchResults, searchResults, visibleNets]);
   const showHeatmap = finder && !hasSearchResults && mapZoom < 5.5;
   const showMarkers = !finder || hasSearchResults || mapZoom >= 4.5;
+  const showDetailedBasemap =
+    layout === "chapter-page" &&
+    (selectedState !== null || hasSearchResults || mapZoom >= 5.5);
+  const activeBasemap =
+    settings.basemap === "streets" || showDetailedBasemap ? "streets" : "blank";
+  const markerSpacing = layout === "chapter-page" ? 36 : 18;
   const coordinateOffsets = useMemo(
-    () => offsetsForSharedCoordinates(visibleNets),
-    [visibleNets],
+    () => offsetsForSharedCoordinates(visibleNets, markerSpacing),
+    [markerSpacing, visibleNets],
   );
 
   /** One name label per city: the id of the first net found in each. */
@@ -176,6 +203,10 @@ export function NeighborNetsMap({
     settings.infoMode === "side-panel" || settings.infoMode === "both";
 
   function handleSelect(net: NeighborNetLocation) {
+    if (layout === "chapter-page") {
+      setSelectedId(net.id);
+      return;
+    }
     setSelectedId((current) => (current === net.id ? null : net.id));
   }
 
@@ -200,7 +231,6 @@ export function NeighborNetsMap({
   }
 
   function focusResult(net: NeighborNetLocation) {
-    setSelectedState(null);
     setHoveredState(null);
     isHoveringStateRef.current = false;
     setFocusedResultId(net.id);
@@ -244,7 +274,7 @@ export function NeighborNetsMap({
         className={cn(
           finder
             ? layout === "chapter-page"
-              ? "relative mt-16 h-[360px] w-full scroll-mt-32 sm:h-[520px] md:mt-[159px] md:h-[749px]"
+              ? "relative mt-16 w-full scroll-mt-32 md:mt-[159px]"
               : "relative h-[70vh] min-h-[32rem] w-full scroll-mt-32"
             : bare
               ? "relative h-full w-full"
@@ -257,7 +287,7 @@ export function NeighborNetsMap({
           className={cn(
             "relative",
             layout === "chapter-page"
-              ? "flex h-full min-h-0 w-full flex-col overflow-hidden rounded-[2px] bg-brand-warm-snow"
+              ? "flex h-[360px] min-h-0 w-full flex-col overflow-hidden rounded-[2px] bg-brand-warm-snow sm:h-[520px] md:h-[749px]"
               : bare
                 ? "h-full w-full"
                 : "h-[60vh] min-h-0 overflow-hidden rounded-lg border border-border lg:h-full",
@@ -270,7 +300,7 @@ export function NeighborNetsMap({
               // would flip the map to dark while the rest of the page stays light:
               // the app has no dark mode wired up yet. Drop this once it does.
               theme="light"
-              blank={settings.basemap === "blank"}
+              blank={activeBasemap === "blank"}
               center={US_VIEW.center}
               zoom={US_VIEW.zoom}
               // MapCamera raises this to the exact zoom needed to keep the whole
@@ -286,7 +316,9 @@ export function NeighborNetsMap({
             >
               <MapCamera
                 focusLocations={cameraNets}
-                focusBounds={selectedState?.bounds ?? null}
+                focusBounds={
+                  focusedResultId ? null : (selectedState?.bounds ?? null)
+                }
                 hoverBounds={hoveredState?.bounds ?? null}
               />
               {layout === "chapter-page" ? (
@@ -297,7 +329,7 @@ export function NeighborNetsMap({
                 <MapGeoJSON
                   // Remounting on basemap change avoids re-tuning paint in place
                   // while MapLibre is mid style-swap.
-                  key={`states-${settings.basemap}`}
+                  key={`states-${activeBasemap}`}
                   id={layout === "chapter-page" ? "chapter-states" : undefined}
                   promoteId={layout === "chapter-page" ? "name" : undefined}
                   data={US_STATES_GEOJSON}
@@ -312,7 +344,8 @@ export function NeighborNetsMap({
                                 "#fcfaf8",
                               ]
                             : "#fcfaf8",
-                          "fill-opacity": 0.94,
+                          "fill-opacity":
+                            activeBasemap === "streets" ? 0.14 : 0.94,
                         }
                       : settings.basemap === "blank"
                         ? { "fill-opacity": 0.55 }
@@ -326,10 +359,17 @@ export function NeighborNetsMap({
                           ? "#ffffff"
                           : "#94a3b8",
                     "line-width": layout === "chapter-page" ? 0.85 : 0.6,
+                    ...(layout === "chapter-page" && activeBasemap === "streets"
+                      ? { "line-opacity": 0.55 }
+                      : {}),
                   }}
                   fillHoverPaint={
                     layout === "chapter-page"
-                      ? { "fill-color": "#99adc8" }
+                      ? {
+                          "fill-color": "#99adc8",
+                          "fill-opacity":
+                            activeBasemap === "streets" ? 0.24 : 0.94,
+                        }
                       : undefined
                   }
                   interactive={layout === "chapter-page"}
@@ -341,7 +381,11 @@ export function NeighborNetsMap({
                       "coordinates" in geometry ? geometry.coordinates : null,
                     );
                     if (typeof name !== "string" || !bounds) return;
-                    setSelectedState({ name, bounds });
+                    setSelectedState({
+                      name,
+                      bounds,
+                      geometry: geometry as Geometry,
+                    });
                     setHoveredState({ name, bounds });
                     isHoveringStateRef.current = true;
                     setSubmittedQuery("");
@@ -390,7 +434,12 @@ export function NeighborNetsMap({
                     offset={
                       coordinateOffsets[net.id] ??
                       (settings.pairOffset && pairedCities.has(cityKey(net))
-                        ? [net.branch === "brothers" ? -9 : 9, 0]
+                        ? [
+                            net.branch === "brothers"
+                              ? -markerSpacing / 2
+                              : markerSpacing / 2,
+                            0,
+                          ]
                         : [0, 0])
                     }
                     onMouseEnter={() => setHoveredId(net.id)}
@@ -404,6 +453,11 @@ export function NeighborNetsMap({
                         differentiator={settings.differentiator}
                         palette={settings.palette}
                         sizeMode={settings.sizeMode}
+                        variant={
+                          layout === "chapter-page"
+                            ? "branch-logo"
+                            : "configurable"
+                        }
                         dimInactive={settings.dimInactive}
                         emphasized={
                           hoveredId === net.id || selectedId === net.id
@@ -482,6 +536,8 @@ export function NeighborNetsMap({
                     setSelectedState(null);
                     setHoveredState(null);
                     isHoveringStateRef.current = false;
+                    setFocusedResultId(null);
+                    setSelectedId(null);
                   }}
                   className="shrink-0 border-b border-brand-royal/70 pb-1 text-xs font-semibold text-brand-royal transition-colors hover:border-brand-royal hover:text-brand-royal/75 sm:text-sm"
                 >
@@ -540,17 +596,32 @@ export function NeighborNetsMap({
             ) : null}
           </div>
         )}
+
+        {showChapterResults ? (
+          <ChapterResultsCarousel
+            results={chapterResults}
+            selectedId={selectedId}
+            palette={settings.palette}
+            contextLabel={
+              hasSearch
+                ? `Results for “${submittedQuery}”`
+                : selectedState?.name
+            }
+            onSelect={focusResult}
+            onClose={resetSearch}
+          />
+        ) : null}
       </div>
 
-      {finder && hasSearch ? (
-        <div className={cn(layout === "chapter-page" && "mt-10")}>
+      {finder && hasSearch && layout !== "chapter-page" ? (
+        <div>
           <SearchResultCards
             query={submittedQuery}
             results={searchResults}
             selectedId={selectedId}
             palette={settings.palette}
             onSelect={focusResult}
-            layout={layout}
+            layout="default"
           />
         </div>
       ) : null}
@@ -657,7 +728,7 @@ function MapCamera({
         const [net] = focusLocations;
         map.easeTo({
           center: [net.longitude, net.latitude],
-          zoom: 8,
+          zoom: 9,
           duration: animated ? 900 : 0,
         });
         return;
@@ -1044,6 +1115,7 @@ function sharedCities(nets: NeighborNetLocation[]): Set<string> {
 /** Offset exact coordinate duplicates so every source row remains clickable. */
 function offsetsForSharedCoordinates(
   nets: NeighborNetLocation[],
+  spacing = 18,
 ): Record<string, [number, number]> {
   const groups: Record<string, NeighborNetLocation[]> = {};
   for (const net of nets) {
@@ -1056,7 +1128,7 @@ function offsetsForSharedCoordinates(
   for (const group of Object.values(groups)) {
     if (group.length < 2) continue;
     group.forEach((net, index) => {
-      offsets[net.id] = [(index - (group.length - 1) / 2) * 18, 0];
+      offsets[net.id] = [(index - (group.length - 1) / 2) * spacing, 0];
     });
   }
   return offsets;
@@ -1426,10 +1498,251 @@ function SearchResultCards({
   );
 }
 
+function ChapterResultsCarousel({
+  results,
+  selectedId,
+  palette,
+  contextLabel,
+  onSelect,
+  onClose,
+}: {
+  results: NeighborNetLocation[];
+  selectedId: string | null;
+  palette: MapSettings["palette"];
+  contextLabel?: string;
+  onSelect: (net: NeighborNetLocation) => void;
+  onClose: () => void;
+}) {
+  const cardRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  useEffect(() => {
+    if (!selectedId) return;
+    cardRefs.current[selectedId]?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  }, [selectedId]);
+
+  return (
+    <section
+      aria-labelledby="area-results-heading"
+      className="relative bg-brand-obsidian px-5 py-8 text-brand-pure-white sm:px-8 md:px-[46px] md:py-10"
+    >
+      <div className="flex items-start justify-between gap-6">
+        <div>
+          <h2
+            id="area-results-heading"
+            className="text-[24px] leading-tight font-extrabold tracking-[-0.02em]"
+          >
+            Results for this area
+          </h2>
+          {contextLabel ? (
+            <p className="mt-2 text-sm text-brand-pure-white/65">
+              {contextLabel}
+            </p>
+          ) : null}
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close area results"
+          className="grid size-8 shrink-0 place-items-center bg-brand-pure-white text-brand-obsidian transition-colors outline-none hover:bg-brand-warm-snow focus-visible:ring-2 focus-visible:ring-sisters-buttercup focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian"
+        >
+          <MaterialIcon name="close" size={18} aria-hidden="true" />
+        </button>
+      </div>
+
+      {results.length === 0 ? (
+        <div className="mt-6 max-w-md bg-brand-pure-white p-6 text-brand-obsidian">
+          <h3 className="text-lg font-extrabold">No NeighborNets found</h3>
+          <p className="mt-2 text-sm leading-relaxed text-brand-obsidian/70">
+            Try a nearby city, chapter name, or another state.
+          </p>
+        </div>
+      ) : (
+        <div
+          className="mt-6 flex snap-x snap-mandatory [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.45)_transparent] gap-5 overflow-x-auto pb-3"
+          aria-label={`${results.length} area ${results.length === 1 ? "result" : "results"}`}
+        >
+          {results.map((net) => {
+            const isSelected = selectedId === net.id;
+            const contactItems: Array<{
+              icon: MaterialIconName;
+              value: string;
+            } | null> = [
+              net.contact?.instagram
+                ? {
+                    icon: "alternate_email",
+                    value: net.contact.instagram,
+                  }
+                : null,
+              net.contact?.email
+                ? { icon: "mail", value: net.contact.email }
+                : null,
+            ];
+            const availableContactItems = contactItems.filter(
+              (item): item is { icon: MaterialIconName; value: string } =>
+                item !== null,
+            );
+
+            return (
+              <button
+                key={net.id}
+                ref={(node) => {
+                  cardRefs.current[net.id] = node;
+                }}
+                type="button"
+                onClick={() => onSelect(net)}
+                aria-pressed={isSelected}
+                className={cn(
+                  "group w-[min(328px,calc(100vw-64px))] min-w-[min(328px,calc(100vw-64px))] snap-start overflow-hidden bg-brand-pure-white text-left text-brand-obsidian transition-[transform,box-shadow] duration-200 outline-none hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-4 focus-visible:ring-offset-brand-obsidian",
+                  isSelected && "-translate-y-1",
+                )}
+                style={
+                  isSelected
+                    ? {
+                        boxShadow: `0 0 0 4px ${branchColor(net.branch, palette)}, 0 16px 28px rgba(0, 0, 0, 0.28)`,
+                      }
+                    : undefined
+                }
+              >
+                <span
+                  className={cn(
+                    "flex h-[100px] items-center justify-center",
+                    net.branch === "brothers"
+                      ? "bg-brand-royal"
+                      : "bg-sisters-buttercup",
+                  )}
+                >
+                  <BranchLogo
+                    branch={net.branch}
+                    className="size-[64px]"
+                    sizes="64px"
+                  />
+                </span>
+
+                <span className="flex min-h-[202px] flex-col px-5 pt-4 pb-5">
+                  <span
+                    className={cn(
+                      "w-fit px-3 py-1 text-xs font-semibold text-brand-pure-white",
+                      net.branch === "brothers"
+                        ? "bg-brand-royal"
+                        : "bg-brand-jade",
+                    )}
+                  >
+                    {branchLabel[net.branch]}
+                  </span>
+                  <span className="mt-3 text-[18px] leading-tight font-extrabold tracking-[-0.02em]">
+                    {net.name}
+                  </span>
+                  <span className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-brand-obsidian/70">
+                    <MaterialIcon
+                      name="my_location"
+                      size={15}
+                      aria-hidden="true"
+                      className="mt-0.5 shrink-0"
+                    />
+                    {locationLabel(net)}
+                  </span>
+
+                  <span className="mt-auto flex min-h-10 flex-wrap items-end gap-2 border-t border-brand-obsidian/15 pt-3">
+                    {availableContactItems.length > 0 ? (
+                      availableContactItems.map((item) => (
+                        <span
+                          key={`${item.icon}-${item.value}`}
+                          title={item.value}
+                          className="inline-flex max-w-full items-center gap-1.5 truncate border border-current px-2 py-1 text-[11px] font-semibold"
+                          style={{
+                            color: branchColor(net.branch, palette),
+                          }}
+                        >
+                          <MaterialIcon
+                            name={item.icon}
+                            size={13}
+                            aria-hidden="true"
+                            className="shrink-0"
+                          />
+                          <span className="truncate">{item.value}</span>
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-[11px] font-medium text-brand-obsidian/55">
+                        Contact details coming soon
+                      </span>
+                    )}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function locationLabel(net: NeighborNetLocation): string {
+  if (net.city && net.state) return `${net.city}, ${net.state}`;
+  if (net.city) return net.city;
+  if (net.state) return net.state;
+  return net.region;
+}
+
 function normalizeSearchTerm(value: string): string {
   return value
     .normalize("NFKD")
     .toLocaleLowerCase("en-US")
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
+}
+
+function geometryContainsPoint(
+  geometry: Geometry,
+  point: [number, number],
+): boolean {
+  if (geometry.type === "Polygon") {
+    return polygonContainsPoint(geometry.coordinates, point);
+  }
+  if (geometry.type === "MultiPolygon") {
+    return geometry.coordinates.some((polygon) =>
+      polygonContainsPoint(polygon, point),
+    );
+  }
+  return false;
+}
+
+function polygonContainsPoint(
+  polygon: Position[][],
+  point: [number, number],
+): boolean {
+  const [outerRing, ...holes] = polygon;
+  if (!outerRing || !ringContainsPoint(outerRing, point)) return false;
+  return !holes.some((hole) => ringContainsPoint(hole, point));
+}
+
+function ringContainsPoint(
+  ring: Position[],
+  [pointX, pointY]: [number, number],
+): boolean {
+  let inside = false;
+
+  for (let index = 0, previous = ring.length - 1; index < ring.length;) {
+    const [x, y] = ring[index] ?? [];
+    const [previousX, previousY] = ring[previous] ?? [];
+    if (
+      x !== undefined &&
+      y !== undefined &&
+      previousX !== undefined &&
+      previousY !== undefined &&
+      y > pointY !== previousY > pointY &&
+      pointX < ((previousX - x) * (pointY - y)) / (previousY - y) + x
+    ) {
+      inside = !inside;
+    }
+    previous = index;
+    index += 1;
+  }
+
+  return inside;
 }
