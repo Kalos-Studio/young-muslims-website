@@ -196,18 +196,6 @@ try {
           const footerWaveRect = document
             .querySelector("footer > [aria-hidden='true'] svg")
             ?.getBoundingClientRect();
-          const noteLayouts = [...document.querySelectorAll("aside")]
-            .filter((note) => note.className.includes("bg-wf-note"))
-            .map((note) => {
-              const rect = note.getBoundingClientRect();
-              const layout = note.parentElement?.parentElement;
-              return {
-                left: Math.round(rect.left),
-                right: Math.round(rect.right),
-                position: layout ? getComputedStyle(layout).position : "missing",
-              };
-            });
-
           const wideStageHeadings = [
             "But it's easier to just show you.",
             "Word on the street.",
@@ -277,7 +265,6 @@ try {
                     right: Math.round(footerWaveRect.right),
                   }
                 : null,
-              noteLayouts,
             },
             wideStages,
           };
@@ -319,19 +306,6 @@ try {
             ? `${route} at ${viewport.width}px keeps the footer wave inside a ${wave.width}px fixed surface (${wave.left}px to ${wave.right}px).`
             : `${route} at ${viewport.width}px is missing the shared footer wave.`,
         );
-      }
-      if (result.innerWidth < 768) {
-        for (const note of result.sharedShell.noteLayouts) {
-          if (
-            note.position !== "relative" ||
-            note.left < -1 ||
-            note.right > result.innerWidth + 1
-          ) {
-            failures.push(
-              `${route} at ${viewport.width}px does not keep a review note inline and inside the viewport (${note.position}, ${note.left}px to ${note.right}px).`,
-            );
-          }
-        }
       }
       for (const stage of result.wideStages) {
         if (

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 // WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
 import { FundraiseUpDonationForm } from "@/components/fundraise-up/donation-form";
-import { Annotate } from "@/components/wireframe/annotate";
+import { ContentFrame } from "@/components/wireframe/content-frame";
 import { Frame } from "@/components/wireframe/frame";
 import { Lorem, Text } from "@/components/wireframe/text";
 import { PageFrame } from "@/components/wireframe/page-frame";
@@ -63,14 +63,14 @@ function RecentSupporters() {
 export default function SupportPage() {
   return (
     <PageFrame className="bg-brand-warm-snow pt-16 pb-20 text-brand-obsidian">
-      <Annotate>
+      <ContentFrame>
         <Text as="h1" className="text-brand-royal">
           Placeholder YM mission heading
         </Text>
         <Lorem paragraphs={2} className="mt-5 max-w-3xl" />
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate className="mt-16">
+      <ContentFrame className="mt-16">
         <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
           <Frame
             variant="muted"
@@ -79,39 +79,28 @@ export default function SupportPage() {
           />
           <FundraiseUpDonationForm />
         </div>
-      </Annotate>
+      </ContentFrame>
 
       {/* The left column is not a profile of one person — it is the argument
-          for giving, which is a different job and a different shape. Two notes
-          because the row makes a different point in each column. */}
-      <Annotate className="mt-16">
+          for giving, which is a different job and a different shape. */}
+      <ContentFrame className="mt-16">
         <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
-          {/* A note per column, each sitting on the column it is about. */}
-          <Annotate
-            bleed
-            className="lg:col-span-2"
-            placement="bottom-right"
-            note="include something about advocacy"
-          >
+          <ContentFrame bleed className="lg:col-span-2">
             <div className="flex h-full flex-col justify-center rounded-card bg-landing-blush px-6 py-8 md:px-16 md:py-16">
               <Text as="h2" className="text-brand-jade">
                 Placeholder heading: the case for giving
               </Text>
               <Lorem paragraphs={2} className="mt-5" />
             </div>
-          </Annotate>
+          </ContentFrame>
 
-          <Annotate
-            bleed
-            placement="top-right"
-            note="anonymize supporter names, e.g. “an anonymous person from X state”"
-          >
+          <ContentFrame bleed>
             <RecentSupporters />
-          </Annotate>
+          </ContentFrame>
         </div>
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate className="mt-8">
+      <ContentFrame className="mt-8">
         <Text as="h2" className="text-brand-royal">
           Where Your Support Goes
         </Text>
@@ -141,7 +130,7 @@ export default function SupportPage() {
             <Lorem paragraphs={1} className="mt-3" />
           </div>
         </div>
-      </Annotate>
+      </ContentFrame>
     </PageFrame>
   );
 }

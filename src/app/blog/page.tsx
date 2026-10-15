@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 // WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
-import { Annotate } from "@/components/wireframe/annotate";
+import { ContentFrame } from "@/components/wireframe/content-frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
@@ -108,7 +108,7 @@ export default function BlogPage() {
           absent. */}
       <h1 className="sr-only">Blog</h1>
 
-      <Annotate>
+      <ContentFrame>
         <div className="relative flex flex-col justify-end bg-wf-fill-muted p-6 pt-40 md:aspect-[21/9] md:p-12">
           <p className="absolute top-6 left-6 text-sm text-background/80 md:top-12 md:left-12">
             Featured post image, full bleed, carousel of three
@@ -136,15 +136,15 @@ export default function BlogPage() {
             <span className="size-2.5 rounded-full bg-background/40" />
           </div>
         </div>
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate className="mt-14">
+      <ContentFrame className="mt-14">
         <div className="grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2 xl:grid-cols-3">
           {rest.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
         </div>
-      </Annotate>
+      </ContentFrame>
     </PageFrame>
   );
 }

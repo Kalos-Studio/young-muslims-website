@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 // WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
-import { Annotate } from "@/components/wireframe/annotate";
+import { ContentFrame } from "@/components/wireframe/content-frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
@@ -30,10 +30,7 @@ export default function StorePage() {
           announce, so it is sr-only rather than absent. */}
       <h1 className="sr-only">Store</h1>
 
-      <Annotate
-        bleed
-        note="brothers and sisters cover images; clicking either side navigates you out to that store"
-      >
+      <ContentFrame bleed>
         <section className="grid min-h-svh grid-cols-1 grid-rows-2 overflow-hidden md:h-[calc(100dvh-6rem)] md:grid-cols-2 md:grid-rows-1">
           <a
             href="https://www.ymsite.com/"
@@ -66,7 +63,7 @@ export default function StorePage() {
             </p>
           </div>
         </section>
-      </Annotate>
+      </ContentFrame>
     </PageFrame>
   );
 }

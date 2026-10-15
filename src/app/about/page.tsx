@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 // WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
-import { Annotate } from "@/components/wireframe/annotate";
+import { ContentFrame } from "@/components/wireframe/content-frame";
 import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
 import { Lorem, Text } from "@/components/wireframe/text";
@@ -19,18 +19,11 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <PageFrame className="bg-brand-warm-snow pt-16 pb-20 text-brand-obsidian">
-      <Annotate
-        note="Vision, Mission, and History share one pinned image position. The copy scrolls while the image crossfades to match the section currently in view. After History, the page returns to its existing structure."
-        placement="top-right"
-      >
+      <ContentFrame>
         <VisionMissionHistory />
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate
-        className="mt-20"
-        note="on scroll, the image swaps to match the event type in view: conferences show a conference photo, retreats show a retreat photo, etc."
-        placement="top-right"
-      >
+      <ContentFrame className="mt-20">
         <Text as="h2" className="text-brand-jade">
           Conferences and retreats
         </Text>
@@ -75,9 +68,9 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate className="mt-20">
+      <ContentFrame className="mt-20">
         <div className="rounded-card bg-brand-obsidian p-6 text-brand-pure-white md:p-8">
           <Text as="h2" tone="dark">
             Leadership
@@ -115,11 +108,11 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate className="mt-20">
+      <ContentFrame className="mt-20">
         <FaqSection />
-      </Annotate>
+      </ContentFrame>
     </PageFrame>
   );
 }

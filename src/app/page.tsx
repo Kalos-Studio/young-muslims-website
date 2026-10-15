@@ -31,10 +31,9 @@ import { PeopleStoriesSection } from "./people-stories-section";
 import { WhatWeStandOnSection } from "./what-we-stand-on-section";
 import { WordOnTheStreetSection } from "./word-on-the-street-section";
 
-// WIREFRAME: annotations remain available while the landing page is reviewed.
-// The page imagery and layout below now follow the approved Figma composition.
-// See WIREFRAME.md.
-import { Annotate } from "@/components/wireframe/annotate";
+// WIREFRAME: ContentFrame only supplies the prototype's shared content width.
+// The page imagery and layout below follow the approved Figma composition.
+import { ContentFrame } from "@/components/wireframe/content-frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
@@ -147,34 +146,11 @@ function SolidCard({
 export default function Home() {
   return (
     <PageFrame className="overflow-x-clip" data-landing-page="true">
-      <Annotate
-        bleed
-        notes={[
-          {
-            placement: "top-left",
-            note: (
-              <>
-                <span className="block font-bold">READ THIS FIRST</span>
-                <span className="mt-3 block">
-                  The landing page now follows the updated Figma composition,
-                  imagery, colors, typography, hierarchy, and approved copy.
-                </span>
-              </>
-            ),
-          },
-          {
-            placement: "center-left",
-            note: "The supplied community video autoplays silently on a loop behind the hero copy. It remains fixed within the hero and does not respond to scrolling.",
-          },
-        ]}
-      >
+      <ContentFrame bleed>
         <HeroVideo />
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate
-        bleed
-        note="Portraits swirl in from the upper right once, then rotate with scroll direction around the copy. The text fades in as it enters the viewport."
-      >
+      <ContentFrame bleed>
         <section
           data-header-theme="light"
           className="relative isolate h-[1298px] w-full overflow-hidden bg-brand-warm-snow xl:h-[1830px]"
@@ -216,12 +192,9 @@ export default function Home() {
             </p>
           </BelongingCopy>
         </section>
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate
-        bleed
-        note="Selecting the highlight reel will open the full video in an overlay once the final video interaction is connected."
-      >
+      <ContentFrame bleed>
         <section
           data-header-theme="dark"
           className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian xl:h-[1087px]"
@@ -256,13 +229,9 @@ export default function Home() {
             </div>
           </div>
         </section>
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate
-        bleed
-        placement="top-right"
-        note="The introduction aligns with the first card while the four closely spaced cards move during scroll. The background marks travel with the section."
-      >
+      <ContentFrame bleed>
         <section
           data-header-theme="light"
           className="relative h-[3026px] w-full overflow-clip bg-brand-warm-snow xl:h-[1835px]"
@@ -361,23 +330,17 @@ export default function Home() {
             />
           </div>
         </section>
-      </Annotate>
+      </ContentFrame>
 
       <WhatWeStandOnSection />
 
-      <Annotate
-        bleed
-        note="Once this section fills the viewport, the heading appears and the metrics count upward."
-      >
+      <ContentFrame bleed>
         <EverywhereSection />
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate
-        bleed
-        note="The heading reveals first. Once it reaches the center, the portraits appear and begin orbiting. Hovering a portrait reveals a cursor-reactive shape, and selecting it opens a full-screen view."
-      >
+      <ContentFrame bleed>
         <PeopleStoriesSection />
-      </Annotate>
+      </ContentFrame>
 
       <ChapterFinderSection />
       <WordOnTheStreetSection />

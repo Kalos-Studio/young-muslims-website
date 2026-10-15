@@ -850,17 +850,12 @@ body:has(.ym-menu-popup) [data-site-logo-link] {
  * wireframe comes out; nothing in the real site should reference `--wf-*` or
  * the `wf-` utilities they generate. See WIREFRAME.md.
  *
- * Everything here is greyscale except --wf-note, which is deliberately the one
- * colour in the prototype so the client reads the yellow notes as commentary
- * sitting on top of the wireframe rather than as part of the design.
+ * The remaining values support the greyscale wireframe placeholders.
  */
 @theme inline {
   --color-wf-fill: var(--wf-fill);
   --color-wf-fill-muted: var(--wf-fill-muted);
   --color-wf-rule: var(--wf-rule);
-  --color-wf-note: var(--wf-note);
-  --color-wf-note-edge: var(--wf-note-edge);
-  --color-wf-note-ink: var(--wf-note-ink);
 }
 
 :root {
@@ -870,8 +865,5 @@ body:has(.ym-menu-popup) [data-site-logo-link] {
   --wf-fill-muted: oklch(0.62 0 0);
   /* Hairline rules standing in for lines of type. */
   --wf-rule: oklch(0.87 0 0);
-  --wf-note: oklch(0.92 0.13 100);
-  --wf-note-edge: oklch(0.86 0.14 95);
-  --wf-note-ink: oklch(0.28 0.03 90);
 }
 /* WIREFRAME:end -------------------------------------------------------------- */
