@@ -1,0 +1,34 @@
+@media (max-width: 767px) {
+  .orbit {
+    width: calc(100% - 32px);
+    height: 900px;
+    aspect-ratio: auto;
+  }
+
+  /* Keep all six stories visible in staggered groups above and below the copy.
+     Desktop retains the original orbit and its motion. */
+  .orbit > div:nth-child(1) {
+    left: 15% !important;
+    top: 225px !important;
+  }
+  .orbit > div:nth-child(2) {
+    left: 50% !important;
+    top: 165px !important;
+  }
+  .orbit > div:nth-child(3) {
+    left: 85% !important;
+    top: 225px !important;
+  }
+  .orbit > div:nth-child(4) {
+    left: 15% !important;
+    top: 675px !important;
+  }
+  .orbit > div:nth-child(5) {
+    left: 50% !important;
+    top: 735px !important;
+  }
+  .orbit > div:nth-child(6) {
+    left: 85% !important;
+    top: 675px !important;
+  }
+}

@@ -15,6 +15,7 @@ import {
   useTransform,
 } from "motion/react";
 
+import styles from "./people-stories-section.module.css";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 import { STORIES, type Story } from "@/lib/stories";
 import {
@@ -62,7 +63,7 @@ function OrbitPortrait({
 
   return (
     <motion.div
-      className="absolute aspect-square w-[clamp(112px,23vw,170px)] xl:w-[224px]"
+      className="absolute aspect-square w-24 md:w-[clamp(112px,23vw,170px)] xl:w-[224px]"
       style={{ left, top, x: "-50%", y: "-50%" }}
     >
       <motion.div
@@ -168,10 +169,10 @@ export function PeopleStoriesSection() {
       ref={sectionRef}
       data-header-theme="light"
       aria-labelledby="people-stories-heading"
-      className="relative h-[734px] w-full overflow-hidden bg-brand-warm-snow text-center md:h-[886px] xl:h-[1327px]"
+      className="relative h-[900px] w-full overflow-hidden bg-brand-warm-snow text-center md:h-[886px] xl:h-[1327px]"
     >
       <div
-        className="absolute top-1/2 left-1/2 aspect-square w-[calc(100vw+120px)] max-w-[1140px] -translate-x-1/2 -translate-y-1/2"
+        className={`${styles.orbit} absolute top-1/2 left-1/2 aspect-square w-[calc(100vw+120px)] max-w-[1140px] -translate-x-1/2 -translate-y-1/2`}
         onFocusCapture={(event) => {
           if ((event.target as HTMLElement).matches(":focus-visible")) {
             setHasKeyboardFocus(true);

@@ -36,12 +36,29 @@
   transition: none;
 }
 
+.mobileCanvas {
+  display: none;
+}
+
 @media (max-width: 767px) {
-  .frame {
-    x: 100px;
-    y: -22px;
-    width: 1240px;
-    height: 1069px;
+  .canvas {
+    display: none;
+  }
+  .mobileCanvas {
+    display: block;
+    position: absolute;
+    inset: 0;
+  }
+  .mobileFrame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(100% - 64px);
+    max-width: 480px;
+    height: auto;
+    max-height: calc(100% - 64px);
+    object-fit: contain;
+    transform: translate(-50%, -50%);
   }
 }
 

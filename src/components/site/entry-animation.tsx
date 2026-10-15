@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { useLayoutEffect, useState } from "react";
 
 import frame01 from "../../../design-assets/figma/entry-animation/frame-01.png";
@@ -135,9 +136,10 @@ export function EntryAnimation({ children }: { children: ReactNode }) {
       ? waitForLandingContent()
       : Promise.resolve();
 
-    const entryFramesReady = isLandingPage
-      ? Promise.all(frames.map((frame) => preloadImage(frame.src)))
-      : Promise.resolve();
+    const entryFramesReady =
+      isLandingPage || window.matchMedia("(max-width: 767px)").matches
+        ? Promise.all(frames.map((frame) => preloadImage(frame.src)))
+        : Promise.resolve();
 
     void entryFramesReady.then(() => {
       if (cancelled) return;
@@ -185,6 +187,19 @@ export function EntryAnimation({ children }: { children: ReactNode }) {
           className={`${styles.root} ${stage === "revealing" ? styles.revealing : ""}`}
           data-entry-animation
         >
+          <div className={styles.mobileCanvas}>
+            {frames.map((frame, index) => (
+              <Image
+                key={frame.src}
+                src={frame}
+                alt=""
+                loading="eager"
+                unoptimized
+                className={styles.mobileFrame}
+                style={{ opacity: index === frameIndex ? 1 : 0 }}
+              />
+            ))}
+          </div>
           <svg
             className={styles.canvas}
             viewBox="0 0 1440 1024"

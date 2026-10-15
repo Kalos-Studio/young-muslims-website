@@ -276,7 +276,7 @@ function FinalImageEdge({ progress }: { progress: MotionValue<number> }) {
       aria-hidden="true"
       viewBox="0 0 1000 1000"
       preserveAspectRatio="none"
-      className="pointer-events-none absolute inset-x-0 bottom-[-48px] z-[13] h-[18%] w-full md:bottom-[-64px]"
+      className="pointer-events-none absolute inset-x-0 bottom-[-12px] z-[13] h-[80px] w-full md:bottom-[-64px] md:h-[18%]"
       style={{ opacity }}
     >
       <path d={`${FINAL_EDGE_CURVE} L 1000 1000 L 0 1000 Z`} fill="#FCFAF8" />
@@ -350,7 +350,7 @@ export function WhatWeStandOnSection() {
       className="relative w-full bg-brand-warm-snow"
       style={{ height: `${(SCROLL_RUNWAY_VIEWPORTS + 1) * 100}vh` }}
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-brand-warm-snow md:min-h-[860px]">
+      <div className="sticky top-0 h-screen min-h-[808px] w-full overflow-hidden bg-brand-warm-snow md:min-h-[860px]">
         <motion.div
           data-over-image={headingOnImage ? "true" : "false"}
           className={`what-we-stand-on-heading absolute top-[76px] left-1/2 z-[3] w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[84px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
