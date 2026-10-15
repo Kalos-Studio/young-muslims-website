@@ -165,6 +165,7 @@ function CountUpMetric({
   suffix,
   label,
   isActive,
+  isMobile,
   reduceMotion,
   className,
 }: {
@@ -172,17 +173,24 @@ function CountUpMetric({
   suffix: string;
   label: string;
   isActive: boolean;
+  isMobile: boolean;
   reduceMotion: boolean | null;
   className?: string;
 }) {
   const numberRef = useRef<HTMLSpanElement>(null);
+  const numberIsVisible = useInView(numberRef, { once: true, amount: 1 });
+  const shouldCount = isMobile ? numberIsVisible : isActive;
 
   useEffect(() => {
     const element = numberRef.current;
     if (!element) return;
 
+    let previousNumber = -1;
     const setNumber = (value: number) => {
-      element.textContent = `${numberFormatter.format(Math.round(value))}${suffix}`;
+      const rounded = Math.round(value);
+      if (rounded === previousNumber) return;
+      previousNumber = rounded;
+      element.textContent = `${numberFormatter.format(rounded)}${suffix}`;
     };
 
     if (reduceMotion) {
@@ -190,18 +198,20 @@ function CountUpMetric({
       return;
     }
 
-    if (!isActive) {
+    if (!shouldCount) {
       setNumber(0);
       return;
     }
 
     const controls = animate(0, target, {
       duration: 1.5,
+      // Keep mobile integer steps evenly paced instead of lingering near the end.
+      ...(isMobile ? { ease: "linear" as const } : {}),
       onUpdate: setNumber,
     });
 
     return () => controls.stop();
-  }, [isActive, reduceMotion, suffix, target]);
+  }, [shouldCount, isMobile, reduceMotion, suffix, target]);
 
   return (
     <div
@@ -352,6 +362,7 @@ export function EverywhereSection() {
               key={metric.label}
               {...metric}
               isActive={metricsAreVisible}
+              isMobile={isMobile}
               reduceMotion={reduceMotion}
               className={
                 index === 0
