@@ -22,7 +22,7 @@ import principleTarbiyyah from "../../design-assets/figma/landing-2026/new-secti
 const INTRO_PHASE_UNITS = 1;
 const PHASE_UNITS_PER_PRINCIPLE = 2;
 const REVEAL_PHASE_UNITS = 1;
-const SCROLL_RUNWAY_VIEWPORTS = 1;
+const SCROLL_RUNWAY_VIEWPORTS = 1.5;
 const FINAL_EDGE_CURVE =
   "M 0 350 C 175 45 345 40 520 300 C 705 555 845 105 1000 275";
 
