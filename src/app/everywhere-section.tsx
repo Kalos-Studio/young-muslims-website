@@ -305,7 +305,7 @@ export function EverywhereSection() {
   );
 
   function updatePointer(event: PointerEvent<HTMLElement>) {
-    if (reduceMotion || event.pointerType === "touch") return;
+    if (reduceMotion || isMobile || event.pointerType === "touch") return;
 
     const bounds = event.currentTarget.getBoundingClientRect();
     pointerX.set(((event.clientX - bounds.left) / bounds.width - 0.5) * 2);
@@ -516,8 +516,9 @@ export function EverywhereSection() {
         </motion.div>
 
         <motion.div
-          className="absolute top-[1192px] left-[-113px] h-[272px] w-[269px] -translate-y-34 md:top-[1385px] md:left-[43px] md:h-[446px] md:w-[439px] md:translate-y-0"
-          style={{ y: bottomLeftPortraitY }}
+          data-discover-portrait="left"
+          className="absolute top-[1230px] left-[28px] h-[272px] w-[269px] origin-top-left scale-[0.55] md:top-[1385px] md:left-[43px] md:h-[446px] md:w-[439px] md:scale-100"
+          style={{ y: isMobile ? 0 : bottomLeftPortraitY }}
         >
           <motion.div
             className="relative size-full"
@@ -545,8 +546,9 @@ export function EverywhereSection() {
         </motion.div>
 
         <motion.div
-          className="absolute top-[1234px] left-[36%] h-[209px] w-[203px] -translate-y-11 md:top-[1349px] md:left-[1071px] md:h-[271px] md:w-[264px] md:translate-y-0"
-          style={{ y: bottomRightPortraitY }}
+          data-discover-portrait="right"
+          className="absolute top-[1230px] left-[188px] h-[209px] w-[203px] origin-top-left scale-[0.7] md:top-[1349px] md:left-[1071px] md:h-[271px] md:w-[264px] md:scale-100"
+          style={{ y: isMobile ? 0 : bottomRightPortraitY }}
         >
           <motion.div
             className="relative size-full"
