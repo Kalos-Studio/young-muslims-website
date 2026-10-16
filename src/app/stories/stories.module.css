@@ -1,3 +1,5 @@
+@reference "../globals.css";
+
 .hero {
   position: relative;
   isolation: isolate;
@@ -43,12 +45,13 @@
 .gallery {
   overflow: hidden;
   padding: clamp(80px, 13vw, 190px) 0 clamp(80px, 11.25vw, 162px);
+  @apply pt-10;
   color: var(--color-brand-obsidian);
 }
 .galleryHeading {
   max-width: 1308px;
   padding: 0 24px;
-  margin: 0 auto clamp(64px, 8.6vw, 124px);
+  margin: 0 auto;
   text-align: center;
 }
 .portraitField {
@@ -144,6 +147,7 @@
 }
 /* Leave vertical gestures available for page scrolling in this taller gallery. */
 .galleryViewport {
+  @apply -mt-16;
   position: relative;
   /* Reserve room above and below the full field for enlarged silhouettes. */
   height: max(861px, calc(45.9028vw + 200px));
@@ -165,6 +169,7 @@
   }
   .gallery {
     padding: 178px 0 115px;
+    @apply pt-10;
   }
   .galleryHeading {
     width: min(400px, calc(100% - 64px));
@@ -188,6 +193,7 @@
     width: 967.27px;
   }
   .galleryViewport {
+    @apply mt-0;
     height: 604px;
   }
   .cta {

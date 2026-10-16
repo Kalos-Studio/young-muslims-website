@@ -23,7 +23,8 @@ import bottomRightShell from "../../../design-assets/figma/landing-2026/everywhe
 import mapCanada from "../../../design-assets/figma/landing-2026/everywhere-map/canada.svg";
 import mapMexico from "../../../design-assets/figma/landing-2026/everywhere-map/mexico.svg";
 import mapUs from "../../../design-assets/figma/landing-2026/everywhere-map/us.svg";
-import mapUsMask from "../../../design-assets/figma/landing-2026/everywhere-map/us-mask.svg";
+import brothersLogo from "../../../ymblogo.png";
+import sistersLogo from "../../../ymslogo.png";
 import leftPhoto from "../../../design-assets/figma/landing-2026/everywhere-left-photo.png";
 import leftShell from "../../../design-assets/figma/landing-2026/everywhere-left-shell.svg";
 import topPhoto from "../../../design-assets/figma/landing-2026/everywhere-top-photo.png";
@@ -35,128 +36,370 @@ const METRICS = [
   { target: 10_000, suffix: "s", label: "of young Muslims" },
 ] as const;
 
-const MAP_GLOWS = [
+// Illustrative branch badges in the globe artwork's coordinate space.
+// Each full badge is positioned within the US outline, including coastal clusters.
+const MAP_LOGOS = [
   {
-    className: "top-[177px] left-[344px] h-[55px] w-[52px]",
-    x: [0, 18, -10, 0],
-    y: [0, -14, 10, 0],
-    duration: 15,
+    x: 388,
+    y: 208,
+    branch: "s",
   },
   {
-    className: "top-[332px] left-[327px] h-[69px] w-[65px]",
-    x: [0, -16, 14, 0],
-    y: [0, 16, -8, 0],
-    duration: 17,
+    x: 380,
+    y: 226,
+    branch: "s",
   },
   {
-    className: "top-[403px] left-[406px] h-[55px] w-[52px]",
-    x: [0, 16, -12, 0],
-    y: [0, -10, 14, 0],
-    duration: 14,
+    x: 378,
+    y: 366,
+    branch: "s",
   },
   {
-    className: "top-[457px] left-[365px] h-[63px] w-[63px]",
-    x: [0, -14, 12, 0],
-    y: [0, 12, -14, 0],
-    duration: 18,
+    x: 378,
+    y: 382,
+    branch: "b",
   },
   {
-    className: "top-[467px] left-[462px] h-[34px] w-[33px]",
-    x: [0, 12, -8, 0],
-    y: [0, -16, 10, 0],
-    duration: 16,
+    x: 386,
+    y: 396,
+    branch: "b",
   },
   {
-    className: "top-[437px] left-[691px] h-[24px] w-[32px]",
-    x: [0, -12, 16, 0],
-    y: [0, 10, -12, 0],
-    duration: 19,
+    x: 418,
+    y: 428,
+    branch: "b",
   },
   {
-    className: "top-[469px] left-[667px] h-[64px] w-[93px]",
-    x: [0, 20, -14, 0],
-    y: [0, -12, 14, 0],
-    duration: 21,
+    x: 428,
+    y: 442,
+    branch: "b",
   },
   {
-    className: "top-[555px] left-[669px] h-[101px] w-[124px]",
-    x: [0, -18, 20, 0],
-    y: [0, 14, -10, 0],
-    duration: 23,
+    x: 442,
+    y: 436,
+    branch: "s",
   },
   {
-    className: "top-[235px] left-[766px] h-[74px] w-[67px]",
-    x: [0, 14, -16, 0],
-    y: [0, -12, 16, 0],
-    duration: 16,
+    x: 408,
+    y: 416,
+    branch: "b",
   },
   {
-    className: "top-[303px] left-[755px] h-[59px] w-[59px]",
-    x: [0, -16, 12, 0],
-    y: [0, 14, -10, 0],
-    duration: 18,
+    x: 432,
+    y: 422,
+    branch: "s",
   },
   {
-    className: "top-[294px] left-[829px] h-[77px] w-[81px]",
-    x: [0, 18, -12, 0],
-    y: [0, -10, 16, 0],
-    duration: 20,
+    x: 468,
+    y: 456,
+    branch: "b",
   },
   {
-    className: "top-[343px] left-[889px] h-[74px] w-[74px]",
-    x: [0, -12, 16, 0],
-    y: [0, 16, -12, 0],
-    duration: 17,
+    x: 482,
+    y: 462,
+    branch: "b",
   },
   {
-    className: "top-[387px] left-[856px] h-[80px] w-[76px]",
-    x: [0, 14, -14, 0],
-    y: [0, -14, 12, 0],
-    duration: 22,
+    x: 500,
+    y: 464,
+    branch: "s",
   },
   {
-    className: "top-[249px] left-[1048px] h-[125px] w-[126px]",
-    x: [0, -18, 14, 0],
-    y: [0, 12, -16, 0],
-    duration: 19,
+    x: 712,
+    y: 440,
+    branch: "s",
   },
   {
-    className: "top-[363px] left-[963px] h-[75px] w-[74px]",
-    x: [0, 16, -12, 0],
-    y: [0, -16, 12, 0],
-    duration: 21,
+    x: 704,
+    y: 502,
+    branch: "b",
   },
   {
-    className: "top-[422px] left-[917px] h-[91px] w-[89px]",
-    x: [0, -14, 18, 0],
-    y: [0, 12, -10, 0],
-    duration: 18,
+    x: 696,
+    y: 520,
+    branch: "b",
   },
   {
-    className: "top-[505px] left-[970px] h-[53px] w-[44px]",
-    x: [0, 16, -16, 0],
-    y: [0, -10, 14, 0],
-    duration: 20,
+    x: 718,
+    y: 526,
+    branch: "s",
   },
   {
-    className: "top-[573px] left-[1020px] h-[57px] w-[38px]",
-    x: [0, -18, 14, 0],
-    y: [0, 16, -12, 0],
-    duration: 24,
+    x: 702,
+    y: 534,
+    branch: "b",
   },
   {
-    className: "top-[518px] left-[939px] h-[51px] w-[54px]",
-    x: [0, 10, -8, 0],
-    y: [0, -10, 8, 0],
-    duration: 17,
+    x: 692,
+    y: 546,
+    branch: "s",
   },
   {
-    className: "top-[531px] left-[803px] h-[41px] w-[53px]",
-    x: [0, -8, 10, 0],
-    y: [0, 8, -10, 0],
-    duration: 19,
+    x: 728,
+    y: 512,
+    branch: "b",
   },
-];
+  {
+    x: 684,
+    y: 560,
+    branch: "s",
+  },
+  {
+    x: 744,
+    y: 508,
+    branch: "b",
+  },
+  {
+    x: 766,
+    y: 506,
+    branch: "b",
+  },
+  {
+    x: 676,
+    y: 546,
+    branch: "s",
+  },
+  {
+    x: 686,
+    y: 532,
+    branch: "b",
+  },
+  {
+    x: 784,
+    y: 504,
+    branch: "s",
+  },
+  {
+    x: 720,
+    y: 244,
+    branch: "b",
+  },
+  {
+    x: 720,
+    y: 262,
+    branch: "b",
+  },
+  {
+    x: 734,
+    y: 268,
+    branch: "s",
+  },
+  {
+    x: 746,
+    y: 284,
+    branch: "s",
+  },
+  {
+    x: 728,
+    y: 288,
+    branch: "s",
+  },
+  {
+    x: 744,
+    y: 322,
+    branch: "s",
+  },
+  {
+    x: 818,
+    y: 318,
+    branch: "b",
+  },
+  {
+    x: 816,
+    y: 334,
+    branch: "b",
+  },
+  {
+    x: 838,
+    y: 334,
+    branch: "b",
+  },
+  {
+    x: 850,
+    y: 350,
+    branch: "s",
+  },
+  {
+    x: 900,
+    y: 330,
+    branch: "s",
+  },
+  {
+    x: 892,
+    y: 348,
+    branch: "s",
+  },
+  {
+    x: 914,
+    y: 354,
+    branch: "b",
+  },
+  {
+    x: 930,
+    y: 370,
+    branch: "s",
+  },
+  {
+    x: 874,
+    y: 380,
+    branch: "b",
+  },
+  {
+    x: 866,
+    y: 398,
+    branch: "s",
+  },
+  {
+    x: 888,
+    y: 404,
+    branch: "b",
+  },
+  {
+    x: 904,
+    y: 420,
+    branch: "s",
+  },
+  {
+    x: 1028,
+    y: 220,
+    branch: "s",
+  },
+  {
+    x: 1010,
+    y: 270,
+    branch: "b",
+  },
+  {
+    x: 986,
+    y: 298,
+    branch: "s",
+  },
+  {
+    x: 994,
+    y: 274,
+    branch: "b",
+  },
+  {
+    x: 974,
+    y: 308,
+    branch: "s",
+  },
+  {
+    x: 972,
+    y: 292,
+    branch: "b",
+  },
+  {
+    x: 960,
+    y: 316,
+    branch: "s",
+  },
+  {
+    x: 958,
+    y: 300,
+    branch: "b",
+  },
+  {
+    x: 956,
+    y: 348,
+    branch: "b",
+  },
+  {
+    x: 970,
+    y: 374,
+    branch: "s",
+  },
+  {
+    x: 972,
+    y: 390,
+    branch: "b",
+  },
+  {
+    x: 958,
+    y: 364,
+    branch: "s",
+  },
+  {
+    x: 942,
+    y: 300,
+    branch: "b",
+  },
+  {
+    x: 942,
+    y: 318,
+    branch: "b",
+  },
+  {
+    x: 934,
+    y: 332,
+    branch: "s",
+  },
+  {
+    x: 944,
+    y: 384,
+    branch: "s",
+  },
+  {
+    x: 900,
+    y: 470,
+    branch: "b",
+  },
+  {
+    x: 892,
+    y: 486,
+    branch: "s",
+  },
+  {
+    x: 950,
+    y: 542,
+    branch: "b",
+  },
+  {
+    x: 940,
+    y: 530,
+    branch: "s",
+  },
+  {
+    x: 934,
+    y: 514,
+    branch: "b",
+  },
+  {
+    x: 926,
+    y: 500,
+    branch: "b",
+  },
+  {
+    x: 912,
+    y: 492,
+    branch: "s",
+  },
+  {
+    x: 920,
+    y: 434,
+    branch: "s",
+  },
+  {
+    x: 912,
+    y: 452,
+    branch: "s",
+  },
+  {
+    x: 798,
+    y: 496,
+    branch: "s",
+  },
+  {
+    x: 774,
+    y: 492,
+    branch: "s",
+  },
+  {
+    x: 814,
+    y: 492,
+    branch: "s",
+  },
+] as const;
 
 const numberFormatter = new Intl.NumberFormat("en-US");
 
@@ -239,7 +482,6 @@ export function EverywhereSection() {
   const [headingIsRevealed, setHeadingIsRevealed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const metricsAreVisible = useInView(metricsRef, { once: true });
-  const sectionIsVisible = useInView(sectionRef, { margin: "300px 0px" });
   const reduceMotion = useReducedMotion();
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
@@ -377,7 +619,7 @@ export function EverywhereSection() {
 
         <div
           role="img"
-          aria-label="Map showing Young Muslims NeighborNet communities across the United States"
+          aria-label="Map showing Young Muslims NeighborNet communities across the United States, with blue YMB logos for brothers and green YMS logos for sisters"
           className="absolute top-[705px] left-1/2 h-[795px] w-[1440px] origin-top -translate-x-1/2 scale-[0.339] md:top-[702px] md:left-0 md:translate-x-0 md:scale-100"
         >
           <motion.div
@@ -424,41 +666,32 @@ export function EverywhereSection() {
                 />
               </div>
 
-              <div
+              <svg
                 aria-hidden="true"
-                className="absolute inset-0"
-                style={{
-                  maskImage: `url("${mapUsMask.src}")`,
-                  maskPosition: "-259px -375px",
-                  maskRepeat: "no-repeat",
-                  maskSize: "1330.06px 964.254px",
-                  WebkitMaskImage: `url("${mapUsMask.src}")`,
-                  WebkitMaskPosition: "-259px -375px",
-                  WebkitMaskRepeat: "no-repeat",
-                  WebkitMaskSize: "1330.06px 964.254px",
-                }}
+                viewBox="0 0 1440 795"
+                className="absolute inset-0 h-full w-full"
               >
-                {MAP_GLOWS.map((glow, index) => (
-                  <motion.span
-                    key={`${glow.className}-${index}`}
-                    className={`everywhere-map-hotspot absolute rounded-[46%_54%_51%_49%/52%_45%_55%_48%] opacity-90 ${glow.className}`}
-                    animate={
-                      reduceMotion || !sectionIsVisible
-                        ? { x: 0, y: 0, scale: 1 }
-                        : {
-                            x: glow.x,
-                            y: glow.y,
-                            scale: [1, 1.18, 0.92, 1],
-                          }
-                    }
-                    transition={{
-                      duration: sectionIsVisible ? glow.duration : 0,
-                      ease: "easeInOut",
-                      repeat: sectionIsVisible ? Infinity : 0,
-                    }}
-                  />
+                {MAP_LOGOS.map(({ x, y, branch }, index) => (
+                  <foreignObject
+                    key={index}
+                    x={x - 12}
+                    y={y - 12}
+                    width={24}
+                    height={24}
+                  >
+                    <div
+                      className={`flex size-6 items-center justify-center rounded-pill p-px ${branch === "b" ? "bg-brand-royal" : "bg-brand-jade"}`}
+                    >
+                      <Image
+                        src={branch === "b" ? brothersLogo : sistersLogo}
+                        alt=""
+                        className="size-full object-contain"
+                        sizes="24px"
+                      />
+                    </div>
+                  </foreignObject>
                 ))}
-              </div>
+              </svg>
 
               <div className="absolute top-[37px] left-0 h-[772px] w-[1440px] bg-[linear-gradient(180deg,rgba(255,255,255,0)_45.5%,var(--color-brand-warm-snow)_100%)]" />
             </div>

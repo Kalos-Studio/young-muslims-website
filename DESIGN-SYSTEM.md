@@ -47,7 +47,7 @@ now supplies the corresponding mobile layout. Use the existing
 `text-mobile-display` (32px) for its Boldonse hero and `text-mobile-section`
 (30px) for its Figtree headings, with `text-nav` for the hero introduction and
 `text-body` for body copy. Keep the desktop roles at the desktop breakpoint.
-Do not invent responsive sizes for pages without an approved mobile frame.
+The Store mobile frame (`456:3697`) also uses these mobile display and section-heading tokens. Do not invent responsive sizes for other pages without an approved mobile frame.
 
 ## Brand color primitives
 
