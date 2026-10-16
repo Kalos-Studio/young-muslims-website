@@ -76,12 +76,12 @@
 @media (hover: hover) {
   .portrait:hover .portraitBackdrop {
     opacity: 1;
-    scale: 1.12;
+    scale: 1.4;
   }
 }
 .portrait:focus-visible .portraitBackdrop {
   opacity: 1;
-  scale: 1.12;
+  scale: 1.4;
 }
 @media (prefers-reduced-motion: reduce) {
   .portraitBackdrop {

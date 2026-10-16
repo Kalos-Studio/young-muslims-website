@@ -8,6 +8,7 @@ import { FooterPageStage } from "@/components/site/footer-page-stage";
 import { EntryAnimation } from "@/components/site/entry-animation";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { StoryPageTransition } from "@/components/site/story-page-transition";
 // WIREFRAME: the import below is prototype scaffolding. See WIREFRAME.md.
 import { AnnotationToolbar } from "@/components/wireframe/annotation-toolbar";
 
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             </FooterSlot>
           </FooterPageStage>
         </EntryAnimation>
+        <StoryPageTransition />
         {/* WIREFRAME: this comes out with the wireframe; the header and footer
             above it stay. */}
         <AnnotationToolbar />

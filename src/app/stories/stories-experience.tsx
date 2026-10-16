@@ -15,6 +15,7 @@ import { usePortraitField } from "./use-portrait-field";
 import galleryMarkLeft from "../../../design-assets/figma/stories-redesign/d7f59.svg";
 import galleryMarkRight from "../../../design-assets/figma/stories-redesign/e2a16.svg";
 import { STORIES, getStoryBySlug, type Story } from "@/lib/stories";
+import { useStoryPageNavigation } from "@/components/site/story-page-transition";
 
 const THEME = {
   brothers: {
@@ -44,6 +45,7 @@ const PORTRAIT_ACCENTS = [
 
 function PortraitSelector() {
   const { viewportRef, suppressClickRef } = usePortraitField();
+  const navigateToStory = useStoryPageNavigation();
 
   return (
     <section
@@ -83,14 +85,18 @@ function PortraitSelector() {
           <Image src={galleryMarkRight} alt="" className={styles.markRight} />
           {PORTRAIT_SLOTS.map((slot, index) => {
             const story = STORIES.find((entry) => entry.slug === slot.slug);
+            const portraitImage =
+              story?.slug === "rahmah-k"
+                ? slot.image
+                : (story?.portrait ?? slot.image);
+            const accent = PORTRAIT_ACCENTS[index % PORTRAIT_ACCENTS.length];
             const backdrop = (
               <span
                 aria-hidden="true"
                 className={styles.portraitBackdrop}
                 style={{
-                  backgroundColor:
-                    PORTRAIT_ACCENTS[index % PORTRAIT_ACCENTS.length],
-                  maskImage: `url(${(story?.slug === "rahmah-k" ? slot.image : (story?.portrait ?? slot.image)).src})`,
+                  backgroundColor: accent,
+                  maskImage: `url(${portraitImage.src})`,
                   rotate: `${story?.rotation ?? 0}deg`,
                 }}
               />
@@ -106,6 +112,19 @@ function PortraitSelector() {
                 key={slot.id}
                 data-portrait={index}
                 href={`/stories/${portraitSlug(slot)}`}
+                onNavigate={(event) => {
+                  const bounds = document
+                    .querySelector<HTMLElement>(`[data-portrait="${index}"]`)
+                    ?.getBoundingClientRect();
+                  if (!bounds) return;
+                  navigateToStory(
+                    `/stories/${portraitSlug(slot)}`,
+                    portraitImage.src,
+                    accent,
+                    bounds,
+                    event,
+                  );
+                }}
                 aria-label={
                   story
                     ? `Read ${story.name}'s story`
@@ -116,11 +135,7 @@ function PortraitSelector() {
               >
                 {backdrop}
                 <Image
-                  src={
-                    story?.slug === "rahmah-k"
-                      ? slot.image
-                      : (story?.portrait ?? slot.image)
-                  }
+                  src={portraitImage}
                   alt=""
                   fill
                   sizes="(max-width: 767px) 120px, 170px"

@@ -17,17 +17,17 @@ import {
 
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 
-import bottomLeftPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-left-photo.png";
-import bottomRightPhoto from "../../design-assets/figma/landing-2026/everywhere-bottom-right-photo.png";
-import bottomRightShell from "../../design-assets/figma/landing-2026/everywhere-bottom-right-shell.svg";
-import mapCanada from "../../design-assets/figma/landing-2026/everywhere-map/canada.svg";
-import mapMexico from "../../design-assets/figma/landing-2026/everywhere-map/mexico.svg";
-import mapUs from "../../design-assets/figma/landing-2026/everywhere-map/us.svg";
-import mapUsMask from "../../design-assets/figma/landing-2026/everywhere-map/us-mask.svg";
-import leftPhoto from "../../design-assets/figma/landing-2026/everywhere-left-photo.png";
-import leftShell from "../../design-assets/figma/landing-2026/everywhere-left-shell.svg";
-import topPhoto from "../../design-assets/figma/landing-2026/everywhere-top-photo.png";
-import topShell from "../../design-assets/figma/landing-2026/everywhere-top-shell.svg";
+import bottomLeftPhoto from "../../../design-assets/figma/landing-2026/everywhere-bottom-left-photo.png";
+import bottomRightPhoto from "../../../design-assets/figma/landing-2026/everywhere-bottom-right-photo.png";
+import bottomRightShell from "../../../design-assets/figma/landing-2026/everywhere-bottom-right-shell.svg";
+import mapCanada from "../../../design-assets/figma/landing-2026/everywhere-map/canada.svg";
+import mapMexico from "../../../design-assets/figma/landing-2026/everywhere-map/mexico.svg";
+import mapUs from "../../../design-assets/figma/landing-2026/everywhere-map/us.svg";
+import mapUsMask from "../../../design-assets/figma/landing-2026/everywhere-map/us-mask.svg";
+import leftPhoto from "../../../design-assets/figma/landing-2026/everywhere-left-photo.png";
+import leftShell from "../../../design-assets/figma/landing-2026/everywhere-left-shell.svg";
+import topPhoto from "../../../design-assets/figma/landing-2026/everywhere-top-photo.png";
+import topShell from "../../../design-assets/figma/landing-2026/everywhere-top-shell.svg";
 
 const METRICS = [
   { target: 200, suffix: "+", label: "NeighborNets" },

@@ -1,4 +1,4 @@
-import heroTransitionPale from "../../design-assets/figma/landing-2026/hero-transition-pale.svg";
+import heroTransitionPale from "../../../design-assets/figma/landing-2026/hero-transition-pale.svg";
 
 export function HeroVideo() {
   return (

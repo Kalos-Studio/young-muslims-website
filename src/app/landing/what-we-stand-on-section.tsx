@@ -14,10 +14,10 @@ import {
 
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 
-import principleDiversity from "../../design-assets/figma/landing-2026/new-sections/208-3-source-03.jpeg";
-import principleImpact from "../../design-assets/figma/landing-2026/new-sections/208-3-source-04.jpeg";
-import principleSustainability from "../../design-assets/figma/landing-2026/new-sections/208-3-source-09.jpeg";
-import principleTarbiyyah from "../../design-assets/figma/landing-2026/new-sections/208-3-source-01.jpeg";
+import principleDiversity from "../../../design-assets/figma/landing-2026/new-sections/208-3-source-03.jpeg";
+import principleImpact from "../../../design-assets/figma/landing-2026/new-sections/208-3-source-04.jpeg";
+import principleSustainability from "../../../design-assets/figma/landing-2026/new-sections/208-3-source-09.jpeg";
+import principleTarbiyyah from "../../../design-assets/figma/landing-2026/new-sections/208-3-source-01.jpeg";
 
 const INTRO_PHASE_UNITS = 1;
 const PHASE_UNITS_PER_PRINCIPLE = 2;

@@ -16,20 +16,20 @@ import belongingWaveObsidian from "../../design-assets/figma/landing-2026/belong
 import belongingWavePale from "../../design-assets/figma/landing-2026/belonging-wave-pale.svg";
 import highlightPlay from "../../design-assets/figma/landing-2026/highlight-play.svg";
 import highlightReel from "../../design-assets/figma/landing-2026/highlight-reel.png";
-import { AllAboutScrollStage } from "./all-about-scroll-stage";
+import { AllAboutScrollStage } from "./landing/all-about-scroll-stage";
 import {
   BelongingCopy,
   BelongingPortraitOrbit,
-} from "./belonging-portrait-orbit";
-import { ChapterFinderSection } from "./chapter-finder-section";
-import { EverywhereSection } from "./everywhere-section";
-import { HeroFollowupCurve } from "./hero-followup-curve";
-import { HeroVideo } from "./hero-video";
-import { HighlightReelMarquee } from "./highlight-reel-section";
-import { LandingCtaSection } from "./landing-new-sections";
-import { PeopleStoriesSection } from "./people-stories-section";
-import { WhatWeStandOnSection } from "./what-we-stand-on-section";
-import { WordOnTheStreetSection } from "./word-on-the-street-section";
+} from "./landing/belonging-portrait-orbit";
+import { ChapterFinderSection } from "./landing/chapter-finder-section";
+import { EverywhereSection } from "./landing/everywhere-section";
+import { HeroFollowupCurve } from "./landing/hero-followup-curve";
+import { HeroVideo } from "./landing/hero-video";
+import { HighlightReelMarquee } from "./landing/highlight-reel-section";
+import { LandingCtaSection } from "./landing/landing-new-sections";
+import { PeopleStoriesSection } from "./landing/people-stories-section";
+import { WhatWeStandOnSection } from "./landing/what-we-stand-on-section";
+import { WordOnTheStreetSection } from "./landing/word-on-the-street-section";
 
 // WIREFRAME: ContentFrame only supplies the prototype's shared content width.
 // The page imagery and layout below follow the approved Figma composition.

@@ -8,21 +8,21 @@ import { motion, useInView, useReducedMotion } from "motion/react";
 
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 
-import brooklynPhoto from "../../design-assets/figma/landing-2026/chapter-cities/brooklyn.jpg";
-import brooklynShape from "../../design-assets/figma/landing-2026/chapter-cities/brooklyn-shape.svg";
-import friscoPhoto from "../../design-assets/figma/landing-2026/chapter-cities/frisco.jpg";
-import friscoShape from "../../design-assets/figma/landing-2026/chapter-cities/frisco-shape.svg";
-import houstonPhoto from "../../design-assets/figma/landing-2026/chapter-cities/houston-255-102.jpg";
-import houstonShape from "../../design-assets/figma/landing-2026/chapter-cities/houston-shape.svg";
-import newarkPhoto from "../../design-assets/figma/landing-2026/chapter-cities/newark.jpg";
-import newarkShape from "../../design-assets/figma/landing-2026/chapter-cities/newark-shape.svg";
-import stamfordPhoto from "../../design-assets/figma/landing-2026/chapter-cities/stamford.jpg";
-import stamfordShape from "../../design-assets/figma/landing-2026/chapter-cities/stamford-shape.svg";
-import suwaneePhoto from "../../design-assets/figma/landing-2026/chapter-cities/suwanee.jpg";
-import suwaneeShape from "../../design-assets/figma/landing-2026/chapter-cities/suwanee-shape.svg";
-import tampaPhoto from "../../design-assets/figma/landing-2026/chapter-cities/tampa.jpg";
-import tampaShape from "../../design-assets/figma/landing-2026/chapter-cities/tampa-shape.svg";
-import chapterWave from "../../design-assets/figma/landing-2026/new-sections/chapter-wave-top.svg";
+import brooklynPhoto from "../../../design-assets/figma/landing-2026/chapter-cities/brooklyn.jpg";
+import brooklynShape from "../../../design-assets/figma/landing-2026/chapter-cities/brooklyn-shape.svg";
+import friscoPhoto from "../../../design-assets/figma/landing-2026/chapter-cities/frisco.jpg";
+import friscoShape from "../../../design-assets/figma/landing-2026/chapter-cities/frisco-shape.svg";
+import houstonPhoto from "../../../design-assets/figma/landing-2026/chapter-cities/houston-255-102.jpg";
+import houstonShape from "../../../design-assets/figma/landing-2026/chapter-cities/houston-shape.svg";
+import newarkPhoto from "../../../design-assets/figma/landing-2026/chapter-cities/newark.jpg";
+import newarkShape from "../../../design-assets/figma/landing-2026/chapter-cities/newark-shape.svg";
+import stamfordPhoto from "../../../design-assets/figma/landing-2026/chapter-cities/stamford.jpg";
+import stamfordShape from "../../../design-assets/figma/landing-2026/chapter-cities/stamford-shape.svg";
+import suwaneePhoto from "../../../design-assets/figma/landing-2026/chapter-cities/suwanee.jpg";
+import suwaneeShape from "../../../design-assets/figma/landing-2026/chapter-cities/suwanee-shape.svg";
+import tampaPhoto from "../../../design-assets/figma/landing-2026/chapter-cities/tampa.jpg";
+import tampaShape from "../../../design-assets/figma/landing-2026/chapter-cities/tampa-shape.svg";
+import chapterWave from "../../../design-assets/figma/landing-2026/new-sections/chapter-wave-top.svg";
 
 type CityKey =
   | "houston"

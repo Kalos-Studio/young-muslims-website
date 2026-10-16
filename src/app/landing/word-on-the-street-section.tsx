@@ -8,9 +8,9 @@ import { motion, useInView, useReducedMotion } from "motion/react";
 
 import { AnimatedArrow } from "@/components/ui/animated-arrow";
 
-import articleMentalHealth from "../../design-assets/figma/landing-2026/new-sections/270-449-source-01.png";
-import articleJudgement from "../../design-assets/figma/landing-2026/new-sections/270-488-source-01.jpeg";
-import articleRamadan from "../../design-assets/figma/landing-2026/new-sections/270-503-source-01.png";
+import articleMentalHealth from "../../../design-assets/figma/landing-2026/new-sections/270-449-source-01.png";
+import articleJudgement from "../../../design-assets/figma/landing-2026/new-sections/270-488-source-01.jpeg";
+import articleRamadan from "../../../design-assets/figma/landing-2026/new-sections/270-503-source-01.png";
 
 const REVEAL_EASE = [0.19, 1, 0.22, 1] as const;
 const ARTICLE_STAGGER = 0.2;

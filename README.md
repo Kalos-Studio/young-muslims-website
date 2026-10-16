@@ -27,6 +27,7 @@ Other scripts:
 ```bash
 bun run build         # production build
 bun run start         # serve the production build locally
+bun run lint:tokens   # block new design-token violations
 bun run lint          # eslint
 bun run typecheck     # next typegen && tsc --noEmit
 bun run format        # prettier --write

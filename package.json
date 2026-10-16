@@ -19,7 +19,9 @@
     "test:responsive": "node scripts/responsive-audit.mjs",
     "test:footer": "node scripts/footer-easter-egg-audit.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "lint:tokens": "node scripts/check-design-tokens.mjs",
+    "test:tokens": "node --test scripts/check-design-tokens.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -45,6 +47,7 @@
     "cheerio": "^1.2.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
+    "postcss": "8.5.28",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",

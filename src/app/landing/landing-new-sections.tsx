@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { PhotoTopCurve } from "@/components/site/photo-top-curve";
+
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 
-import landingPageFooter from "../../landing page footer.png";
+import landingPageFooter from "../../../landing page footer.png";
 
 export function LandingCtaSection() {
   return (
@@ -19,14 +21,7 @@ export function LandingCtaSection() {
         className="object-cover object-center xl:object-[center_70%]"
       />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(23,23,37,0.7),rgba(23,23,37,0.22)_60%,rgba(23,23,37,0.45))] xl:bg-brand-obsidian/30" />
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 1440 96"
-        preserveAspectRatio="none"
-        className="pointer-events-none absolute top-0 left-0 h-24 w-full text-brand-warm-snow"
-      >
-        <path d="M0 0H1440V72C1100 -18 340 -18 0 72Z" fill="currentColor" />
-      </svg>
+      <PhotoTopCurve />
       <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 xl:w-[1440px] 2xl:left-0 2xl:w-full 2xl:translate-x-0">
         <h2 className="absolute top-[155px] left-8 w-[296px] text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:text-landing-section md:leading-[1.2] xl:top-[314px] xl:left-[129px] xl:w-[692px] xl:text-left 2xl:left-20">
           Seeking the pleasure of Allah (SWT) by empowering Muslim youth.

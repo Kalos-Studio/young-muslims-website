@@ -18,26 +18,26 @@ import {
   useTransform,
 } from "motion/react";
 
-import portrait01 from "../../design-assets/figma/landing-2026/orbit-01.png";
-import portrait02 from "../../design-assets/figma/landing-2026/orbit-02.png";
-import portrait03 from "../../design-assets/figma/landing-2026/orbit-03.png";
-import portrait04 from "../../design-assets/figma/landing-2026/orbit-04.png";
-import portrait05 from "../../design-assets/figma/landing-2026/orbit-05.png";
-import portrait06 from "../../design-assets/figma/landing-2026/orbit-06.png";
-import portrait07 from "../../design-assets/figma/landing-2026/orbit-07.png";
-import portrait08 from "../../design-assets/figma/landing-2026/orbit-08.png";
-import portrait09 from "../../design-assets/figma/landing-2026/orbit-09.png";
-import portrait10 from "../../design-assets/figma/landing-2026/orbit-10.png";
-import portrait11 from "../../design-assets/figma/landing-2026/orbit-11.png";
-import portrait12 from "../../design-assets/figma/landing-2026/orbit-12.png";
-import portrait13 from "../../design-assets/figma/landing-2026/orbit-13.png";
-import portrait14 from "../../design-assets/figma/landing-2026/orbit-14.png";
-import portrait15 from "../../design-assets/figma/landing-2026/orbit-15.png";
-import portrait16 from "../../design-assets/figma/landing-2026/orbit-16.png";
-import portrait17 from "../../design-assets/figma/landing-2026/orbit-17.png";
-import portrait18 from "../../design-assets/figma/landing-2026/orbit-18.png";
-import portrait19 from "../../design-assets/figma/landing-2026/orbit-19.png";
-import portrait20 from "../../design-assets/figma/landing-2026/orbit-20.png";
+import portrait01 from "../../../design-assets/figma/landing-2026/orbit-01.png";
+import portrait02 from "../../../design-assets/figma/landing-2026/orbit-02.png";
+import portrait03 from "../../../design-assets/figma/landing-2026/orbit-03.png";
+import portrait04 from "../../../design-assets/figma/landing-2026/orbit-04.png";
+import portrait05 from "../../../design-assets/figma/landing-2026/orbit-05.png";
+import portrait06 from "../../../design-assets/figma/landing-2026/orbit-06.png";
+import portrait07 from "../../../design-assets/figma/landing-2026/orbit-07.png";
+import portrait08 from "../../../design-assets/figma/landing-2026/orbit-08.png";
+import portrait09 from "../../../design-assets/figma/landing-2026/orbit-09.png";
+import portrait10 from "../../../design-assets/figma/landing-2026/orbit-10.png";
+import portrait11 from "../../../design-assets/figma/landing-2026/orbit-11.png";
+import portrait12 from "../../../design-assets/figma/landing-2026/orbit-12.png";
+import portrait13 from "../../../design-assets/figma/landing-2026/orbit-13.png";
+import portrait14 from "../../../design-assets/figma/landing-2026/orbit-14.png";
+import portrait15 from "../../../design-assets/figma/landing-2026/orbit-15.png";
+import portrait16 from "../../../design-assets/figma/landing-2026/orbit-16.png";
+import portrait17 from "../../../design-assets/figma/landing-2026/orbit-17.png";
+import portrait18 from "../../../design-assets/figma/landing-2026/orbit-18.png";
+import portrait19 from "../../../design-assets/figma/landing-2026/orbit-19.png";
+import portrait20 from "../../../design-assets/figma/landing-2026/orbit-20.png";
 
 type Portrait = {
   image: StaticImageData;
