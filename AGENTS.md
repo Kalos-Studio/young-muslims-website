@@ -8,11 +8,45 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-# Read WIREFRAME.md first
+# Building on the existing site
 
-The site is currently a black-and-white wireframe prototype. `WIREFRAME.md` says
-which code is real and which is scaffolding, how the sticky notes and the
-Agentation feedback toolbar work, and how to remove the wireframe when the time
-comes. Read it before changing anything under `src/`.
+The site is being developed into the production design on top of an earlier
+wireframe. Follow `DESIGN-SYSTEM.md` for current visual rules. Some temporary
+scaffolding remains; consult `WIREFRAME.md` when modifying or removing it, but
+do not apply its historical wireframe-only styling rules to production work.
+Preserve working routes, shared components, and functionality as scaffolding
+is replaced.
 
-`grep -rn "WIREFRAME:" src` is the complete inventory of temporary code.
+# Keep the shared footer on every page
+
+Every existing and future page must inherit `SiteFooter` and `FooterPageStage`
+from the root layout, including the bottom-edge Easter egg animation. Do not
+replace them with page-specific footers or introduce route allowlists for the
+animation. Preserve reduced-motion handling. When changing page scrolling or
+the shared footer, run `bun run test:footer` against the local dev server.
+
+# Design-system lock
+
+Never use a font, color, type size, spacing value, radius, shadow, animation,
+or other visual value that is not already exposed by the project's Tailwind
+theme and permitted by `DESIGN-SYSTEM.md`.
+
+The approved desktop website values come from the Young Muslims Website Figma
+file, node `26:188`. Treat the role tokens documented in `DESIGN-SYSTEM.md` as
+the reviewed code translation of that frame; do not reinterpret its raw layer
+values at individual call sites.
+
+- Use existing semantic Tailwind utilities first, then approved brand
+  utilities when the design explicitly calls for them.
+- Never use arbitrary Tailwind values or properties (`[...]`), raw color
+  literals, inline visual styles, or ad hoc CSS variables to bypass the theme.
+- Never add or load another font. The only approved families are Figtree
+  (`font-sans` / `font-heading`) and Boldonse (`font-display`).
+- Do not extend or change the theme merely to satisfy a one-off design choice.
+  If the approved tokens cannot express a requested design, stop and ask for
+  explicit approval to update the design system first.
+
+Run `bun run lint:tokens` after visual changes and before completing the task.
+GitHub Actions runs the same check. Existing violations are tracked in
+`scripts/design-token-baseline.json`; do not add new violations to the baseline
+to make the check pass. See `scripts/design-tokens.md` for scope and limitations.

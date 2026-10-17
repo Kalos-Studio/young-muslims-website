@@ -1,11 +1,13 @@
 "use client";
 
 import { Dialog } from "@base-ui/react/dialog";
-import { ArrowUpRight, Menu, X } from "lucide-react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
+
+import { AnimatedArrow } from "@/components/ui/animated-arrow";
+import { MaterialIcon } from "@/components/ui/material-icon";
 
 import menuMarkBottom from "../../../design-assets/figma/landing-2026/card-decor-bottom.svg";
 import menuMarkTop from "../../../design-assets/figma/landing-2026/card-decor-top.svg";
@@ -14,18 +16,36 @@ import instagramIcon from "../../../design-assets/figma/landing-2026/new-section
 import xIcon from "../../../design-assets/figma/landing-2026/new-sections/footer-x.svg";
 import youtubeIcon from "../../../design-assets/figma/landing-2026/new-sections/footer-youtube.svg";
 import { Logo } from "./logo";
-import { ctaLink, drawerOnlyLinks, primaryLinks } from "./nav-links";
+import { getNavigationItems, isNavigationItemCurrent } from "./nav-links";
 
-const menuPrimaryLinks = [
-  { ...ctaLink, label: "Chapters" },
-  ...primaryLinks,
-] as const;
+const menuPrimaryLinks = getNavigationItems("drawer-primary");
+const menuSecondaryLinks = getNavigationItems("drawer-secondary");
 
-const socialIcons: ReadonlyArray<{ label: string; src: StaticImageData }> = [
-  { label: "Facebook", src: facebookIcon },
-  { label: "X", src: xIcon },
-  { label: "YouTube", src: youtubeIcon },
-  { label: "Instagram", src: instagramIcon },
+const socialIcons: ReadonlyArray<{
+  href: string;
+  label: string;
+  src: StaticImageData;
+}> = [
+  {
+    href: "https://www.facebook.com/youngmuslims",
+    label: "Facebook",
+    src: facebookIcon,
+  },
+  {
+    href: "https://twitter.com/youngmuslims",
+    label: "X",
+    src: xIcon,
+  },
+  {
+    href: "https://www.youtube.com/youngmuslims",
+    label: "YouTube",
+    src: youtubeIcon,
+  },
+  {
+    href: "https://www.instagram.com/young_muslims/",
+    label: "Instagram",
+    src: instagramIcon,
+  },
 ];
 
 /**
@@ -91,7 +111,7 @@ export function SideNav() {
         aria-label="Open menu"
         className="rounded-xs p-2 text-foreground outline-none hover:opacity-60 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
-        <Menu className="size-6" strokeWidth={2.5} aria-hidden />
+        <MaterialIcon name="menu" size={24} aria-hidden />
       </Dialog.Trigger>
 
       <Dialog.Portal>
@@ -124,7 +144,7 @@ export function SideNav() {
                 <Logo className="h-5" aria-hidden />
               </Link>
               <Dialog.Close aria-label="Close menu" className="ym-menu-close">
-                <X className="size-8" strokeWidth={2} aria-hidden />
+                <MaterialIcon name="close" size={32} aria-hidden />
               </Dialog.Close>
             </div>
 
@@ -133,10 +153,10 @@ export function SideNav() {
                 <nav aria-label="Main menu">
                   <ul className="ym-menu-link-list ym-menu-primary-list">
                     {menuPrimaryLinks.map((link) => {
-                      const isCurrent = pathname.startsWith(link.href);
+                      const isCurrent = isNavigationItemCurrent(link, pathname);
 
                       return (
-                        <li key={link.href}>
+                        <li key={link.id}>
                           <Link
                             href={link.href}
                             onClick={closeMenu}
@@ -155,25 +175,26 @@ export function SideNav() {
               <div className="ym-menu-footer">
                 <nav aria-label="More pages">
                   <ul className="ym-menu-link-list ym-menu-secondary-list">
-                    {drawerOnlyLinks.map((link) => {
-                      const isCurrent =
-                        link.label !== "Contact" &&
-                        pathname.startsWith(link.href);
+                    {menuSecondaryLinks.map((link) => {
+                      const isCurrent = isNavigationItemCurrent(link, pathname);
 
                       return (
-                        <li key={link.href}>
+                        <li key={link.id}>
                           <Link
                             href={link.href}
                             onClick={closeMenu}
                             aria-current={isCurrent ? "page" : undefined}
-                            className="ym-menu-secondary-link"
+                            className="ym-cta-trigger ym-menu-secondary-link"
                           >
-                            <span>{link.label}</span>
-                            <ArrowUpRight
-                              className="size-6 shrink-0"
-                              strokeWidth={1.75}
-                              aria-hidden
-                            />
+                            <span className="ym-cta-roll">
+                              <span
+                                className="ym-cta-roll__text"
+                                data-text={link.label}
+                              >
+                                {link.label}
+                              </span>
+                            </span>
+                            <AnimatedArrow />
                           </Link>
                         </li>
                       );
@@ -184,7 +205,15 @@ export function SideNav() {
                 <ul className="ym-menu-socials" aria-label="Social media">
                   {socialIcons.map((social) => (
                     <li key={social.label}>
-                      <Image src={social.src} alt={social.label} />
+                      <a
+                        href={social.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`${social.label} (opens in a new tab)`}
+                        className="ym-menu-social-link"
+                      >
+                        <Image src={social.src} alt="" aria-hidden />
+                      </a>
                     </li>
                   ))}
                 </ul>

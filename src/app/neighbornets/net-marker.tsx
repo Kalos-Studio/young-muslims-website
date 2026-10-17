@@ -1,5 +1,9 @@
 "use client";
 
+import Image from "next/image";
+
+import brothersLogo from "../../../ymblogo.png";
+import sistersLogo from "../../../ymslogo.png";
 import { cn } from "@/lib/utils";
 import type { Branch, NeighborNetLocation } from "@/lib/neighbornets";
 import {
@@ -18,6 +22,26 @@ import {
 
 export function branchColor(branch: Branch, palette: Palette): string {
   return palettes[palette][branch];
+}
+
+export function BranchLogo({
+  branch,
+  className,
+  sizes = "56px",
+}: {
+  branch: Branch;
+  className?: string;
+  sizes?: string;
+}) {
+  return (
+    <Image
+      src={branch === "brothers" ? brothersLogo : sistersLogo}
+      alt=""
+      aria-hidden="true"
+      className={cn("object-contain", className)}
+      sizes={sizes}
+    />
+  );
 }
 
 /** Diamond for sisters is what makes the shape channel readable without color. */
@@ -54,6 +78,8 @@ export type NetMarkerProps = {
   differentiator: Differentiator;
   palette: Palette;
   sizeMode: SizeMode;
+  /** Use the approved branch marks instead of a configurable prototype glyph. */
+  variant?: "configurable" | "branch-logo";
   /** Paused and forming nets can be knocked back so active ones read first. */
   dimInactive: boolean;
   /** The net is hovered or selected, so nudge it forward. */
@@ -66,6 +92,7 @@ export function NetMarker({
   differentiator,
   palette,
   sizeMode,
+  variant = "configurable",
   dimInactive,
   emphasized,
 }: NetMarkerProps) {
@@ -80,6 +107,26 @@ export function NetMarker({
 
   const muted = dimInactive && net.status !== "active";
   const opacity = muted ? 0.45 : 1;
+
+  if (variant === "branch-logo") {
+    return (
+      <span
+        role="img"
+        aria-label={`${net.branch === "brothers" ? "Brothers" : "Sisters"} NeighborNet location`}
+        className={cn(
+          "relative flex size-9 items-center justify-center rounded-full shadow-[0_2px_8px_rgba(23,23,37,0.3)] ring-2 ring-brand-pure-white transition-transform duration-150",
+          emphasized && "scale-[1.15]",
+        )}
+        style={{ backgroundColor: color, opacity }}
+      >
+        <BranchLogo
+          branch={net.branch}
+          className="size-[30px] object-contain"
+          sizes="30px"
+        />
+      </span>
+    );
+  }
 
   if (markerStyle === "pin") {
     return (

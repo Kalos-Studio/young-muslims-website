@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 // WIREFRAME: this whole page is scaffolding. See WIREFRAME.md.
-import { Annotate } from "@/components/wireframe/annotate";
+import { ContentFrame } from "@/components/wireframe/content-frame";
 import { Frame } from "@/components/wireframe/frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
 import { Lorem, Text } from "@/components/wireframe/text";
@@ -19,23 +19,16 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <PageFrame className="bg-brand-warm-snow pt-16 pb-20 text-brand-obsidian">
-      <Annotate
-        note="Vision, Mission, and History share one pinned image position. The copy scrolls while the image crossfades to match the section currently in view. After History, the page returns to its existing structure."
-        placement="top-right"
-      >
+      <ContentFrame>
         <VisionMissionHistory />
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate
-        className="mt-20"
-        note="on scroll, the image swaps to match the event type in view: conferences show a conference photo, retreats show a retreat photo, etc."
-        placement="top-right"
-      >
+      <ContentFrame className="mt-20">
         <Text as="h2" className="text-brand-jade">
           Conferences and retreats
         </Text>
         <div className="mt-8 flex flex-col divide-y divide-brand-obsidian/10">
-          <div className="grid grid-cols-2 items-start gap-8 py-16">
+          <div className="grid grid-cols-1 items-start gap-8 py-16 md:grid-cols-2">
             <Frame
               variant="fill"
               label="Event image: conferences"
@@ -48,7 +41,7 @@ export default function AboutPage() {
               <Lorem paragraphs={2} className="mt-4" />
             </div>
           </div>
-          <div className="grid grid-cols-2 items-start gap-8 py-16">
+          <div className="grid grid-cols-1 items-start gap-8 py-16 md:grid-cols-2">
             <Frame
               variant="fill"
               label="Event image: retreats"
@@ -61,7 +54,7 @@ export default function AboutPage() {
               <Lorem paragraphs={2} className="mt-4" />
             </div>
           </div>
-          <div className="grid grid-cols-2 items-start gap-8 py-16">
+          <div className="grid grid-cols-1 items-start gap-8 py-16 md:grid-cols-2">
             <Frame
               variant="fill"
               label="Event image: events"
@@ -75,19 +68,19 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate className="mt-20">
-        <div className="rounded-card bg-brand-obsidian p-8 text-brand-pure-white">
+      <ContentFrame className="mt-20">
+        <div className="rounded-card bg-brand-obsidian p-6 text-brand-pure-white md:p-8">
           <Text as="h2" tone="dark">
             Leadership
           </Text>
-          <div className="mt-8 grid grid-cols-2 divide-x divide-brand-pure-white/20">
+          <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 md:divide-x md:divide-brand-pure-white/20">
             <div>
               <Text as="h3" tone="dark">
                 Brothers
               </Text>
-              <div className="mt-6 grid grid-cols-4 gap-4">
+              <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div
                     key={i}
@@ -98,11 +91,11 @@ export default function AboutPage() {
                 ))}
               </div>
             </div>
-            <div className="pl-8">
+            <div className="md:pl-8">
               <Text as="h3" tone="dark">
                 Sisters
               </Text>
-              <div className="mt-6 grid grid-cols-4 gap-4">
+              <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div
                     key={i}
@@ -115,11 +108,11 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate className="mt-20">
+      <ContentFrame className="mt-20">
         <FaqSection />
-      </Annotate>
+      </ContentFrame>
     </PageFrame>
   );
 }

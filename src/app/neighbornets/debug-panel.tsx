@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, RotateCcw, SlidersHorizontal } from "lucide-react";
 
+import { MaterialIcon } from "@/components/ui/material-icon";
 import { cn } from "@/lib/utils";
 import { branchLabel } from "@/lib/neighbornets";
 import {
@@ -44,13 +44,13 @@ export function DebugPanel({
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center gap-2 px-3 py-2.5 text-left hover:bg-accent lg:cursor-default lg:hover:bg-transparent"
       >
-        <SlidersHorizontal className="size-4 shrink-0" />
+        <MaterialIcon name="tune" size={16} aria-hidden />
         <span className="flex-1 text-sm font-semibold">Debug controls</span>
-        <ChevronDown
-          className={cn(
-            "size-4 shrink-0 transition-transform lg:hidden",
-            open && "rotate-180",
-          )}
+        <MaterialIcon
+          name="expand_more"
+          size={16}
+          className={cn("transition-transform lg:hidden", open && "rotate-180")}
+          aria-hidden
         />
       </button>
 
@@ -194,7 +194,7 @@ export function DebugPanel({
           onClick={() => onChange(defaultSettings)}
           className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md border border-border px-2 py-1.5 text-xs font-medium hover:bg-accent"
         >
-          <RotateCcw className="size-3" />
+          <MaterialIcon name="refresh" size={12} aria-hidden />
           Reset to defaults
         </button>
       </div>

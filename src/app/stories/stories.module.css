@@ -1,0 +1,231 @@
+@reference "../globals.css";
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-brand-warm-snow);
+}
+
+/* The two Figma curves share their geometry, with the pale edge below the photo.
+   Both finish within the first viewport, as on the other full-bleed heroes. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 3%;
+  background: #f7f3f0;
+  border-radius: 0 0 50% 50% / 0 0 5% 5%;
+}
+.heroMedia {
+  position: absolute;
+  inset: 0 0 9%;
+  overflow: hidden;
+  border-radius: 0 0 50% 50% / 0 0 5% 5%;
+}
+.heroPhoto {
+  position: absolute;
+  inset: 0;
+}
+.heroPhoto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(23 23 37 / 25%);
+}
+.heroCopy {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  width: min(92%, 1260px);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--color-brand-pure-white);
+}
+.gallery {
+  overflow: hidden;
+  padding: clamp(80px, 13vw, 190px) 0 clamp(80px, 11.25vw, 162px);
+  @apply pt-10;
+  color: var(--color-brand-obsidian);
+}
+.galleryHeading {
+  max-width: 1308px;
+  padding: 0 24px;
+  margin: 0 auto;
+  text-align: center;
+}
+.portraitField {
+  position: relative;
+  width: max(100%, 1440px);
+  aspect-ratio: 1440 / 661;
+  will-change: transform;
+}
+.portrait {
+  position: absolute;
+}
+.portraitBackdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  opacity: 0;
+  scale: 1;
+  transition:
+    opacity 300ms ease,
+    scale 300ms ease;
+}
+@media (hover: hover) {
+  .portrait:hover .portraitBackdrop {
+    opacity: 1;
+    scale: 1.4;
+  }
+}
+.portrait:focus-visible .portraitBackdrop {
+  opacity: 1;
+  scale: 1.4;
+}
+@media (prefers-reduced-motion: reduce) {
+  .portraitBackdrop {
+    transition: none;
+  }
+}
+.selectable {
+  z-index: 1;
+  cursor: pointer;
+  border-radius: 50%;
+  outline-offset: 6px;
+}
+.selectable:focus-visible,
+.selectable[aria-pressed="true"] {
+  outline: 3px solid var(--color-brand-royal);
+}
+.markLeft,
+.markRight {
+  position: absolute;
+  top: 39%;
+  width: 13.06%;
+  height: auto;
+}
+.markLeft {
+  left: 35.94%;
+}
+.markRight {
+  left: 51.03%;
+}
+.cta {
+  position: relative;
+  isolation: isolate;
+  height: clamp(560px, 50.2vw, 850px);
+  overflow: hidden;
+  color: var(--color-brand-warm-snow);
+}
+.ctaBackground {
+  position: absolute;
+  inset: 48.7% 0 0;
+  background: var(--color-brand-obsidian);
+}
+.ctaPhoto {
+  position: absolute;
+  top: 0;
+  left: -34.7%;
+  width: 160.48%;
+  height: 104.6%;
+  transform: rotate(3.7deg);
+}
+.ctaContent {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 64px;
+  height: 100%;
+  max-width: 1230px;
+  margin: auto;
+  padding: 0 24px;
+}
+/* Leave vertical gestures available for page scrolling in this taller gallery. */
+.galleryViewport {
+  @apply -mt-16;
+  position: relative;
+  /* Reserve room above and below the full field for enlarged silhouettes. */
+  height: max(861px, calc(45.9028vw + 200px));
+  overflow: clip;
+  touch-action: pan-y pinch-zoom;
+  outline-offset: -3px;
+}
+@media (max-width: 767px) {
+  .heroCopy {
+    width: min(296px, calc(100% - 64px));
+  }
+  .heroCopy h1 {
+    font-size: var(--text-mobile-display);
+    letter-spacing: -0.02em;
+  }
+  .heroCopy p {
+    margin-top: 11px;
+    font-size: var(--text-nav);
+  }
+  .gallery {
+    padding: 178px 0 115px;
+    @apply pt-10;
+  }
+  .galleryHeading {
+    width: min(400px, calc(100% - 64px));
+    padding: 0;
+    margin-bottom: 61px;
+  }
+  .galleryHeading h2,
+  .ctaContent h2 {
+    font-size: var(--text-mobile-section);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .galleryHeading h2 span {
+    display: block;
+  }
+  .galleryHeading p {
+    font-size: var(--text-body);
+    line-height: 1.2;
+  }
+  .portraitField {
+    width: 967.27px;
+  }
+  .galleryViewport {
+    @apply mt-0;
+    height: 604px;
+  }
+  .cta {
+    height: 894px;
+  }
+  .ctaBackground {
+    top: 567px;
+  }
+  .ctaPhoto {
+    width: 2830.59px;
+    left: calc(50% - 1415.295px);
+    height: 926.305px;
+    top: -6px;
+  }
+  .ctaContent {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0;
+    padding: 155px 32px 0;
+    text-align: center;
+  }
+  .ctaContent h2 {
+    width: min(100%, 400px);
+  }
+  .ctaContent > div {
+    position: absolute;
+    top: 490px;
+    width: min(400px, calc(100% - 64px));
+  }
+  .ctaContent a {
+    font-size: 1.125rem;
+    padding-block: 19px;
+  }
+}

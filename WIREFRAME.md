@@ -26,13 +26,13 @@ scaffolding, so you replace the right things.
 
 ## What is real and what is not
 
-| Real, keep it                                | Scaffolding, replace it                  |
-| -------------------------------------------- | ---------------------------------------- |
-| Routes and folder structure under `src/app/` | The body of each `page.tsx`              |
-| `src/components/site/nav-links.ts` — the IA  | Placeholders (`<Frame>`, `<Text>`)       |
-| `SiteHeader`, `SideNav`, `SiteFooter`        | Yellow sticky notes and the notes toggle |
-| Page `metadata` exports                      | The Agentation feedback toolbar          |
-| The NeighborNets map and its data            | The map's wireframe settings override    |
+| Real, keep it                                | Scaffolding, replace it               |
+| -------------------------------------------- | ------------------------------------- |
+| Routes and folder structure under `src/app/` | The body of each `page.tsx`           |
+| `src/components/site/nav-links.ts` — the IA  | Placeholders (`<Frame>`, `<Text>`)    |
+| `SiteHeader`, `SideNav`, `SiteFooter`        | `<ContentFrame>` and `<PageFrame>`    |
+| Page `metadata` exports                      | The Agentation feedback toolbar       |
+| The NeighborNets map and its data            | The map's wireframe settings override |
 
 The logo in the header and footer is the real asset, not a placeholder box, on
 purpose: a grey rectangle there would make the permanent shell depend on a
@@ -73,42 +73,11 @@ Keep using `src/components/site/` for anything the whole site shares. Put
 page-specific components next to the page, the way `src/app/neighbornets/`
 already does.
 
-## The two annotation layers
+## Feedback annotations
 
-They do different jobs and both work on Netlify deploy previews.
-
-### Sticky notes — "here's why I did it this way"
-
-Omar's design rationale, authored into the page next to the block it explains,
-mirroring the notes in the Figma file. Add one by passing `note` to
-`<Annotate>`:
-
-```tsx
-<Annotate note="background video clips of people having fun">
-  <Frame variant="fill" label="Background video loop" />
-</Annotate>
-```
-
-Notes are absolutely positioned over a corner of the section they annotate, so
-they cost no layout and sit next to what they are about. Overlapping the content
-is fine and expected, the way a sticky note covers part of a Figma artboard.
-What matters is that a note stays with its subject, so `placement` picks the
-corner: `top-right` (default), `top-left`, `bottom-right`, `bottom-left`.
-
-Two earlier versions got this wrong in opposite directions, and neither is worth
-repeating. A fixed right-hand rail took real space, narrowing every section to
-make room for commentary. Moving notes into the gap above each section then
-covered nothing but floated them out of context and forced big artificial gaps
-between sections.
-
-For a section needing a note on each of two columns, nest: wrap each column in
-its own `<Annotate bleed>`, which attaches a note to that element without adding
-a container. Support's bottom row does this.
-
-`<Annotate>` also carries the shared content width, so pass `bleed` for a
-full-width section — the landing hero, the store's split screen. Width lives
-here rather than in `<PageFrame>`, which is why a contained section and a
-full-page hero can sit on the same page.
+The former yellow review notes and their toggle have been retired. The remaining
+`<ContentFrame>` component carries the shared prototype content width; pass
+`bleed` for full-width sections such as the landing hero and store split screen.
 
 ### Agentation — "here's what to change"
 
@@ -155,33 +124,26 @@ you the markdown. Shared sessions across people would need a server we host —
 Agentation supports it via `endpoint`/`sessionId` and `webhookUrl`, but it is
 not worth standing up unless client review gets heavy.
 
-### How both reach the Netlify previews
+### How Agentation reaches the Netlify previews
 
-`NEXT_PUBLIC_SHOW_NOTES` and `NEXT_PUBLIC_ENABLE_AGENTATION` gate them. Both are
-on in local dev, and `netlify.toml` turns them on for the `deploy-preview` and
-`branch-deploy` contexts while deliberately leaving them unset for production.
+`NEXT_PUBLIC_ENABLE_AGENTATION` gates the toolbar. It is on in local dev, and
+`netlify.toml` turns it on for the `deploy-preview` and `branch-deploy` contexts
+while deliberately leaving it unset for production.
 `NEXT_PUBLIC_*` values are inlined at build time and every Netlify context is its
 own build, so the gate is decided once per deploy rather than at runtime.
 
-What that does and does not guarantee, precisely:
-
-- **Note text does not ship to production.** Verified: build without the flags
-  and `grep "background video clips" .next/server/app/index.html` finds nothing.
-  This only holds because `<Annotate>` is a server component. If you ever make
-  it a client component again, every note's text lands back in the RSC payload
-  even on builds where the notes do not render — a client component's props are
-  serialised regardless of what it decides to render.
-- **The Agentation chunk is emitted but never requested.** `next/dynamic` puts
-  it in its own ~413KB chunk, which is written into the build output either way
-  because the bundler cannot drop a dynamic import behind a runtime check. It is
-  not part of the initial bundle and no browser fetches it while the flag is
-  off, so it costs deploy size and nothing else. If that ever matters, removing
-  it is the checklist item below, not a build trick.
+The Agentation chunk is emitted but never requested while the flag is off.
+`next/dynamic` puts
+it in its own ~413KB chunk, which is written into the build output either way
+because the bundler cannot drop a dynamic import behind a runtime check. It is
+not part of the initial bundle and no browser fetches it while the flag is
+off, so it costs deploy size and nothing else. If that ever matters, removing
+it is the checklist item below, not a build trick.
 
 To see what the client sees, locally:
 
 ```bash
-NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
+NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
 ```
 
 ## Conventions
@@ -220,7 +182,7 @@ NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
   the actual line.
 
 - **No em dashes and no interpunct dots in anything the visitor reads.** No `—`
-  and no `·` or `•`, in copy, in placeholder text, in note text, in page titles.
+  and no `·` or `•`, in copy, in placeholder text, or in page titles.
   Use a comma, a colon, a full stop, or layout spacing instead. Page titles come
   from the `template` in the root layout so the separator is defined once rather
   than retyped per page. `grep -rn '—\|·' src/app src/components` should only
@@ -233,25 +195,17 @@ NEXT_PUBLIC_SHOW_NOTES=true NEXT_PUBLIC_ENABLE_AGENTATION=true bun run dev
   eighth heading size; add a step to the scale instead. Body copy stays on
   Tailwind's `text-base` / `text-sm` / `text-xs`.
 - **No all-caps, anywhere.** No letterspaced small capitals for labels or
-  headings. The one deliberate exception is `READ THIS FIRST` on the landing
-  page's framing note, which has to out-rank the other notes on the page; it is
-  marked as an exception in `src/app/page.tsx`. Nothing on this site is going to be set that way, so using it in the
+  headings. Nothing on this site is going to be set that way, so using it in the
   wireframe makes it look like a design decision rather than a description of
   one. Sentence case, normal tracking.
-- **Greyscale only.** The only colour in the prototype is the sticky-note
-  yellow, which is what makes a note read as commentary sitting on top of the
-  wireframe rather than as part of the design. Use `bg-background`,
+- **Greyscale only.** Use `bg-background`,
   `text-foreground`, `border-border`, `bg-muted`, and the `wf-*` tokens.
 - **Tailwind 4 has no config file.** Design tokens live in the `@theme` block of
   `src/app/globals.css`. The wireframe's own tokens are in a fenced
   `WIREFRAME:start` / `WIREFRAME:end` block at the bottom of that file.
-- **Desktop only for now.** No mobile work has been done — no breakpoint tuning,
-  no mobile nav variant, no narrow-width QA. Tailwind is mobile-first by default
-  so adding breakpoints later is additive, not a rewrite. Two places will need
-  real work when we do responsive, and both carry a `WIREFRAME:` note: the
-  header collapsing its centre links into the drawer (`site-header.tsx`), and
-  the notes rail, which has nowhere to go on a narrow screen and will need to
-  stack inline (`annotate.tsx`).
+- **Responsive behavior is now under active implementation.** Keep narrow and
+  wide viewport checks in the responsive audit as real pages replace the
+  remaining route stubs.
 
 ## How to remove the wireframe
 

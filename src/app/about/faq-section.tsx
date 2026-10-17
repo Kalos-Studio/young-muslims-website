@@ -1,7 +1,8 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+
+import { MaterialIcon } from "@/components/ui/material-icon";
 
 const faqs = [
   {
@@ -111,9 +112,10 @@ export function FaqSection() {
                 className="flex w-full cursor-pointer items-center justify-between gap-8 py-6 text-left text-body font-semibold text-brand-obsidian outline-none hover:text-brand-royal focus-visible:text-brand-royal"
               >
                 <span>{faq.question}</span>
-                <ChevronDown
-                  className={`size-5 shrink-0 transition-transform duration-300 ease-out ${isOpen ? "rotate-180" : ""}`}
-                  strokeWidth={1.75}
+                <MaterialIcon
+                  name="expand_more"
+                  size={20}
+                  className={`transition-transform duration-300 ease-out ${isOpen ? "rotate-180" : ""}`}
                   aria-hidden
                 />
               </button>

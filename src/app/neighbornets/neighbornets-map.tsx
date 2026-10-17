@@ -8,11 +8,18 @@ import {
   useState,
   type FormEvent,
 } from "react";
-import { RotateCcw, Search } from "lucide-react";
-
+import type { Geometry, Position } from "geojson";
 // Must come before the map component so our same-origin worker URL is set
 // before mapcn's unpkg fallback runs. See src/lib/maplibre-worker.ts.
 import "@/lib/maplibre-worker";
+import {
+  AnimatedArrow,
+  AnimatedCtaLabel,
+} from "@/components/ui/animated-arrow";
+import {
+  MaterialIcon,
+  type MaterialIconName,
+} from "@/components/ui/material-icon";
 import {
   Map,
   MapControls,
@@ -34,7 +41,7 @@ import {
 } from "@/lib/neighbornets";
 import { DebugPanel } from "./debug-panel";
 import { NetDetails } from "./net-details";
-import { NetMarker, branchColor } from "./net-marker";
+import { BranchLogo, NetMarker, branchColor } from "./net-marker";
 import {
   US_BOUNDS,
   US_STATES_GEOJSON,
@@ -67,6 +74,7 @@ export function NeighborNetsMap({
   bare = false,
   finder = false,
   interactive,
+  layout = "default",
 }: {
   locations: NeighborNetLocation[];
   initialSettings?: MapSettings;
@@ -76,6 +84,8 @@ export function NeighborNetsMap({
   finder?: boolean;
   /** Keep visual chrome and map interaction as separate decisions. */
   interactive?: boolean;
+  /** Repositions the existing finder to match the production chapter page. */
+  layout?: "default" | "chapter-page";
 }) {
   const [settings, setSettings] = useState<MapSettings>(initialSettings);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -84,6 +94,16 @@ export function NeighborNetsMap({
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [focusedResultId, setFocusedResultId] = useState<string | null>(null);
   const [mapZoom, setMapZoom] = useState(US_VIEW.zoom);
+  const [selectedState, setSelectedState] = useState<{
+    name: string;
+    bounds: [[number, number], [number, number]];
+    geometry: Geometry;
+  } | null>(null);
+  const [hoveredState, setHoveredState] = useState<{
+    name: string;
+    bounds: [[number, number], [number, number]];
+  } | null>(null);
+  const isHoveringStateRef = useRef(false);
   const mapSectionRef = useRef<HTMLDivElement>(null);
 
   const visibleNets = useMemo(
@@ -128,18 +148,40 @@ export function NeighborNetsMap({
   }, [normalizedQuery, visibleNets]);
   const hasSearch = normalizedQuery.length > 0;
   const hasSearchResults = hasSearch && searchResults.length > 0;
+  const selectedStateResults = useMemo(() => {
+    if (!selectedState) return [];
+
+    return visibleNets
+      .filter((net) =>
+        geometryContainsPoint(selectedState.geometry, [
+          net.longitude,
+          net.latitude,
+        ]),
+      )
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [selectedState, visibleNets]);
+  const chapterResults = hasSearch ? searchResults : selectedStateResults;
+  const showChapterResults =
+    layout === "chapter-page" && (hasSearch || selectedState !== null);
   const mappedNets = hasSearchResults ? searchResults : visibleNets;
   const cameraNets = useMemo(() => {
-    if (!hasSearchResults) return null;
-    if (!focusedResultId) return searchResults;
-    const focused = searchResults.find((net) => net.id === focusedResultId);
-    return focused ? [focused] : searchResults;
-  }, [focusedResultId, hasSearchResults, searchResults]);
+    if (focusedResultId) {
+      const focused = visibleNets.find((net) => net.id === focusedResultId);
+      if (focused) return [focused];
+    }
+    return hasSearchResults ? searchResults : null;
+  }, [focusedResultId, hasSearchResults, searchResults, visibleNets]);
   const showHeatmap = finder && !hasSearchResults && mapZoom < 5.5;
   const showMarkers = !finder || hasSearchResults || mapZoom >= 4.5;
+  const showDetailedBasemap =
+    layout === "chapter-page" &&
+    (selectedState !== null || hasSearchResults || mapZoom >= 5.5);
+  const activeBasemap =
+    settings.basemap === "streets" || showDetailedBasemap ? "streets" : "blank";
+  const markerSpacing = layout === "chapter-page" ? 36 : 18;
   const coordinateOffsets = useMemo(
-    () => offsetsForSharedCoordinates(visibleNets),
-    [visibleNets],
+    () => offsetsForSharedCoordinates(visibleNets, markerSpacing),
+    [markerSpacing, visibleNets],
   );
 
   /** One name label per city: the id of the first net found in each. */
@@ -161,6 +203,10 @@ export function NeighborNetsMap({
     settings.infoMode === "side-panel" || settings.infoMode === "both";
 
   function handleSelect(net: NeighborNetLocation) {
+    if (layout === "chapter-page") {
+      setSelectedId(net.id);
+      return;
+    }
     setSelectedId((current) => (current === net.id ? null : net.id));
   }
 
@@ -169,6 +215,9 @@ export function NeighborNetsMap({
     setSubmittedQuery(query.trim());
     setFocusedResultId(null);
     setSelectedId(null);
+    setSelectedState(null);
+    setHoveredState(null);
+    isHoveringStateRef.current = false;
   }
 
   function resetSearch() {
@@ -176,9 +225,14 @@ export function NeighborNetsMap({
     setSubmittedQuery("");
     setFocusedResultId(null);
     setSelectedId(null);
+    setSelectedState(null);
+    setHoveredState(null);
+    isHoveringStateRef.current = false;
   }
 
   function focusResult(net: NeighborNetLocation) {
+    setHoveredState(null);
+    isHoveringStateRef.current = false;
     setFocusedResultId(net.id);
     setSelectedId(net.id);
     mapSectionRef.current?.scrollIntoView({
@@ -188,7 +242,11 @@ export function NeighborNetsMap({
   }
 
   return (
-    <div className={cn(finder && "space-y-6")}>
+    <div
+      className={cn(
+        finder && (layout === "chapter-page" ? "relative" : "space-y-6"),
+      )}
+    >
       {finder ? (
         <ChapterSearch
           query={query}
@@ -199,11 +257,15 @@ export function NeighborNetsMap({
             setSubmittedQuery(value);
             setFocusedResultId(null);
             setSelectedId(null);
+            setSelectedState(null);
+            setHoveredState(null);
+            isHoveringStateRef.current = false;
           }}
           onReset={resetSearch}
           locations={visibleNets}
           hasSearch={hasSearch}
           resultCount={searchResults.length}
+          layout={layout}
         />
       ) : null}
 
@@ -211,7 +273,9 @@ export function NeighborNetsMap({
         ref={mapSectionRef}
         className={cn(
           finder
-            ? "relative h-[70vh] min-h-[32rem] w-full scroll-mt-32"
+            ? layout === "chapter-page"
+              ? "relative mt-16 w-full scroll-mt-32 md:mt-[159px]"
+              : "relative h-[70vh] min-h-[32rem] w-full scroll-mt-32"
             : bare
               ? "relative h-full w-full"
               : // `min-h-0` on both cells is what stops the tall debug panel from
@@ -222,141 +286,275 @@ export function NeighborNetsMap({
         <div
           className={cn(
             "relative",
-            bare
-              ? "h-full w-full"
-              : "h-[60vh] min-h-0 overflow-hidden rounded-lg border border-border lg:h-full",
+            layout === "chapter-page"
+              ? "flex h-[360px] min-h-0 w-full flex-col overflow-hidden rounded-[2px] bg-brand-warm-snow sm:h-[520px] md:h-[749px]"
+              : bare
+                ? "h-full w-full"
+                : "h-[60vh] min-h-0 overflow-hidden rounded-lg border border-border lg:h-full",
           )}
         >
-          <Map
-            className="h-full w-full"
-            // mapcn otherwise picks its theme from prefers-color-scheme, which
-            // would flip the map to dark while the rest of the page stays light:
-            // the app has no dark mode wired up yet. Drop this once it does.
-            theme="light"
-            blank={settings.basemap === "blank"}
-            center={US_VIEW.center}
-            zoom={US_VIEW.zoom}
-            // MapCamera raises this to the exact zoom needed to keep the whole
-            // country in frame once it knows the rendered container size.
-            minZoom={1.5}
-            maxZoom={14}
-            // A bare map is a picture of the country, not something to fly
-            // around in. This disables MapLibre's own drag/zoom/keyboard
-            // handlers; markers are separate DOM overlays, so they stay
-            // clickable, and fitBounds still drives the camera.
-            interactive={interactive ?? !bare}
-            onViewportChange={(viewport) => setMapZoom(viewport.zoom)}
-          >
-            <MapCamera focusLocations={cameraNets} />
-
-            {showHeatmap ? <RegionHeatmap nets={visibleNets} /> : null}
-
-            {settings.showStateOutlines ? (
-              <MapGeoJSON
-                // Remounting on basemap change avoids re-tuning paint in place
-                // while MapLibre is mid style-swap.
-                key={`states-${settings.basemap}`}
-                data={US_STATES_GEOJSON}
-                fillPaint={
-                  settings.basemap === "blank"
-                    ? { "fill-opacity": 0.55 }
-                    : { "fill-opacity": 0 }
+          <div className="relative min-h-0 flex-1 bg-brand-warm-snow">
+            <Map
+              className="absolute inset-0 h-full w-full"
+              // mapcn otherwise picks its theme from prefers-color-scheme, which
+              // would flip the map to dark while the rest of the page stays light:
+              // the app has no dark mode wired up yet. Drop this once it does.
+              theme="light"
+              blank={activeBasemap === "blank"}
+              center={US_VIEW.center}
+              zoom={US_VIEW.zoom}
+              // MapCamera raises this to the exact zoom needed to keep the whole
+              // country in frame once it knows the rendered container size.
+              minZoom={1.5}
+              maxZoom={14}
+              // A bare map is a picture of the country, not something to fly
+              // around in. This disables MapLibre's own drag/zoom/keyboard
+              // handlers; markers are separate DOM overlays, so they stay
+              // clickable, and fitBounds still drives the camera.
+              interactive={interactive ?? !bare}
+              onViewportChange={(viewport) => setMapZoom(viewport.zoom)}
+            >
+              <MapCamera
+                focusLocations={cameraNets}
+                focusBounds={
+                  focusedResultId ? null : (selectedState?.bounds ?? null)
                 }
-                linePaint={{
-                  "line-color":
-                    settings.basemap === "blank" ? "#ffffff" : "#94a3b8",
-                  "line-width": 0.6,
-                }}
+                hoverBounds={hoveredState?.bounds ?? null}
               />
-            ) : null}
+              {layout === "chapter-page" ? (
+                <MapCursorFocus isHoveringStateRef={isHoveringStateRef} />
+              ) : null}
 
-            {showMarkers && settings.cluster ? (
-              <ClusterLayers
-                nets={mappedNets}
-                settings={settings}
-                onSelect={handleSelect}
-              />
-            ) : showMarkers ? (
-              mappedNets.map((net) => (
-                <MapMarker
-                  key={net.id}
-                  longitude={net.longitude}
-                  latitude={net.latitude}
-                  // A screen-space nudge, so the two nets stay separated at every
-                  // zoom instead of merging as you zoom out.
-                  offset={
-                    coordinateOffsets[net.id] ??
-                    (settings.pairOffset && pairedCities.has(cityKey(net))
-                      ? [net.branch === "brothers" ? -9 : 9, 0]
-                      : [0, 0])
+              {settings.showStateOutlines ? (
+                <MapGeoJSON
+                  // Remounting on basemap change avoids re-tuning paint in place
+                  // while MapLibre is mid style-swap.
+                  key={`states-${activeBasemap}`}
+                  id={layout === "chapter-page" ? "chapter-states" : undefined}
+                  promoteId={layout === "chapter-page" ? "name" : undefined}
+                  data={US_STATES_GEOJSON}
+                  fillPaint={
+                    layout === "chapter-page"
+                      ? {
+                          "fill-color": selectedState
+                            ? [
+                                "case",
+                                ["==", ["get", "name"], selectedState.name],
+                                "#99adc8",
+                                "#fcfaf8",
+                              ]
+                            : "#fcfaf8",
+                          "fill-opacity":
+                            activeBasemap === "streets" ? 0.14 : 0.94,
+                        }
+                      : settings.basemap === "blank"
+                        ? { "fill-opacity": 0.55 }
+                        : { "fill-opacity": 0 }
                   }
-                  onMouseEnter={() => setHoveredId(net.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                  onClick={() => handleSelect(net)}
-                >
-                  <MarkerContent className="cursor-pointer">
-                    <NetMarker
-                      net={net}
-                      markerStyle={settings.markerStyle}
-                      differentiator={settings.differentiator}
-                      palette={settings.palette}
-                      sizeMode={settings.sizeMode}
-                      dimInactive={settings.dimInactive}
-                      emphasized={hoveredId === net.id || selectedId === net.id}
-                    />
-                    {/* MarkerLabel is positioned, not portaled, so it has to sit
+                  linePaint={{
+                    "line-color":
+                      layout === "chapter-page"
+                        ? "#234080"
+                        : settings.basemap === "blank"
+                          ? "#ffffff"
+                          : "#94a3b8",
+                    "line-width": layout === "chapter-page" ? 0.85 : 0.6,
+                    ...(layout === "chapter-page" && activeBasemap === "streets"
+                      ? { "line-opacity": 0.55 }
+                      : {}),
+                  }}
+                  fillHoverPaint={
+                    layout === "chapter-page"
+                      ? {
+                          "fill-color": "#99adc8",
+                          "fill-opacity":
+                            activeBasemap === "streets" ? 0.24 : 0.94,
+                        }
+                      : undefined
+                  }
+                  interactive={layout === "chapter-page"}
+                  onClick={(event) => {
+                    if (layout !== "chapter-page") return;
+                    const name = event.feature.properties?.name;
+                    const geometry = event.feature.geometry;
+                    const bounds = boundsFromCoordinates(
+                      "coordinates" in geometry ? geometry.coordinates : null,
+                    );
+                    if (typeof name !== "string" || !bounds) return;
+                    setSelectedState({
+                      name,
+                      bounds,
+                      geometry: geometry as Geometry,
+                    });
+                    setHoveredState({ name, bounds });
+                    isHoveringStateRef.current = true;
+                    setSubmittedQuery("");
+                    setQuery("");
+                    setFocusedResultId(null);
+                    setSelectedId(null);
+                  }}
+                  onHover={(event) => {
+                    if (!event) {
+                      isHoveringStateRef.current = false;
+                      return;
+                    }
+                    const name = event.feature.properties?.name;
+                    const geometry = event.feature.geometry;
+                    const bounds = boundsFromCoordinates(
+                      "coordinates" in geometry ? geometry.coordinates : null,
+                    );
+                    if (typeof name !== "string" || !bounds) return;
+                    isHoveringStateRef.current = true;
+                    setHoveredState({ name, bounds });
+                  }}
+                />
+              ) : null}
+
+              {showHeatmap ? (
+                <RegionHeatmap
+                  nets={visibleNets}
+                  aboveStates={layout === "chapter-page"}
+                />
+              ) : null}
+
+              {showMarkers && settings.cluster ? (
+                <ClusterLayers
+                  nets={mappedNets}
+                  settings={settings}
+                  onSelect={handleSelect}
+                />
+              ) : showMarkers ? (
+                mappedNets.map((net) => (
+                  <MapMarker
+                    key={net.id}
+                    longitude={net.longitude}
+                    latitude={net.latitude}
+                    // A screen-space nudge, so the two nets stay separated at every
+                    // zoom instead of merging as you zoom out.
+                    offset={
+                      coordinateOffsets[net.id] ??
+                      (settings.pairOffset && pairedCities.has(cityKey(net))
+                        ? [
+                            net.branch === "brothers"
+                              ? -markerSpacing / 2
+                              : markerSpacing / 2,
+                            0,
+                          ]
+                        : [0, 0])
+                    }
+                    onMouseEnter={() => setHoveredId(net.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                    onClick={() => handleSelect(net)}
+                  >
+                    <MarkerContent className="cursor-pointer">
+                      <NetMarker
+                        net={net}
+                        markerStyle={settings.markerStyle}
+                        differentiator={settings.differentiator}
+                        palette={settings.palette}
+                        sizeMode={settings.sizeMode}
+                        variant={
+                          layout === "chapter-page"
+                            ? "branch-logo"
+                            : "configurable"
+                        }
+                        dimInactive={settings.dimInactive}
+                        emphasized={
+                          hoveredId === net.id || selectedId === net.id
+                        }
+                      />
+                      {/* MarkerLabel is positioned, not portaled, so it has to sit
                       inside MarkerContent to anchor to the marker. Only the
                       first net in a city gets one, or paired nets print the
                       same city name twice on top of each other. */}
-                    {settings.showLabels && labelledNets.has(net.id) ? (
-                      <MarkerLabel className="rounded bg-background/85 px-1 py-px">
-                        {net.city ?? net.name}
-                      </MarkerLabel>
+                      {settings.showLabels && labelledNets.has(net.id) ? (
+                        <MarkerLabel className="rounded bg-background/85 px-1 py-px">
+                          {net.city ?? net.name}
+                        </MarkerLabel>
+                      ) : null}
+                    </MarkerContent>
+
+                    {settings.infoMode === "hover-tooltip" ||
+                    settings.infoMode === "both" ? (
+                      <MarkerTooltip className="bg-transparent! p-0! shadow-none!">
+                        <NetDetails
+                          net={net}
+                          palette={settings.palette}
+                          density={
+                            settings.infoMode === "both" ? "peek" : "compact"
+                          }
+                        />
+                      </MarkerTooltip>
                     ) : null}
-                  </MarkerContent>
 
-                  {settings.infoMode === "hover-tooltip" ||
-                  settings.infoMode === "both" ? (
-                    <MarkerTooltip className="bg-transparent! p-0! shadow-none!">
-                      <NetDetails
-                        net={net}
-                        palette={settings.palette}
-                        density={
-                          settings.infoMode === "both" ? "peek" : "compact"
-                        }
-                      />
-                    </MarkerTooltip>
-                  ) : null}
+                    {settings.infoMode === "click-popup" ? (
+                      <MarkerPopup className="border-0! bg-transparent! p-0! shadow-none!">
+                        <NetDetails
+                          net={net}
+                          palette={settings.palette}
+                          density="compact"
+                          ctaMotion={layout === "chapter-page"}
+                        />
+                      </MarkerPopup>
+                    ) : null}
+                  </MapMarker>
+                ))
+              ) : null}
 
-                  {settings.infoMode === "click-popup" ? (
-                    <MarkerPopup className="border-0! bg-transparent! p-0! shadow-none!">
-                      <NetDetails
-                        net={net}
-                        palette={settings.palette}
-                        density="compact"
-                      />
-                    </MarkerPopup>
-                  ) : null}
-                </MapMarker>
-              ))
-            ) : null}
-
-            {bare ? null : (
-              <MapControls
-                position="top-right"
-                showZoom
-                showCompass
-                showFullscreen
+              {bare ? null : (
+                <MapControls
+                  position="top-right"
+                  showZoom
+                  showCompass
+                  showFullscreen
+                />
+              )}
+            </Map>
+            {layout === "chapter-page" ? (
+              <div
+                aria-hidden="true"
+                data-cursor-focus-zone
+                className="pointer-events-none absolute inset-0 z-10 border border-brand-royal/45 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.35)]"
               />
-            )}
-          </Map>
+            ) : null}
+          </div>
 
-          <Legend
-            settings={settings}
-            branches={availableBranches}
-            hasInactive={locations.some((net) => net.status !== "active")}
-            densityMode={showHeatmap}
-          />
+          {layout === "chapter-page" ? (
+            <div className="relative z-10 flex min-h-[68px] items-center justify-between gap-4 border-t border-brand-royal/25 bg-brand-warm-snow px-5 text-brand-obsidian sm:px-8">
+              <div>
+                <p className="text-[11px] font-medium tracking-[0.16em] text-brand-obsidian/60 uppercase">
+                  Find a location
+                </p>
+                <p className="mt-1 text-sm font-semibold sm:text-base">
+                  {selectedState?.name ?? "Select a state"}
+                </p>
+              </div>
+              {selectedState ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedState(null);
+                    setHoveredState(null);
+                    isHoveringStateRef.current = false;
+                    setFocusedResultId(null);
+                    setSelectedId(null);
+                  }}
+                  className="shrink-0 border-b border-brand-royal/70 pb-1 text-xs font-semibold text-brand-royal transition-colors hover:border-brand-royal hover:text-brand-royal/75 sm:text-sm"
+                >
+                  View all states
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+
+          {layout === "chapter-page" ? null : (
+            <Legend
+              settings={settings}
+              branches={availableBranches}
+              hasInactive={locations.some((net) => net.status !== "active")}
+              densityMode={showHeatmap}
+            />
+          )}
         </div>
 
         {bare ? null : (
@@ -398,16 +596,34 @@ export function NeighborNetsMap({
             ) : null}
           </div>
         )}
+
+        {showChapterResults ? (
+          <ChapterResultsCarousel
+            results={chapterResults}
+            selectedId={selectedId}
+            palette={settings.palette}
+            contextLabel={
+              hasSearch
+                ? `Results for “${submittedQuery}”`
+                : selectedState?.name
+            }
+            onSelect={focusResult}
+            onClose={resetSearch}
+          />
+        ) : null}
       </div>
 
-      {finder && hasSearch ? (
-        <SearchResultCards
-          query={submittedQuery}
-          results={searchResults}
-          selectedId={selectedId}
-          palette={settings.palette}
-          onSelect={focusResult}
-        />
+      {finder && hasSearch && layout !== "chapter-page" ? (
+        <div>
+          <SearchResultCards
+            query={submittedQuery}
+            results={searchResults}
+            selectedId={selectedId}
+            palette={settings.palette}
+            onSelect={focusResult}
+            layout="default"
+          />
+        </div>
       ) : null}
     </div>
   );
@@ -417,10 +633,47 @@ export function NeighborNetsMap({
  * Frames the lower 48 once the map is ready. Without this the map opens at a
  * fixed zoom, which crops the country badly on a phone-width container.
  */
+function boundsFromCoordinates(
+  coordinates: unknown,
+): [[number, number], [number, number]] | null {
+  let west = Infinity;
+  let south = Infinity;
+  let east = -Infinity;
+  let north = -Infinity;
+
+  const visit = (value: unknown) => {
+    if (!Array.isArray(value)) return;
+    if (
+      value.length >= 2 &&
+      typeof value[0] === "number" &&
+      typeof value[1] === "number"
+    ) {
+      west = Math.min(west, value[0]);
+      south = Math.min(south, value[1]);
+      east = Math.max(east, value[0]);
+      north = Math.max(north, value[1]);
+      return;
+    }
+    value.forEach(visit);
+  };
+
+  visit(coordinates);
+  return Number.isFinite(west)
+    ? [
+        [west, south],
+        [east, north],
+      ]
+    : null;
+}
+
 function MapCamera({
   focusLocations,
+  focusBounds,
+  hoverBounds,
 }: {
   focusLocations: NeighborNetLocation[] | null;
+  focusBounds: [[number, number], [number, number]] | null;
+  hoverBounds: [[number, number], [number, number]] | null;
 }) {
   const { map, isLoaded } = useMap();
 
@@ -445,6 +698,27 @@ function MapCamera({
     const fit = (animated = false) => {
       if (userDriven) return;
       setCountryZoomFloor();
+      if (focusBounds) {
+        map.fitBounds(focusBounds, {
+          padding: { top: 48, right: 48, bottom: 48, left: 48 },
+          maxZoom: 8,
+          duration: animated ? 900 : 0,
+          easing: (t) => 1 - (1 - t) ** 3,
+        });
+        return;
+      }
+      if (hoverBounds) {
+        map.easeTo({
+          center: [
+            (hoverBounds[0][0] + hoverBounds[1][0]) / 2,
+            (hoverBounds[0][1] + hoverBounds[1][1]) / 2,
+          ],
+          zoom: map.getZoom(),
+          duration: animated ? 2000 : 0,
+          easing: (t) => 1 - (1 - t) ** 3,
+        });
+        return;
+      }
       if (!focusLocations || focusLocations.length === 0) {
         map.fitBounds(US_BOUNDS, { padding: 32, duration: animated ? 900 : 0 });
         return;
@@ -454,7 +728,7 @@ function MapCamera({
         const [net] = focusLocations;
         map.easeTo({
           center: [net.longitude, net.latitude],
-          zoom: 8,
+          zoom: 9,
           duration: animated ? 900 : 0,
         });
         return;
@@ -480,6 +754,10 @@ function MapCamera({
     // The container can still be settling when the map first loads (and it
     // changes size on rotate or fullscreen), so refit until the user takes over.
     const observer = new ResizeObserver(() => {
+      map.resize();
+      // A non-animated fit here would cancel the smooth state-hover transition.
+      // Once a state is focused, preserve its camera and just resize the canvas.
+      if (focusBounds || hoverBounds) return;
       setCountryZoomFloor();
       fit(false);
     });
@@ -489,12 +767,174 @@ function MapCamera({
       observer.disconnect();
       map.off("movestart", markUserDriven);
     };
-  }, [map, isLoaded, focusLocations]);
+  }, [map, isLoaded, focusLocations, focusBounds, hoverBounds]);
 
   return null;
 }
 
-function RegionHeatmap({ nets }: { nets: NeighborNetLocation[] }) {
+/**
+ * Uses the cursor as the zoom anchor on entry, then adds a restrained parallax
+ * pan while the cursor remains inside the visible square focus zone.
+ */
+function MapCursorFocus({
+  isHoveringStateRef,
+}: {
+  isHoveringStateRef: { current: boolean };
+}) {
+  const { map, isLoaded } = useMap();
+
+  useEffect(() => {
+    if (!map || !isLoaded) return;
+
+    const canvas = map.getCanvas();
+    const focusZone = map
+      .getContainer()
+      .parentElement?.querySelector<HTMLElement>("[data-cursor-focus-zone]");
+    if (!focusZone) return;
+    let hasFocusedOnEntry = false;
+    let isInsideFocusZone = false;
+    let focusAnimating = false;
+    let previousPoint: [number, number] | null = null;
+    let pendingDelta: [number, number] = [0, 0];
+    let animationFrame = 0;
+    let focusEndHandler: (() => void) | null = null;
+
+    const pointFromEvent = (event: MouseEvent): [number, number] => {
+      const rect = canvas.getBoundingClientRect();
+      return [event.clientX - rect.left, event.clientY - rect.top];
+    };
+
+    const isInFocusZone = (event: MouseEvent) => {
+      const rect = focusZone.getBoundingClientRect();
+      return (
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom
+      );
+    };
+
+    const moveWithCursor = () => {
+      animationFrame = 0;
+      const [deltaX, deltaY] = pendingDelta;
+      const maxDeltaPerFrame = 24;
+      const sensitivity = 0.18;
+      const panX = Math.max(
+        -maxDeltaPerFrame,
+        Math.min(maxDeltaPerFrame, deltaX),
+      );
+      const panY = Math.max(
+        -maxDeltaPerFrame,
+        Math.min(maxDeltaPerFrame, deltaY),
+      );
+      if (
+        Math.abs(panX * sensitivity) < 0.5 &&
+        Math.abs(panY * sensitivity) < 0.5
+      ) {
+        // Keep sub-pixel motion so small pointer changes accumulate instead
+        // of disappearing before MapLibre can render a pan.
+        return;
+      }
+
+      pendingDelta = [0, 0];
+      map.panBy([-panX * sensitivity, -panY * sensitivity], {
+        duration: 90,
+        easing: (t) => t,
+      });
+    };
+
+    const schedulePan = () => {
+      if (!animationFrame) {
+        animationFrame = window.requestAnimationFrame(moveWithCursor);
+      }
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isInFocusZone(event)) {
+        isInsideFocusZone = false;
+        previousPoint = null;
+        pendingDelta = [0, 0];
+        return;
+      }
+
+      const point = pointFromEvent(event);
+      if (isHoveringStateRef.current) {
+        previousPoint = point;
+        pendingDelta = [0, 0];
+        return;
+      }
+      if (!isInsideFocusZone) {
+        isInsideFocusZone = true;
+        previousPoint = point;
+        if (!hasFocusedOnEntry) {
+          hasFocusedOnEntry = true;
+          const anchor = map.unproject([point[0], point[1]]);
+          const targetZoom = Math.min(5.25, Math.max(map.getZoom(), 4.25));
+          focusAnimating = targetZoom > map.getZoom() + 0.01;
+          if (focusAnimating) {
+            focusEndHandler = () => {
+              focusAnimating = false;
+              focusEndHandler = null;
+              if (pendingDelta[0] || pendingDelta[1]) schedulePan();
+            };
+            map.once("moveend", focusEndHandler);
+          }
+          map.easeTo({
+            zoom: targetZoom,
+            around: anchor,
+            duration: focusAnimating ? 800 : 0,
+            easing: (t) => 1 - (1 - t) ** 3,
+          });
+        }
+        return;
+      }
+      if (!previousPoint) {
+        previousPoint = point;
+        return;
+      }
+
+      const [deltaX, deltaY] = [
+        point[0] - previousPoint[0],
+        point[1] - previousPoint[1],
+      ];
+      previousPoint = point;
+
+      // Keep pointer motion queued through the initial focus animation, then
+      // apply it. Only a real drag suppresses the cursor follow.
+      if (event.buttons > 0) return;
+      pendingDelta = [pendingDelta[0] + deltaX, pendingDelta[1] + deltaY];
+      if (!focusAnimating) schedulePan();
+    };
+
+    const handleMouseLeave = () => {
+      hasFocusedOnEntry = false;
+      isInsideFocusZone = false;
+      previousPoint = null;
+      pendingDelta = [0, 0];
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+    };
+
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
+    return () => {
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseleave", handleMouseLeave);
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      if (focusEndHandler) map.off("moveend", focusEndHandler);
+    };
+  }, [map, isLoaded, isHoveringStateRef]);
+
+  return null;
+}
+
+function RegionHeatmap({
+  nets,
+  aboveStates = false,
+}: {
+  nets: NeighborNetLocation[];
+  aboveStates?: boolean;
+}) {
   const netsByDominance = useMemo(() => {
     const counts: Record<string, Record<Branch, number>> = {};
     for (const net of nets) {
@@ -520,6 +960,7 @@ function RegionHeatmap({ nets }: { nets: NeighborNetLocation[] }) {
           nets={netsByDominance.brothers}
           colorToken="--color-brothers-sky"
           fallbackColor="#4a90d9"
+          beforeId={aboveStates ? "geojson-line-chapter-states" : undefined}
         />
       ) : null}
       {netsByDominance.sisters.length ? (
@@ -528,6 +969,7 @@ function RegionHeatmap({ nets }: { nets: NeighborNetLocation[] }) {
           nets={netsByDominance.sisters}
           colorToken="--color-brand-jade"
           fallbackColor="#397451"
+          beforeId={aboveStates ? "geojson-line-chapter-states" : undefined}
         />
       ) : null}
     </>
@@ -539,11 +981,13 @@ function HeatmapLayer({
   nets,
   colorToken,
   fallbackColor,
+  beforeId,
 }: {
   branch: Branch;
   nets: NeighborNetLocation[];
   colorToken: string;
   fallbackColor: string;
+  beforeId?: string;
 }) {
   const { map, isLoaded } = useMap();
   const reactId = useId().replaceAll(":", "");
@@ -563,6 +1007,9 @@ function HeatmapLayer({
     const firstLabelLayer = map
       .getStyle()
       .layers?.find((layer) => layer.type === "symbol")?.id;
+
+    const layerAnchor =
+      beforeId && map.getLayer(beforeId) ? beforeId : firstLabelLayer;
 
     map.addLayer(
       {
@@ -608,14 +1055,23 @@ function HeatmapLayer({
           ],
         },
       },
-      firstLabelLayer,
+      layerAnchor,
     );
 
     return () => {
       if (map.getLayer(layerId)) map.removeLayer(layerId);
       if (map.getSource(sourceId)) map.removeSource(sourceId);
     };
-  }, [colorToken, data, fallbackColor, isLoaded, layerId, map, sourceId]);
+  }, [
+    beforeId,
+    colorToken,
+    data,
+    fallbackColor,
+    isLoaded,
+    layerId,
+    map,
+    sourceId,
+  ]);
 
   return null;
 }
@@ -659,6 +1115,7 @@ function sharedCities(nets: NeighborNetLocation[]): Set<string> {
 /** Offset exact coordinate duplicates so every source row remains clickable. */
 function offsetsForSharedCoordinates(
   nets: NeighborNetLocation[],
+  spacing = 18,
 ): Record<string, [number, number]> {
   const groups: Record<string, NeighborNetLocation[]> = {};
   for (const net of nets) {
@@ -671,7 +1128,7 @@ function offsetsForSharedCoordinates(
   for (const group of Object.values(groups)) {
     if (group.length < 2) continue;
     group.forEach((net, index) => {
-      offsets[net.id] = [(index - (group.length - 1) / 2) * 18, 0];
+      offsets[net.id] = [(index - (group.length - 1) / 2) * spacing, 0];
     });
   }
   return offsets;
@@ -789,6 +1246,7 @@ function ChapterSearch({
   locations,
   hasSearch,
   resultCount,
+  layout,
 }: {
   query: string;
   onQueryChange: (value: string) => void;
@@ -798,6 +1256,7 @@ function ChapterSearch({
   locations: NeighborNetLocation[];
   hasSearch: boolean;
   resultCount: number;
+  layout: "default" | "chapter-page";
 }) {
   const suggestions = useMemo(() => {
     const term = normalizeSearchTerm(query);
@@ -809,6 +1268,79 @@ function ChapterSearch({
       .slice(0, 6);
   }, [locations, query]);
 
+  if (layout === "chapter-page") {
+    return (
+      <div className="relative w-full">
+        <div>
+          <h2 className="text-[30px] leading-[1.2] font-extrabold tracking-[-0.02em] md:text-landing-section">
+            Find a NeighborNet near you.
+          </h2>
+          <p className="mt-4 text-base font-medium md:text-landing-copy">
+            Search your city, or select a state to see where Young Muslims
+            meets.
+          </p>
+        </div>
+
+        <form
+          onSubmit={onSubmit}
+          role="search"
+          className="relative mt-10 flex w-full items-start gap-3 md:mt-[60px] md:gap-8"
+        >
+          <div className="relative flex h-[51px] min-w-0 flex-1 items-center gap-2.5 border-b border-brand-obsidian px-6 py-4">
+            <MaterialIcon name="search" size={18} aria-hidden="true" />
+            <label htmlFor="chapter-search" className="sr-only">
+              Search for city or ZIP
+            </label>
+            <input
+              id="chapter-search"
+              value={query}
+              onChange={(event) => onQueryChange(event.target.value)}
+              placeholder="Search for city or ZIP"
+              autoComplete="off"
+              className="min-w-0 flex-1 bg-transparent text-nav font-bold text-brand-obsidian outline-none placeholder:text-brand-obsidian"
+            />
+          </div>
+          <button
+            type="submit"
+            aria-label="Search"
+            className="ym-cta-trigger grid size-[51px] shrink-0 place-items-center bg-brand-royal text-brand-pure-white transition-opacity outline-none hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
+          >
+            <AnimatedArrow size={18} />
+          </button>
+          {hasSearch ? (
+            <button
+              type="button"
+              onClick={onReset}
+              className="ym-cta-trigger inline-flex h-[51px] items-center justify-center gap-2 border border-brand-obsidian px-5 text-nav font-bold outline-none hover:bg-brand-obsidian hover:text-brand-warm-snow focus-visible:ring-2 focus-visible:ring-brand-royal"
+            >
+              <AnimatedCtaLabel label="Reset" arrowSize={16} />
+            </button>
+          ) : null}
+          {suggestions.length > 0 ? (
+            <ul className="absolute top-[59px] right-[63px] left-0 z-30 grid gap-1 border border-brand-obsidian/15 bg-brand-warm-snow p-2 shadow-lg md:right-[83px]">
+              {suggestions.map((suggestion) => (
+                <li key={suggestion}>
+                  <button
+                    type="button"
+                    onClick={() => onChoose(suggestion)}
+                    className="w-full px-4 py-2 text-left text-sm outline-none hover:bg-brand-obsidian/5 focus-visible:ring-2 focus-visible:ring-brand-royal"
+                  >
+                    {suggestion}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <span className="sr-only" aria-live="polite">
+            {hasSearch
+              ? `${resultCount} NeighborNets found.`
+              : `${locations.length} NeighborNets available.`}
+          </span>
+        </form>
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-card bg-brand-royal p-5 text-brand-pure-white sm:p-7">
       <form onSubmit={onSubmit} role="search">
@@ -817,9 +1349,11 @@ function ChapterSearch({
         </label>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
           <div className="relative min-w-0 flex-1">
-            <Search
+            <MaterialIcon
+              name="search"
+              size={20}
               aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-brand-royal"
+              className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-brand-royal"
             />
             <input
               id="chapter-search"
@@ -842,7 +1376,7 @@ function ChapterSearch({
               onClick={onReset}
               className="inline-flex h-14 items-center justify-center gap-2 rounded-pill border border-brand-pure-white/45 px-5 font-bold outline-none hover:bg-brand-pure-white/10 focus-visible:ring-2 focus-visible:ring-brand-pure-white"
             >
-              <RotateCcw aria-hidden="true" className="size-4" />
+              <MaterialIcon name="refresh" size={16} aria-hidden="true" />
               Reset
             </button>
           ) : null}
@@ -881,12 +1415,14 @@ function SearchResultCards({
   selectedId,
   palette,
   onSelect,
+  layout,
 }: {
   query: string;
   results: NeighborNetLocation[];
   selectedId: string | null;
   palette: MapSettings["palette"];
   onSelect: (net: NeighborNetLocation) => void;
+  layout: "default" | "chapter-page";
 }) {
   if (results.length === 0) {
     return (
@@ -925,6 +1461,7 @@ function SearchResultCards({
             aria-pressed={selectedId === net.id}
             className={cn(
               "rounded-card border bg-brand-pure-white p-5 text-left transition-transform outline-none hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-brand-royal",
+              layout === "chapter-page" && "ym-cta-trigger",
               selectedId === net.id
                 ? "border-brand-royal shadow-md"
                 : "border-brand-obsidian/15",
@@ -946,8 +1483,12 @@ function SearchResultCards({
               <span className="rounded-pill bg-brothers-sky/15 px-3 py-1 text-xs font-bold text-brothers-midnight">
                 {branchLabel[net.branch]}
               </span>
-              <span className="text-sm font-bold text-brand-royal">
-                View on map
+              <span className="inline-flex items-center gap-1 text-sm font-bold text-brand-royal">
+                {layout === "chapter-page" ? (
+                  <AnimatedCtaLabel label="View on map" arrowSize={16} />
+                ) : (
+                  "View on map"
+                )}
               </span>
             </div>
           </button>
@@ -957,10 +1498,251 @@ function SearchResultCards({
   );
 }
 
+function ChapterResultsCarousel({
+  results,
+  selectedId,
+  palette,
+  contextLabel,
+  onSelect,
+  onClose,
+}: {
+  results: NeighborNetLocation[];
+  selectedId: string | null;
+  palette: MapSettings["palette"];
+  contextLabel?: string;
+  onSelect: (net: NeighborNetLocation) => void;
+  onClose: () => void;
+}) {
+  const cardRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  useEffect(() => {
+    if (!selectedId) return;
+    cardRefs.current[selectedId]?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  }, [selectedId]);
+
+  return (
+    <section
+      aria-labelledby="area-results-heading"
+      className="relative bg-brand-obsidian px-5 py-8 text-brand-pure-white sm:px-8 md:px-[46px] md:py-10"
+    >
+      <div className="flex items-start justify-between gap-6">
+        <div>
+          <h2
+            id="area-results-heading"
+            className="text-[24px] leading-tight font-extrabold tracking-[-0.02em]"
+          >
+            Results for this area
+          </h2>
+          {contextLabel ? (
+            <p className="mt-2 text-sm text-brand-pure-white/65">
+              {contextLabel}
+            </p>
+          ) : null}
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close area results"
+          className="grid size-8 shrink-0 place-items-center bg-brand-pure-white text-brand-obsidian transition-colors outline-none hover:bg-brand-warm-snow focus-visible:ring-2 focus-visible:ring-sisters-buttercup focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian"
+        >
+          <MaterialIcon name="close" size={18} aria-hidden="true" />
+        </button>
+      </div>
+
+      {results.length === 0 ? (
+        <div className="mt-6 max-w-md bg-brand-pure-white p-6 text-brand-obsidian">
+          <h3 className="text-lg font-extrabold">No NeighborNets found</h3>
+          <p className="mt-2 text-sm leading-relaxed text-brand-obsidian/70">
+            Try a nearby city, chapter name, or another state.
+          </p>
+        </div>
+      ) : (
+        <div
+          className="mt-6 flex snap-x snap-mandatory [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.45)_transparent] gap-5 overflow-x-auto pb-3"
+          aria-label={`${results.length} area ${results.length === 1 ? "result" : "results"}`}
+        >
+          {results.map((net) => {
+            const isSelected = selectedId === net.id;
+            const contactItems: Array<{
+              icon: MaterialIconName;
+              value: string;
+            } | null> = [
+              net.contact?.instagram
+                ? {
+                    icon: "alternate_email",
+                    value: net.contact.instagram,
+                  }
+                : null,
+              net.contact?.email
+                ? { icon: "mail", value: net.contact.email }
+                : null,
+            ];
+            const availableContactItems = contactItems.filter(
+              (item): item is { icon: MaterialIconName; value: string } =>
+                item !== null,
+            );
+
+            return (
+              <button
+                key={net.id}
+                ref={(node) => {
+                  cardRefs.current[net.id] = node;
+                }}
+                type="button"
+                onClick={() => onSelect(net)}
+                aria-pressed={isSelected}
+                className={cn(
+                  "group w-[min(328px,calc(100vw-64px))] min-w-[min(328px,calc(100vw-64px))] snap-start overflow-hidden bg-brand-pure-white text-left text-brand-obsidian transition-[transform,box-shadow] duration-200 outline-none hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-4 focus-visible:ring-offset-brand-obsidian",
+                  isSelected && "-translate-y-1",
+                )}
+                style={
+                  isSelected
+                    ? {
+                        boxShadow: `0 0 0 4px ${branchColor(net.branch, palette)}, 0 16px 28px rgba(0, 0, 0, 0.28)`,
+                      }
+                    : undefined
+                }
+              >
+                <span
+                  className={cn(
+                    "flex h-[100px] items-center justify-center",
+                    net.branch === "brothers"
+                      ? "bg-brand-royal"
+                      : "bg-sisters-buttercup",
+                  )}
+                >
+                  <BranchLogo
+                    branch={net.branch}
+                    className="size-[64px]"
+                    sizes="64px"
+                  />
+                </span>
+
+                <span className="flex min-h-[202px] flex-col px-5 pt-4 pb-5">
+                  <span
+                    className={cn(
+                      "w-fit px-3 py-1 text-xs font-semibold text-brand-pure-white",
+                      net.branch === "brothers"
+                        ? "bg-brand-royal"
+                        : "bg-brand-jade",
+                    )}
+                  >
+                    {branchLabel[net.branch]}
+                  </span>
+                  <span className="mt-3 text-[18px] leading-tight font-extrabold tracking-[-0.02em]">
+                    {net.name}
+                  </span>
+                  <span className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-brand-obsidian/70">
+                    <MaterialIcon
+                      name="my_location"
+                      size={15}
+                      aria-hidden="true"
+                      className="mt-0.5 shrink-0"
+                    />
+                    {locationLabel(net)}
+                  </span>
+
+                  <span className="mt-auto flex min-h-10 flex-wrap items-end gap-2 border-t border-brand-obsidian/15 pt-3">
+                    {availableContactItems.length > 0 ? (
+                      availableContactItems.map((item) => (
+                        <span
+                          key={`${item.icon}-${item.value}`}
+                          title={item.value}
+                          className="inline-flex max-w-full items-center gap-1.5 truncate border border-current px-2 py-1 text-[11px] font-semibold"
+                          style={{
+                            color: branchColor(net.branch, palette),
+                          }}
+                        >
+                          <MaterialIcon
+                            name={item.icon}
+                            size={13}
+                            aria-hidden="true"
+                            className="shrink-0"
+                          />
+                          <span className="truncate">{item.value}</span>
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-[11px] font-medium text-brand-obsidian/55">
+                        Contact details coming soon
+                      </span>
+                    )}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function locationLabel(net: NeighborNetLocation): string {
+  if (net.city && net.state) return `${net.city}, ${net.state}`;
+  if (net.city) return net.city;
+  if (net.state) return net.state;
+  return net.region;
+}
+
 function normalizeSearchTerm(value: string): string {
   return value
     .normalize("NFKD")
     .toLocaleLowerCase("en-US")
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
+}
+
+function geometryContainsPoint(
+  geometry: Geometry,
+  point: [number, number],
+): boolean {
+  if (geometry.type === "Polygon") {
+    return polygonContainsPoint(geometry.coordinates, point);
+  }
+  if (geometry.type === "MultiPolygon") {
+    return geometry.coordinates.some((polygon) =>
+      polygonContainsPoint(polygon, point),
+    );
+  }
+  return false;
+}
+
+function polygonContainsPoint(
+  polygon: Position[][],
+  point: [number, number],
+): boolean {
+  const [outerRing, ...holes] = polygon;
+  if (!outerRing || !ringContainsPoint(outerRing, point)) return false;
+  return !holes.some((hole) => ringContainsPoint(hole, point));
+}
+
+function ringContainsPoint(
+  ring: Position[],
+  [pointX, pointY]: [number, number],
+): boolean {
+  let inside = false;
+
+  for (let index = 0, previous = ring.length - 1; index < ring.length;) {
+    const [x, y] = ring[index] ?? [];
+    const [previousX, previousY] = ring[previous] ?? [];
+    if (
+      x !== undefined &&
+      y !== undefined &&
+      previousX !== undefined &&
+      previousY !== undefined &&
+      y > pointY !== previousY > pointY &&
+      pointX < ((previousX - x) * (pointY - y)) / (previousY - y) + x
+    ) {
+      inside = !inside;
+    }
+    previous = index;
+    index += 1;
+  }
+
+  return inside;
 }

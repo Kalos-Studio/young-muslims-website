@@ -27,7 +27,7 @@ export default async function StoriesPage({ searchParams }: StoriesPageProps) {
   const initialStory = getStoryBySlug(requestedSlug);
 
   return (
-    <main className="w-full bg-brand-warm-snow">
+    <main data-stories-page className="w-full bg-brand-warm-snow">
       <Suspense>
         <StoriesExperience
           initialSlug={initialStory?.slug ?? null}

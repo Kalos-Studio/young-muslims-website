@@ -1,10 +1,19 @@
-import Link from "next/link";
+"use client";
 
+import Link from "next/link";
+import { motion } from "motion/react";
+
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+
+import { useFooterPageStage } from "./footer-page-stage";
 import { HeaderContrastController } from "./header-contrast-controller";
 import { Logo } from "./logo";
 import { NavLink } from "./nav-link";
-import { ctaLink, primaryLinks } from "./nav-links";
+import { getNavigationItems } from "./nav-links";
 import { SideNav } from "./side-nav";
+
+const primaryLinks = getNavigationItems("header-primary");
+const [ctaLink] = getNavigationItems("header-cta");
 
 /**
  * The site header. Permanent: these are the real routes and the real layout.
@@ -23,37 +32,43 @@ import { SideNav } from "./side-nav";
  * below the `md` breakpoint.
  */
 export function SiteHeader() {
+  const { pageY } = useFooterPageStage();
   return (
-    <header
+    <motion.header
       data-site-header
       className="sticky top-0 z-40 border-b border-border bg-background/60 backdrop-blur-md"
+      style={{ y: pageY }}
     >
       <HeaderContrastController />
       <div
         data-site-header-inner
-        className="grid h-[123px] w-full grid-cols-[1fr_auto_1fr] items-center gap-8 px-20"
+        className="mx-auto grid h-[123px] w-full max-w-[1440px] grid-cols-[1fr_auto] items-center gap-8 px-8 md:px-20 xl:grid-cols-[1fr_auto_1fr]"
       >
         <div className="flex items-center justify-start">
           <Link
             href="/"
             aria-label="Young Muslims, home"
             data-site-logo-link
-            className="rounded-xs transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="rounded-xs transition-[color,opacity] duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             {/* aria-hidden because the link above already names the destination;
                 without it a screen reader announces the name twice. */}
-            <Logo className="h-5" aria-hidden />
+            <Logo className="h-5 w-auto" aria-hidden />
           </Link>
         </div>
 
         <nav
           data-primary-nav
           aria-label="Primary"
-          className="flex items-center justify-center gap-4 text-nav"
+          className="hidden items-center justify-center gap-4 text-nav xl:flex"
         >
           {primaryLinks.map((link) => (
-            <NavLink key={link.href} href={link.href} className="p-2.5">
-              {link.label}
+            <NavLink key={link.id} item={link} className="ym-cta-trigger p-2.5">
+              <span className="ym-cta-roll">
+                <span className="ym-cta-roll__text" data-text={link.label}>
+                  {link.label}
+                </span>
+              </span>
             </NavLink>
           ))}
         </nav>
@@ -61,19 +76,19 @@ export function SiteHeader() {
         <div className="flex shrink-0 items-center justify-end gap-6">
           <nav
             aria-label="Find a chapter"
-            className="flex items-center text-nav"
+            className="hidden items-center text-nav md:flex"
           >
             <NavLink
-              href={ctaLink.href}
-              className="inline-flex items-center bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
+              item={ctaLink}
+              className="ym-cta-trigger inline-flex items-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:text-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
               data-site-cta
             >
-              {ctaLink.label}
+              <AnimatedCtaLabel label={ctaLink.label} arrowSize={18} />
             </NavLink>
           </nav>
           <SideNav />
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

@@ -4,11 +4,13 @@ import "./globals.css";
 import { isSiteIndexable, SITE_ORIGIN } from "@/lib/seo";
 
 import { FooterSlot } from "@/components/site/footer-slot";
+import { FooterPageStage } from "@/components/site/footer-page-stage";
+import { EntryAnimation } from "@/components/site/entry-animation";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-// WIREFRAME: the two imports below are prototype scaffolding. See WIREFRAME.md.
+import { StoryPageTransition } from "@/components/site/story-page-transition";
+// WIREFRAME: the import below is prototype scaffolding. See WIREFRAME.md.
 import { AnnotationToolbar } from "@/components/wireframe/annotation-toolbar";
-import { NotesToggle } from "@/components/wireframe/notes-toggle";
 
 const figtree = Figtree({
   variable: "--font-figtree",
@@ -46,16 +48,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${figtree.variable} ${boldonse.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <SiteHeader />
-        <div data-page-shell className="flex-1">
-          {children}
-        </div>
-        <FooterSlot>
-          <SiteFooter />
-        </FooterSlot>
-        {/* WIREFRAME: both come out with the wireframe; the header and footer
-            above them stay. */}
-        <NotesToggle />
+        <EntryAnimation>
+          <FooterPageStage header={<SiteHeader />}>
+            <div data-page-shell className="flex-1">
+              {children}
+            </div>
+            <FooterSlot>
+              <SiteFooter />
+            </FooterSlot>
+          </FooterPageStage>
+        </EntryAnimation>
+        <StoryPageTransition />
+        {/* WIREFRAME: this comes out with the wireframe; the header and footer
+            above it stay. */}
         <AnnotationToolbar />
       </body>
     </html>

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
  * can see which page you are on — and it used to impose one content width,
  * which stopped a section from ever going full-bleed.
  *
- * Width is <Annotate>'s job now, so a contained section and a full-page hero
+ * Width is <ContentFrame>'s job, so a contained section and a full-page hero
  * can sit in the same page.
  */
 export function PageFrame({

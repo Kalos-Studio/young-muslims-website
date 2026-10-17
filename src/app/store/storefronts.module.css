@@ -1,0 +1,28 @@
+@reference "../globals.css";
+
+.media {
+  @apply absolute inset-0 -z-20 grayscale duration-300 ease-out;
+  transition-property: filter, scale;
+}
+
+.panel[data-selected="true"] .media,
+.panel:has(:focus-visible) .media {
+  @apply scale-105 grayscale-0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .panel:hover .media {
+    @apply scale-105 grayscale-0;
+  }
+}
+
+/* Keyboard feedback is immediate; focus is as visible as pointer selection. */
+.panel:has(:focus-visible) .media {
+  @apply transition-none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel .media {
+    @apply scale-100! transition-none;
+  }
+}

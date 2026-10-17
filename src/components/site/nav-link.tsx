@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
+import { isNavigationItemCurrent, type NavigationItem } from "./nav-links";
 
 /**
  * A nav link that knows whether it is the current page.
@@ -15,7 +16,7 @@ import { cn } from "@/lib/utils";
  */
 
 type NavLinkProps = {
-  href: string;
+  item: NavigationItem;
   children: React.ReactNode;
   className?: string;
   "data-site-cta"?: boolean;
@@ -23,21 +24,15 @@ type NavLinkProps = {
   onNavigate?: () => void;
 };
 
-export function useIsCurrent(href: string): boolean {
-  const pathname = usePathname();
-  // Exact match for "/", prefix match elsewhere, so /stories/some-person still
-  // marks Stories as the current section.
-  return href === "/" ? pathname === "/" : pathname.startsWith(href);
-}
-
 export function NavLink({
-  href,
+  item,
   children,
   className,
   "data-site-cta": siteCta,
   onNavigate,
 }: NavLinkProps) {
-  const isCurrent = useIsCurrent(href);
+  const pathname = usePathname();
+  const isCurrent = isNavigationItemCurrent(item, pathname);
   const linkClassName = cn(
     "rounded-xs font-bold underline-offset-8 transition-colors outline-none",
     "hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
@@ -47,7 +42,7 @@ export function NavLink({
 
   return (
     <Link
-      href={href}
+      href={item.href}
       onClick={onNavigate}
       aria-current={isCurrent ? "page" : undefined}
       data-site-cta={siteCta ? "true" : undefined}

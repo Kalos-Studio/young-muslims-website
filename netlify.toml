@@ -18,19 +18,17 @@
 # WIREFRAME: remove only the review-tool flags when retiring the wireframe.
 # Keep the deployment contexts and SITE_INDEXABLE controls.
 #
-# These turn on the sticky notes and the Agentation feedback toolbar for deploy
-# previews and branch deploys, and deliberately leave them off for production.
+# This turns on the Agentation feedback toolbar for deploy previews and branch
+# deploys, and deliberately leaves it off for production.
 # NEXT_PUBLIC_* values are inlined at build time and every Netlify context is
 # its own build, so this is the right lever: the live site cannot accidentally
 # ship the commentary or the ~3.6MB feedback library.
 [context.deploy-preview.environment]
   SITE_INDEXABLE = "false"
-  NEXT_PUBLIC_SHOW_NOTES = "true"
   NEXT_PUBLIC_ENABLE_AGENTATION = "true"
   NEXT_PUBLIC_FUNDRAISE_UP_LIVEMODE = "false"
 
 [context.branch-deploy.environment]
   SITE_INDEXABLE = "false"
-  NEXT_PUBLIC_SHOW_NOTES = "true"
   NEXT_PUBLIC_ENABLE_AGENTATION = "true"
   NEXT_PUBLIC_FUNDRAISE_UP_LIVEMODE = "false"

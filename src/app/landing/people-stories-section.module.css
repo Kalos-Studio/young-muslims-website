@@ -1,0 +1,9 @@
+@media (max-width: 767px) {
+  .orbit {
+    /* Let portraits orbit beyond the viewport while clearing the central copy. */
+    width: calc(100% + 600px);
+    max-width: none;
+    height: 900px;
+    aspect-ratio: auto;
+  }
+}

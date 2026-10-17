@@ -42,30 +42,34 @@ Fonts are loaded and self-hosted by Next.js from `src/app/layout.tsx`.
 Tailwind's default font namespace is reset in `src/app/globals.css`, so
 `font-serif` and `font-mono` are deliberately unavailable.
 
-These are the approved desktop values. Responsive behavior is not yet defined
-by mobile website frames, so do not invent responsive sizes. Keep the desktop
-role unchanged until a mobile design supplies its corresponding value.
+These are the approved desktop values. The Support mobile frame (`447:2754`)
+now supplies the corresponding mobile layout. Use the existing
+`text-mobile-display` (32px) for its Boldonse hero and `text-mobile-section`
+(30px) for its Figtree headings, with `text-nav` for the hero introduction and
+`text-body` for body copy. Keep the desktop roles at the desktop breakpoint.
+The Store mobile frame (`456:3697`) also uses these mobile display and section-heading tokens. Do not invent responsive sizes for other pages without an approved mobile frame.
 
 ## Brand color primitives
 
 These values are exact and must not be altered.
 
-| Tailwind token      | Brand name        | Value     | Intended use                        |
-| ------------------- | ----------------- | --------- | ----------------------------------- |
-| `brand-obsidian`    | Deep Obsidian     | `#171725` | General dark foundation and text    |
-| `brand-warm-snow`   | Warm Snow         | `#FCFAF8` | General light foundation            |
-| `brand-royal`       | Royal Blue        | `#234080` | General or Brothers accent and text |
-| `brand-jade`        | Jade Foliage      | `#397451` | General or Sisters accent and text  |
-| `brand-pure-white`  | Pure White        | `#FFFFFF` | Reversed content and clean surfaces |
-| `brothers-midnight` | Midnight Blue     | `#16294F` | Brothers dark foundation and text   |
-| `brothers-slate`    | Cool Slate        | `#99ADC8` | Brothers large fills and accents    |
-| `brothers-sky`      | Sky Blue          | `#4A90D9` | Brothers large fills and accents    |
-| `sisters-forest`    | Deep Forest Green | `#043222` | Sisters dark foundation and text    |
-| `sisters-brass`     | Warm Brass        | `#D8AA45` | Sisters large fills and accents     |
-| `sisters-buttercup` | Buttercup Yellow  | `#EBD255` | Sisters large fills and accents     |
-| `landing-cyan`      | Landing Cyan      | `#23B8C0` | Highlighted words on the homepage   |
-| `landing-blush`     | Landing Blush     | `#E3D6D6` | Homepage story-card surfaces        |
-| `landing-card-ink`  | Card Ink          | `#000000` | Homepage story-card text            |
+| Tailwind token      | Brand name        | Value     | Intended use                         |
+| ------------------- | ----------------- | --------- | ------------------------------------ |
+| `brand-obsidian`    | Deep Obsidian     | `#171725` | General dark foundation and text     |
+| `brand-warm-snow`   | Warm Snow         | `#FCFAF8` | General light foundation             |
+| `brand-royal`       | Royal Blue        | `#234080` | General or Brothers accent and text  |
+| `brand-jade`        | Jade Foliage      | `#397451` | General or Sisters accent and text   |
+| `brand-pure-white`  | Pure White        | `#FFFFFF` | Reversed content and clean surfaces  |
+| `brothers-midnight` | Midnight Blue     | `#16294F` | Brothers dark foundation and text    |
+| `brothers-slate`    | Cool Slate        | `#99ADC8` | Brothers large fills and accents     |
+| `brothers-sky`      | Sky Blue          | `#4A90D9` | Brothers large fills and accents     |
+| `sisters-forest`    | Deep Forest Green | `#043222` | Sisters dark foundation and text     |
+| `sisters-brass`     | Warm Brass        | `#D8AA45` | Sisters large fills and accents      |
+| `sisters-buttercup` | Buttercup Yellow  | `#EBD255` | Sisters large fills and accents      |
+| `landing-cyan`      | Landing Cyan      | `#23B8C0` | Highlighted words on the homepage    |
+| `landing-blush`     | Landing Blush     | `#E3D6D6` | Homepage story-card surfaces         |
+| `landing-twilight`  | Landing Twilight  | `#34344C` | Homepage highlight-reel outer curves |
+| `landing-card-ink`  | Card Ink          | `#000000` | Homepage story-card text             |
 
 Slate, Sky, Brass, and Buttercup do not have enough contrast for normal-sized
 text on white or Warm Snow. Use them for fills, decoration, and large graphical

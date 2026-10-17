@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 
+import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+
 import cardDecorBottom from "../../design-assets/figma/landing-2026/card-decor-bottom.svg";
 import cardDecorTop from "../../design-assets/figma/landing-2026/card-decor-top.svg";
 import cardWaveObsidian from "../../design-assets/figma/landing-2026/card-wave-obsidian.svg";
@@ -14,21 +16,24 @@ import belongingWaveObsidian from "../../design-assets/figma/landing-2026/belong
 import belongingWavePale from "../../design-assets/figma/landing-2026/belonging-wave-pale.svg";
 import highlightPlay from "../../design-assets/figma/landing-2026/highlight-play.svg";
 import highlightReel from "../../design-assets/figma/landing-2026/highlight-reel.png";
-import { AllAboutScrollStage } from "./all-about-scroll-stage";
-import { BelongingPortraitOrbit } from "./belonging-portrait-orbit";
-import { ChapterFinderSection } from "./chapter-finder-section";
-import { EverywhereSection } from "./everywhere-section";
-import { HeroVideo } from "./hero-video";
-import { HighlightReelMarquee } from "./highlight-reel-section";
-import { LandingCtaSection, LandingFooter } from "./landing-new-sections";
-import { PeopleStoriesSection } from "./people-stories-section";
-import { WhatWeStandOnSection } from "./what-we-stand-on-section";
-import { WordOnTheStreetSection } from "./word-on-the-street-section";
+import { AllAboutScrollStage } from "./landing/all-about-scroll-stage";
+import {
+  BelongingCopy,
+  BelongingPortraitOrbit,
+} from "./landing/belonging-portrait-orbit";
+import { ChapterFinderSection } from "./landing/chapter-finder-section";
+import { EverywhereSection } from "./landing/everywhere-section";
+import { HeroFollowupCurve } from "./landing/hero-followup-curve";
+import { HeroVideo } from "./landing/hero-video";
+import { HighlightReelMarquee } from "./landing/highlight-reel-section";
+import { LandingCtaSection } from "./landing/landing-new-sections";
+import { PeopleStoriesSection } from "./landing/people-stories-section";
+import { WhatWeStandOnSection } from "./landing/what-we-stand-on-section";
+import { WordOnTheStreetSection } from "./landing/word-on-the-street-section";
 
-// WIREFRAME: annotations remain available while the landing page is reviewed.
-// The page imagery and layout below now follow the approved Figma composition.
-// See WIREFRAME.md.
-import { Annotate } from "@/components/wireframe/annotate";
+// WIREFRAME: ContentFrame only supplies the prototype's shared content width.
+// The page imagery and layout below follow the approved Figma composition.
+import { ContentFrame } from "@/components/wireframe/content-frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
@@ -76,7 +81,7 @@ function PhotoCard({
 }) {
   return (
     <article
-      className={`absolute h-[482px] w-[298px] overflow-hidden rounded-card text-brand-pure-white ${className}`}
+      className={`all-about-card absolute h-[482px] w-[296px] overflow-hidden text-brand-pure-white md:w-[298px] ${className}`}
     >
       {crop ? (
         <Image
@@ -86,7 +91,13 @@ function PhotoCard({
           className={PHOTO_CROP_CLASSES[crop]}
         />
       ) : (
-        <Image src={image} alt="" fill sizes="298px" className="object-cover" />
+        <Image
+          src={image}
+          alt=""
+          fill
+          sizes="(max-width: 767px) 296px, 298px"
+          className="object-cover"
+        />
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-obsidian/10 to-brand-obsidian/90" />
       <div className="absolute right-7 bottom-8 left-7">
@@ -108,7 +119,7 @@ function SolidCard({
 }) {
   return (
     <article
-      className={`absolute h-[482px] w-[298px] overflow-hidden rounded-card px-7 ${image ? "text-brand-pure-white" : "bg-landing-blush text-landing-card-ink"} ${className}`}
+      className={`all-about-card absolute h-[482px] w-[296px] overflow-hidden px-7 md:w-[298px] ${image ? "text-brand-pure-white" : "bg-landing-blush text-landing-card-ink"} ${className}`}
     >
       {image ? (
         <>
@@ -135,61 +146,43 @@ function SolidCard({
 export default function Home() {
   return (
     <PageFrame className="overflow-x-clip" data-landing-page="true">
-      <Annotate
-        bleed
-        notes={[
-          {
-            placement: "top-left",
-            note: (
-              <>
-                <span className="block font-bold">READ THIS FIRST</span>
-                <span className="mt-3 block">
-                  The landing page now follows the updated Figma composition,
-                  imagery, colors, typography, hierarchy, and approved copy.
-                </span>
-              </>
-            ),
-          },
-          {
-            placement: "center-left",
-            note: "The supplied community video autoplays silently on a loop behind the hero copy. It remains fixed within the hero and does not respond to scrolling.",
-          },
-        ]}
-      >
+      <ContentFrame bleed>
         <HeroVideo />
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate
-        bleed
-        note="The updated portraits follow a continuous elliptical orbit, respond subtly to the pointer, and remain intentionally cropped at the viewport edges."
-      >
+      <ContentFrame bleed>
         <section
           data-header-theme="light"
-          className="relative h-[1830px] w-full overflow-hidden bg-brand-warm-snow"
+          className="relative isolate h-[1298px] w-full overflow-hidden bg-brand-warm-snow xl:h-[1830px]"
         >
-          <div className="pointer-events-none absolute top-[1281px] left-[-873px] z-0 flex h-[1880px] w-[2956px] rotate-[-9.8deg] items-center justify-center">
-            <Image
-              src={belongingWavePale}
-              alt=""
-              className="block max-w-none"
-            />
+          <HeroFollowupCurve />
+          <div className="pointer-events-none absolute top-[1671.83px] left-[calc(50%-115.01px)] z-0 flex h-[1879.96px] w-[2955.92px] -translate-x-1/2 -translate-y-1/2 items-center justify-center xl:top-[1281px] xl:left-[-873px] xl:translate-x-0 xl:translate-y-0">
+            <div className="rotate-[-9.8deg]">
+              <Image
+                src={belongingWavePale}
+                alt=""
+                className="block max-w-none"
+              />
+            </div>
           </div>
-          <div className="pointer-events-none absolute top-[1375px] left-[-781px] z-[1] flex h-[1772px] w-[2787px] rotate-[-9.8deg] items-center justify-center">
-            <Image
-              src={belongingWaveObsidian}
-              alt=""
-              className="block max-w-none"
-            />
+          <div className="pointer-events-none absolute top-[1712.19px] left-[calc(50%-115.01px)] z-[15] flex h-[1772.44px] w-[2786.86px] -translate-x-1/2 -translate-y-1/2 items-center justify-center xl:top-[1375px] xl:left-[-781px] xl:translate-x-0 xl:translate-y-0">
+            <div className="rotate-[-9.8deg]">
+              <Image
+                src={belongingWaveObsidian}
+                alt=""
+                className="block max-w-none"
+              />
+            </div>
           </div>
           <div className="relative z-10 h-full">
             <BelongingPortraitOrbit />
           </div>
-          <div className="absolute top-[743px] left-1/2 z-20 w-full max-w-[784px] -translate-x-1/2 text-center">
-            <h2 className="text-landing-section font-extrabold text-brand-jade">
+          <BelongingCopy>
+            <h2 className="text-[30px] leading-[36px] font-extrabold tracking-[-0.02em] text-brand-jade md:text-landing-section md:leading-[1.2]">
               More than a program.
               <br />A place to belong.
             </h2>
-            <p className="mt-[43px] text-landing-copy font-medium text-brand-obsidian">
+            <p className="mt-6 text-base leading-[18.9px] font-medium tracking-[-0.02em] text-brand-obsidian md:mt-[26px] md:text-landing-copy md:leading-[1.2]">
               Young Muslims is the nation&apos;s largest Muslim youth
               organization, but that&apos;s not how members describe it. To
               them, it&apos;s the people they see every week, the ones who
@@ -197,56 +190,51 @@ export default function Home() {
               everyday friendship into a stronger Deen, a stronger self, and a
               lifetime of brotherhood and sisterhood.
             </p>
-          </div>
+          </BelongingCopy>
         </section>
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate
-        bleed
-        note="Selecting the highlight reel will open the full video in an overlay once the final video interaction is connected."
-      >
+      <ContentFrame bleed>
         <section
           data-header-theme="dark"
-          className="relative h-[899px] w-full overflow-hidden bg-brand-obsidian"
+          className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian xl:h-[1087px]"
         >
-          <div className="absolute top-0 left-1/2 h-full w-[1440px] -translate-x-1/2">
-            <h2 className="absolute top-[113px] left-1/2 w-[784px] -translate-x-1/2 text-center text-landing-section font-extrabold text-brand-warm-snow">
+          <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 xl:w-[1440px] 2xl:left-0 2xl:w-full 2xl:translate-x-0">
+            <h2 className="absolute top-[21px] left-1/2 w-[274px] -translate-x-1/2 text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:text-landing-section md:leading-[1.2] xl:top-[122px] xl:w-[784px]">
               But it&apos;s easier to just show you.
             </h2>
             <HighlightReelMarquee />
-            <div className="absolute top-[269px] left-[503px] h-[529px] w-[833px] overflow-hidden rounded-media shadow-2xl">
+            <div className="absolute top-[160px] left-8 h-[397px] w-[296px] overflow-hidden shadow-2xl xl:top-[278px] xl:left-[503px] xl:h-[529px] xl:w-[833px] 2xl:left-1/2 2xl:-translate-x-1/2">
               <Image
                 src={highlightReel}
                 alt="Young Muslims gathered together"
                 fill
-                sizes="833px"
+                sizes="(max-width: 767px) 296px, 833px"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-brand-obsidian/35" />
+              <div className="absolute inset-0 bg-black/40" />
               <Image
                 src={highlightPlay}
                 alt=""
-                className="absolute top-1/2 left-1/2 h-[88px] w-[88px] -translate-x-1/2 -translate-y-1/2"
+                className="absolute top-1/2 left-1/2 h-[66px] w-[66px] -translate-x-1/2 -translate-y-1/2 md:h-[88px] md:w-[88px]"
               />
-              <div className="absolute right-12 bottom-12 left-12 text-brand-pure-white">
-                <p className="text-base font-extrabold">30 SECOND WATCH</p>
-                <p className="mt-2 text-[32px] leading-tight font-semibold">
+              <div className="absolute right-6 bottom-6 left-6 text-brand-pure-white md:right-[39.5px] md:bottom-[37px] md:left-[39.5px]">
+                <p className="text-xs font-extrabold md:text-base">
+                  30 SECOND WATCH
+                </p>
+                <p className="mt-1 text-xl leading-tight font-semibold md:mt-[7px] md:text-[32px]">
                   Young Muslims Highlight Reel
                 </p>
               </div>
             </div>
           </div>
         </section>
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate
-        bleed
-        placement="top-right"
-        note="The introduction stays fixed while the four cards move at different speeds during scroll."
-      >
+      <ContentFrame bleed>
         <section
           data-header-theme="light"
-          className="relative h-[1791px] w-full overflow-clip bg-brand-warm-snow"
+          className="relative h-[3026px] w-full overflow-clip bg-brand-warm-snow xl:h-[1835px]"
         >
           <div
             className="pointer-events-none absolute top-0 left-1/2 z-0 h-full -translate-x-1/2 overflow-hidden"
@@ -284,32 +272,30 @@ export default function Home() {
                   <Image
                     src={cardDecorTop}
                     alt=""
-                    className="absolute -top-[26px] left-[1111px]"
+                    className="absolute top-[392px] left-[193px] h-[200px] w-[200px] xl:-top-[26px] xl:left-[1111px] xl:h-auto xl:w-auto"
                   />
                   <Image
                     src={cardDecorBottom}
                     alt=""
-                    className="absolute top-[1052px] left-[17px]"
+                    className="all-about-yms-mark absolute top-[2780px] left-[-41px] h-[200px] w-[200px] xl:top-[1052px] xl:left-[17px] xl:h-auto xl:w-auto"
                   />
                 </>
               }
               intro={
                 <>
-                  <h2 className="text-landing-section font-extrabold">
-                    This is what we&apos;re
-                    <br />
-                    all about.
+                  <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section md:leading-[1.2]">
+                    This is what we&apos;re all about.
                   </h2>
-                  <p className="mt-8 text-landing-copy font-medium">
+                  <p className="mt-4 text-base leading-normal font-medium tracking-[-0.02em] md:text-landing-copy md:leading-[1.2]">
                     It starts as a hangout. It turns into brotherhood,
                     sisterhood, and a reason to show up for something bigger
                     than yourself.
                   </p>
                   <Link
                     href="/about"
-                    className="mt-8 inline-flex rounded-pill bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white outline-none hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow"
+                    className="ym-cta-trigger mt-8 inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white outline-none hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow md:w-auto"
                   >
-                    About Us
+                    <AnimatedCtaLabel label="About us" />
                   </Link>
                 </>
               }
@@ -318,54 +304,47 @@ export default function Home() {
                   key={POINTS[0].title}
                   point={POINTS[0]}
                   image={cardPeople}
-                  className="top-[130px] left-[720px]"
+                  className="top-[751px] left-8 xl:top-[130px] xl:left-[720px]"
                   crop="people"
                 />,
                 <SolidCard
                   key={POINTS[1].title}
                   point={POINTS[1]}
                   image={cardLeadership}
-                  className="top-[684px] left-[720px]"
+                  className="top-[1265px] left-8 xl:top-[632px] xl:left-[720px]"
                 />,
                 <PhotoCard
                   key={POINTS[2].title}
                   point={POINTS[2]}
                   image={cardGuidance}
-                  className="top-[220px] left-[1071px]"
+                  className="top-[1779px] left-8 xl:top-[220px] xl:left-[1038px]"
                   crop="guidance"
                 />,
                 <SolidCard
                   key={POINTS[3].title}
                   point={POINTS[3]}
                   image={cardService}
-                  className="top-[774px] left-[1071px]"
+                  className="top-[2293px] left-8 xl:top-[722px] xl:left-[1038px]"
                 />,
               ]}
             />
           </div>
         </section>
-      </Annotate>
+      </ContentFrame>
 
       <WhatWeStandOnSection />
 
-      <Annotate
-        bleed
-        note="Once this section fills the viewport, the heading appears and the metrics count upward."
-      >
+      <ContentFrame bleed>
         <EverywhereSection />
-      </Annotate>
+      </ContentFrame>
 
-      <Annotate
-        bleed
-        note="The heading reveals first. Once it reaches the center, the portraits appear and begin orbiting. Hovering a portrait reveals a cursor-reactive shape, and selecting it opens a full-screen view."
-      >
+      <ContentFrame bleed>
         <PeopleStoriesSection />
-      </Annotate>
+      </ContentFrame>
 
       <ChapterFinderSection />
       <WordOnTheStreetSection />
       <LandingCtaSection />
-      <LandingFooter />
     </PageFrame>
   );
 }
