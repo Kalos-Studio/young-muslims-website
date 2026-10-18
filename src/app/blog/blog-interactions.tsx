@@ -70,7 +70,7 @@ function PostCard({ post }: { post: BlogPost }) {
       <Link
         href={`/blog/${post.id}`}
         aria-label={`Read ${post.title}`}
-        className="block outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="group block outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <figure className="relative h-96 overflow-hidden bg-muted md:aspect-square md:h-auto">
           <Image
@@ -78,7 +78,7 @@ function PostCard({ post }: { post: BlogPost }) {
             alt=""
             fill
             sizes="(min-width: 1280px) 25vw, (min-width: 768px) 45vw, 100vw"
-            className="object-cover"
+            className="object-cover transition-transform duration-300 group-hover:scale-105 group-focus-visible:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
           />
           <figcaption className="absolute top-5 left-5 bg-foreground/80 px-2 py-1 text-nav font-semibold text-background backdrop-blur-sm">
             {post.category}
