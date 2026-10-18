@@ -44,13 +44,16 @@ export function HeroVideo() {
           muted
           playsInline
           preload="metadata"
+          poster="/videos/hero-poster.webp"
           tabIndex={-1}
           className="absolute inset-0 h-full w-full object-cover"
         >
           <source
-            src="/videos/ym-website-hero-dark-overlay.mp4"
+            media="(max-width: 767px)"
+            src="/videos/hero-mobile.mp4"
             type="video/mp4"
           />
+          <source src="/videos/hero-desktop.mp4" type="video/mp4" />
           Your browser does not support background video.
         </video>
         <div aria-hidden className="absolute inset-0 bg-brand-obsidian/10" />
