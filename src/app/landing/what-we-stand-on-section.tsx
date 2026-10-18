@@ -355,12 +355,13 @@ export function WhatWeStandOnSection() {
     if (reduceMotion || !sectionRef.current) return;
 
     const completed = PRINCIPLES.filter((_, index) => {
-      const revealEnd =
-        (INTRO_PHASE_UNITS +
-          index * PHASE_UNITS_PER_PRINCIPLE +
-          REVEAL_PHASE_UNITS) /
-        TOTAL_PHASE_UNITS;
-      return progress >= revealEnd;
+      const barRevealPoint =
+        index < PRINCIPLES.length - 1
+          ? INTRO_PHASE_UNITS + (index + 1) * PHASE_UNITS_PER_PRINCIPLE
+          : INTRO_PHASE_UNITS +
+            index * PHASE_UNITS_PER_PRINCIPLE +
+            REVEAL_PHASE_UNITS;
+      return progress >= barRevealPoint / TOTAL_PHASE_UNITS;
     }).length;
     setCompletedCount(completed);
     const imageHasReachedHeading = progress >= darkHeaderStart;
