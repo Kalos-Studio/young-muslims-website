@@ -404,8 +404,7 @@ export function WhatWeStandOnSection() {
     >
       <div className="sticky top-0 h-screen min-h-[808px] w-full overflow-hidden bg-brand-warm-snow md:min-h-[860px]">
         <motion.div
-          data-over-image={headingOnImage ? "true" : "false"}
-          className={`what-we-stand-on-heading absolute top-[76px] left-1/2 z-[3] w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[84px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
+          className={`absolute top-[76px] left-1/2 z-[3] w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[84px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
           style={{ y: headingY }}
         >
           <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section md:leading-[1.2]">

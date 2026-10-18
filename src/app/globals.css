@@ -426,30 +426,6 @@
   }
 }
 
-.what-we-stand-on-heading {
-  isolation: isolate;
-}
-
-.what-we-stand-on-heading::before {
-  position: absolute;
-  z-index: -1;
-  inset: -2rem -3.5rem;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    color-mix(in srgb, var(--color-brand-obsidian) 72%, transparent) 0%,
-    color-mix(in srgb, var(--color-brand-obsidian) 42%, transparent) 46%,
-    transparent 74%
-  );
-  content: "";
-  opacity: 0;
-  transition: opacity 300ms ease;
-}
-
-.what-we-stand-on-heading[data-over-image="true"]::before {
-  opacity: 1;
-}
-
 /*
  * Website typography roles.
  *
