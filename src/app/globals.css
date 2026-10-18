@@ -188,6 +188,19 @@
   }
 }
 
+@keyframes nn-explainer-marquee-right {
+  from {
+    transform: translate3d(-25%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.nn-explainer-marquee-track.support-donation-track {
+  animation-name: nn-explainer-marquee-right;
+}
+
 @media (min-width: 768px) {
   .nn-image-marquee-track {
     animation-duration: 61s;

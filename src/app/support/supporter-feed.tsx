@@ -38,7 +38,8 @@ export function SupporterFeed({ children }: { children: ReactNode }) {
         {/* Four equal groups match the existing marquee's quarter-width loop. */}
         <div
           ref={trackRef}
-          className="nn-image-marquee-track nn-explainer-marquee-track flex w-max"
+          className="nn-image-marquee-track nn-explainer-marquee-track support-donation-track flex w-max"
+          data-direction="right"
         >
           {[0, 1, 2, 3].map((copy) => (
             <ul

@@ -6,6 +6,8 @@ import { FundraiseUpDonationForm } from "@/components/fundraise-up/donation-form
 import { PhotoTopCurve } from "@/components/site/photo-top-curve";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 
+import { HighlightReelMarquee } from "../landing/highlight-reel-section";
+
 import { SupporterFeed } from "./supporter-feed";
 
 export const metadata: Metadata = {
@@ -281,47 +283,49 @@ export default function SupportPage() {
               className="absolute bottom-8 -left-4 lg:left-4"
             />
           </picture>
-          <div className="absolute top-2/3 left-1/2 flex -translate-x-1/2 flex-col gap-4 lg:top-1/2 lg:gap-6">
-            <picture>
-              <source
-                media="(max-width: 1023px)"
-                srcSet={`${assets}words-top-mobile.svg`}
-              />{" "}
-              <Image
-                src={`${assets}words-top.svg`}
-                alt=""
-                width={1847}
-                height={60}
-                className="max-w-none"
-              />
-            </picture>
-            <picture>
-              <source
-                media="(max-width: 1023px)"
-                srcSet={`${assets}words-middle-mobile.svg`}
-              />{" "}
-              <Image
-                src={`${assets}words-middle.svg`}
-                alt=""
-                width={2743}
-                height={65}
-                className="max-w-none -translate-x-1/4"
-              />
-            </picture>
-            <picture>
-              <source
-                media="(max-width: 1023px)"
-                srcSet={`${assets}words-bottom-mobile.svg`}
-              />{" "}
-              <Image
-                src={`${assets}words-bottom.svg`}
-                alt=""
-                width={1847}
-                height={60}
-                className="max-w-none"
-              />
-            </picture>
-          </div>
+          <HighlightReelMarquee
+            rows={[
+              <picture key="top-words">
+                <source
+                  media="(max-width: 1023px)"
+                  srcSet={`${assets}words-top-mobile.svg`}
+                />{" "}
+                <Image
+                  src={`${assets}words-top.svg`}
+                  alt=""
+                  width={1847}
+                  height={60}
+                  className="max-w-none"
+                />
+              </picture>,
+              <picture key="middle-words">
+                <source
+                  media="(max-width: 1023px)"
+                  srcSet={`${assets}words-middle-mobile.svg`}
+                />{" "}
+                <Image
+                  src={`${assets}words-middle.svg`}
+                  alt=""
+                  width={2743}
+                  height={65}
+                  className="max-w-none -translate-x-1/4"
+                />
+              </picture>,
+              <picture key="bottom-words">
+                <source
+                  media="(max-width: 1023px)"
+                  srcSet={`${assets}words-bottom-mobile.svg`}
+                />{" "}
+                <Image
+                  src={`${assets}words-bottom.svg`}
+                  alt=""
+                  width={1847}
+                  height={60}
+                  className="max-w-none"
+                />
+              </picture>,
+            ]}
+          />
         </div>
         <figure className="relative mx-8 mt-20 overflow-hidden bg-primary md:mx-auto md:max-w-4xl lg:mt-32">
           <Image
