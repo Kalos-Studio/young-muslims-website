@@ -107,9 +107,22 @@ function ProgressivePrincipleBars({
         <div
           key={principle.title}
           role="listitem"
-          className="flex h-16 items-center bg-brand-warm-snow px-6 text-body font-bold text-brand-obsidian shadow-lg"
+          className="relative h-16 overflow-hidden bg-brand-obsidian shadow-lg"
         >
-          {principle.title}
+          <Image
+            src={principle.image}
+            alt=""
+            fill
+            sizes="(min-width: 896px) 832px, 100vw"
+            className="object-cover"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-gradient-to-r from-brand-obsidian/80 to-transparent"
+          />
+          <h3 className="relative z-10 flex h-full items-center px-6 font-display text-mobile-display text-brand-pure-white md:text-display">
+            {principle.title}
+          </h3>
         </div>
       ))}
     </div>
