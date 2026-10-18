@@ -101,26 +101,26 @@ function ProgressivePrincipleBars({
       role="list"
       aria-label="Values completed"
       aria-hidden={completedCount === 0}
-      className="absolute inset-x-0 top-56 z-20 mx-auto grid w-full max-w-4xl gap-2 px-8 md:top-48"
+      className="absolute inset-x-0 top-56 z-20 grid w-full md:top-48"
     >
       {PRINCIPLES.slice(0, completedCount).map((principle) => (
         <div
           key={principle.title}
           role="listitem"
-          className="relative h-16 overflow-hidden bg-brand-obsidian shadow-lg"
+          className="relative h-24 overflow-hidden bg-brand-obsidian shadow-lg md:h-32"
         >
           <Image
             src={principle.image}
             alt=""
             fill
-            sizes="(min-width: 896px) 832px, 100vw"
+            sizes="100vw"
             className="object-cover"
           />
           <div
             aria-hidden="true"
             className="absolute inset-0 bg-gradient-to-r from-brand-obsidian/80 to-transparent"
           />
-          <h3 className="relative z-10 flex h-full items-center px-6 font-display text-mobile-display text-brand-pure-white md:text-display">
+          <h3 className="relative z-10 flex h-full items-center px-8 font-display text-mobile-display text-brand-pure-white md:text-display">
             {principle.title}
           </h3>
         </div>
