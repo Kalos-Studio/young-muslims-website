@@ -286,7 +286,7 @@ function RevealingPrinciple({
         data-principle-panel={index}
         aria-hidden={completedCount > index}
         inert={completedCount > index}
-        className={`absolute inset-0 overflow-hidden bg-brand-obsidian transition-opacity duration-300 ${completedCount > index ? "opacity-0" : "opacity-100"} motion-reduce:transition-none`}
+        className="absolute inset-0 overflow-hidden bg-brand-obsidian"
         style={{ y: panelY, clipPath: `url(#${clipId})`, zIndex }}
       >
         <motion.div className="absolute inset-0" style={{ y: contentY }}>
