@@ -22,8 +22,7 @@ import principleTarbiyyah from "../../../design-assets/figma/landing-2026/new-se
 const INTRO_PHASE_UNITS = 1;
 const PHASE_UNITS_PER_PRINCIPLE = 2;
 const REVEAL_PHASE_UNITS = 1;
-const FINAL_STACK_PHASE_UNITS = 2;
-const SCROLL_RUNWAY_VIEWPORTS = 2.5;
+const SCROLL_RUNWAY_VIEWPORTS = 1.5;
 const FINAL_EDGE_CURVE =
   "M 0 350 C 175 45 345 40 520 300 C 705 555 845 105 1000 275";
 
@@ -90,42 +89,29 @@ const PRINCIPLES = [
 type Principle = (typeof PRINCIPLES)[number];
 
 const TOTAL_PHASE_UNITS =
-  INTRO_PHASE_UNITS +
-  PRINCIPLES.length * PHASE_UNITS_PER_PRINCIPLE +
-  FINAL_STACK_PHASE_UNITS;
+  INTRO_PHASE_UNITS + PRINCIPLES.length * PHASE_UNITS_PER_PRINCIPLE;
 
-function FinalPrincipleStack({ visible }: { visible: boolean }) {
+function ProgressivePrincipleBars({
+  completedCount,
+}: {
+  completedCount: number;
+}) {
   return (
     <div
-      aria-label="The four values Young Muslims stands on"
-      aria-hidden={!visible}
-      className={`absolute inset-x-0 top-1/2 z-20 mx-auto w-full max-w-4xl -translate-y-1/2 px-8 transition-opacity duration-300 ${visible ? "opacity-100" : "opacity-0"} motion-reduce:transition-none`}
+      role="list"
+      aria-label="Values completed"
+      aria-hidden={completedCount === 0}
+      className="absolute inset-x-0 top-56 z-20 mx-auto grid w-full max-w-4xl gap-2 px-8 md:top-48"
     >
-      <div
-        className={`grid gap-2 transition-transform duration-300 ${visible ? "translate-y-0" : "translate-y-6"} motion-reduce:transition-none`}
-      >
-        {PRINCIPLES.map((principle) => (
-          <div
-            key={principle.title}
-            className="relative h-24 overflow-hidden bg-brand-obsidian"
-          >
-            <Image
-              src={principle.image}
-              alt=""
-              fill
-              sizes="(min-width: 896px) 832px, 100vw"
-              className="object-cover"
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-r from-brand-obsidian/80 to-transparent"
-            />
-            <h3 className="relative z-10 flex h-full items-center px-6 font-display text-mobile-display text-brand-pure-white md:text-display">
-              {principle.title}
-            </h3>
-          </div>
-        ))}
-      </div>
+      {PRINCIPLES.slice(0, completedCount).map((principle) => (
+        <div
+          key={principle.title}
+          role="listitem"
+          className="flex h-16 items-center bg-brand-warm-snow px-6 text-body font-bold text-brand-obsidian shadow-lg"
+        >
+          {principle.title}
+        </div>
+      ))}
     </div>
   );
 }
@@ -236,10 +222,12 @@ function RevealingPrinciple({
   principle,
   index,
   progress,
+  completedCount,
 }: {
   principle: Principle;
   index: number;
   progress: MotionValue<number>;
+  completedCount: number;
 }) {
   const revealStart =
     (INTRO_PHASE_UNITS + index * PHASE_UNITS_PER_PRINCIPLE) / TOTAL_PHASE_UNITS;
@@ -283,7 +271,9 @@ function RevealingPrinciple({
       </svg>
       <motion.div
         data-principle-panel={index}
-        className="absolute inset-0 overflow-hidden bg-brand-obsidian"
+        aria-hidden={completedCount > index}
+        inert={completedCount > index}
+        className={`absolute inset-0 overflow-hidden bg-brand-obsidian transition-opacity duration-300 ${completedCount > index ? "opacity-0" : "opacity-100"} motion-reduce:transition-none`}
         style={{ y: panelY, clipPath: `url(#${clipId})`, zIndex }}
       >
         <motion.div className="absolute inset-0" style={{ y: contentY }}>
@@ -333,7 +323,7 @@ function FinalImageEdge({ progress }: { progress: MotionValue<number> }) {
 export function WhatWeStandOnSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [headingOnImage, setHeadingOnImage] = useState(false);
-  const [stackVisible, setStackVisible] = useState(false);
+  const [completedCount, setCompletedCount] = useState(0);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -345,19 +335,21 @@ export function WhatWeStandOnSection() {
     [0, introEnd],
     ["calc(100vh - 84px)", "0px"],
   );
-  const finalStackStart =
-    (INTRO_PHASE_UNITS +
-      (PRINCIPLES.length - 1) * PHASE_UNITS_PER_PRINCIPLE +
-      REVEAL_PHASE_UNITS) /
-    TOTAL_PHASE_UNITS;
   const darkHeaderStart =
     (INTRO_PHASE_UNITS + REVEAL_PHASE_UNITS * 0.9) / TOTAL_PHASE_UNITS;
 
   useMotionValueEvent(scrollYProgress, "change", (progress) => {
     if (reduceMotion || !sectionRef.current) return;
 
-    const isStackVisible = progress >= finalStackStart;
-    setStackVisible(isStackVisible);
+    const completed = PRINCIPLES.filter((_, index) => {
+      const revealEnd =
+        (INTRO_PHASE_UNITS +
+          index * PHASE_UNITS_PER_PRINCIPLE +
+          REVEAL_PHASE_UNITS) /
+        TOTAL_PHASE_UNITS;
+      return progress >= revealEnd;
+    }).length;
+    setCompletedCount(completed);
     const imageHasReachedHeading = progress >= darkHeaderStart;
     sectionRef.current.dataset.headerTheme = imageHasReachedHeading
       ? "dark"
@@ -400,7 +392,7 @@ export function WhatWeStandOnSection() {
       <div className="sticky top-0 h-screen min-h-[808px] w-full overflow-hidden bg-brand-warm-snow md:min-h-[860px]">
         <motion.div
           data-over-image={headingOnImage ? "true" : "false"}
-          className={`what-we-stand-on-heading absolute top-[76px] left-1/2 z-[3] w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors transition-opacity duration-300 md:top-[84px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"} ${stackVisible ? "opacity-0" : "opacity-100"}`}
+          className={`what-we-stand-on-heading absolute top-[76px] left-1/2 z-[3] w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[84px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
           style={{ y: headingY }}
         >
           <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section md:leading-[1.2]">
@@ -418,10 +410,15 @@ export function WhatWeStandOnSection() {
             principle={principle}
             index={index}
             progress={scrollYProgress}
+            completedCount={completedCount}
           />
         ))}
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 z-10 bg-brand-obsidian transition-opacity duration-300 ${completedCount === PRINCIPLES.length ? "opacity-100" : "opacity-0"} motion-reduce:transition-none`}
+        />
         <FinalImageEdge progress={scrollYProgress} />
-        <FinalPrincipleStack visible={stackVisible} />
+        <ProgressivePrincipleBars completedCount={completedCount} />
       </div>
     </section>
   );
