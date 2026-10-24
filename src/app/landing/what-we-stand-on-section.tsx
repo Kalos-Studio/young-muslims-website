@@ -91,6 +91,44 @@ type Principle = (typeof PRINCIPLES)[number];
 const TOTAL_PHASE_UNITS =
   INTRO_PHASE_UNITS + PRINCIPLES.length * PHASE_UNITS_PER_PRINCIPLE;
 
+function ProgressivePrincipleBars({
+  completedCount,
+}: {
+  completedCount: number;
+}) {
+  return (
+    <div
+      role="list"
+      aria-label="Values completed"
+      aria-hidden={completedCount === 0}
+      className="absolute inset-x-0 top-56 z-20 grid w-full md:top-48"
+    >
+      {PRINCIPLES.slice(0, completedCount).map((principle) => (
+        <div
+          key={principle.title}
+          role="listitem"
+          className="relative h-24 overflow-hidden bg-brand-obsidian shadow-lg md:h-32"
+        >
+          <Image
+            src={principle.image}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-gradient-to-r from-brand-obsidian/80 to-transparent"
+          />
+          <h3 className="relative z-10 flex h-full items-center px-8 font-display text-mobile-display text-brand-pure-white md:text-display">
+            {principle.title}
+          </h3>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ShapeOutline({
   y,
   path,
@@ -197,10 +235,12 @@ function RevealingPrinciple({
   principle,
   index,
   progress,
+  completedCount,
 }: {
   principle: Principle;
   index: number;
   progress: MotionValue<number>;
+  completedCount: number;
 }) {
   const revealStart =
     (INTRO_PHASE_UNITS + index * PHASE_UNITS_PER_PRINCIPLE) / TOTAL_PHASE_UNITS;
@@ -244,6 +284,8 @@ function RevealingPrinciple({
       </svg>
       <motion.div
         data-principle-panel={index}
+        aria-hidden={completedCount > index}
+        inert={completedCount > index}
         className="absolute inset-0 overflow-hidden bg-brand-obsidian"
         style={{ y: panelY, clipPath: `url(#${clipId})`, zIndex }}
       >
@@ -294,6 +336,7 @@ function FinalImageEdge({ progress }: { progress: MotionValue<number> }) {
 export function WhatWeStandOnSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [headingOnImage, setHeadingOnImage] = useState(false);
+  const [completedCount, setCompletedCount] = useState(0);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -311,6 +354,16 @@ export function WhatWeStandOnSection() {
   useMotionValueEvent(scrollYProgress, "change", (progress) => {
     if (reduceMotion || !sectionRef.current) return;
 
+    const completed = PRINCIPLES.filter((_, index) => {
+      const barRevealPoint =
+        index < PRINCIPLES.length - 1
+          ? INTRO_PHASE_UNITS + (index + 1) * PHASE_UNITS_PER_PRINCIPLE
+          : INTRO_PHASE_UNITS +
+            index * PHASE_UNITS_PER_PRINCIPLE +
+            REVEAL_PHASE_UNITS;
+      return progress >= barRevealPoint / TOTAL_PHASE_UNITS;
+    }).length;
+    setCompletedCount(completed);
     const imageHasReachedHeading = progress >= darkHeaderStart;
     sectionRef.current.dataset.headerTheme = imageHasReachedHeading
       ? "dark"
@@ -352,8 +405,7 @@ export function WhatWeStandOnSection() {
     >
       <div className="sticky top-0 h-screen min-h-[808px] w-full overflow-hidden bg-brand-warm-snow md:min-h-[860px]">
         <motion.div
-          data-over-image={headingOnImage ? "true" : "false"}
-          className={`what-we-stand-on-heading absolute top-[76px] left-1/2 z-[3] w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[84px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
+          className={`absolute top-[76px] left-1/2 z-[3] w-[296px] max-w-[calc(100%-64px)] -translate-x-1/2 text-center transition-colors duration-300 md:top-[84px] md:w-[538px] md:max-w-[calc(100%-48px)] ${headingOnImage ? "text-brand-warm-snow" : "text-brand-obsidian"}`}
           style={{ y: headingY }}
         >
           <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section md:leading-[1.2]">
@@ -371,9 +423,15 @@ export function WhatWeStandOnSection() {
             principle={principle}
             index={index}
             progress={scrollYProgress}
+            completedCount={completedCount}
           />
         ))}
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 z-10 bg-brand-obsidian transition-opacity duration-300 ${completedCount === PRINCIPLES.length ? "opacity-100" : "opacity-0"} motion-reduce:transition-none`}
+        />
         <FinalImageEdge progress={scrollYProgress} />
+        <ProgressivePrincipleBars completedCount={completedCount} />
       </div>
     </section>
   );
