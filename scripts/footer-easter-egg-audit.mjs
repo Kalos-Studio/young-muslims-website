@@ -123,6 +123,7 @@ try {
     "/stories/rahmah-k",
     "/neighbornets",
     "/about",
+    "/contact",
     "/blog",
     "/store",
     "/support",

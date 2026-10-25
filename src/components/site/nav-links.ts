@@ -64,11 +64,9 @@ const DESTINATIONS = {
     currentRoute: "prefix",
   },
   contact: {
-    href: "/about",
+    href: "/contact",
     label: "Contact",
-    // Contact currently points at the About page rather than its own route.
-    // It must not compete with Who We Are for aria-current.
-    currentRoute: "never",
+    currentRoute: "prefix",
     labels: { "footer-contact": "Contact us" },
   },
 } as const satisfies Record<DestinationId, Destination>;

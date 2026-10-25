@@ -10,6 +10,7 @@ export const isSiteIndexable =
 export const indexablePaths = [
   "/",
   "/about",
+  "/contact",
   "/stories",
   "/support",
   "/neighbornets",
