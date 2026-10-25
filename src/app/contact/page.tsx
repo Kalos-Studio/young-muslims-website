@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { PhotoPageHero } from "@/components/site/photo-page-hero";
-import contactHero from "../../../design-assets/photos/10-24 photo 3732c992-31fc-4c67-8d1c-abe434b1a996.jpg";
+import { ContactHero } from "./contact-hero";
 import Link from "next/link";
 import { EditorialLink, EditorialPhoto } from "@/components/site/editorial";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
@@ -15,24 +14,11 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="bg-background text-foreground">
-      <PhotoPageHero
-        image={contactHero}
-        imageAlt="Sisters embracing beside a lake"
-        nextSurface="muted"
-        title={
-          <>
-            It starts
-            <br />
-            with a salaam.
-          </>
-        }
-        description="Looking for your people? Have an idea for your community? Let’s help you take the next step."
-        href="#connect"
-        cta="Let’s connect"
-      />
+    <main data-photo-hero-page className="bg-background text-foreground">
+      <ContactHero />
 
       <section
+        data-header-theme="light"
         id="connect"
         aria-labelledby="connect-heading"
         className="scroll-mt-40 bg-muted py-20"

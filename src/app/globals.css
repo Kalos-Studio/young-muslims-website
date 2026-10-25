@@ -265,7 +265,8 @@
       [data-stories-page],
       [data-support-page],
       [data-store-page],
-      [data-blog-page]
+      [data-blog-page],
+      [data-photo-hero-page]
     )
   ) {
     overflow-x: clip;
@@ -277,7 +278,8 @@
         [data-stories-page],
         [data-support-page],
         [data-store-page],
-        [data-blog-page]
+        [data-blog-page],
+        [data-photo-hero-page]
       )
     )
     [data-site-header] {
@@ -290,7 +292,8 @@
         [data-stories-page],
         [data-support-page],
         [data-store-page],
-        [data-blog-page]
+        [data-blog-page],
+        [data-photo-hero-page]
       )
     )
     [data-site-header]
@@ -303,7 +306,8 @@
         [data-stories-page],
         [data-support-page],
         [data-store-page],
-        [data-blog-page]
+        [data-blog-page],
+        [data-photo-hero-page]
       )
     )
     [data-site-logo-link],
@@ -314,7 +318,8 @@
         [data-stories-page],
         [data-support-page],
         [data-store-page],
-        [data-blog-page]
+        [data-blog-page],
+        [data-photo-hero-page]
       )
     )
     [data-site-header]
@@ -329,7 +334,8 @@
         [data-stories-page],
         [data-support-page],
         [data-store-page],
-        [data-blog-page]
+        [data-blog-page],
+        [data-photo-hero-page]
       )
     )
     [data-site-header]
@@ -345,7 +351,8 @@
         [data-stories-page],
         [data-support-page],
         [data-store-page],
-        [data-blog-page]
+        [data-blog-page],
+        [data-photo-hero-page]
       )
     )
     [data-site-header][data-header-theme="light"]
@@ -358,7 +365,8 @@
         [data-stories-page],
         [data-support-page],
         [data-store-page],
-        [data-blog-page]
+        [data-blog-page],
+        [data-photo-hero-page]
       )
     )
     [data-site-header][data-header-theme="light"]
@@ -370,7 +378,8 @@
         [data-stories-page],
         [data-support-page],
         [data-store-page],
-        [data-blog-page]
+        [data-blog-page],
+        [data-photo-hero-page]
       )
     )
     [data-site-header][data-header-theme="light"]
@@ -385,7 +394,8 @@
         [data-stories-page],
         [data-support-page],
         [data-store-page],
-        [data-blog-page]
+        [data-blog-page],
+        [data-photo-hero-page]
       )
     )
     [data-site-header][data-header-theme="light"]
@@ -411,7 +421,8 @@
         [data-stories-page],
         [data-support-page],
         [data-store-page],
-        [data-blog-page]
+        [data-blog-page],
+        [data-photo-hero-page]
       )
     )
     [data-site-header-inner] {
