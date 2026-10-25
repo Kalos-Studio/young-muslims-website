@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import Image, { type StaticImageData } from "next/image";
-import { EditorialLink } from "./editorial";
 
 /** Shared image-led opening, using the existing Support hero type and spacing. */
 export function PhotoPageHero({
@@ -8,16 +7,12 @@ export function PhotoPageHero({
   imageAlt,
   title,
   description,
-  href,
-  cta,
   nextSurface,
 }: {
   image: StaticImageData;
   imageAlt: string;
   title: ReactNode;
   description: string;
-  href: string;
-  cta: string;
   nextSurface: "primary" | "muted";
 }) {
   return (
@@ -37,16 +32,13 @@ export function PhotoPageHero({
         aria-hidden="true"
         className="absolute inset-0 -z-10 bg-primary/60"
       />
-      <div className="mx-auto flex min-h-screen max-w-screen-2xl flex-col justify-center px-8 py-40 md:px-20 lg:py-60">
-        <h1 className="max-w-5xl font-display text-mobile-display lg:text-display">
+      <div className="mx-auto flex min-h-screen max-w-screen-2xl flex-col items-center justify-center px-8 py-40 text-center md:px-20 lg:py-60">
+        <h1 className="max-w-5xl font-display text-mobile-display uppercase lg:text-display">
           {title}
         </h1>
         <p className="mt-6 max-w-2xl text-nav font-semibold lg:text-lead">
           {description}
         </p>
-        <div className="mt-8">
-          <EditorialLink href={href}>{cta}</EditorialLink>
-        </div>
       </div>
       <svg
         aria-hidden="true"

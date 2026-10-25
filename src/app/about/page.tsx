@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="bg-background text-foreground">
+    <main data-photo-hero-page className="bg-background text-foreground">
       <PhotoPageHero
         image={aboutHero}
         imageAlt="Young Muslim sisters gathered together at a qiyam night"
@@ -29,8 +29,6 @@ export default function AboutPage() {
           </>
         }
         description="YM begins with a local circle of friends and grows into a national network of young Muslims learning their Deen, serving their communities, and taking part in the broader Islamic movement."
-        href="/neighbornets"
-        cta="Find your people"
       />
 
       <VisionMissionHistory />
@@ -113,37 +111,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-muted py-20" aria-labelledby="leadership-heading">
-        <div className="mx-auto grid max-w-7xl gap-8 px-8 lg:grid-cols-2 lg:px-20">
-          <div>
-            <p className="text-nav font-bold text-secondary">Our leadership</p>
-            <h2
-              id="leadership-heading"
-              className="mt-6 text-mobile-section font-extrabold md:text-section"
-            >
-              Led by youth.
-              <br />
-              Built on care.
-            </h2>
-          </div>
-          <div>
-            <p className="text-lead font-medium">
-              Leadership connects the weekly gathering to the wider work, with
-              responsibility rooted in the communities it serves.
-            </p>
-            <p className="mt-6 text-body">
-              Our brothers and sisters wings operate independently, with local
-              gatherings and leadership that support their communities.
-              Together, they share a commitment to companionship, mentorship,
-              education, and service.
-            </p>
-            <div className="mt-8">
-              <EditorialLink href="/contact">Get in touch</EditorialLink>
-            </div>
-          </div>
-        </div>
-      </section>
       <div
+        data-header-theme="light"
         id="faq"
         className="mx-auto max-w-7xl scroll-mt-40 px-8 py-20 lg:px-20"
       >
