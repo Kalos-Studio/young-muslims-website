@@ -89,7 +89,7 @@ export function FaqSection() {
     <section aria-labelledby="about-faq-heading">
       <h2
         id="about-faq-heading"
-        className="text-section font-extrabold text-brand-royal"
+        className="text-mobile-section font-extrabold text-brand-royal md:text-section"
       >
         Frequently asked questions
       </h2>

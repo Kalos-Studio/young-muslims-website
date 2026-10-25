@@ -11,6 +11,7 @@ const CHROME =
 const routes = [
   "/",
   "/about",
+  "/contact",
   "/stories",
   "/support",
   "/store",
