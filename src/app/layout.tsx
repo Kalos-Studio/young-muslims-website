@@ -8,6 +8,7 @@ import { FooterPageStage } from "@/components/site/footer-page-stage";
 import { EntryAnimation } from "@/components/site/entry-animation";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { SmoothScrollProvider } from "@/components/site/smooth-scroll-provider";
 import { StoryPageTransition } from "@/components/site/story-page-transition";
 // WIREFRAME: the import below is prototype scaffolding. See WIREFRAME.md.
 import { AnnotationToolbar } from "@/components/wireframe/annotation-toolbar";
@@ -48,16 +49,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${figtree.variable} ${boldonse.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <EntryAnimation>
-          <FooterPageStage header={<SiteHeader />}>
-            <div data-page-shell className="flex-1">
-              {children}
-            </div>
-            <FooterSlot>
-              <SiteFooter />
-            </FooterSlot>
-          </FooterPageStage>
-        </EntryAnimation>
+        <SmoothScrollProvider>
+          <EntryAnimation>
+            <FooterPageStage header={<SiteHeader />}>
+              <div data-page-shell className="flex-1">
+                {children}
+              </div>
+              <FooterSlot>
+                <SiteFooter />
+              </FooterSlot>
+            </FooterPageStage>
+          </EntryAnimation>
+        </SmoothScrollProvider>
         <StoryPageTransition />
         {/* WIREFRAME: this comes out with the wireframe; the header and footer
             above it stay. */}

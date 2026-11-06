@@ -79,6 +79,23 @@ Animation must respect the user's reduced-motion preference. Prefer opacity or
 an immediate state change when `useReducedMotion()` is true. Avoid animating a
 large page subtree when a small animated component boundary will do.
 
+### Lenis (smooth scrolling)
+
+[Lenis](https://lenis.darkroom.engineering) provides app-wide smooth wheel
+scrolling, pinned at `1.3.26`. It is mounted once in the root layout by
+`src/components/site/smooth-scroll-provider.tsx`, the only file that imports
+it. Lenis drives the real window scroll, so `scroll` listeners, `scrollY` reads
+and Motion `useScroll` stay in sync without subscribing to Lenis. Do not move
+them onto a Lenis event source. It is not created when
+`prefers-reduced-motion: reduce` is set, and it is skipped while `<html>` has
+`overflow: hidden`. Do not import `lenis/dist/lenis.css`; its
+`height: auto` rule breaks the full-height layout.
+
+Tracked follow-up: when the NeighborNets map (`components/ui/map.tsx`) and the
+story dialog are rebuilt, add `data-lenis-prevent` to the map and to modal
+scroll containers. Until then, wheel-zooming the map also scrolls the page.
+Remove Lenis by deleting the provider, its layout wrapper and this section.
+
 ### Embla Carousel
 
 [Embla Carousel](https://www.embla-carousel.com/docs/v8/get-started/react) is
