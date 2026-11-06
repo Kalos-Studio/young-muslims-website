@@ -567,7 +567,6 @@ export function EverywhereSection() {
   return (
     <section
       ref={sectionRef}
-      data-header-theme="light"
       className="relative h-[1495px] w-full overflow-hidden bg-brand-warm-snow md:h-[1963px]"
       onPointerMove={updatePointer}
       onPointerLeave={() => {

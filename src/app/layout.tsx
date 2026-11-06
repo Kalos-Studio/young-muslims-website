@@ -8,6 +8,7 @@ import { FooterPageStage } from "@/components/site/footer-page-stage";
 import { EntryAnimation } from "@/components/site/entry-animation";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { SiteNavigation } from "@/components/site/site-navigation";
 import { SmoothScrollProvider } from "@/components/site/smooth-scroll-provider";
 import { StoryPageTransition } from "@/components/site/story-page-transition";
 // WIREFRAME: the import below is prototype scaffolding. See WIREFRAME.md.
@@ -51,7 +52,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col">
         <SmoothScrollProvider>
           <EntryAnimation>
-            <FooterPageStage header={<SiteHeader />}>
+            <FooterPageStage
+              header={
+                <SiteHeader>
+                  <SiteNavigation />
+                </SiteHeader>
+              }
+            >
               <div data-page-shell className="flex-1">
                 {children}
               </div>

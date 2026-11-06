@@ -167,7 +167,6 @@ export function PeopleStoriesSection() {
   return (
     <section
       ref={sectionRef}
-      data-header-theme="light"
       aria-labelledby="people-stories-heading"
       className="relative h-[900px] w-full overflow-hidden bg-brand-warm-snow text-center md:h-[886px] xl:h-[1327px]"
     >

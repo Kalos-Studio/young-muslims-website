@@ -222,10 +222,7 @@ function PrincipleContent({ principle }: { principle: Principle }) {
 
 function PrincipleSection({ principle }: { principle: Principle }) {
   return (
-    <section
-      data-header-theme="dark"
-      className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian md:h-screen md:min-h-[860px]"
-    >
+    <section className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian md:h-screen md:min-h-[860px]">
       <PrincipleContent principle={principle} />
     </section>
   );
@@ -374,10 +371,7 @@ export function WhatWeStandOnSection() {
   if (reduceMotion) {
     return (
       <section ref={sectionRef} className="w-full bg-brand-warm-snow">
-        <div
-          data-header-theme="light"
-          className="flex min-h-[808px] items-start justify-center px-8 pt-[76px] text-center text-brand-obsidian md:min-h-screen md:px-6 md:pt-[84px]"
-        >
+        <div className="flex min-h-[808px] items-start justify-center px-8 pt-[76px] text-center text-brand-obsidian md:min-h-screen md:px-6 md:pt-[84px]">
           <div className="w-[296px] max-w-full md:w-[538px]">
             <h2 className="text-[30px] leading-normal font-extrabold tracking-[-0.02em] md:text-landing-section md:leading-[1.2]">
               What we stand on.
@@ -399,7 +393,6 @@ export function WhatWeStandOnSection() {
   return (
     <section
       ref={sectionRef}
-      data-header-theme="light"
       className="relative w-full bg-brand-warm-snow"
       style={{ height: `${(SCROLL_RUNWAY_VIEWPORTS + 1) * 100}vh` }}
     >

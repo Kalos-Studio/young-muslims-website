@@ -311,7 +311,6 @@ export function ChapterFinderSection() {
   return (
     <section
       ref={sectionRef}
-      data-header-theme="dark"
       aria-labelledby="chapter-finder-heading"
       className="relative h-[3790px] w-full overflow-clip bg-brand-warm-snow md:h-[2060px] xl:h-[2340px]"
     >

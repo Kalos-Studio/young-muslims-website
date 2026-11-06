@@ -15,10 +15,7 @@ export function LocalToNational() {
       className="scroll-mt-40"
       aria-label="From your neighborhood to a national movement"
     >
-      <div
-        data-header-theme="light"
-        className="mx-auto max-w-7xl px-8 pt-20 lg:px-20"
-      >
+      <div className="mx-auto max-w-7xl px-8 pt-20 lg:px-20">
         <div className="mx-auto max-w-lg text-center">
           <p className="text-nav font-bold text-accent">01 / Local</p>
           <h2 className="mt-4 text-mobile-section font-extrabold md:text-section">
@@ -83,10 +80,7 @@ export function LocalToNational() {
         <ScrollConnector arrow={false} />
       </div>
 
-      <div
-        className="bg-secondary text-secondary-foreground"
-        data-header-theme="dark"
-      >
+      <div className="bg-secondary text-secondary-foreground">
         <ScrollConnector inverse />
         <div className="mx-auto max-w-7xl px-8 lg:px-20">
           <div className="text-center">
@@ -122,10 +116,7 @@ export function LocalToNational() {
         </div>
       </div>
       <LeadershipSection />
-      <div
-        data-header-theme="light"
-        className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-8 py-8 md:flex-row lg:px-20"
-      >
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-8 py-8 md:flex-row lg:px-20">
         <p className="text-lead font-medium">
           A bigger movement starts close to home.
         </p>

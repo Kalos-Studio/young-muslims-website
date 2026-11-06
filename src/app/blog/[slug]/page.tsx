@@ -38,7 +38,7 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
     <main data-blog-page className="bg-background text-foreground">
       <article>
         <div
-          data-header-theme="dark"
+          data-header-hero
           className="relative h-96 overflow-hidden bg-foreground md:h-128"
         >
           <Image
@@ -54,7 +54,7 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
             className="absolute inset-0 bg-gradient-to-b from-foreground/60 to-transparent"
           />
         </div>
-        <div data-header-theme="light" className="px-6 py-12 md:px-20 md:py-20">
+        <div className="px-6 py-12 md:px-20 md:py-20">
           <div className="mx-auto max-w-3xl">
             <header className="border-b border-border pb-8">
               <Link
@@ -107,7 +107,6 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
       </article>
       <section
         aria-labelledby="more-blog-posts"
-        data-header-theme="light"
         className="px-6 pb-20 md:px-20"
       >
         <div className="mx-auto max-w-7xl border-t border-border pt-12">

@@ -6,7 +6,6 @@ export function VisionMissionHistory() {
     <section
       aria-labelledby="purpose-heading"
       className="bg-primary py-20 text-primary-foreground"
-      data-header-theme="dark"
     >
       <div className="mx-auto grid max-w-7xl gap-20 px-8 lg:grid-cols-2 lg:px-20">
         <div>

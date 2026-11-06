@@ -48,11 +48,7 @@ function PortraitSelector() {
   const navigateToStory = useStoryPageNavigation();
 
   return (
-    <section
-      data-header-theme="light"
-      aria-labelledby="stories-heading"
-      className={styles.gallery}
-    >
+    <section aria-labelledby="stories-heading" className={styles.gallery}>
       <div className={styles.galleryHeading}>
         <h2
           id="stories-heading"

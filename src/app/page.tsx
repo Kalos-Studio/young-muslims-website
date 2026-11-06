@@ -151,10 +151,7 @@ export default function Home() {
       </ContentFrame>
 
       <ContentFrame bleed>
-        <section
-          data-header-theme="light"
-          className="relative isolate h-[1298px] w-full overflow-hidden bg-brand-warm-snow xl:h-[1830px]"
-        >
+        <section className="relative isolate h-[1298px] w-full overflow-hidden bg-brand-warm-snow xl:h-[1830px]">
           <HeroFollowupCurve />
           <div className="pointer-events-none absolute top-[1671.83px] left-[calc(50%-115.01px)] z-0 flex h-[1879.96px] w-[2955.92px] -translate-x-1/2 -translate-y-1/2 items-center justify-center xl:top-[1281px] xl:left-[-873px] xl:translate-x-0 xl:translate-y-0">
             <div className="rotate-[-9.8deg]">
@@ -195,10 +192,7 @@ export default function Home() {
       </ContentFrame>
 
       <ContentFrame bleed>
-        <section
-          data-header-theme="dark"
-          className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian xl:h-[1087px]"
-        >
+        <section className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian xl:h-[1087px]">
           <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 xl:w-[1440px] 2xl:left-0 2xl:w-full 2xl:translate-x-0">
             <h2 className="absolute top-[21px] left-1/2 w-[274px] -translate-x-1/2 text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:text-landing-section md:leading-[1.2] xl:top-[122px] xl:w-[784px]">
               But it&apos;s easier to just show you.
@@ -232,10 +226,7 @@ export default function Home() {
       </ContentFrame>
 
       <ContentFrame bleed>
-        <section
-          data-header-theme="light"
-          className="relative h-[3026px] w-full overflow-clip bg-brand-warm-snow xl:h-[1835px]"
-        >
+        <section className="relative h-[3026px] w-full overflow-clip bg-brand-warm-snow xl:h-[1835px]">
           <div
             className="pointer-events-none absolute top-0 left-1/2 z-0 h-full -translate-x-1/2 overflow-hidden"
             style={{ width: "max(100vw, 1440px)" }}

@@ -18,7 +18,7 @@ export function PhotoPageHero({
   return (
     <section
       className="relative isolate overflow-hidden bg-primary text-primary-foreground"
-      data-header-theme="dark"
+      data-header-hero
     >
       <Image
         src={image}

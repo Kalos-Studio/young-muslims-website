@@ -9,7 +9,7 @@ import styles from "./stories.module.css";
 export function StoriesHero() {
   return (
     <section
-      data-header-theme="dark"
+      data-header-hero
       className={styles.hero}
       aria-labelledby="stories-title"
     >
@@ -45,7 +45,7 @@ export function StoriesCta({
         .props
     : undefined;
   return (
-    <section data-header-theme="dark" className={styles.cta}>
+    <section className={styles.cta}>
       <div className={styles.ctaBackground} />
       <div className={styles.ctaPhoto}>
         <picture>

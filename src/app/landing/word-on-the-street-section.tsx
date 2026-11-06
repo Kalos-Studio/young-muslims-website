@@ -165,10 +165,7 @@ export function WordOnTheStreetSection() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section
-      data-header-theme="light"
-      className="relative h-[2084px] w-full overflow-hidden bg-brand-warm-snow xl:h-[1024px]"
-    >
+    <section className="relative h-[2084px] w-full overflow-hidden bg-brand-warm-snow xl:h-[1024px]">
       <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 xl:w-[1440px] 2xl:left-0 2xl:w-full 2xl:translate-x-0">
         <div className="absolute top-[82px] left-8 flex w-[296px] flex-col items-stretch gap-8 xl:top-[129px] xl:left-[90px] xl:w-[1270px] xl:flex-row xl:items-end 2xl:right-20 2xl:left-20 2xl:w-auto">
           <div className="flex-1 text-brand-obsidian">

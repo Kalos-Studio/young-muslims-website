@@ -271,147 +271,10 @@
   ) {
     overflow-x: clip;
   }
-  body:has(
-      :is(
-        [data-landing-page],
-        [data-neighbornets-page],
-        [data-stories-page],
-        [data-support-page],
-        [data-store-page],
-        [data-blog-page],
-        [data-photo-hero-page]
-      )
-    )
-    [data-site-header] {
-    @apply fixed! w-full! border-transparent! bg-transparent! text-brand-pure-white backdrop-blur-none!;
-  }
-  body:has(
-      :is(
-        [data-landing-page],
-        [data-neighbornets-page],
-        [data-stories-page],
-        [data-support-page],
-        [data-store-page],
-        [data-blog-page],
-        [data-photo-hero-page]
-      )
-    )
-    [data-site-header]
-    nav
-    a,
-  body:has(
-      :is(
-        [data-landing-page],
-        [data-neighbornets-page],
-        [data-stories-page],
-        [data-support-page],
-        [data-store-page],
-        [data-blog-page],
-        [data-photo-hero-page]
-      )
-    )
-    [data-site-logo-link],
-  body:has(
-      :is(
-        [data-landing-page],
-        [data-neighbornets-page],
-        [data-stories-page],
-        [data-support-page],
-        [data-store-page],
-        [data-blog-page],
-        [data-photo-hero-page]
-      )
-    )
-    [data-site-header]
-    [data-menu-trigger] {
-    color: var(--color-brand-pure-white) !important;
-    transition: color 300ms ease;
-  }
-  body:has(
-      :is(
-        [data-landing-page],
-        [data-neighbornets-page],
-        [data-stories-page],
-        [data-support-page],
-        [data-store-page],
-        [data-blog-page],
-        [data-photo-hero-page]
-      )
-    )
-    [data-site-header]
-    nav
-    a[data-site-cta="true"] {
-    background: var(--color-brand-warm-snow) !important;
-    color: var(--color-brand-obsidian) !important;
-  }
-  body:has(
-      :is(
-        [data-landing-page],
-        [data-neighbornets-page],
-        [data-stories-page],
-        [data-support-page],
-        [data-store-page],
-        [data-blog-page],
-        [data-photo-hero-page]
-      )
-    )
-    [data-site-header][data-header-theme="light"]
-    nav
-    a,
-  body:has(
-      :is(
-        [data-landing-page],
-        [data-neighbornets-page],
-        [data-stories-page],
-        [data-support-page],
-        [data-store-page],
-        [data-blog-page],
-        [data-photo-hero-page]
-      )
-    )
-    [data-site-header][data-header-theme="light"]
-    [data-site-logo-link],
-  body:has(
-      :is(
-        [data-landing-page],
-        [data-neighbornets-page],
-        [data-stories-page],
-        [data-support-page],
-        [data-store-page],
-        [data-blog-page],
-        [data-photo-hero-page]
-      )
-    )
-    [data-site-header][data-header-theme="light"]
-    [data-menu-trigger] {
-    color: var(--color-brand-obsidian) !important;
-  }
-  /* Swap the chapter CTA when the fixed header passes over light sections. */
-  body:has(
-      :is(
-        [data-landing-page],
-        [data-neighbornets-page],
-        [data-stories-page],
-        [data-support-page],
-        [data-store-page],
-        [data-blog-page],
-        [data-photo-hero-page]
-      )
-    )
-    [data-site-header][data-header-theme="light"]
-    nav
-    a[data-site-cta="true"] {
-    background: var(--color-brand-royal) !important;
-    color: var(--color-brand-pure-white) !important;
-  }
   body:has([data-neighbornets-page])
     [data-site-cta="true"][aria-current="page"] {
     pointer-events: none;
     opacity: 0;
-  }
-  body:has([data-neighbornets-page])
-    [data-site-header][data-header-theme="light"] {
-    background: var(--color-brand-warm-snow) !important;
   }
 }
 
@@ -751,6 +614,43 @@
 
 .ym-cta-arrow__icon--next {
   transform: translateY(120%);
+}
+
+/* Diagonal "launch" for an up-right (↗) arrow: the arrow leaves the way it
+ * points and its copy enters from the bottom left. Timing, easing and
+ * reduced-motion handling come from the shared rules for `.ym-cta-arrow__icon`.
+ */
+.ym-cta-arrow--diagonal .ym-cta-arrow__icon--next {
+  transform: translate(-120%, 120%);
+}
+
+/* Current-page dot for header links: a small Pure White dot centered in the
+ * link's bottom padding. It is keyed to `aria-current`, so the visual and the
+ * announced state always agree, and it is static with no layout cost.
+ */
+.ym-nav-current-dot {
+  @apply relative;
+}
+
+.ym-nav-current-dot[aria-current="page"]::after {
+  content: "";
+  @apply pointer-events-none absolute bottom-0.5 left-1/2 size-1 -translate-x-1/2 rounded-pill bg-brand-pure-white;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ym-cta-trigger:hover .ym-cta-arrow--diagonal .ym-cta-arrow__icon--current,
+  .ym-cta-trigger:focus-visible
+    .ym-cta-arrow--diagonal
+    .ym-cta-arrow__icon--current {
+    transform: translate(120%, -120%);
+  }
+
+  .ym-cta-trigger:hover .ym-cta-arrow--diagonal .ym-cta-arrow__icon--next,
+  .ym-cta-trigger:focus-visible
+    .ym-cta-arrow--diagonal
+    .ym-cta-arrow__icon--next {
+    transform: translate(0, 0);
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

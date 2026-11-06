@@ -9,10 +9,7 @@ import landingPageFooter from "../../../landing page footer.png";
 
 export function LandingCtaSection() {
   return (
-    <section
-      data-header-theme="dark"
-      className="relative h-[894px] w-full overflow-hidden bg-brand-obsidian xl:h-[723px]"
-    >
+    <section className="relative h-[894px] w-full overflow-hidden bg-brand-obsidian xl:h-[723px]">
       <Image
         src={landingPageFooter}
         alt="Young Muslims volunteers standing together"

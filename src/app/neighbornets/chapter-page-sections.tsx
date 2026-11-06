@@ -99,7 +99,6 @@ const involvementCards = [
 export function NeighborNetExplainer() {
   return (
     <section
-      data-header-theme="light"
       aria-labelledby="neighbornet-explainer-heading"
       className="overflow-hidden bg-brand-warm-snow pt-20 pb-28 md:pt-[103px] md:pb-[124px]"
     >
@@ -155,7 +154,6 @@ export function ChapterImageGrid() {
 export function OtherWaysSection() {
   return (
     <section
-      data-header-theme="light"
       aria-labelledby="other-ways-heading"
       className="bg-brand-warm-snow px-5 pt-24 pb-32 md:min-h-[1087px] md:px-8 md:pt-[145px] md:pb-32"
     >

@@ -3,7 +3,7 @@ import heroTransitionPale from "../../../design-assets/figma/landing-2026/hero-t
 export function HeroVideo() {
   return (
     <section
-      data-header-theme="dark"
+      data-header-hero
       aria-label="Young Muslims community introduction"
       className="relative z-[1] flex h-[808px] w-full items-center justify-center bg-[#f7f3f0] px-8 text-center text-brand-warm-snow md:h-svh md:px-6"
     >

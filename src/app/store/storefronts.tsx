@@ -16,7 +16,7 @@ export function Storefronts() {
   const [selected, setSelected] = useState<string | null>(null);
   return (
     <section
-      data-header-theme="dark"
+      data-header-hero
       aria-label="Our stores"
       className="grid grid-cols-1 bg-primary text-primary-foreground md:grid-cols-2"
     >

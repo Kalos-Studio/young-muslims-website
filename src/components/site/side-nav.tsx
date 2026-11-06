@@ -16,6 +16,7 @@ import instagramIcon from "../../../design-assets/figma/landing-2026/new-section
 import xIcon from "../../../design-assets/figma/landing-2026/new-sections/footer-x.svg";
 import youtubeIcon from "../../../design-assets/figma/landing-2026/new-sections/footer-youtube.svg";
 import { Logo } from "./logo";
+import { MenuToggleIcon } from "./menu-toggle-icon";
 import { getNavigationItems, isNavigationItemCurrent } from "./nav-links";
 
 const menuPrimaryLinks = getNavigationItems("drawer-primary");
@@ -107,11 +108,10 @@ export function SideNav() {
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Trigger
         ref={triggerRef}
-        data-menu-trigger
-        aria-label="Open menu"
-        className="rounded-xs p-2 text-foreground outline-none hover:opacity-60 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        aria-label={open ? "Close menu" : "Open menu"}
+        className="block cursor-pointer text-brand-pure-white outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pure-white"
       >
-        <MaterialIcon name="menu" size={24} aria-hidden />
+        <MenuToggleIcon open={open} />
       </Dialog.Trigger>
 
       <Dialog.Portal>
