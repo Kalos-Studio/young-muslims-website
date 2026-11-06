@@ -2,19 +2,17 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { blogPosts, getBlogPost } from "@/lib/blog";
+import { getBlogContent } from "@/lib/sanity-blog";
+import { ArticleBody } from "../article-body";
 
 type BlogArticleProps = { params: Promise<{ slug: string }> };
-
-export function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.id }));
-}
 
 export async function generateMetadata({
   params,
 }: BlogArticleProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const { posts } = await getBlogContent();
+  const post = posts.find((item) => item.id === slug);
   if (!post) notFound();
   return {
     title: post.title,
@@ -25,14 +23,13 @@ export async function generateMetadata({
 
 export default async function BlogArticlePage({ params }: BlogArticleProps) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const { posts } = await getBlogContent();
+  const post = posts.find((item) => item.id === slug);
   if (!post) notFound();
   const content = post.content ?? [
     { type: "paragraph" as const, text: post.excerpt },
   ];
-  const otherPosts = blogPosts
-    .filter((item) => item.id !== post.id)
-    .slice(0, 3);
+  const otherPosts = posts.filter((item) => item.id !== post.id).slice(0, 3);
 
   return (
     <main data-blog-page className="bg-background text-foreground">
@@ -43,7 +40,7 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
         >
           <Image
             src={post.heroImage ?? post.image}
-            alt=""
+            alt={post.imageAlt ?? ""}
             fill
             preload
             sizes="100vw"
@@ -81,26 +78,30 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
               )}
             </header>
             <div className="space-y-6 pt-8 text-body leading-relaxed">
-              {content.map((block, index) => {
-                if (block.type === "heading")
-                  return (
-                    <h2
-                      key={index}
-                      className="pt-6 text-card-title font-semibold"
-                    >
-                      {block.text}
-                    </h2>
-                  );
-                if (block.type === "list")
-                  return (
-                    <ul key={index} className="list-disc space-y-3 pl-6">
-                      {block.items.map((item, itemIndex) => (
-                        <li key={itemIndex}>{item}</li>
-                      ))}
-                    </ul>
-                  );
-                return <p key={index}>{block.text}</p>;
-              })}
+              {post.body ? (
+                <ArticleBody body={post.body} />
+              ) : (
+                content.map((block, index) => {
+                  if (block.type === "heading")
+                    return (
+                      <h2
+                        key={index}
+                        className="pt-6 text-card-title font-semibold"
+                      >
+                        {block.text}
+                      </h2>
+                    );
+                  if (block.type === "list")
+                    return (
+                      <ul key={index} className="list-disc space-y-3 pl-6">
+                        {block.items.map((item, itemIndex) => (
+                          <li key={itemIndex}>{item}</li>
+                        ))}
+                      </ul>
+                    );
+                  return <p key={index}>{block.text}</p>;
+                })
+              )}
             </div>
           </div>
         </div>
