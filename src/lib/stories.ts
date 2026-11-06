@@ -171,6 +171,12 @@ export const STORIES = [
 
 export type StorySlug = (typeof STORIES)[number]["slug"];
 
+// Story pages with a finished story. Every other portrait renders a
+// "coming soon" placeholder, which stays out of the index and sitemap.
+export const INDEXABLE_STORY_SLUGS: readonly string[] = [
+  "rahmah-k",
+] satisfies readonly StorySlug[];
+
 export function getStoryBySlug(slug: string | null | undefined): Story | null {
   if (!slug) return null;
   return STORIES.find((story) => story.slug === slug) ?? null;

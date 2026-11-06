@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 
+import { JsonLd } from "@/components/site/json-ld";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+import { siteJsonLd } from "@/lib/seo";
 
 import cardDecorBottom from "../../design-assets/figma/landing-2026/card-decor-bottom.svg";
 import cardDecorTop from "../../design-assets/figma/landing-2026/card-decor-top.svg";
@@ -38,7 +40,7 @@ import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
-  title: "Young Muslims",
+  title: { absolute: "Young Muslims" },
   description:
     "A nationwide brotherhood and sisterhood, built on real friendships and a shared Deen.",
 };
@@ -146,6 +148,7 @@ function SolidCard({
 export default function Home() {
   return (
     <PageFrame className="overflow-x-clip" data-landing-page="true">
+      <JsonLd data={siteJsonLd} />
       <ContentFrame bleed>
         <HeroVideo />
       </ContentFrame>
