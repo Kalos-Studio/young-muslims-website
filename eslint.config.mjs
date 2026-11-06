@@ -18,6 +18,7 @@ const eslintConfig = defineConfig([
     "src/components/ui/map.tsx",
     // Static assets, including the maplibre-gl worker copied in on postinstall.
     "public/**",
+    "studio-young-muslims-website/**",
   ]),
 ]);
 

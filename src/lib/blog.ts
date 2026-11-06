@@ -12,6 +12,7 @@ export type BlogPost = {
   category: "Resource" | "Article" | "Toolkit";
   image: string;
   heroImage?: string;
+  imageAlt?: string;
   content?: ArticleBlock[];
 };
 

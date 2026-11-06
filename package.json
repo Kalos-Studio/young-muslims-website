@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
+    "@portabletext/react": "^8.0.1",
     "agentation": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.2.6",
