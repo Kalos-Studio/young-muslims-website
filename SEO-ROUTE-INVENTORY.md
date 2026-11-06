@@ -15,6 +15,17 @@ The documented production origin is `https://youngmuslims.com`. Paths below are
 relative to that origin. Content owners remain unassigned; search purposes below
 are proposals based on the current pages, not validated keyword research.
 
+## Update 2026-11-04: routes added since this inventory
+
+The site now has more routes than the eight below. Indexing decisions are made
+in code and enforced by `bun run test:seo`:
+
+| Route             | Source                                          | Production indexing                                                                                                                                                               |
+| ----------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/contact`        | [Contact](src/app/contact/page.tsx)             | Index; listed in `indexablePaths`. Title "Contact"; description "Connect with Young Muslims. Find your local chapter, start a NeighborNet, or learn more about getting involved." |
+| `/stories/[slug]` | [Story detail](src/app/stories/[slug]/page.tsx) | Index only finished stories in `INDEXABLE_STORY_SLUGS` (currently `rahmah-k`). Placeholder portraits are `noindex, follow` and stay out of the sitemap.                           |
+| `/blog/[slug]`    | [Blog article](src/app/blog/[slug]/page.tsx)    | Index only posts with a full article body (`isBlogPostIndexable`). All 8 current posts are excerpt-only, so all are `noindex, follow` until their content is migrated.            |
+
 ## Page inventory
 
 | Route            | Source                                          | Page purpose / content                                                                           | Proposed search purpose                                    | Navigation discovery                                                                    | Production indexing decision                    | Content owner |
@@ -90,8 +101,10 @@ reasons to exclude a page from the approved inventory.
 
 ## Route boundaries
 
-- Eight page routes were found, all literal paths with no dynamic segments.
-- No individual chapter, article, story, event, or program detail routes exist.
+- As of 2026-10-02, eight page routes were found, all literal paths. Since then
+  `/contact`, `/blog/[slug]`, and `/stories/[slug]` were added; see the update
+  section above.
+- No individual chapter, event, or program detail routes exist.
 - Components such as `about/faq-section.tsx`, map popups, and portrait sections
   are parts of pages, not additional routes.
 - No application `route.ts` handlers, custom redirects, or robots/sitemap routes
