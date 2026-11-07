@@ -79,6 +79,12 @@ type BlobRevealProps = ComponentPropsWithoutRef<"div"> & {
   shape?: number;
   /** Called once the blob has left the viewport. */
   onRevealed?: () => void;
+  /**
+   * Called once the blob has swept back in to cover the viewport, after
+   * `revealing` changes from true to false. Mount with `revealing` true to
+   * start off-screen, then set it false to sweep in.
+   */
+  onCovered?: () => void;
 };
 
 /**
@@ -96,6 +102,12 @@ type BlobRevealProps = ComponentPropsWithoutRef<"div"> & {
  * Neither the layer nor the content fades or moves; only the mask changes,
  * and both mask-position and mask-size interpolate reliably as plain lengths.
  *
+ * It also runs in reverse for covering: mounted with `revealing` true the
+ * blob starts off-screen, and setting it false sweeps the blob in until it
+ * covers the viewport (`onCovered`). Sweeping in uses
+ * `--duration-blob-cover`; sweeping out uses `--duration-blob-reveal`.
+ * Callbacks fire only for a change of state, never on mount.
+ *
  * Each play uses one of the curated blob shapes, picked at random on mount
  * and again whenever `revealing` returns to false, so a reused layer gets a
  * fresh shape every time. The pick is made on the client after hydration;
@@ -110,15 +122,19 @@ export function BlobReveal({
   origin,
   shape,
   onRevealed,
+  onCovered,
   className,
   children,
   ...props
 }: BlobRevealProps) {
   const layerRef = useRef<HTMLDivElement>(null);
   const onRevealedRef = useRef(onRevealed);
+  const onCoveredRef = useRef(onCovered);
+  const previousRevealing = useRef<boolean | null>(null);
 
   useEffect(() => {
     onRevealedRef.current = onRevealed;
+    onCoveredRef.current = onCovered;
   });
 
   // Arm the next play with a random shape. Set directly on the element so the
@@ -130,15 +146,22 @@ export function BlobReveal({
   }, [revealing, shape]);
 
   useEffect(() => {
-    if (!revealing) return;
+    const previous = previousRevealing.current;
+    previousRevealing.current = revealing;
+    // Only a change of state is a play; the initial state is just a pose.
+    if (previous === null || previous === revealing) return;
     const layer = layerRef.current;
     if (!layer) return;
 
+    const callback = revealing ? onRevealedRef : onCoveredRef;
+    const duration = revealing
+      ? readTimeToken("--duration-blob-reveal", 700)
+      : readTimeToken("--duration-blob-cover", 500);
     let complete = false;
     const finish = () => {
       if (complete) return;
       complete = true;
-      onRevealedRef.current?.();
+      callback.current?.();
     };
     const onTransitionEnd = (event: TransitionEvent) => {
       if (event.target === layer && event.propertyName.includes("mask")) {
@@ -146,10 +169,7 @@ export function BlobReveal({
       }
     };
     // Fallback in case the transition never runs (e.g. a hidden tab).
-    const fallback = window.setTimeout(
-      finish,
-      readTimeToken("--duration-blob-reveal", 700) + 250,
-    );
+    const fallback = window.setTimeout(finish, duration + 250);
 
     layer.addEventListener("transitionend", onTransitionEnd);
     return () => {

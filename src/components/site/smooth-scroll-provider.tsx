@@ -44,6 +44,26 @@ const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
  * and the story dialog are rebuilt against Figma, add `data-lenis-prevent` to
  * them. Until then, wheel-zooming the map also scrolls the page.
  */
+/** The live Lenis instance, or null under reduced motion or before mount. */
+let activeLenis: Lenis | null = null;
+
+/**
+ * Pauses smooth scrolling: cancels any in-flight momentum and blocks wheel
+ * input. Used by the page transition instead of the `<html>` overflow flag,
+ * which Base UI's menu scroll lock also writes. No-op without Lenis.
+ */
+export function stopSmoothScroll() {
+  activeLenis?.stop();
+}
+
+/**
+ * Resumes smooth scrolling, re-synced to the real scroll position (so it
+ * picks up a scroll-to-top that happened while stopped). No-op without Lenis.
+ */
+export function startSmoothScroll() {
+  activeLenis?.start();
+}
+
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const media = window.matchMedia(REDUCED_MOTION_QUERY);
@@ -63,6 +83,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
         naiveDimensions: true,
         prevent: () => document.documentElement.style.overflow === "hidden",
       });
+      activeLenis = lenis;
       frame = window.requestAnimationFrame(tick);
     };
 
@@ -71,6 +92,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
       frame = undefined;
       lenis?.destroy();
       lenis = null;
+      activeLenis = null;
     };
 
     const sync = () => (media.matches ? stop() : start());

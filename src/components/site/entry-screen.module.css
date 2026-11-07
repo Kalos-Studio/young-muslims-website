@@ -1,5 +1,5 @@
-/* Entry screen layout. Sizes are Figma frame units (273:620) multiplied by
-   --entry-unit; colours come from Tailwind classes in entry-screen.tsx. */
+/* The entry screen fills the overlay and centres the YM composition
+   (ym-composition.tsx). */
 
 .screen {
   position: absolute;
@@ -7,42 +7,4 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.composition {
-  position: relative;
-  width: calc(1073.78 * var(--entry-unit));
-  height: calc(926 * var(--entry-unit));
-}
-
-/* The monograms are the menu's full-opacity marks used as masks over the
-   slate fill, with the shared grain filter from entry-screen.tsx. The filter
-   applies before the mask, so the grain stays inside each mark. */
-.monogram {
-  position: absolute;
-  top: 0;
-  width: calc(301 * var(--entry-unit));
-  aspect-ratio: 1;
-  filter: url(#entry-grain);
-  mask-position: center;
-  mask-repeat: no-repeat;
-  mask-size: contain;
-}
-
-.monogramFilled {
-  left: calc(212 * var(--entry-unit));
-  mask-image: url("../../../design-assets/figma/menu/menu-mark-ym.svg");
-}
-
-.monogramOutline {
-  left: calc(562 * var(--entry-unit));
-  mask-image: url("../../../design-assets/figma/menu/menu-mark-ym-outline.svg");
-}
-
-.wordmark {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
 }

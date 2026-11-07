@@ -202,14 +202,66 @@ globals.css, and raise `BLOB_REVEAL_SHAPE_COUNT`.
 
 | Token                           | Value                            | Use                                                                                |
 | ------------------------------- | -------------------------------- | ---------------------------------------------------------------------------------- |
-| `--ease-blob-reveal`            | `cubic-bezier(0.65, 0, 0.35, 1)` | Wipe easing                                                                        |
-| `--duration-blob-reveal`        | 700ms                            | Wipe duration                                                                      |
+| `--ease-blob-reveal`            | `cubic-bezier(0.33, 0, 0.15, 1)` | Wipe easing: a soft start and a long, gentle deceleration                          |
+| `--duration-blob-reveal`        | 850ms                            | Wipe duration (the entry wipe and the page-transition reveal)                      |
+| `--duration-blob-cover`         | 750ms                            | Sweeping back in to cover (the reverse, used by the page transition)               |
 | `--blob-reveal-size`            | 200vmax                          | Full blob size; every shape's narrowest radius covers any viewport from the centre |
 | `--blob-reveal-travel`          | 155vmax                          | How far a directional mask slides; takes the blob fully off-screen                 |
 | `--blob-reveal-shape-1` to `-6` | Inline SVGs                      | The curated organic blobs, one picked per play                                     |
 | `--blob-reveal-solid`           | Inline SVG                       | The solid layer the centre mode excludes the blob from                             |
 
 Under reduced motion the wipe is instant.
+
+`BlobReveal` also runs in reverse: mounted with `revealing` true it starts
+off-screen, and setting `revealing` false sweeps it in to cover the viewport
+(`onCovered`). Callbacks fire only for a change of state, never on mount.
+
+## Page transition
+
+Client-side navigation between pages plays a cover-then-reveal with
+`BlobReveal` (`src/components/site/page-transition.tsx`, mounted once in the
+root layout). A capture-phase click listener on the document takes over
+internal link clicks and calls `preventDefault()`, so next/link skips its own
+navigation while other click handlers (such as the menu closing) still run.
+
+1. A blob in a random brand colour sweeps in from a random direction with a
+   random shape, the stacked YM composition centred on it.
+2. Once covered, the app navigates with `router.push` inside a React
+   transition.
+3. The cover holds on the composition while that transition is pending and the
+   destination's fonts and visible images load, for at most the max hold.
+   When the destination is already loaded there is no hold.
+4. The same blob continues across and off-screen, revealing the new page,
+   which has already scrolled to the top or to its `#anchor`.
+
+The cover colours are the full brand palette: Deep Obsidian, Warm Snow, Royal
+Blue, Jade Foliage, Pure White, Midnight Blue, Cool Slate, Sky Blue, Deep
+Forest Green, Warm Brass and Buttercup Yellow (`COVER_COLORS` in
+page-transition.tsx). The cover shows the entry's stacked YM composition
+(`YmComposition`, shared with the entry screen and scaled the same way) in
+one solid colour with no grain: Deep Obsidian on colours whose relative
+luminance is above the contrast threshold and Warm Snow below it, which
+gives at least 5.3:1 on every colour.
+
+| Token                                  | Value  | Use                                                                                                          |
+| -------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------ |
+| `--duration-blob-cover`                | 750ms  | The cover sweeping in                                                                                        |
+| `--duration-blob-reveal`               | 850ms  | The reveal sweeping out                                                                                      |
+| `--duration-page-transition-max-hold`  | 3000ms | Longest the cover waits for a slow destination; after it, the cover reveals whatever is there                |
+| `--page-transition-contrast-threshold` | 0.195  | Relative luminance above which the composition is Obsidian; where Obsidian and Warm Snow have equal contrast |
+
+Not intercepted: modified clicks, new-tab and download links, external
+links, same-page links (a `#hash` or a query change), back and forward
+navigation (the browser restores scroll natively), clicks while the entry
+animation plays, and links inside `[data-page-transition="off"]`, which the
+Stories portraits use to keep their own expanding-image transition. Under
+reduced motion links navigate directly.
+
+During the transition smooth scrolling is stopped through
+`stopSmoothScroll()` / `startSmoothScroll()` (smooth-scroll-provider.tsx),
+which cancels Lenis momentum and re-syncs it afterwards. It deliberately does
+not use the `<html>` overflow flag, which Base UI's menu scroll lock also
+writes.
 
 ## Entry animation
 

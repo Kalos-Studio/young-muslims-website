@@ -107,6 +107,8 @@ function PortraitSelector() {
               <Link
                 key={slot.id}
                 data-portrait={index}
+                // Keeps its own StoryPageTransition instead of the page transition.
+                data-page-transition="off"
                 href={`/stories/${portraitSlug(slot)}`}
                 onNavigate={(event) => {
                   const bounds = document

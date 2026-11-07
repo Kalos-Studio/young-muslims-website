@@ -498,8 +498,10 @@
  * "Blob reveal" and "Entry animation".
  */
 @theme {
-  /* A purposeful ease-in-out for the blob wipe. */
-  --ease-blob-reveal: cubic-bezier(0.65, 0, 0.35, 1);
+  /* A soft start and a long, gentle deceleration for the blob, so its
+     visible motion is spread across the duration rather than squeezed into
+     the middle (the previous 0.65, 0, 0.35, 1 read as abrupt). */
+  --ease-blob-reveal: cubic-bezier(0.33, 0, 0.15, 1);
 }
 
 :root {
@@ -508,7 +510,7 @@
      viewport from the centre, and 155vmax of travel takes it fully off-screen
      in any of the 8 directions. The shapes are inline data URIs so the mask
      is ready at first paint, before any image request. */
-  --duration-blob-reveal: 700ms;
+  --duration-blob-reveal: 850ms;
   --blob-reveal-size: 200vmax;
   --blob-reveal-travel: 155vmax;
   /* The curated blob shapes (see "Blob reveal" in DESIGN-SYSTEM.md): 1 classic, 2 pebble, 3 trefoil, 4 drift, 5 clover, 6 river. Each stays within
@@ -525,6 +527,18 @@
      blob by excluding the blob from this. It must stretch to the whole layer
      (preserveAspectRatio none), not scale to a centred square. */
   --blob-reveal-solid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' preserveAspectRatio='none'%3E%3Crect width='1' height='1'/%3E%3C/svg%3E");
+
+  /* Sweeping a blob in to cover (BlobReveal's reverse); sweeping out uses
+     --duration-blob-reveal. */
+  --duration-blob-cover: 750ms;
+
+  /* Page transition (components/site/page-transition.tsx). The cover holds
+     on the composition while the destination loads, for at most the max
+     hold. The composition is Obsidian on cover colours whose relative
+     luminance is above the threshold and Warm Snow below it; 0.195 is where
+     those two have equal contrast. */
+  --duration-page-transition-max-hold: 3000ms;
+  --page-transition-contrast-threshold: 0.195;
 
   /* Entry animation. The flash is shared equally by the photos; the last one
      is held before the wipe. */
@@ -558,6 +572,12 @@
   mask-position: 50% 50%;
   mask-size: var(--blob-reveal-size) var(--blob-reveal-size);
   transition: mask-position var(--duration-blob-reveal) var(--ease-blob-reveal);
+}
+
+/* Sweeping in to cover runs on its own, shorter duration. A layer that starts
+   covered (the entry screen) never transitions into this state. */
+.ym-blob-reveal[data-blob-state="covering"] {
+  transition-duration: var(--duration-blob-cover);
 }
 
 .ym-blob-reveal[data-blob-origin="center"] {
