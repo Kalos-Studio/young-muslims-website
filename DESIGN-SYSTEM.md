@@ -70,6 +70,7 @@ These values are exact and must not be altered.
 | `landing-blush`     | Landing Blush     | `#E3D6D6` | Homepage story-card surfaces         |
 | `landing-twilight`  | Landing Twilight  | `#34344C` | Homepage highlight-reel outer curves |
 | `landing-card-ink`  | Card Ink          | `#000000` | Homepage story-card text             |
+| `landing-pale`      | Landing Pale      | `#F7F3F0` | Pale band of the hero's bottom wave  |
 
 Slate, Sky, Brass, and Buttercup do not have enough contrast for normal-sized
 text on white or Warm Snow. Use them for fills, decoration, and large graphical
@@ -166,6 +167,34 @@ The decorative monograms are full-opacity Royal Blue and Jade assets in
 `design-assets/figma/menu/`. They sit outside the menu's content so they stay
 anchored to the viewport and bleed off its edges, and they are hidden below
 `md`.
+
+## Sticky hero
+
+Every hero page uses `StickyHero` (`src/components/site/sticky-hero.tsx`).
+The hero is a full-viewport panel, `100dvh` on every device, pinned with
+`position: sticky; top: 0` while the rest of the page, passed as children,
+scrolls up over it. Pass the media (a video or image with
+`stickyHeroMediaClassName`, so it covers) and the centred overlay content.
+
+- The content after the hero begins with `HeroWave`, the bottom wave built
+  from the Figma hero blobs (27:251 and 27:253): transparent above the photo
+  edge so the hero shows through, the `landing-pale` band, then Warm Snow. It
+  is one shape that moves with the content, so it cannot misalign with the
+  hero, and it rises over the pinned hero like a mask line.
+- At load the wave's top hump peeks above the fold, as in the 1440 x 1024
+  frame.
+- Sticky rather than fixed: the footer Easter egg transforms the page
+  wrapper, which would carry a fixed hero with it.
+- The header scrim is driven by an invisible 100dvh marker with
+  `data-header-hero` that scrolls normally (the pinned hero is always in
+  view, so it cannot be the sentinel).
+- The media and wave are full-bleed; overlay content caps at the 1440 bound
+  with the header's side padding.
+
+| Token                | Value                 | Use                                                                                       |
+| -------------------- | --------------------- | ----------------------------------------------------------------------------------------- |
+| `--hero-wave-height` | `max(6rem, 16.944vw)` | The wave band: 244 of 1440 units, with a 6rem minimum so it stays a proper wave on phones |
+| `--hero-peek`        | 15.57% of the band    | How much of the band shows above the fold at load (38 of 244 units)                       |
 
 ## Blob reveal
 

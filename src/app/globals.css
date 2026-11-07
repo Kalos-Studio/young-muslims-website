@@ -97,6 +97,8 @@
   --color-landing-blush: #e3d6d6;
   --color-landing-twilight: #34344c;
   --color-landing-card-ink: #000000;
+  /* The pale band of the hero's bottom wave (Figma 27:253). */
+  --color-landing-pale: #f7f3f0;
 
   /* Functional UI color, intentionally separate from the brand palette. */
   --color-system-danger: #b42318;
@@ -293,13 +295,6 @@
   }
 }
 
-@media (max-width: 1279px) {
-  [data-landing-page] [data-hero-video-frame] {
-    clip-path: inset(0) !important;
-    -webkit-clip-path: inset(0) !important;
-  }
-}
-
 /*
  * Website typography roles.
  *
@@ -491,6 +486,20 @@
     --menu-mark-filled-left: 47.43%;
     --menu-mark-outline-left: 64.42%;
   }
+}
+
+/*
+ * Sticky hero tokens (components/site/sticky-hero.tsx). Documented in
+ * DESIGN-SYSTEM.md under "Sticky hero".
+ */
+:root {
+  /* The bottom wave band spans Figma page y 986-1230 (244 units of 1440)
+     and scales with the viewport width, with a minimum so it stays a proper
+     wave on phones. */
+  --hero-wave-height: max(6rem, calc(100vw * 0.16944));
+  /* How much of the band shows above the fold at load: the wave's top hump,
+     38 of its 244 units in the 1440 x 1024 frame. */
+  --hero-peek: calc(var(--hero-wave-height) * 0.1557);
 }
 
 /*
