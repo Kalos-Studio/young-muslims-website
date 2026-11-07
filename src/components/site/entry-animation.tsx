@@ -1,24 +1,15 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Image from "next/image";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
-import frame01 from "../../../design-assets/figma/entry-animation/frame-01.png";
-import frame02 from "../../../design-assets/figma/entry-animation/frame-02.png";
-import frame03 from "../../../design-assets/figma/entry-animation/frame-03.png";
-import frame04 from "../../../design-assets/figma/entry-animation/frame-04.png";
-import frame05 from "../../../design-assets/figma/entry-animation/frame-05.png";
-import frame06 from "../../../design-assets/figma/entry-animation/frame-06.png";
-import frame07 from "../../../design-assets/figma/entry-animation/frame-07.png";
+import { BlobReveal, readTimeToken } from "./blob-reveal";
+import { entryPhotos } from "./entry-photos";
 import styles from "./entry-animation.module.css";
 
-const frames = [frame01, frame02, frame03, frame04, frame05, frame06, frame07];
-
-const FLASH_DURATION_MS = 145;
-const FINAL_FRAME_HOLD_MS = 140;
-const REVEAL_DURATION_MS = 750;
 const VIDEO_READY_TIMEOUT_MS = 5_000;
+/** Extra time after the reveal's duration before the safety finish runs. */
+const REVEAL_SAFETY_MS = 500;
 
 type Stage = "flashing" | "revealing" | "done";
 
@@ -93,9 +84,41 @@ async function waitForLandingContent() {
   ]);
 }
 
-export function EntryAnimation({ children }: { children: ReactNode }) {
-  const [frameIndex, setFrameIndex] = useState(0);
+/** Shows one photo layer of the entry wordmark and hides the rest. */
+function showEntryPhoto(index: number) {
+  document
+    .querySelectorAll<SVGImageElement>("[data-entry-photo]")
+    .forEach((layer) => {
+      layer.setAttribute(
+        "opacity",
+        layer.dataset.entryPhoto === String(index) ? "1" : "0",
+      );
+    });
+}
+
+/**
+ * The first-load entry sequence. `screen` (the server-rendered EntryScreen)
+ * is on screen at first paint; photos flash through its wordmark, and once
+ * the page underneath is ready the whole screen wipes away with a
+ * centre-origin BlobReveal: a blob grows from the middle of the composition
+ * and uncovers the page outward.
+ *
+ * Contract other code relies on: while playing, `<html>` has an inline
+ * `overflow: hidden` (the footer Easter egg and Lenis both check it), scroll
+ * restoration is manual and the page is scrolled to the top unless the URL
+ * has a hash, and the overlay carries `data-entry-animation`. All of it is
+ * restored on finish. Under reduced motion the overlay is hidden and the
+ * sequence finishes immediately.
+ */
+export function EntryAnimation({
+  children,
+  screen,
+}: {
+  children: ReactNode;
+  screen: ReactNode;
+}) {
   const [stage, setStage] = useState<Stage>("flashing");
+  const finishRef = useRef(() => {});
 
   useLayoutEffect(() => {
     const shouldResetScroll = window.location.hash === "";
@@ -104,17 +127,20 @@ export function EntryAnimation({ children }: { children: ReactNode }) {
       document.querySelector("[data-landing-page]"),
     );
     let cancelled = false;
+    let finished = false;
     let frameTimer: number | undefined;
     const timers: number[] = [];
     const previousOverflow = document.documentElement.style.overflow;
 
     const finish = () => {
-      if (cancelled) return;
+      if (cancelled || finished) return;
+      finished = true;
       if (shouldResetScroll) window.scrollTo(0, 0);
       window.history.scrollRestoration = previousScrollRestoration;
       document.documentElement.style.overflow = previousOverflow;
       setStage("done");
     };
+    finishRef.current = finish;
 
     if (shouldResetScroll) {
       window.history.scrollRestoration = "manual";
@@ -135,35 +161,46 @@ export function EntryAnimation({ children }: { children: ReactNode }) {
     const landingContentReady = isLandingPage
       ? waitForLandingContent()
       : Promise.resolve();
+    const photosReady = Promise.all(
+      entryPhotos.map((photo) => preloadImage(photo.src)),
+    );
 
-    const entryFramesReady =
-      isLandingPage || window.matchMedia("(max-width: 767px)").matches
-        ? Promise.all(frames.map((frame) => preloadImage(frame.src)))
-        : Promise.resolve();
+    // Each photo gets an equal share of the flash; the last one is held.
+    const frameDuration =
+      readTimeToken("--duration-entry-flash", 1200) / entryPhotos.length;
+    const holdDuration = readTimeToken("--duration-entry-hold", 140);
+    const lastPhoto = entryPhotos.length - 1;
+    let photoIndex = 0;
 
-    void entryFramesReady.then(() => {
+    void photosReady.then(() => {
       if (cancelled) return;
 
       frameTimer = window.setInterval(() => {
-        setFrameIndex((index) => (index + 1) % frames.length);
-      }, FLASH_DURATION_MS);
+        photoIndex = (photoIndex + 1) % entryPhotos.length;
+        showEntryPhoto(photoIndex);
+      }, frameDuration);
 
       const minimumCycle = new Promise<void>((resolve) => {
-        timers.push(
-          window.setTimeout(resolve, FLASH_DURATION_MS * (frames.length - 1)),
-        );
+        timers.push(window.setTimeout(resolve, frameDuration * lastPhoto));
       });
 
       void Promise.all([minimumCycle, landingContentReady]).then(() => {
         if (cancelled) return;
         window.clearInterval(frameTimer);
-        setFrameIndex(frames.length - 1);
+        showEntryPhoto(lastPhoto);
         timers.push(
           window.setTimeout(() => {
             if (cancelled) return;
             setStage("revealing");
-            timers.push(window.setTimeout(finish, REVEAL_DURATION_MS + 50));
-          }, FINAL_FRAME_HOLD_MS),
+            // BlobReveal reports completion; this only guards against a
+            // transition that never ends.
+            timers.push(
+              window.setTimeout(
+                finish,
+                readTimeToken("--duration-blob-reveal", 700) + REVEAL_SAFETY_MS,
+              ),
+            );
+          }, holdDuration),
         );
       });
     });
@@ -182,44 +219,16 @@ export function EntryAnimation({ children }: { children: ReactNode }) {
       <div className={styles.site}>{children}</div>
 
       {stage !== "done" ? (
-        <div
+        <BlobReveal
           aria-hidden="true"
-          className={`${styles.root} ${stage === "revealing" ? styles.revealing : ""}`}
           data-entry-animation
+          revealing={stage === "revealing"}
+          origin="center"
+          onRevealed={() => finishRef.current()}
+          className={styles.root}
         >
-          <div className={styles.mobileCanvas}>
-            {frames.map((frame, index) => (
-              <Image
-                key={frame.src}
-                src={frame}
-                alt=""
-                loading="eager"
-                unoptimized
-                className={styles.mobileFrame}
-                style={{ opacity: index === frameIndex ? 1 : 0 }}
-              />
-            ))}
-          </div>
-          <svg
-            className={styles.canvas}
-            viewBox="0 0 1440 1024"
-            preserveAspectRatio="xMidYMid meet"
-          >
-            {frames.map((frame, index) => (
-              <image
-                key={frame.src}
-                className={styles.frame}
-                href={frame.src}
-                x="183.1"
-                y="36"
-                width="1073.78"
-                height="926"
-                opacity={index === frameIndex ? 1 : 0}
-                preserveAspectRatio="xMidYMid meet"
-              />
-            ))}
-          </svg>
-        </div>
+          {screen}
+        </BlobReveal>
       ) : null}
     </>
   );

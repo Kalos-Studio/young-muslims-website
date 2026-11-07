@@ -392,16 +392,285 @@
   -webkit-text-stroke: 2.45px var(--color-brand-warm-snow);
 }
 
-/* Full-screen site menu ------------------------------------------------------
- * Opening retains the center-out reveal from the menu trigger. The open state
- * follows the desktop and mobile Figma frames; closing fades the completed
- * composition instead of reversing the reveal.
+/*
+ * Site menu tokens. Approved values from the Figma menu frames (desktop
+ * 298:1507, tablet 301:1594, mobile 301:1667) and the approved reveal motion.
+ * Documented in DESIGN-SYSTEM.md under "Site menu".
  */
+@theme {
+  /* Gentle deceleration for the circle that reveals and conceals the menu. */
+  --ease-menu-reveal: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --duration-menu-reveal: 800ms;
+  --duration-menu-conceal: 550ms;
+
+  /* The reveal circle's final radius reaches exactly the farthest viewport
+     corner from the trigger, so the whole duration is visible motion. */
+  --menu-viewport-width: 100vw;
+  --menu-viewport-height: 100dvh;
+
+  /* Outlined Boldonse primary links. At their Figma sizes (48px from `md`,
+     41.36px below) with the standard -2% tracking, rendered glyph bounds
+     match the frames' outlines. 1.21 reproduces their line boxes. */
+  --menu-primary-line-height: 1.21;
+  --menu-primary-tracking: -0.02em;
+
+  /* Viewport fit. Every vertical size below is its Figma value times
+     --menu-fit, which is 1px at the frame heights and shrinks on shorter
+     viewports so the menu always fits 100dvh without scrolling. --menu-fit is
+     (viewport height - fixed parts) / (sum of the scalable sizes + 8px slack).
+     Fixed parts are the top bar, the secondary text lines and the socials.
+     Mobile frame: 80px bar + 66px of text + 32px socials; 600.2px scalable. */
+  --menu-fit: min(1px, calc((100dvh - 11.125rem) / 608));
+  --menu-pad-top: calc(76 * var(--menu-fit));
+  --menu-pad-bottom: calc(64 * var(--menu-fit));
+  --menu-primary-size: calc(41.36 * var(--menu-fit));
+  --menu-primary-gap: calc(32 * var(--menu-fit));
+  --menu-section-gap: calc(24 * var(--menu-fit));
+  --menu-secondary-padding: calc(16 * var(--menu-fit));
+  --menu-secondary-gap: calc(4 * var(--menu-fit));
+  --menu-footer-gap: calc(36 * var(--menu-fit));
+
+  /* Decorative monograms (tablet frame). The outline mark sits directly
+     beneath the filled mark. Hidden below `md`, as in the mobile frame. */
+  --menu-mark-size: 66.667vw;
+  /* A unit is required: the outline mark adds this to a length in calc(). */
+  --menu-mark-top: 0vw;
+  --menu-mark-filled-left: 37.22%;
+  --menu-mark-outline-left: 63.57%;
+}
+
+/* Tablet and desktop frames: 97px bar + 87px of text + 32px socials;
+   687.24px scalable. */
+@media (width >= 48rem) {
+  :root {
+    --menu-fit: min(1px, calc((100dvh - 13.5rem) / 695));
+    --menu-pad-top: calc(59 * var(--menu-fit));
+    --menu-pad-bottom: calc(80 * var(--menu-fit));
+    --menu-primary-size: calc(48 * var(--menu-fit));
+    --menu-primary-gap: calc(40 * var(--menu-fit));
+    --menu-secondary-gap: calc(16 * var(--menu-fit));
+    --menu-footer-gap: calc(44 * var(--menu-fit));
+  }
+}
+
+/* Short viewports (mainly landscape phones): the primary links and the
+   secondary block sit side by side, and --menu-fit sizes the primary links to
+   the height left under the top bar and 1rem paddings. */
+@media (width < 48rem) and (height < 30rem) {
+  :root {
+    --menu-fit: min(1px, calc((100dvh - 7rem) / 296.2));
+  }
+}
+
+@media (width >= 48rem) and (height < 35rem) {
+  :root {
+    --menu-fit: min(1px, calc((100dvh - 8.0625rem) / 352.24));
+  }
+}
+
+@media (width < 48rem) and (height < 30rem),
+  (width >= 48rem) and (height < 35rem) {
+  :root {
+    --menu-pad-top: 1rem;
+    --menu-pad-bottom: 1rem;
+    --menu-section-gap: 1.5rem;
+    --menu-secondary-padding: 0.5rem;
+    --menu-secondary-gap: 0.25rem;
+    --menu-footer-gap: 1rem;
+  }
+}
+
+/* Desktop frame values, from `xl` like the header's full navigation. */
+@media (width >= 80rem) {
+  :root {
+    --menu-mark-size: 42.98vw;
+    --menu-mark-top: -5.417vw;
+    --menu-mark-filled-left: 47.43%;
+    --menu-mark-outline-left: 64.42%;
+  }
+}
+
+/*
+ * Blob reveal and entry animation tokens. Documented in DESIGN-SYSTEM.md under
+ * "Blob reveal" and "Entry animation".
+ */
+@theme {
+  /* A purposeful ease-in-out for the blob wipe. */
+  --ease-blob-reveal: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root {
+  /* Blob reveal (components/site/blob-reveal.tsx). The shape is an organic
+     blob whose narrowest radius is 37.7% of its box: at 200vmax it covers any
+     viewport from the centre, and 155vmax of travel takes it fully off-screen
+     in any of the 8 directions. The shapes are inline data URIs so the mask
+     is ready at first paint, before any image request. */
+  --duration-blob-reveal: 700ms;
+  --blob-reveal-size: 200vmax;
+  --blob-reveal-travel: 155vmax;
+  /* The curated blob shapes (see "Blob reveal" in DESIGN-SYSTEM.md): 1 classic, 2 pebble, 3 trefoil, 4 drift, 5 clover, 6 river. Each stays within
+     36.5-49.5% radius of its box, so it covers any viewport at 200vmax
+     and never clips flat. BlobReveal picks one per play; keep
+     BLOB_REVEAL_SHAPE_COUNT in blob-reveal.tsx in step with this list. */
+  --blob-reveal-shape-1: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M973.3 500.0C981.5 529.9 982.1 564.7 975.1 594.5C968.1 624.3 949.6 653.8 931.2 678.6C912.8 703.5 886.9 723.9 864.5 743.5C842.1 763.2 818.8 779.5 796.6 796.6C774.4 813.7 754.0 831.0 731.2 846.0C708.5 861.1 685.2 876.7 660.2 886.7C635.1 896.7 607.4 903.5 580.7 906.0C554.1 908.4 526.3 904.6 500.0 901.6C473.7 898.5 449.0 891.4 422.9 887.6C396.8 883.7 371.6 881.3 343.3 878.3C315.0 875.3 283.6 875.9 253.1 869.5C222.6 863.1 187.3 855.8 160.1 839.9C132.9 824.0 105.8 800.6 90.0 774.0C74.2 747.3 66.6 711.9 65.3 680.0C64.1 648.2 74.5 613.1 82.4 583.1C90.4 553.0 105.1 526.1 113.3 500.0C121.5 473.9 127.7 451.8 131.6 426.7C135.5 401.6 133.7 376.3 136.7 349.5C139.6 322.7 140.8 292.6 149.4 265.8C158.1 238.9 171.2 211.0 188.5 188.5C205.9 166.1 229.7 147.0 253.4 131.0C277.2 114.9 304.5 103.6 331.1 92.1C357.7 80.7 384.8 70.9 413.0 62.5C441.1 54.0 470.4 44.6 500.0 41.6C529.6 38.5 562.0 37.1 590.7 44.1C619.4 51.1 649.0 65.4 672.4 83.8C695.8 102.2 714.9 129.8 730.9 154.4C746.9 179.1 755.9 208.2 768.2 231.8C780.6 255.4 789.8 276.3 805.1 296.2C820.3 316.0 839.7 331.1 859.9 350.9C880.0 370.8 907.0 390.4 925.9 415.3C944.8 440.1 965.1 470.1 973.3 500.0Z'/%3E%3C/svg%3E");
+  --blob-reveal-shape-2: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M954.7 500.0C955.2 529.3 950.7 559.8 943.6 588.2C936.5 616.7 924.9 644.5 912.1 670.7C899.4 696.9 883.8 721.7 867.2 745.4C850.6 769.0 832.6 791.7 812.8 812.8C793.0 833.9 771.9 854.6 748.6 872.1C725.4 889.7 700.0 906.3 673.2 918.3C646.5 930.2 617.1 939.5 588.3 943.8C559.4 948.1 528.7 947.8 500.0 944.0C471.3 940.2 442.7 931.3 416.2 921.1C389.8 910.8 365.1 896.7 341.5 882.7C317.9 868.8 296.2 853.1 274.6 837.4C252.9 821.7 232.1 805.8 211.5 788.5C190.9 771.1 170.0 753.5 150.9 733.3C131.9 713.0 112.5 691.1 97.3 666.8C82.0 642.5 68.2 615.4 59.5 587.6C50.9 559.8 45.9 529.3 45.3 500.0C44.8 470.7 49.3 440.2 56.4 411.8C63.5 383.3 75.1 355.5 87.9 329.3C100.6 303.1 116.2 278.3 132.8 254.6C149.4 231.0 167.4 208.3 187.2 187.2C207.0 166.1 228.1 145.4 251.4 127.9C274.6 110.3 300.0 93.7 326.8 81.7C353.5 69.8 382.9 60.5 411.7 56.2C440.6 51.9 471.3 52.2 500.0 56.0C528.7 59.8 557.3 68.7 583.8 78.9C610.2 89.2 634.9 103.3 658.5 117.3C682.1 131.2 703.8 146.9 725.4 162.6C747.1 178.3 767.9 194.2 788.5 211.5C809.1 228.9 830.0 246.5 849.1 266.7C868.1 287.0 887.5 308.9 902.7 333.2C918.0 357.5 931.8 384.6 940.5 412.4C949.1 440.2 954.1 470.7 954.7 500.0Z'/%3E%3C/svg%3E");
+  --blob-reveal-shape-3: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M979.5 500.0C980.2 530.5 974.7 564.0 962.5 592.0C950.2 620.0 927.6 646.4 906.1 668.2C884.6 690.0 856.3 706.0 833.5 722.8C810.7 739.7 788.9 752.6 769.2 769.2C749.5 785.8 734.1 804.2 715.4 822.3C696.6 840.5 678.7 862.0 656.7 878.4C634.8 894.8 609.8 910.2 583.7 920.8C557.6 931.4 528.8 937.7 500.0 942.1C471.2 946.5 441.2 948.1 411.0 947.2C380.9 946.3 348.7 944.7 319.1 936.6C289.6 928.6 257.9 917.0 233.5 898.8C209.1 880.6 187.2 854.5 172.6 827.4C157.9 800.4 151.4 766.4 145.7 736.8C140.0 707.1 141.6 676.9 138.4 649.8C135.3 622.7 132.5 599.2 127.0 574.2C121.6 549.2 111.7 525.9 105.7 500.0C99.7 474.1 92.2 446.3 91.1 418.7C90.0 391.0 92.9 361.7 99.2 334.0C105.5 306.2 116.6 278.8 129.0 252.1C141.4 225.4 156.0 198.4 173.6 173.6C191.3 148.9 211.1 122.5 235.1 103.5C259.0 84.4 288.0 67.0 317.4 59.2C346.9 51.4 381.4 51.9 411.8 56.5C442.2 61.1 472.8 75.9 500.0 87.0C527.2 98.1 550.6 113.0 575.0 122.9C599.4 132.8 621.8 139.2 646.5 146.4C671.2 153.5 697.8 156.9 723.2 165.9C748.7 174.9 775.9 185.5 799.4 200.6C822.9 215.7 844.7 235.5 864.2 256.6C883.8 277.8 900.8 302.1 916.5 327.5C932.2 352.8 947.8 380.1 958.3 408.8C968.8 437.6 978.8 469.5 979.5 500.0Z'/%3E%3C/svg%3E");
+  --blob-reveal-shape-4: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M934.3 500.0C930.2 528.1 920.7 555.5 912.2 582.0C903.6 608.4 893.2 633.2 883.0 658.7C872.9 684.1 863.6 709.6 851.4 734.8C839.3 760.1 827.1 787.0 810.1 810.1C793.2 833.3 772.9 856.8 749.6 873.6C726.3 890.3 697.9 903.4 670.1 910.5C642.2 917.6 611.1 918.0 582.8 916.2C554.4 914.3 526.2 906.4 500.0 899.6C473.8 892.8 449.5 883.5 425.4 875.2C401.2 866.9 378.2 859.1 355.1 849.9C331.9 840.7 308.5 831.7 286.3 819.8C264.1 807.8 242.0 794.2 221.8 778.2C201.7 762.1 183.0 743.4 165.5 723.5C148.0 703.6 132.3 681.8 117.0 658.6C101.7 635.5 86.7 611.2 73.9 584.8C61.1 558.3 47.7 529.7 40.3 500.0C32.8 470.3 26.9 437.1 29.1 406.3C31.4 375.5 39.5 342.5 53.8 315.2C68.0 287.9 90.8 262.3 114.6 242.5C138.4 222.7 169.0 208.5 196.5 196.5C224.1 184.6 253.5 178.3 280.0 170.8C306.5 163.2 331.1 157.9 355.5 151.1C379.9 144.3 402.3 136.4 426.4 130.0C450.5 123.6 474.8 115.9 500.0 112.5C525.2 109.1 551.9 107.3 577.7 109.5C603.5 111.8 629.8 117.8 654.9 126.1C679.9 134.3 704.3 146.0 728.0 158.8C751.6 171.7 774.9 186.3 797.0 203.0C819.0 219.8 841.6 238.0 860.5 259.1C879.5 280.3 898.0 304.2 910.7 329.9C923.4 355.6 932.6 384.8 936.5 413.2C940.5 441.5 938.3 471.9 934.3 500.0Z'/%3E%3C/svg%3E");
+  --blob-reveal-shape-5: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M955.8 500.0C960.2 529.2 959.9 561.5 952.8 590.1C945.7 618.6 930.5 647.3 913.2 671.2C895.9 695.0 871.4 715.2 849.0 733.2C826.6 751.1 801.2 764.2 778.8 778.8C756.3 793.4 735.2 805.6 714.3 820.7C693.3 835.8 674.7 852.6 653.0 869.4C631.3 886.1 609.3 906.4 583.8 921.4C558.3 936.4 529.4 952.4 500.0 959.6C470.6 966.9 437.3 969.8 407.5 965.1C377.7 960.3 347.0 947.3 321.4 931.2C295.8 915.1 273.3 891.0 253.8 868.4C234.4 845.8 219.7 819.3 204.5 795.5C189.2 771.7 176.8 748.5 162.3 725.6C147.8 702.8 132.5 681.8 117.6 658.4C102.8 634.9 85.4 611.3 73.1 584.9C60.9 558.5 48.5 529.2 44.2 500.0C39.8 470.8 40.1 438.5 47.2 409.9C54.3 381.4 69.5 352.7 86.8 328.8C104.1 305.0 128.6 284.8 151.0 266.8C173.4 248.9 198.8 235.8 221.2 221.2C243.7 206.6 264.8 194.4 285.7 179.3C306.7 164.2 325.3 147.4 347.0 130.6C368.7 113.9 390.7 93.6 416.2 78.6C441.7 63.6 470.6 47.6 500.0 40.4C529.4 33.1 562.7 30.2 592.5 34.9C622.3 39.7 653.0 52.7 678.6 68.8C704.2 84.9 726.7 109.0 746.2 131.6C765.6 154.2 780.3 180.7 795.5 204.5C810.8 228.3 823.2 251.5 837.7 274.4C852.2 297.2 867.5 318.2 882.4 341.6C897.2 365.1 914.6 388.7 926.9 415.1C939.1 441.5 951.5 470.8 955.8 500.0Z'/%3E%3C/svg%3E");
+  --blob-reveal-shape-6: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M968.6 500.0C967.1 530.0 959.6 561.6 947.7 589.0C935.7 616.5 916.2 642.2 897.2 664.5C878.2 686.8 854.5 705.0 833.7 722.9C812.8 740.9 792.0 755.8 772.1 772.1C752.3 788.4 734.4 805.0 714.4 820.9C694.4 836.7 674.6 854.2 652.2 867.3C629.7 880.5 604.9 892.8 579.5 899.9C554.2 907.0 526.6 909.8 500.0 910.1C473.4 910.3 446.7 905.8 420.1 901.5C393.6 897.2 367.8 890.9 340.8 884.3C313.8 877.8 285.9 871.7 258.1 862.1C230.2 852.5 199.8 842.3 173.5 826.5C147.3 810.6 120.1 790.7 100.4 767.0C80.7 743.3 64.8 713.6 55.4 684.2C45.9 654.8 43.8 621.4 44.0 590.7C44.2 560.0 50.7 529.1 56.6 500.0C62.5 470.9 70.8 443.4 79.3 416.3C87.8 389.2 96.2 362.7 107.7 337.5C119.2 312.3 131.8 286.8 148.4 265.1C165.0 243.3 185.3 223.0 207.1 207.1C229.0 191.3 255.0 179.8 279.5 170.0C304.0 160.2 329.9 155.2 354.4 148.5C378.9 141.7 402.0 136.6 426.3 129.5C450.6 122.4 474.0 113.2 500.0 106.1C526.0 99.0 553.8 89.7 582.2 86.8C610.6 83.8 641.9 82.8 670.5 88.4C699.0 94.0 728.3 105.6 753.5 120.6C778.8 135.5 801.5 156.7 821.9 178.1C842.4 199.4 859.7 224.0 876.3 248.5C893.0 273.1 908.5 298.5 921.9 325.3C935.3 352.0 948.8 380.1 956.6 409.2C964.4 438.3 970.1 470.0 968.6 500.0Z'/%3E%3C/svg%3E");
+  /* A solid layer: the centre reveal shows the covering layer outside the
+     blob by excluding the blob from this. It must stretch to the whole layer
+     (preserveAspectRatio none), not scale to a centred square. */
+  --blob-reveal-solid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' preserveAspectRatio='none'%3E%3Crect width='1' height='1'/%3E%3C/svg%3E");
+
+  /* Entry animation. The flash is shared equally by the photos; the last one
+     is held before the wipe. */
+  --duration-entry-flash: 1200ms;
+  --duration-entry-hold: 140ms;
+
+  /* One Figma unit of the entry composition (1073.78 x 926 in frame 273:620)
+     in screen pixels. Width-limited to the frame's 74.57vw, but never
+     narrower than 18.5rem or wider than the viewport less 2rem margins;
+     height-limited to the viewport less 2rem margins. */
+  --entry-unit: min(
+    calc(min(100vw - 4rem, max(74.57vw, 18.5rem)) / 1073.78),
+    calc((100dvh - 4rem) / 926)
+  );
+}
+
+/* Blob reveal ----------------------------------------------------------------
+ * Directional origins: the covering layer is visible only inside the blob
+ * mask. Revealing slides the mask away from the origin side, uncovering the
+ * page from that side behind the blob's trailing edge. Only mask-position
+ * animates.
+ *
+ * Centre origin: the covering layer is visible outside the blob (a solid
+ * layer with the blob excluded). Revealing grows the blob from nothing at the
+ * viewport centre, uncovering the page from the middle outward. Only the
+ * blob's mask-size animates.
+ */
+.ym-blob-reveal {
+  mask-image: var(--blob-reveal-shape-1);
+  mask-repeat: no-repeat;
+  mask-position: 50% 50%;
+  mask-size: var(--blob-reveal-size) var(--blob-reveal-size);
+  transition: mask-position var(--duration-blob-reveal) var(--ease-blob-reveal);
+}
+
+.ym-blob-reveal[data-blob-origin="center"] {
+  mask-image: var(--blob-reveal-solid), var(--blob-reveal-shape-1);
+  mask-composite: exclude;
+  mask-size:
+    100% 100%,
+    0 0;
+  transition-property: mask-size;
+}
+
+.ym-blob-reveal[data-blob-state="revealing"][data-blob-origin="center"] {
+  mask-size:
+    100% 100%,
+    var(--blob-reveal-size) var(--blob-reveal-size);
+}
+
+/* The shape picked for this play (data-blob-shape). The centre mode's cut-out
+   is the same blob layer excluded from the solid layer, so its edge always
+   matches the growing blob. Without the attribute, shape 1 is used. */
+.ym-blob-reveal[data-blob-shape="2"]:not([data-blob-origin="center"]) {
+  mask-image: var(--blob-reveal-shape-2);
+}
+
+.ym-blob-reveal[data-blob-shape="2"][data-blob-origin="center"] {
+  mask-image: var(--blob-reveal-solid), var(--blob-reveal-shape-2);
+}
+
+.ym-blob-reveal[data-blob-shape="3"]:not([data-blob-origin="center"]) {
+  mask-image: var(--blob-reveal-shape-3);
+}
+
+.ym-blob-reveal[data-blob-shape="3"][data-blob-origin="center"] {
+  mask-image: var(--blob-reveal-solid), var(--blob-reveal-shape-3);
+}
+
+.ym-blob-reveal[data-blob-shape="4"]:not([data-blob-origin="center"]) {
+  mask-image: var(--blob-reveal-shape-4);
+}
+
+.ym-blob-reveal[data-blob-shape="4"][data-blob-origin="center"] {
+  mask-image: var(--blob-reveal-solid), var(--blob-reveal-shape-4);
+}
+
+.ym-blob-reveal[data-blob-shape="5"]:not([data-blob-origin="center"]) {
+  mask-image: var(--blob-reveal-shape-5);
+}
+
+.ym-blob-reveal[data-blob-shape="5"][data-blob-origin="center"] {
+  mask-image: var(--blob-reveal-solid), var(--blob-reveal-shape-5);
+}
+
+.ym-blob-reveal[data-blob-shape="6"]:not([data-blob-origin="center"]) {
+  mask-image: var(--blob-reveal-shape-6);
+}
+
+.ym-blob-reveal[data-blob-shape="6"][data-blob-origin="center"] {
+  mask-image: var(--blob-reveal-solid), var(--blob-reveal-shape-6);
+}
+
+.ym-blob-reveal[data-blob-state="revealing"][data-blob-origin="left"] {
+  mask-position: calc(50% + var(--blob-reveal-travel)) 50%;
+}
+
+.ym-blob-reveal[data-blob-state="revealing"][data-blob-origin="right"] {
+  mask-position: calc(50% - var(--blob-reveal-travel)) 50%;
+}
+
+.ym-blob-reveal[data-blob-state="revealing"][data-blob-origin="top"] {
+  mask-position: 50% calc(50% + var(--blob-reveal-travel));
+}
+
+.ym-blob-reveal[data-blob-state="revealing"][data-blob-origin="bottom"] {
+  mask-position: 50% calc(50% - var(--blob-reveal-travel));
+}
+
+.ym-blob-reveal[data-blob-state="revealing"][data-blob-origin="top-left"] {
+  mask-position: calc(50% + var(--blob-reveal-travel))
+    calc(50% + var(--blob-reveal-travel));
+}
+
+.ym-blob-reveal[data-blob-state="revealing"][data-blob-origin="top-right"] {
+  mask-position: calc(50% - var(--blob-reveal-travel))
+    calc(50% + var(--blob-reveal-travel));
+}
+
+.ym-blob-reveal[data-blob-state="revealing"][data-blob-origin="bottom-left"] {
+  mask-position: calc(50% + var(--blob-reveal-travel))
+    calc(50% - var(--blob-reveal-travel));
+}
+
+.ym-blob-reveal[data-blob-state="revealing"][data-blob-origin="bottom-right"] {
+  mask-position: calc(50% - var(--blob-reveal-travel))
+    calc(50% - var(--blob-reveal-travel));
+}
+
+/* Full-screen site menu ------------------------------------------------------
+ * An Obsidian circle grows from the menu trigger and reveals the menu. The
+ * popup is the circle: its clip-path is a circle centred on the trigger whose
+ * final radius reaches the farthest viewport corner, so the finished
+ * composition is only ever visible inside the circle's current area, and
+ * nothing inside it animates. A single radius interpolates reliably in every
+ * browser. Closing shrinks the circle back into the trigger. Reduced motion
+ * makes both instant. The top bar matches the header's height and padding, so
+ * the logo and trigger do not move on open. The composition always fits
+ * 100dvh (see --menu-fit). Tokens: "Site menu" in DESIGN-SYSTEM.md.
+ */
+/* Invisible: catches clicks outside the growing circle so they close the menu.
+   No background, so nothing dims the page before or behind the reveal. */
 .ym-menu-backdrop {
   position: fixed;
   inset: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--color-brand-obsidian) 20%, transparent);
 }
 
 .ym-menu-popup {
@@ -409,37 +678,33 @@
   inset: 0;
   z-index: 2147483647;
   overflow: hidden;
+  background: var(--color-brand-obsidian);
   color: var(--color-brand-pure-white);
   outline: none;
-  opacity: 1;
-  transition: opacity 300ms ease;
+  clip-path: circle(
+    hypot(
+        max(
+          var(--menu-origin-x),
+          var(--menu-viewport-width) - var(--menu-origin-x)
+        ),
+        max(
+          var(--menu-origin-y),
+          var(--menu-viewport-height) - var(--menu-origin-y)
+        )
+      )
+      at var(--menu-origin-x) var(--menu-origin-y)
+  );
+  transition: clip-path var(--duration-menu-reveal) var(--ease-menu-reveal);
+}
+
+/* Collapsed to a point on the trigger: the shape it grows from and returns to. */
+.ym-menu-popup[data-starting-style],
+.ym-menu-popup[data-ending-style] {
+  clip-path: circle(0 at var(--menu-origin-x) var(--menu-origin-y));
 }
 
 .ym-menu-popup[data-ending-style] {
-  opacity: 0;
-}
-
-.ym-menu-surface {
-  position: absolute;
-  top: var(--menu-origin-y, 3.85rem);
-  left: var(--menu-origin-x, calc(100vw - 5.75rem));
-  width: 220vmax;
-  aspect-ratio: 1;
-  background: var(--color-brand-obsidian);
-  border-radius: 61% 39% 55% 45% / 44% 61% 39% 56%;
-  transform: translate(-50%, -50%) scale(1);
-  transform-origin: center;
-  transition: transform 800ms cubic-bezier(0.19, 1, 0.22, 1);
-  will-change: transform;
-}
-
-.ym-menu-popup[data-starting-style] .ym-menu-surface {
-  transform: translate(-50%, -50%) scale(0);
-}
-
-.ym-menu-popup[data-ending-style] .ym-menu-surface {
-  transform: translate(-50%, -50%) scale(1);
-  transition: none;
+  transition-duration: var(--duration-menu-conceal);
 }
 
 .ym-menu-content {
@@ -450,65 +715,45 @@
   min-height: 0;
   flex-direction: column;
   overflow-y: auto;
-  padding: 0 clamp(1rem, 5.6vw, 5rem) clamp(1.5rem, 5dvh, 4rem);
-  opacity: 1;
-  transform: scale(1);
-  transition:
-    opacity 250ms ease 180ms,
-    transform 800ms cubic-bezier(0.19, 1, 0.22, 1);
+  padding-bottom: var(--menu-pad-bottom);
+  @apply px-8 md:px-16 xl:px-20;
 }
 
-.ym-menu-popup[data-starting-style] .ym-menu-content {
-  opacity: 0;
-  transform: scale(0.9);
-}
-
-.ym-menu-popup[data-ending-style] .ym-menu-content {
-  opacity: 1;
-  transform: scale(1);
-  transition: none;
-}
-
+/* A direct child of the popup, so the monograms are anchored to the viewport
+   and bleed off its edges instead of moving or clipping with the content. */
 .ym-menu-decoration {
-  --ym-menu-mark-top: 1rem;
-  --ym-menu-mark-size: min(30rem, calc(50dvh - 3rem), calc(100vw - 2rem));
-  --ym-menu-mark-gap: 2rem;
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  @apply hidden md:block;
 }
 
 .ym-menu-mark {
   position: absolute;
+  top: var(--menu-mark-top);
+  width: var(--menu-mark-size);
+  height: var(--menu-mark-size);
   max-width: none;
-  filter: brightness(0) invert(1);
   user-select: none;
 }
 
-.ym-menu-mark--top {
-  top: var(--ym-menu-mark-top);
-  left: min(47.43%, calc(100% - var(--ym-menu-mark-size) - 1rem));
-  width: var(--ym-menu-mark-size);
-  height: var(--ym-menu-mark-size);
+.ym-menu-mark--filled {
+  left: var(--menu-mark-filled-left);
 }
 
-.ym-menu-mark--bottom {
-  top: calc(
-    var(--ym-menu-mark-top) + var(--ym-menu-mark-size) + var(--ym-menu-mark-gap)
-  );
-  left: min(64.42%, calc(100% - var(--ym-menu-mark-size) - 1rem));
-  width: var(--ym-menu-mark-size);
-  height: var(--ym-menu-mark-size);
+.ym-menu-mark--outline {
+  top: calc(var(--menu-mark-top) + var(--menu-mark-size));
+  left: var(--menu-mark-outline-left);
 }
 
 .ym-menu-topbar {
   display: flex;
-  min-height: clamp(4.5rem, 12dvh, 7.6875rem);
   flex: none;
   align-items: center;
   justify-content: space-between;
+  @apply mx-auto h-20 w-full max-w-320 md:h-24.25;
 }
 
 .ym-menu-logo {
@@ -528,10 +773,10 @@
   box-shadow: 0 0 0 3px var(--color-sisters-buttercup);
 }
 
+/* The negative margin centres the square on the header's menu trigger, so the
+   X lands where the hamburger was. */
 .ym-menu-close {
   display: grid;
-  width: 3.375rem;
-  height: 3.375rem;
   cursor: pointer;
   place-items: center;
   background: var(--color-brand-pure-white);
@@ -540,6 +785,7 @@
   transition:
     opacity 200ms ease,
     transform 450ms cubic-bezier(0.645, 0.045, 0.355, 1);
+  @apply -mr-1 size-10 md:-mr-2.75 md:size-13.5;
 }
 
 .ym-menu-close:hover {
@@ -552,16 +798,18 @@
     0 0 0 4px var(--color-brand-pure-white);
 }
 
+/* At the frame heights, primary links start 156px from the top, below the
+   80/97px bar. */
 .ym-menu-layout {
   position: relative;
   display: flex;
   width: 100%;
-  max-width: 90rem;
   flex: 1 0 auto;
   flex-direction: column;
-  gap: clamp(0.75rem, 2dvh, 2rem);
+  gap: var(--menu-section-gap);
   margin-inline: auto;
-  padding-top: clamp(0.5rem, 2dvh, 2.0625rem);
+  padding-top: var(--menu-pad-top);
+  @apply max-w-320;
 }
 
 .ym-menu-link-list {
@@ -680,17 +928,17 @@
   display: block;
   width: fit-content;
   font-family: var(--font-boldonse);
-  font-size: clamp(2.25rem, min(3.5rem, 7dvh, 6vw), 3.5rem);
-  line-height: 1.037;
-  letter-spacing: -0.02em;
   color: transparent;
   -webkit-text-stroke: 2px var(--color-brand-warm-snow);
   white-space: nowrap;
   text-transform: uppercase;
+  font-size: var(--menu-primary-size);
+  line-height: var(--menu-primary-line-height);
+  letter-spacing: var(--menu-primary-tracking);
 }
 
 .ym-menu-primary-list {
-  gap: clamp(0.75rem, 4dvh, 2.5rem);
+  gap: var(--menu-primary-gap);
 }
 
 .ym-menu-primary-link:hover,
@@ -710,12 +958,12 @@
   flex: none;
   flex-direction: column;
   justify-content: space-between;
-  gap: clamp(0.75rem, 2dvh, 2rem);
+  gap: var(--menu-footer-gap);
   margin-top: auto;
 }
 
 .ym-menu-secondary-list {
-  gap: 1rem;
+  gap: var(--menu-secondary-gap);
 }
 
 .ym-menu-secondary-link {
@@ -723,10 +971,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding-block: clamp(0.5rem, 2dvh, 1rem);
+  padding-block: var(--menu-secondary-padding);
   color: var(--color-brand-warm-snow);
-  font-size: 1.5rem;
-  font-weight: 700;
+  @apply text-lead font-bold;
 }
 
 .ym-menu-secondary-link:focus-visible {
@@ -762,82 +1009,31 @@
   box-shadow: 0 0 0 0.1875rem var(--color-brand-warm-snow);
 }
 
-body:has(.ym-menu-popup) [data-site-logo-link] {
-  pointer-events: none;
-  opacity: 0;
-}
-
-@media (max-width: 37.5rem) {
-  .ym-menu-decoration {
-    --ym-menu-mark-size: min(17rem, calc(50dvh - 3rem), calc(100vw - 2rem));
-  }
-
-  .ym-menu-content {
-    padding: 0 clamp(1rem, 8.2vw, 2rem) clamp(1.5rem, 5dvh, 4rem);
-  }
-
-  .ym-menu-topbar {
-    min-height: clamp(4rem, 12dvh, 7.6875rem);
-  }
-
-  .ym-menu-close {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-
-  .ym-menu-close [data-material-icon] {
-    width: 1.4815rem;
-    height: 1.4815rem;
-  }
-
-  .ym-menu-primary-link {
-    font-size: clamp(1.5rem, min(3rem, 7dvh, 11vw), 3rem);
-    line-height: 1.043;
-    -webkit-text-stroke-width: 2px;
-  }
-
-  .ym-menu-primary-list {
-    gap: clamp(0.625rem, 3dvh, 2rem);
-  }
-
-  .ym-menu-layout {
-    gap: 0;
-  }
-
-  .ym-menu-footer {
-    width: 100%;
-    margin-top: clamp(1.25rem, 6dvh, 3.5rem);
-  }
-
+/* Mobile frame, below the header's `md` breakpoint. */
+@media (width < 48rem) {
   .ym-menu-secondary-link {
     font-size: 1.125rem;
   }
+}
 
-  .ym-menu-secondary-list {
-    gap: 0.25rem;
+/* Short viewports: primary links and the secondary block side by side. */
+@media (width < 48rem) and (height < 30rem),
+  (width >= 48rem) and (height < 35rem) {
+  .ym-menu-layout {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
   }
 
-  .ym-menu-secondary-link .ym-cta-arrow,
-  .ym-menu-secondary-link .ym-cta-arrow [data-material-icon] {
-    width: 1.125rem;
-    height: 1.125rem;
-  }
-
-  .ym-menu-mark--top {
-    left: 1rem;
-  }
-
-  .ym-menu-mark--bottom {
-    right: 1rem;
-    left: auto;
+  .ym-menu-footer {
+    flex: 0 1 auto;
+    margin-top: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ym-menu-backdrop,
+  .ym-blob-reveal,
   .ym-menu-popup,
-  .ym-menu-surface,
-  .ym-menu-content,
   .ym-menu-close,
   .ym-menu-link-list a,
   .ym-menu-social-link,

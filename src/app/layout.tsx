@@ -6,6 +6,7 @@ import { isSiteIndexable, SITE_ORIGIN } from "@/lib/seo";
 import { FooterSlot } from "@/components/site/footer-slot";
 import { FooterPageStage } from "@/components/site/footer-page-stage";
 import { EntryAnimation } from "@/components/site/entry-animation";
+import { EntryScreen } from "@/components/site/entry-screen";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteNavigation } from "@/components/site/site-navigation";
@@ -51,7 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col">
         <SmoothScrollProvider>
-          <EntryAnimation>
+          <EntryAnimation screen={<EntryScreen />}>
             <FooterPageStage
               header={
                 <SiteHeader>

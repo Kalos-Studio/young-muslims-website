@@ -53,7 +53,7 @@ const DESTINATIONS = {
     href: "/support",
     label: "Support",
     currentRoute: "prefix",
-    labels: { "header-donate": "Donate" },
+    labels: { "header-donate": "Donate", "drawer-primary": "Donate" },
   },
   store: {
     href: "/store",
@@ -64,7 +64,7 @@ const DESTINATIONS = {
     href: "/blog",
     label: "Blog",
     currentRoute: "prefix",
-    labels: { "header-primary": "The Feed" },
+    labels: { "header-primary": "The Feed", "drawer-secondary": "The Feed" },
   },
   contact: {
     href: "/contact",
