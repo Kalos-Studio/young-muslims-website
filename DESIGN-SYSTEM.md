@@ -35,6 +35,13 @@ The desktop website roles come directly from Figma node `26:188`:
 
 Every role uses Figma's Auto line height, represented by `normal` in CSS.
 
+Every type role is also listed in `TYPE_SIZE_TOKENS` in `src/lib/utils.ts`,
+which registers the roles with `cn` as font sizes. Without that, `cn` reads a
+custom size such as `text-nav` as a text colour and silently drops it when a
+colour such as `text-brand-obsidian` is in the same call. When you add a
+`--text-*` role to `globals.css`, add it there too; `bun run lint:tokens`
+fails until the two lists match.
+
 Boldonse has one approved weight. Do not combine `font-display` with a bold
 utility: that asks the browser to synthesize a weight that does not exist.
 
@@ -190,11 +197,128 @@ scrolls up over it. Pass the media (a video or image with
   view, so it cannot be the sentinel).
 - The media and wave are full-bleed; overlay content caps at the 1440 bound
   with the header's side padding.
+- On short viewports the overlay title drops to `text-mobile-display` so it
+  does not crowd under the header. `short:` is the project's one height-based
+  variant, `@media (max-height: 30rem)` (480px). It catches landscape phones
+  (about 360-430px tall) but not landscape tablets or laptops.
 
 | Token                | Value                 | Use                                                                                       |
 | -------------------- | --------------------- | ----------------------------------------------------------------------------------------- |
 | `--hero-wave-height` | `max(6rem, 16.944vw)` | The wave band: 244 of 1440 units, with a 6rem minimum so it stays a proper wave on phones |
 | `--hero-peek`        | 15.57% of the band    | How much of the band shows above the fold at load (38 of 244 units)                       |
+
+Both are rounded to whole pixels. Every section edge below the hero sits over
+the pinned hero, and an edge on a fractional pixel lets a hairline of it show
+through.
+
+## Standard button
+
+`StandardButton` (`src/components/ui/standard-button.tsx`) is the site's
+standard page button, a link: `<StandardButton href="/about" label="Who We
+Are" />`. Use it for in-page calls to action everywhere except the header
+CTAs and the end-of-page CTA sections, which keep their own styles. Pass
+`className` for placement; other link props pass through.
+
+- **Resting (Figma 545:938):** a `text-nav` Figtree Bold label in Obsidian, an
+  ↗ arrow in a Royal square, and a 2px Royal underline. It is `px-6`, with
+  `pt-4 pb-4.5` so the underline sits inside the 51px height, and `gap-2.5`.
+- **Hover and keyboard focus (Figma 544:654):** one orchestrated animation.
+  The underline rises into a full Royal fill as the text turns Warm Snow.
+  Riding on it, the label rolls (`.ym-cta-roll`) and the arrow launches up
+  and to the right (`.ym-cta-arrow--diagonal`, as on the Donate button). The
+  arrow's square is the same Royal as the fill, so it merges into it. All
+  four share one easing and duration; the roll and launch start just after
+  the fill, so the fill leads.
+- **Reduced motion:** hover and focus switch straight to the filled state,
+  with no fill rise, roll or launch.
+- The hover is CSS only, so the component is a Server Component.
+
+| Token                                   | Value                            | Use                                                                     |
+| --------------------------------------- | -------------------------------- | ----------------------------------------------------------------------- |
+| `--duration-standard-button`            | 360ms                            | The fill rising and the colour change; also the roll and launch         |
+| `--duration-standard-button-swap-delay` | 40ms                             | How long after the fill starts the roll and launch begin                |
+| `--ease-standard-button`                | `cubic-bezier(0.22, 1, 0.36, 1)` | The one easing for the whole hover: quick start, soft settle, no bounce |
+| `--standard-button-underline`           | 0.125rem                         | The resting underline, which grows into the fill                        |
+
+## Text reveal
+
+Every section below the hero wraps its text in `TextReveal`
+(`src/components/site/text-reveal.tsx`). When the text scrolls into view, its
+lines fade in and rise into place one after another, once. It is not
+re-triggered.
+
+- Wrap a heading, a paragraph, or a block holding both. The stagger then runs
+  through the heading's lines into the body's. Lines are measured when the
+  reveal starts, so they follow however the text wraps at that width.
+- Spread `textRevealUnit` (from `text-reveal-unit.ts`, importable by Server
+  Components) on a link or button inside the block to reveal it
+  whole, as one more line.
+- The reveal starts when the text's top is 15% up from the bottom of the
+  viewport. Text that is already above the viewport (skipped by a jump) is
+  revealed too.
+- Under reduced motion, and before JavaScript runs, the text is shown in
+  place.
+
+| Token                            | Value                            | Use                                    |
+| -------------------------------- | -------------------------------- | -------------------------------------- |
+| `--duration-text-reveal`         | 700ms                            | Each line's fade and rise              |
+| `--duration-text-reveal-stagger` | 90ms                             | Delay between one line and the next    |
+| `--text-reveal-rise`             | 1.25rem                          | How far below its place a line starts  |
+| `--ease-text-reveal`             | `cubic-bezier(0.22, 1, 0.36, 1)` | The menu's gentle deceleration, reused |
+
+## Belonging section
+
+The landing page's second section, "More than a program" (Figma 37:19, tablet
+279:150, mobile 294:1078). It is built in
+`src/app/landing/belonging-section.tsx`, and it rides up over the hero behind
+the hero wave.
+
+- The copy (`text-mobile-section` / `text-landing-section` in Jade,
+  `text-body` / `text-landing-copy` in Obsidian, and the "Who We Are" link) is
+  centred in a stage, inside an oval ring of 20 faces (Figma 37:37).
+- The ring is one SVG drawn in Figma's desktop units and scaled by
+  `--belonging-ring-width`, so every breakpoint shows the same full ring. On
+  tablet and mobile it is wider than the screen and bleeds off both sides:
+  you see its top and bottom arcs around the copy. This is intended.
+- The faces are spaced evenly along an oval fitted to the Figma face
+  centres: centre (742.6, 859.6), radii 951 x 414.6, tilted -19.7 degrees.
+  They are drawn at 84% of their Figma size, so they don't touch.
+- **Motion, in two phases.**
+  - **Stream-in (time-based, once per page load).** When the section
+    scrolls into view, the faces enter one after another from beyond the
+    viewport's right edge and sweep along the oval into place, like beads
+    threading onto it: top-arc faces along the top, bottom-arc faces along
+    the bottom, farthest first so none pass each other. Each fades in as it
+    comes. Where each enters depends on the screen: just past the right edge
+    on its arc, or, when the whole oval fits on screen, from beyond its right
+    end. Durations scale with on-screen path length (paced by the longest
+    path at 1440px), so the stream moves at the same pace on every width. It plays to the end on its own timeline, whatever the scroll does,
+    and scrolling back up never replays it. Scrolling does not rotate the
+    ring until it has finished.
+  - **Drift (scroll-linked).** From the moment the stream-in ends, the ring
+    drifts gently around the oval: counter-clockwise as the page scrolls
+    down, clockwise as it scrolls up. The drift is measured from the scroll
+    position at that moment, so it starts at zero and the faces continue
+    from exactly where the stream-in left them.
+  - Under reduced motion the faces simply sit in place.
+- The waves into the next (Obsidian) section, Figma 165:1221 and 165:1223,
+  keep Figma's size at every breakpoint up to 1440px wide, anchored to the
+  section's bottom centre. Beyond 1440px they scale with the width, so they
+  always reach both edges.
+
+Mobile values first; tablet from `md`, desktop from `xl`:
+
+| Token                                | Mobile / tablet / desktop         | Use                                                                                                                                                                                           |
+| ------------------------------------ | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--belonging-ring-width`             | 109.696 / 116.811 / 143.75rem     | The ring SVG (2300 Figma units) at scale 0.7631 / 0.8126 / 1                                                                                                                                  |
+| `--belonging-stage-height`           | 70.0625 / 62.8125 / 77.8125rem    | The area the ring and copy are centred in (twice the hero wave's bottom to the copy's centre)                                                                                                 |
+| `--belonging-wave-band`              | 14.5625 / 24.875 / 28.75rem       | The band holding the waves into the next section                                                                                                                                              |
+| `--belonging-wave-height`            | 28.75rem                          | The drawn waves (460 Figma units), 1:1 up to 1440px wide; they may rise above a shorter band                                                                                                  |
+| `--duration-belonging-swirl`         | 1400ms                            | Each face's stream-in. The longest path at 1440px takes this, which sets the pace; a longer on-screen path (wider screens) takes proportionally longer at that pace, shorter ones take 1400ms |
+| `--duration-belonging-swirl-fade`    | 700ms                             | Each face's fade-in, over the first half of its stream-in                                                                                                                                     |
+| `--duration-belonging-swirl-stagger` | 60ms                              | Delay between one face's stream-in and the next (about 2.5s in all at 1440: 1.4s + 19 x 60ms; a little longer on wide screens)                                                                |
+| `--ease-belonging-swirl`             | `cubic-bezier(0.3, 0.6, 0.25, 1)` | Each face's stream-in: already moving as it enters (about twice its average speed), settling softly                                                                                           |
+| `--belonging-ring-drift`             | 36deg                             | The ring's drift across the section's whole scroll, starting from zero at the handoff                                                                                                         |
 
 ## Blob reveal
 

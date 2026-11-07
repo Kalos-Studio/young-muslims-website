@@ -56,7 +56,9 @@ Choose the smallest tool that fully expresses the interaction.
 
 [Motion for React](https://motion.dev/docs/react) is installed for sliding
 panels, content reveals, gestures, layout animation, and coordinated component
-transitions. It is available but is not yet imported by a production component.
+transitions. Section text below the hero uses the shared `TextReveal`
+(`src/components/site/text-reveal.tsx`), and scroll-linked scenes such as the
+landing belonging ring use `useScroll`; see `DESIGN-SYSTEM.md`.
 
 Use a Client Component when the animation needs hooks, gestures, state, or
 `AnimatePresence`:

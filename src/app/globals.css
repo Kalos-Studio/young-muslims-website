@@ -5,6 +5,8 @@
  ---break---
  */
 @custom-variant dark (&:is(.dark *));
+/* Short viewports, such as landscape phones (see DESIGN-SYSTEM.md). */
+@custom-variant short (@media (max-height: 30rem));
 
 /*
  * Design tokens.
@@ -496,10 +498,107 @@
   /* The bottom wave band spans Figma page y 986-1230 (244 units of 1440)
      and scales with the viewport width, with a minimum so it stays a proper
      wave on phones. */
-  --hero-wave-height: max(6rem, calc(100vw * 0.16944));
+  --hero-wave-height: max(6rem, round(calc(100vw * 0.16944), 1px));
   /* How much of the band shows above the fold at load: the wave's top hump,
-     38 of its 244 units in the 1440 x 1024 frame. */
-  --hero-peek: calc(var(--hero-wave-height) * 0.1557);
+     38 of its 244 units in the 1440 x 1024 frame. Both are rounded to whole
+     pixels: every section edge below sits over the pinned hero, and an edge
+     on a fractional pixel lets a hairline of the hero show through. */
+  --hero-peek: round(calc(var(--hero-wave-height) * 0.1557), 1px);
+}
+
+/*
+ * Standard button tokens (components/ui/standard-button.tsx), Figma 545:938
+ * (resting) and 544:654 (hover). Documented in DESIGN-SYSTEM.md under
+ * "Standard button".
+ */
+@theme {
+  /* One easing for the whole hover: the fill rising, the colour change, the
+     label roll and the arrow launch. A quick start that settles softly, with
+     no overshoot (a fill that overshoots would read as a bounce). */
+  --ease-standard-button: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  /* The Royal underline at rest, which grows up into the hover fill. */
+  --standard-button-underline: 0.125rem;
+  /* The fill rising and the text turning Warm Snow. */
+  --duration-standard-button: 360ms;
+  /* The label roll and arrow launch start this much after the fill, so the
+     fill leads and the swap rides on it; they share its duration. */
+  --duration-standard-button-swap-delay: 40ms;
+}
+
+/*
+ * Text reveal tokens (components/site/text-reveal.tsx), the line-by-line
+ * fade-and-rise used by every section below the hero. Documented in
+ * DESIGN-SYSTEM.md under "Text reveal".
+ */
+@theme {
+  /* The menu's gentle deceleration: lines arrive quickly and settle softly. */
+  --ease-text-reveal: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --duration-text-reveal: 700ms;
+  /* Delay between one line and the next. */
+  --duration-text-reveal-stagger: 90ms;
+  /* How far below its place a line starts. */
+  --text-reveal-rise: 1.25rem;
+}
+
+/*
+ * Belonging section tokens (landing "More than a program", Figma 37:19,
+ * 279:150 and 294:1078). Documented in DESIGN-SYSTEM.md under "Belonging
+ * section". Mobile values first; tablet from `md`, desktop from `xl`.
+ */
+@theme {
+  /* Each face's stream-in: already moving as it enters, at about twice
+     its average speed, and settling softly into place. */
+  --ease-belonging-swirl: cubic-bezier(0.3, 0.6, 0.25, 1);
+}
+
+:root {
+  /* The face ring is drawn in an SVG 2300 Figma units wide, centred on the
+     copy. Desktop draws it 1:1; tablet and mobile scale the same ring
+     (0.8126 and 0.7631, from the ring groups 279:155 and 294:1083), so it
+     bleeds off both sides of narrow screens. */
+  --belonging-ring-width: 109.696rem;
+  /* The area the ring and copy are centred in: from the hero wave's bottom
+     edge, twice the distance to the copy's centre in each frame. */
+  --belonging-stage-height: 70.0625rem;
+  /* The band under the stage that holds the waves into the next section. */
+  --belonging-wave-band: 14.5625rem;
+  /* The drawn waves: 460 Figma units tall, 1:1 up to 1440px wide (they may
+     rise above a shorter band). */
+  --belonging-wave-height: 28.75rem;
+  /* Ring motion. The stream-in plays once, on a timer, when the section
+     enters view: one after another, the faces enter from beyond the right
+     edge and sweep along the oval into place, fading in as they come. After
+     it, the ring drifts with scroll, this far (counter-clockwise when
+     scrolling down) across the section's whole scroll. */
+  /* Each face's stream-in. The longest path at 1440px takes this, which
+     sets the stream's pace; a longer path on screen (wider screens) takes
+     proportionally longer at that pace, and shorter ones take this. */
+  --duration-belonging-swirl: 1400ms;
+  --duration-belonging-swirl-fade: 700ms;
+  --duration-belonging-swirl-stagger: 60ms;
+  --belonging-ring-drift: 36deg;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --belonging-ring-width: 116.811rem;
+    --belonging-stage-height: 62.8125rem;
+    --belonging-wave-band: 24.875rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --belonging-ring-width: 143.75rem;
+    --belonging-stage-height: 77.8125rem;
+    --belonging-wave-band: 28.75rem;
+  }
 }
 
 /*

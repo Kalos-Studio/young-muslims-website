@@ -1,0 +1,21 @@
+/* Sizes come from the belonging tokens in globals.css (DESIGN-SYSTEM.md,
+   "Belonging section"). */
+
+.stage {
+  height: var(--belonging-stage-height);
+}
+
+.ring {
+  width: var(--belonging-ring-width);
+  max-width: none;
+  height: auto;
+}
+
+.waveBand {
+  height: var(--belonging-wave-band);
+}
+
+/* 1:1 up to 1440px wide; beyond that the view box's aspect ratio grows it. */
+.waves {
+  min-height: var(--belonging-wave-height);
+}

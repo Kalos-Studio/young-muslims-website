@@ -48,7 +48,7 @@ export function LandingHero({ children }: { children: ReactNode }) {
       }
       overlay={
         <div className="mx-auto flex w-full max-w-360 flex-col items-center gap-3 px-8 text-center text-brand-pure-white md:gap-4 md:px-16 xl:px-20">
-          <h1 className="font-display text-mobile-display text-balance md:text-landing-display">
+          <h1 className="font-display text-mobile-display text-balance md:text-landing-display short:text-mobile-display">
             FOR THE YOUTH. BY THE YOUTH.
           </h1>
           <p className="max-w-3xl text-nav font-semibold text-balance md:text-landing-hero-subtitle">

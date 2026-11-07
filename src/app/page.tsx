@@ -12,15 +12,10 @@ import cardLeadership from "../../design-assets/figma/landing-2026/card-guidance
 import cardGuidance from "../../design-assets/figma/landing-2026/card-guidance.png";
 import cardService from "../../design-assets/figma/landing-2026/card-impact-source.jpeg";
 import cardPeople from "../../design-assets/figma/landing-2026/card-people.jpeg";
-import belongingWaveObsidian from "../../design-assets/figma/landing-2026/belonging-wave-obsidian.svg";
-import belongingWavePale from "../../design-assets/figma/landing-2026/belonging-wave-pale.svg";
 import highlightPlay from "../../design-assets/figma/landing-2026/highlight-play.svg";
 import highlightReel from "../../design-assets/figma/landing-2026/highlight-reel.png";
 import { AllAboutScrollStage } from "./landing/all-about-scroll-stage";
-import {
-  BelongingCopy,
-  BelongingPortraitOrbit,
-} from "./landing/belonging-portrait-orbit";
+import { BelongingSection } from "./landing/belonging-section";
 import { ChapterFinderSection } from "./landing/chapter-finder-section";
 import { EverywhereSection } from "./landing/everywhere-section";
 import { HighlightReelMarquee } from "./landing/highlight-reel-section";
@@ -147,45 +142,7 @@ export default function Home() {
     <PageFrame className="overflow-x-clip" data-landing-page="true">
       {/* Every section after the hero scrolls up over the pinned hero. */}
       <LandingHero>
-        <ContentFrame bleed>
-          <section className="relative isolate h-[1298px] w-full overflow-hidden bg-brand-warm-snow xl:h-[1830px]">
-            <div className="pointer-events-none absolute top-[1671.83px] left-[calc(50%-115.01px)] z-0 flex h-[1879.96px] w-[2955.92px] -translate-x-1/2 -translate-y-1/2 items-center justify-center xl:top-[1281px] xl:left-[-873px] xl:translate-x-0 xl:translate-y-0">
-              <div className="rotate-[-9.8deg]">
-                <Image
-                  src={belongingWavePale}
-                  alt=""
-                  className="block max-w-none"
-                />
-              </div>
-            </div>
-            <div className="pointer-events-none absolute top-[1712.19px] left-[calc(50%-115.01px)] z-[15] flex h-[1772.44px] w-[2786.86px] -translate-x-1/2 -translate-y-1/2 items-center justify-center xl:top-[1375px] xl:left-[-781px] xl:translate-x-0 xl:translate-y-0">
-              <div className="rotate-[-9.8deg]">
-                <Image
-                  src={belongingWaveObsidian}
-                  alt=""
-                  className="block max-w-none"
-                />
-              </div>
-            </div>
-            <div className="relative z-10 h-full">
-              <BelongingPortraitOrbit />
-            </div>
-            <BelongingCopy>
-              <h2 className="text-[30px] leading-[36px] font-extrabold tracking-[-0.02em] text-brand-jade md:text-landing-section md:leading-[1.2]">
-                More than a program.
-                <br />A place to belong.
-              </h2>
-              <p className="mt-6 text-base leading-[18.9px] font-medium tracking-[-0.02em] text-brand-obsidian md:mt-[26px] md:text-landing-copy md:leading-[1.2]">
-                Young Muslims is the nation&apos;s largest Muslim youth
-                organization, but that&apos;s not how members describe it. To
-                them, it&apos;s the people they see every week, the ones who
-                became a second family. Across the country, Young Muslims turns
-                everyday friendship into a stronger Deen, a stronger self, and a
-                lifetime of brotherhood and sisterhood.
-              </p>
-            </BelongingCopy>
-          </section>
-        </ContentFrame>
+        <BelongingSection />
 
         <ContentFrame bleed>
           <section className="relative h-[808px] w-full overflow-hidden bg-brand-obsidian xl:h-[1087px]">
