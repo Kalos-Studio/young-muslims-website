@@ -124,7 +124,7 @@ export function ShowYouReel() {
           </span>
           <span className="absolute bottom-9 left-4.5 md:bottom-7.5 md:left-7.5 xl:bottom-10 xl:left-10">
             <span className="block text-xs font-extrabold xl:text-body">
-              30 SECOND WATCH
+              2 MIN WATCH
             </span>
             <span className="mt-1.5 block text-landing-copy font-semibold md:text-lead xl:mt-1.75 xl:text-mobile-display">
               Young Muslims Highlight Reel

@@ -618,22 +618,25 @@
      in the three frames). Row spacing, tile spacing and offsets are fixed
      multiples of it, so the marquee scales as one. */
   --show-marquee-row-height: 2.4593rem;
-  /* The blob's caps (show-you-blob.ts): the top one is 540 units tall and
-     the bottom one 460, each including the 80 units it reaches back into the
-     section; 1:1 up to 1440px wide. */
-  --show-blob-top-height: 33.75rem;
-  --show-blob-bottom-height: 28.75rem;
-  --show-blob-overlap: 5rem;
+  /* The blob's caps (show-you-blob.ts): the top one is 600 units tall and
+     the bottom one 520, each including the 140 units it reaches back into
+     the section (more than --show-edge-drift moves it); 1:1 up to 1440px
+     wide. */
+  --show-blob-top-height: 37.5rem;
+  --show-blob-bottom-height: 32.5rem;
+  --show-blob-overlap: 8.75rem;
   /* Scroll-linked parallax across the section's scroll (from its top
      entering the viewport to its bottom leaving). Each marquee row drifts
      this many row heights in all, half either side of its Figma place;
      the top and bottom rows go left as the page scrolls down, the middle row
      right. */
   --show-marquee-drift: 6;
-  /* The blob breathes: as the page scrolls down its top edge rises and its
-     bottom edge falls, by this either side of rest (the Twilight rims half as
-     much again, for depth). */
-  --show-edge-drift: 1.5rem;
+  /* The blob breathes outward: its top edge rises by this over the first
+     half of the section's scroll and its bottom edge falls by this over the
+     second (the Twilight rims move half as much again). Keep it in step with EDGE_DRIFT in
+     scripts/blob-contours.mjs, which sizes the overlaps for it and refuses
+     to generate if any straight inner edge could show. */
+  --show-edge-drift: 6.875rem;
   /* The card grows by this on hover, before it is played. */
   --show-reel-hover-scale: 1.025;
   --duration-show-reel-hover: 450ms;

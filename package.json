@@ -18,10 +18,12 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test:responsive": "node scripts/responsive-audit.mjs",
     "test:footer": "node scripts/footer-easter-egg-audit.mjs",
+    "test:show-you": "node scripts/show-you-blob-audit.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:tokens": "node scripts/check-design-tokens.mjs",
-    "test:tokens": "node --test scripts/check-design-tokens.test.mjs"
+    "test:tokens": "node --test scripts/check-design-tokens.test.mjs",
+    "generate:show-you-blob": "node scripts/blob-contours.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

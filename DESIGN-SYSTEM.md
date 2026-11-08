@@ -335,11 +335,11 @@ warm-to-dark handoff and the page's first deliberate parallax moment.
   waves around the section (top: 165:1221 Landing Twilight, 165:1223
   Obsidian; bottom: 165:1225, 165:1227), each Obsidian contour with its
   Twilight rim behind it. The contours are generated into
-  `src/app/landing/show-you-blob.ts` (reference renders `blob-top.svg` and
+  `src/app/landing/show-you-blob.ts` by `scripts/blob-contours.mjs` (`bun run
+generate:show-you-blob`; edit the script, not its output; reference renders `blob-top.svg` and
   `blob-bottom.svg` in `design-assets/figma/landing-2026/show-you/`): each
   shape's outer edge across the full width, so no notch, lobe or straight
-  edge shows at any width. Each cap reaches 80 units back into the section,
-  more than it ever moves. The section sits above its neighbours (`z-20`) so
+  edge shows at any width. The contours follow Figma exactly, including the bottom shape curving back into the section at the far left (visible on 1440px+ screens), where the Twilight rim shows through. Each Obsidian cap reaches 140 units back into the section, the top rim 64 and the bottom rim 134 (sized by the script for that curve-back and the drift), more than they ever move, so no straight inner edge shows. The generator refuses a contour with a vertical jump or a flattened shelf near either side, and `bun run test:show-you` (against a running server, like `test:footer`) checks the rendered blob at five widths through the whole scroll for straight vertical and horizontal edges, squared corners and page overflow. The section sits above its neighbours (`z-20`) so
   the caps can overlap them, and clips sideways only. Each cap keeps Figma's
   size up to 1440px wide and scales with the width beyond.
 - **"But it's easier to just show you."** Figtree ExtraBold in Warm Snow,
@@ -352,7 +352,7 @@ warm-to-dark handoff and the page's first deliberate parallax moment.
   shows an end, and bleeds off both sides.
 - **The highlight-reel card** (`show-you-reel.tsx`): the Figma photo under a
   40% Obsidian overlay, the `play_arrow` Material Symbol (66px, 100px on
-  desktop), "30 SECOND WATCH" (`text-xs`, `text-body` on desktop) and "Young
+  desktop), "2 MIN WATCH" (the reel runs 1:55; `text-xs`, `text-body` on desktop) and "Young
   Muslims Highlight Reel" (`text-landing-copy` / `text-lead` /
   `text-mobile-display`, the 32px role). Landscape on tablet and desktop,
   portrait on mobile; on desktop it sits 200px right of centre, as in Figma; from `2xl` (1536px) it centres, with the stage spanning the viewport, per the approved wide-screen layout that `test:responsive` checks.
@@ -362,29 +362,36 @@ warm-to-dark handoff and the page's first deliberate parallax moment.
 - **Parallax**, from one scroll-linked value across the section's scroll,
   written straight to GPU-composited transforms (`translate3d` on HTML
   layers; no per-frame CSS transitions, since Lenis already smooths the
-  scroll): the blob breathes, its top edge rising and its bottom edge falling
-  as the page scrolls down (the Twilight rims half as much again, for
-  depth); the marquee rows drift in opposite directions (top and bottom left
-  as the page scrolls down, middle right), reaching their Figma places when
-  the section is centred.
+  scroll). The blob breathes outward from its Figma shape: its top edge rises
+  over the first half of the scroll (while it is on screen) and its bottom
+  edge falls over the second half, the Twilight rims half as much again, so
+  the shape visibly grows as it passes and shrinks back on the way up. The
+  edges only move outward, so the outline never dips into the section. The
+  marquee rows drift in opposite directions (top and bottom left as the page
+  scrolls down, middle right), reaching their Figma places when the section
+  is centred.
+- **Height.** Content-driven: heading top / gap to card / space under it are
+  51 / 67 / 168 on mobile, 51 / 137 / 216 on tablet and 120 / 108 / 120 on
+  desktop, giving a 755 / 848 / 925px section (Figma's frames were 808 / 894
+  / 1087, with dead dark space above the heading and below the card).
 - **Reduced motion:** no parallax (everything at its Figma place), no hover
   growth, no PLAY label.
 
 Spacing uses Tailwind's spacing scale; mobile values first, tablet from `md`,
 desktop from `xl`:
 
-| Token                                                  | Value                            | Use                                                                                                |
-| ------------------------------------------------------ | -------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `--show-marquee-row-height`                            | 2.4593 / 3.4996 / 3.7599rem      | One lettering row (39.35 / 55.99 / 60.16 Figma units); spacing and offsets scale with it           |
-| `--show-marquee-drift`                                 | 6                                | Each row's drift in row heights across the section (half either side of rest): 361 / 336 / 236px   |
-| `--show-edge-drift`                                    | 1.5rem                           | How far the blob's top and bottom edges move either side of rest (48px in all); the rims move 1.5x |
-| `--ease-show-you`                                      | `cubic-bezier(0.22, 1, 0.36, 1)` | The card's hover growth and the PLAY label's follow                                                |
-| `--show-reel-hover-scale`                              | 1.025                            | The card's growth on hover, before it is played                                                    |
-| `--duration-show-reel-hover`                           | 450ms                            | The card's hover growth                                                                            |
-| `--duration-show-reel-follow`                          | 160ms                            | How far the PLAY label trails the pointer                                                          |
-| `--aspect-show-reel` / `--aspect-show-reel-portrait`   | 833 / 529, 296 / 397             | The card's shape: landscape (tablet, desktop) and portrait (mobile)                                |
-| `--show-blob-top-height` / `--show-blob-bottom-height` | 33.75rem / 28.75rem              | The drawn caps (540 and 460 Figma units, including the overlap), 1:1 up to 1440px wide             |
-| `--show-blob-overlap`                                  | 5rem                             | How far each cap reaches back into the section (80 units; 5.5556% of the width once scaled)        |
+| Token                                                  | Value                            | Use                                                                                                                                                                                                                                                          |
+| ------------------------------------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--show-marquee-row-height`                            | 2.4593 / 3.4996 / 3.7599rem      | One lettering row (39.35 / 55.99 / 60.16 Figma units); spacing and offsets scale with it                                                                                                                                                                     |
+| `--show-marquee-drift`                                 | 6                                | Each row's drift in row heights across the section (half either side of rest): 361 / 336 / 236px                                                                                                                                                             |
+| `--show-edge-drift`                                    | 6.875rem                         | How far the blob's top edge rises and bottom edge falls (110px each, so the blob grows 220px); the rims move 1.5x (165px). Keep EDGE_DRIFT in scripts/blob-contours.mjs in step: it sizes the overlaps and refuses to generate if a straight edge could show |
+| `--ease-show-you`                                      | `cubic-bezier(0.22, 1, 0.36, 1)` | The card's hover growth and the PLAY label's follow                                                                                                                                                                                                          |
+| `--show-reel-hover-scale`                              | 1.025                            | The card's growth on hover, before it is played                                                                                                                                                                                                              |
+| `--duration-show-reel-hover`                           | 450ms                            | The card's hover growth                                                                                                                                                                                                                                      |
+| `--duration-show-reel-follow`                          | 160ms                            | How far the PLAY label trails the pointer                                                                                                                                                                                                                    |
+| `--aspect-show-reel` / `--aspect-show-reel-portrait`   | 833 / 529, 296 / 397             | The card's shape: landscape (tablet, desktop) and portrait (mobile)                                                                                                                                                                                          |
+| `--show-blob-top-height` / `--show-blob-bottom-height` | 37.5rem / 32.5rem                | The drawn caps (600 and 520 Figma units, including the overlap), 1:1 up to 1440px wide                                                                                                                                                                       |
+| `--show-blob-overlap`                                  | 8.75rem                          | How far each Obsidian cap reaches back into the section (140 units; 9.7222% of the width once scaled)                                                                                                                                                        |
 
 The video files and how they are encoded are in
 `design-assets/video-source/README.md`.

@@ -3,7 +3,7 @@
 
 /* The blob's caps: separate layers, moved by the compositor only. Each
    shape is 1:1 up to 1440px wide (centred and cropped) and grows with the
-   width beyond, and reaches --show-blob-overlap (80 units, 5.5556% of the
+   width beyond, and reaches --show-blob-overlap (140 units, 9.7222% of the
    width once scaled) back into the section, so the body's straight edges
    never show however the caps move. */
 .cap {
@@ -15,12 +15,12 @@
 
 .capTop {
   bottom: 100%;
-  margin-bottom: calc(-1 * max(var(--show-blob-overlap), 5.5556%));
+  margin-bottom: calc(-1 * max(var(--show-blob-overlap), 9.7222%));
 }
 
 .capBottom {
   top: 100%;
-  margin-top: calc(-1 * max(var(--show-blob-overlap), 5.5556%));
+  margin-top: calc(-1 * max(var(--show-blob-overlap), 9.7222%));
 }
 
 .capTopShape {

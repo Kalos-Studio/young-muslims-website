@@ -70,15 +70,23 @@ const CAPS = [
  * The blob is one contained shape: the section's Obsidian body plus a top cap
  * and a bottom cap whose organic contours come from Figma's waves around the
  * section (see show-you-blob.ts), each with a Landing Twilight rim behind it.
- * The caps reach 80 units back into the section, more than they ever move, so
- * the body's straight edges never show.
+ * The caps reach 140 units back into the section, more than they ever move,
+ * so the body's straight edges never show; the rims reach 64 (top) and 134
+ * (bottom, where Figma's shape curves back into the section at the far
+ * left), so theirs stay hidden behind the Obsidian although they move
+ * further.
  *
  * Parallax, from one scroll-linked value (0 as the section's top enters the
  * viewport, 1 as its bottom leaves), written straight to compositor-only
  * transforms (no per-frame CSS transitions; Lenis already smooths the
  * scroll):
- * - The blob breathes: its top edge rises and its bottom edge falls by
- *   `--show-edge-drift` either side of rest, the rims half as much again.
+ * - The blob breathes outward from its Figma shape: over the first half of
+ *   the section's scroll (while its top edge is on screen) the top edge rises
+ *   by `--show-edge-drift`, and over the second half (while its bottom edge
+ *   is on screen) the bottom edge falls by the same; the rims move half as
+ *   much again. Scrolling back reverses it. The edges only ever move outward,
+ *   so the organic outline never dips into the section, where the body's
+ *   straight edge would show.
  * - The marquee rows drift `--show-marquee-drift` row heights in all, half
  *   either side of their Figma places (reached when the section is centred):
  *   the top and bottom rows left as the page scrolls down, the middle row
@@ -106,10 +114,15 @@ export function ShowYouMotion() {
       const x = row.direction * centred * metrics.drift;
       element.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
     });
+    // Each edge's share of its outward move: the top edge over the first
+    // half of the scroll, the bottom edge over the second.
+    const topOut = Math.min(1, Math.max(0, progress * 2));
+    const bottomOut = Math.min(1, Math.max(0, progress * 2 - 1));
     CAPS.forEach((cap, index) => {
       const element = capRefs.current[index];
       if (!element) return;
-      const y = cap.edge * centred * 2 * metrics.edge * cap.depth;
+      const out = cap.edge === -1 ? topOut : bottomOut;
+      const y = cap.edge * out * metrics.edge * cap.depth;
       element.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
     });
   };
@@ -156,7 +169,7 @@ export function ShowYouMotion() {
             className={cn(styles.cap, top ? styles.capTop : styles.capBottom)}
           >
             <svg
-              viewBox={top ? "-720 -460 1440 540" : "-720 -80 1440 460"}
+              viewBox={top ? "-720 -460 1440 600" : "-720 -140 1440 520"}
               preserveAspectRatio={top ? "xMidYMax slice" : "xMidYMin slice"}
               className={cn(
                 "block h-auto w-full",
@@ -171,8 +184,9 @@ export function ShowYouMotion() {
 
       {/* The lettering, clipped to the section's sides. */}
       <div className="absolute inset-0 overflow-x-clip">
-        {/* Rows start at Figma y 570 / 603 / 501 in the three frames. */}
-        <div className="absolute top-142.5 left-1/2 flex flex-col md:top-150.75 xl:top-125.25">
+        {/* Rows start 380 / 367 / 143 below the card's top (Figma y 570 /
+            603 / 501 in the three frames; desktop moves up with the card). */}
+        <div className="absolute top-142.5 left-1/2 flex flex-col md:top-150.75 xl:top-104.75">
           {ROWS.map((row, index) => (
             <div
               key={index}

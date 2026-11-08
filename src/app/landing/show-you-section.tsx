@@ -15,8 +15,10 @@ import { ShowYouReel } from "./show-you-reel";
  * place (ShowYouReel). The section sits above its neighbours so its edges
  * can overlap them; it clips sideways only.
  *
- * Vertical rhythm per frame (heading top / gap to card / space under it):
- * mobile 51 / 67 / 221, tablet 51 / 137 / 262, desktop 202 / 108 / 200.
+ * Vertical rhythm (heading top / gap to card / space under it): mobile
+ * 51 / 67 / 168, tablet 51 / 137 / 216, desktop 120 / 108 / 120. Figma's
+ * frames gave 221, 262 and 202 + 200, which left dead dark space; the space
+ * under the card now just clears the lettering rows and the blob's edge.
  * On desktop the card sits 200 to the right of centre, as in Figma; on wide
  * screens (from `2xl`) it centres, and the stage spans the viewport, as the
  * approved wide-screen layout (checked by `bun run test:responsive`) requires.
@@ -29,7 +31,7 @@ export function ShowYouSection() {
       className="relative z-20 overflow-x-clip bg-brand-obsidian"
     >
       <ShowYouMotion />
-      <div className="relative flex w-full flex-col items-center px-8 pt-12.75 pb-55.25 md:px-16 md:pb-65.5 xl:px-20 xl:pt-50.5 xl:pb-50">
+      <div className="relative flex w-full flex-col items-center px-8 pt-12.75 pb-42 md:px-16 md:pb-54 xl:px-20 xl:pt-30 xl:pb-30">
         <TextReveal
           as="h2"
           id="show-you-heading"
