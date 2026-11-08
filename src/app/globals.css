@@ -657,6 +657,48 @@
 }
 
 /*
+ * "All about" cards section tokens (Figma 58:120, 279:262 and 295:1165).
+ * Documented in DESIGN-SYSTEM.md under "All about section". Scroll-linked
+ * travel across the section's scroll (from its top entering the viewport to
+ * its bottom leaving), with every layer at its Figma place when the section
+ * is centred in the viewport.
+ */
+@theme {
+  /* A tile's Figma shape (298 x 482). Mobile tiles scale with the content
+     width at this ratio, so their photos keep their proportions. */
+  --aspect-all-about-tile: 298 / 482;
+}
+
+:root {
+  /* The show-you blob's bottom rim hangs this far into the section at rest:
+     306 units, 1:1 up to 1440px wide, then 21.25% of the width (it scales
+     with the width beyond). Resolves against the width, so use it only in
+     padding or margin. */
+  --all-about-wave-depth-base: 19.125rem;
+  --all-about-wave-depth: max(var(--all-about-wave-depth-base), 21.25%);
+  /* The copy starts this far below that resting depth: the rim's 165px
+     drift plus the desktop frame's 64px gap (535px in all up to 1440). */
+  --all-about-wave-clearance: 14.3125rem;
+  /* Desktop: the left column (tiles 1 and 3) rises through the section, this
+     far either side of its place. */
+  --all-about-column-rise: 11.25rem;
+  /* Desktop: the right column (tiles 2 and 4) descends from this far above
+     its place, tucked under the dark blob's bottom wave as the section
+     enters... */
+  --all-about-column-tuck: 27.5rem;
+  /* ...and ends this far below it, inside the 174px under the last tile so
+     it never crosses into the next section. */
+  --all-about-column-settle: 10rem;
+  /* Desktop: the watermarks rise this far in all, half either side. */
+  --all-about-mark-drift: 6rem;
+  /* Tablet: depth parallax. The cards and watermarks both lag the scroll,
+     the watermarks (deeper) twice as far: these are their totals, half
+     either side. */
+  --all-about-tablet-card-drift: 4rem;
+  --all-about-tablet-mark-drift: 8rem;
+}
+
+/*
  * Blob reveal and entry animation tokens. Documented in DESIGN-SYSTEM.md under
  * "Blob reveal" and "Entry animation".
  */

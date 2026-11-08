@@ -7,7 +7,7 @@ import { AnimatedArrow } from "./animated-arrow";
 import styles from "./standard-button.module.css";
 
 const BASE_CLASSES =
-  "ym-cta-trigger relative isolate inline-flex items-center gap-2.5 px-6 pt-4 pb-4.5 text-nav font-bold text-brand-obsidian outline-none focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow";
+  "ym-cta-trigger relative isolate inline-flex w-full items-center justify-center gap-2.5 px-6 md:w-auto pt-4 pb-4.5 text-nav font-bold text-brand-obsidian outline-none focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow";
 
 type StandardButtonProps = Omit<
   ComponentProps<typeof Link>,
@@ -31,8 +31,10 @@ type StandardButtonProps = Omit<
  * so it merges into it, as in the hover frame. Under reduced motion it
  * switches straight to the filled state.
  *
- * Pass `className` for placement (margins and the like); other link props
- * pass through to the anchor.
+ * On mobile it spans its container's width (label and arrow centred), for a
+ * bigger tap target and a clean stacked layout; from `md` it sizes to its
+ * label. Pass `className` for placement (margins and the like); other link
+ * props pass through to the anchor.
  */
 export function StandardButton({
   label,

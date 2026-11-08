@@ -223,6 +223,8 @@ Are" />`. Use it for in-page calls to action everywhere except the header
 CTAs and the end-of-page CTA sections, which keep their own styles. Pass
 `className` for placement; other link props pass through.
 
+- **Width:** full width on mobile (label and arrow centred), for a bigger
+  tap target and a clean stacked layout; from `md` it sizes to its label.
 - **Resting (Figma 545:938):** a `text-nav` Figtree Bold label in Obsidian, an
   ↗ arrow in a Royal square, and a 2px Royal underline. It is `px-6`, with
   `pt-4 pb-4.5` so the underline sits inside the 51px height, and `gap-2.5`.
@@ -395,6 +397,79 @@ desktop from `xl`:
 
 The video files and how they are encoded are in
 `design-assets/video-source/README.md`.
+
+## All about section
+
+The landing page's "This is what we're all about" section (Figma 58:120,
+tablet 279:262, mobile 295:1165), built in
+`src/app/landing/all-about-section.tsx` with its scroll motion in
+`all-about-motion.tsx`. It follows the "show you" section, whose blob's
+bottom wave (drawn by that section, above this one) hangs over its top.
+
+- **Copy:** "This is what we're all about." (`text-mobile-section` /
+  `text-landing-section`, Figtree ExtraBold, Obsidian; the tablet frame's
+  36px has no token, so tablet uses the desktop role), the body
+  (`text-body` / `text-landing-copy`, Medium) and an "About us"
+  `StandardButton` to `/about` (full width on mobile, the button's default), all
+  in one `TextReveal`. Mobile uses the site's 32px (`px-8`) side gutter at
+  every phone width, as the hero, belonging and show-you sections do.
+- **Tiles:** four static 298 x 482 tiles (on mobile they fill the content
+  width at that locked ratio, `aspect-all-about-tile`, up to 384px wide), not links and
+  with no hover: photo, Figma's bottom overlay (clear at 9.5% to 48%
+  Obsidian at 110%), a `text-card-title` SemiBold title and a `text-body`
+  Medium body in Pure White, positioned per tile as in Figma. Each photo is
+  vendored pre-cropped to its Figma frame crop
+  (`design-assets/figma/landing-2026/all-about/tile-*.jpg`, 3x where the
+  source allows), so it simply covers the tile.
+- **Layout:** desktop puts the copy on the left (538 wide) and two tile
+  columns on the right: tiles 1 and 3, then tiles 2 and 4 starting 90
+  lower, 53 apart, 72 between tiles. The 1440 frame's 90 / 71 side insets
+  hold; between 1280 and 1440 the copy column narrows. Tablet keeps the two
+  offset columns (44 apart) under the copy, in a centred 768 frame. Mobile
+  stacks the tiles 46 apart in the order 1, 3, 2, 4, as in its frame.
+- **Watermarks:** the YM monogram (Royal) and the "ym" roundel (Jade), both
+  at 4% opacity in the vendored SVGs, at their frame positions (the
+  monogram right-anchored on desktop).
+- **Handoff spacing:** the show-you bottom rim reaches 306 units below that
+  section at rest and 471px at full drift, at every width up to 1440 (its
+  contour is traced from the desktop wave), and deeper beyond, where the
+  caps scale with the width (573px at 1920, 709px at 2560). The tablet and
+  mobile frames assumed a shallower wave, so their copy (309 / 267) would
+  sit under the rim. The copy therefore starts the rim's drift plus the
+  desktop frame's 64 gap below the rim's resting depth on every tier: 535px
+  up to 1440 wide, growing with the rim beyond
+  (`all-about-section.module.css`). The tiles and watermarks move down with
+  it. Tiles from 535 / 824 / 866 (desktop / tablet / mobile), giving
+  1835 / 2149px on desktop / tablet up to 1440 wide; on mobile the height
+  follows the tiles (3128px at 360, 3562px at 430).
+- **Motion** (one scroll-linked value across the section's scroll, 0.5 when
+  centred, where everything is at its Figma place; written straight to
+  `translate3d` on layers promoted with `will-change`, no per-frame CSS
+  transitions, since Lenis smooths the scroll):
+  - **Desktop:** the copy is `position: sticky` (not fixed: the footer
+    Easter egg transforms the page wrapper). Its `top` is measured as
+    (viewport height - copy height) / 2, so it scrolls normally until its
+    centre reaches the viewport's centre, pins there, and is released at
+    the end of its column (as tall as the tiles). The left column rises and
+    the right column descends, sliding past each other: the right one
+    starts tucked under the blob's bottom wave and emerges from behind it
+    as the section enters. The watermarks rise slowly.
+  - **Tablet:** no pin and no opposing motion. Tiles and watermarks both
+    lag the scroll, the watermarks twice as far, for depth.
+  - **Mobile:** nothing moves or pins.
+  - **Reduced motion**, at any width: nothing moves or pins; everything sits
+    at its Figma place.
+
+| Token                                                             | Value                         | Use                                                                                                                                                                         |
+| ----------------------------------------------------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--all-about-column-rise`                                         | 11.25rem                      | Desktop left column: rises 180px either side of its place (360px in all)                                                                                                    |
+| `--all-about-column-tuck`                                         | 27.5rem                       | Desktop right column: starts 440px above its place, under the blob's bottom wave as the section enters, and descends to it at the centred point                             |
+| `--all-about-column-settle`                                       | 10rem                         | Desktop right column: carries on to 160px below its place, inside the 174px under the last tile, so it never crosses into the next section                                  |
+| `--all-about-mark-drift`                                          | 6rem                          | Desktop watermarks: rise 96px in all, half either side                                                                                                                      |
+| `--all-about-tablet-card-drift` / `--all-about-tablet-mark-drift` | 4rem / 8rem                   | Tablet depth parallax: tiles and watermarks lag the scroll by 64px / 128px in all, half either side                                                                         |
+| `--all-about-wave-depth-base` / `--all-about-wave-depth`          | 19.125rem / max(base, 21.25%) | The show-you rim's resting depth over this section: 306 units, 1:1 up to 1440 wide, then 21.25% of the width. Width-relative, so padding and margin only                    |
+| `--all-about-wave-clearance`                                      | 14.3125rem                    | How far below that depth the copy starts: the rim's 165px drift plus the desktop frame's 64px gap (535px in all up to 1440)                                                 |
+| `--aspect-all-about-tile`                                         | 298 / 482                     | A tile's Figma shape; mobile tiles scale with the content width at this ratio (296 x 479 at 360, 366 x 592 at 430, at most 384 wide) so their photos keep their proportions |
 
 ## Blob reveal
 

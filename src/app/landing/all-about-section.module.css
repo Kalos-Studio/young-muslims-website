@@ -1,0 +1,21 @@
+/* Spacing under the "show you" blob's bottom wave, from the all-about
+   tokens in globals.css (DESIGN-SYSTEM.md, "All about section"). The wave's
+   Twilight rim keeps Figma's size up to 1440px wide and scales with the
+   width beyond, so its depth is a share of the section's width (padding and
+   margin percentages resolve against it). */
+
+/* The copy (and, on desktop, the tiles) start the clearance below the rim's
+   resting depth: 535px up to 1440px wide, more beyond. */
+.content {
+  padding-top: calc(
+    var(--all-about-wave-clearance) + var(--all-about-wave-depth)
+  );
+}
+
+/* The watermarks move down with the content once the rim grows past its
+   1440 depth. */
+.marks {
+  margin-top: calc(
+    var(--all-about-wave-depth) - var(--all-about-wave-depth-base)
+  );
+}
