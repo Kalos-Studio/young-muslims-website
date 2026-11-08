@@ -19,16 +19,16 @@ function readRoot(name: string, fallback: string) {
 }
 
 /** Plays `animations` once `element` comes into view (or is already past). */
-function onEnter(element: Element, play: () => void) {
+function onEnter(element: Element, play: () => void, rise = "15%") {
   const observer = new IntersectionObserver(
     ([entry]) => {
       if (!entry.isIntersecting && entry.boundingClientRect.top > 0) return;
       observer.disconnect();
       play();
     },
-    // Starts as the element's top comes 15% up from the viewport's foot, as
-    // TextReveal does.
-    { rootMargin: "0px 0px -15% 0px" },
+    // Fires once, as the element's top comes `rise` up from the viewport's
+    // foot (15% by default, as TextReveal does), or if it is already past.
+    { rootMargin: `0px 0px -${rise} 0px` },
   );
   observer.observe(element);
   return observer;
@@ -51,9 +51,10 @@ function onEnter(element: Element, play: () => void) {
  * - Stats: each rises `--everywhere-stat-rise` as it fades in, one stagger
  *   after the last, in reading order (left to right; top to bottom on
  *   mobile).
- * - Map: fades in growing from `--everywhere-map-from-scale`; when it has
- *   settled the 85 markers pin on in their DOM order, which runs left to
- *   right across the map: each drops `--everywhere-pin-drop` as it scales
+ * - Map: fades in growing from `--everywhere-map-from-scale`. The 85 markers
+ *   have their own trigger, the map's top reaching `--everywhere-pin-trigger`
+ *   up the viewport, and pin on in their DOM order, which runs left to right
+ *   across the map: each drops `--everywhere-pin-drop` as it scales
  *   in from nothing, with a slight overshoot, one stagger after the last.
  *
  * Under reduced motion nothing is created: everything stays in place.
@@ -147,7 +148,8 @@ export function EverywhereMotion({
         onEnter(stats[0], () => statAnimations.forEach((a) => a.play())),
       );
 
-    // Map, then the markers, left to right.
+    // The map's entrance, and, on their own trigger, the markers, left to
+    // right.
     const map = all("map")[0];
     if (map) {
       const mapDuration = readTimeToken("--duration-everywhere-map", 900);
@@ -172,16 +174,22 @@ export function EverywhereMotion({
           ],
           {
             duration: pinDuration,
-            delay: mapDuration + index * pinStagger,
+            delay: index * pinStagger,
             easing: pin,
           },
         ),
       );
+      observers.push(onEnter(map, () => mapAnimation.play()));
+      // The markers start as the map comes properly into view (its top
+      // `--everywhere-pin-trigger` up the viewport), whatever the map's own
+      // entrance is doing. A line rather than a share of the map, which is
+      // wider than the screen on tablet and mobile.
       observers.push(
-        onEnter(map, () => {
-          mapAnimation.play();
-          markerAnimations.forEach((a) => a.play());
-        }),
+        onEnter(
+          map,
+          () => markerAnimations.forEach((a) => a.play()),
+          readRoot("--everywhere-pin-trigger", "45%"),
+        ),
       );
     }
 

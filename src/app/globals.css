@@ -812,11 +812,13 @@
   --duration-everywhere-stat: 700ms;
   --duration-everywhere-stat-stagger: 140ms;
   --everywhere-stat-rise: 1.5rem;
-  /* The map fades in growing from this scale; once it has settled the
-     markers pin on, left to right, each dropping this far as it scales in,
-     one stagger after the last. */
+  /* The map fades in growing from this scale as it enters view. The markers
+     start on their own trigger, once the map's top has risen this far up the
+     viewport (so the map is properly on screen), and pin on left to right,
+     each dropping this far as it scales in, one stagger after the last. */
   --duration-everywhere-map: 900ms;
   --everywhere-map-from-scale: 0.96;
+  --everywhere-pin-trigger: 45%;
   --duration-everywhere-pin: 420ms;
   --duration-everywhere-pin-stagger: 12ms;
   --everywhere-pin-drop: 0.75rem;

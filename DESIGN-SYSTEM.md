@@ -603,25 +603,28 @@ with its motion in `everywhere-motion.tsx`.
     transform transition. Pointer moves are read at most once a frame and
     only while the section is on screen. No hover effect.
   - Stats rise and fade in one by one, in reading order (no count-up).
-  - The map fades in growing from 0.96; as it settles, the markers pin on
-    left to right, each dropping in from nothing with a slight overshoot, 12ms
-    after the last (about 1.4s for all 85).
+  - The map fades in growing from 0.96 as it enters view. The markers have
+    their own trigger: once the map's top has risen `--everywhere-pin-trigger`
+    (45%) up the viewport, so the map is properly on screen, they pin on left
+    to right, each dropping in from nothing with a slight overshoot, 12ms
+    after the last (about 1.4s for all 85). Once only.
   - Reduced motion: nothing is created; everything is in place. The DOM is
     the same either way, so the server and client always agree.
 
-| Token                                                                                          | Value                               | Use                                                                                      |
-| ---------------------------------------------------------------------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------- |
-| `--aspect-everywhere-map`                                                                      | 1440 / 795                          | The map frame                                                                            |
-| `--everywhere-map-width`                                                                       | 30.4936rem / 75.6549rem / 90rem     | The map frame's width (mobile / tablet / desktop)                                        |
-| `--everywhere-wave-height`                                                                     | max(1.25rem, 2.2222vw rounded)      | The subtle top edge's band                                                               |
-| `--ease-everywhere-enter`                                                                      | `cubic-bezier(0.22, 1, 0.36, 1)`    | Shape, stat and map entrances; the pointer drift                                         |
-| `--ease-everywhere-pin`                                                                        | `cubic-bezier(0.34, 1.56, 0.64, 1)` | A marker pinning on: a slight overshoot, then settle                                     |
-| `--duration-everywhere-shape` / `--everywhere-shape-from-scale`                                | 900ms / 0.92                        | A shape's grow-and-fade entrance                                                         |
-| `--everywhere-shape-drift`                                                                     | 5rem                                | A shape's scroll drift across the section, times its depth                               |
-| `--everywhere-pointer-drift` / `--duration-everywhere-pointer`                                 | 0.875rem / 700ms                    | A shape's furthest drift towards the cursor (times its depth), and how long it trails it |
-| `--duration-everywhere-stat` / `--duration-everywhere-stat-stagger` / `--everywhere-stat-rise` | 700ms / 140ms / 1.5rem              | Each stat's rise-and-fade, the delay between stats, and how far each rises               |
-| `--duration-everywhere-map` / `--everywhere-map-from-scale`                                    | 900ms / 0.96                        | The map's fade-and-grow entrance; the markers start as it ends                           |
-| `--duration-everywhere-pin` / `--duration-everywhere-pin-stagger` / `--everywhere-pin-drop`    | 420ms / 12ms / 0.75rem              | Each marker's drop-in, the delay between markers (left to right), and how far each drops |
+| Token                                                                                          | Value                               | Use                                                                                                                                                            |
+| ---------------------------------------------------------------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--aspect-everywhere-map`                                                                      | 1440 / 795                          | The map frame                                                                                                                                                  |
+| `--everywhere-map-width`                                                                       | 30.4936rem / 75.6549rem / 90rem     | The map frame's width (mobile / tablet / desktop)                                                                                                              |
+| `--everywhere-wave-height`                                                                     | max(1.25rem, 2.2222vw rounded)      | The subtle top edge's band                                                                                                                                     |
+| `--ease-everywhere-enter`                                                                      | `cubic-bezier(0.22, 1, 0.36, 1)`    | Shape, stat and map entrances; the pointer drift                                                                                                               |
+| `--ease-everywhere-pin`                                                                        | `cubic-bezier(0.34, 1.56, 0.64, 1)` | A marker pinning on: a slight overshoot, then settle                                                                                                           |
+| `--duration-everywhere-shape` / `--everywhere-shape-from-scale`                                | 900ms / 0.92                        | A shape's grow-and-fade entrance                                                                                                                               |
+| `--everywhere-shape-drift`                                                                     | 5rem                                | A shape's scroll drift across the section, times its depth                                                                                                     |
+| `--everywhere-pointer-drift` / `--duration-everywhere-pointer`                                 | 0.875rem / 700ms                    | A shape's furthest drift towards the cursor (times its depth), and how long it trails it                                                                       |
+| `--duration-everywhere-stat` / `--duration-everywhere-stat-stagger` / `--everywhere-stat-rise` | 700ms / 140ms / 1.5rem              | Each stat's rise-and-fade, the delay between stats, and how far each rises                                                                                     |
+| `--duration-everywhere-map` / `--everywhere-map-from-scale`                                    | 900ms / 0.96                        | The map's fade-and-grow entrance                                                                                                                               |
+| `--everywhere-pin-trigger`                                                                     | 45%                                 | How far up the viewport the map's top must rise before the markers start (a line, not a share of the map, which is wider than the screen on tablet and mobile) |
+| `--duration-everywhere-pin` / `--duration-everywhere-pin-stagger` / `--everywhere-pin-drop`    | 420ms / 12ms / 0.75rem              | Each marker's drop-in, the delay between markers (left to right), and how far each drops                                                                       |
 
 ## Blob reveal
 
