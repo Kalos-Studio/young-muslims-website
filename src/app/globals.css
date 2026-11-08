@@ -568,9 +568,6 @@
   --belonging-stage-height: 70.0625rem;
   /* The band under the stage that holds the waves into the next section. */
   --belonging-wave-band: 14.5625rem;
-  /* The drawn waves: 460 Figma units tall, 1:1 up to 1440px wide (they may
-     rise above a shorter band). */
-  --belonging-wave-height: 28.75rem;
   /* Ring motion. The stream-in plays once, on a timer, when the section
      enters view: one after another, the faces enter from beyond the right
      edge and sweep along the oval into place, fading in as they come. After
@@ -598,6 +595,61 @@
     --belonging-ring-width: 143.75rem;
     --belonging-stage-height: 77.8125rem;
     --belonging-wave-band: 28.75rem;
+  }
+}
+
+/*
+ * "Show you" section tokens (landing highlight reel, Figma 53:73, 279:208
+ * and 294:1136). Documented in DESIGN-SYSTEM.md under "Show you section".
+ * Mobile values first; tablet from `md`, desktop from `xl`.
+ */
+@theme {
+  /* The highlight-reel card: landscape on tablet and desktop (833 x 529 and
+     624 x 396.27), portrait on mobile (296 x 397). */
+  --aspect-show-reel: 833 / 529;
+  --aspect-show-reel-portrait: 296 / 397;
+  /* The card's hover growth and the PLAY label's follow: quick to respond,
+     soft to settle. */
+  --ease-show-you: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  /* One row of the background lettering (60.16, 55.99 and 39.35 Figma units
+     in the three frames). Row spacing, tile spacing and offsets are fixed
+     multiples of it, so the marquee scales as one. */
+  --show-marquee-row-height: 2.4593rem;
+  /* The blob's caps (show-you-blob.ts): the top one is 540 units tall and
+     the bottom one 460, each including the 80 units it reaches back into the
+     section; 1:1 up to 1440px wide. */
+  --show-blob-top-height: 33.75rem;
+  --show-blob-bottom-height: 28.75rem;
+  --show-blob-overlap: 5rem;
+  /* Scroll-linked parallax across the section's scroll (from its top
+     entering the viewport to its bottom leaving). Each marquee row drifts
+     this many row heights in all, half either side of its Figma place;
+     the top and bottom rows go left as the page scrolls down, the middle row
+     right. */
+  --show-marquee-drift: 6;
+  /* The blob breathes: as the page scrolls down its top edge rises and its
+     bottom edge falls, by this either side of rest (the Twilight rims half as
+     much again, for depth). */
+  --show-edge-drift: 1.5rem;
+  /* The card grows by this on hover, before it is played. */
+  --show-reel-hover-scale: 1.025;
+  --duration-show-reel-hover: 450ms;
+  /* The PLAY label trails the pointer by this. */
+  --duration-show-reel-follow: 160ms;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --show-marquee-row-height: 3.4996rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --show-marquee-row-height: 3.7599rem;
   }
 }
 

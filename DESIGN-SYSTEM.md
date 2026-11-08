@@ -192,6 +192,10 @@ scrolls up over it. Pass the media (a video or image with
   frame.
 - Sticky rather than fixed: the footer Easter egg transforms the page
   wrapper, which would carry a fixed hero with it.
+- Once the page has scrolled past the hero's wave the hero is fully covered,
+  so `StickyHeroCover` hides it and pauses its videos until it comes back:
+  pinned for the whole page, it would otherwise keep decoding and compositing
+  a full-screen video behind everything.
 - The header scrim is driven by an invisible 100dvh marker with
   `data-header-hero` that scrolls normally (the pinned hero is always in
   view, so it cannot be the sentinel).
@@ -302,9 +306,10 @@ the hero wave.
     from exactly where the stream-in left them.
   - Under reduced motion the faces simply sit in place.
 - The waves into the next (Obsidian) section, Figma 165:1221 and 165:1223,
-  keep Figma's size at every breakpoint up to 1440px wide, anchored to the
-  section's bottom centre. Beyond 1440px they scale with the width, so they
-  always reach both edges.
+  are drawn by that section as its wavy top edge (see "Show you section"),
+  over the band at the foot of this one, so the dark blob's outline can drift
+  as one shape. They keep Figma's size up to 1440px wide and scale with the
+  width beyond, so they always reach both edges.
 
 Mobile values first; tablet from `md`, desktop from `xl`:
 
@@ -312,13 +317,77 @@ Mobile values first; tablet from `md`, desktop from `xl`:
 | ------------------------------------ | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--belonging-ring-width`             | 109.696 / 116.811 / 143.75rem     | The ring SVG (2300 Figma units) at scale 0.7631 / 0.8126 / 1                                                                                                                                  |
 | `--belonging-stage-height`           | 70.0625 / 62.8125 / 77.8125rem    | The area the ring and copy are centred in (twice the hero wave's bottom to the copy's centre)                                                                                                 |
-| `--belonging-wave-band`              | 14.5625 / 24.875 / 28.75rem       | The band holding the waves into the next section                                                                                                                                              |
-| `--belonging-wave-height`            | 28.75rem                          | The drawn waves (460 Figma units), 1:1 up to 1440px wide; they may rise above a shorter band                                                                                                  |
+| `--belonging-wave-band`              | 14.5625 / 24.875 / 28.75rem       | The band the next section's top edge is drawn over                                                                                                                                            |
 | `--duration-belonging-swirl`         | 1400ms                            | Each face's stream-in. The longest path at 1440px takes this, which sets the pace; a longer on-screen path (wider screens) takes proportionally longer at that pace, shorter ones take 1400ms |
 | `--duration-belonging-swirl-fade`    | 700ms                             | Each face's fade-in, over the first half of its stream-in                                                                                                                                     |
 | `--duration-belonging-swirl-stagger` | 60ms                              | Delay between one face's stream-in and the next (about 2.5s in all at 1440: 1.4s + 19 x 60ms; a little longer on wide screens)                                                                |
 | `--ease-belonging-swirl`             | `cubic-bezier(0.3, 0.6, 0.25, 1)` | Each face's stream-in: already moving as it enters (about twice its average speed), settling softly                                                                                           |
 | `--belonging-ring-drift`             | 36deg                             | The ring's drift across the section's whole scroll, starting from zero at the handoff                                                                                                         |
+
+## Show you section
+
+The landing page's dark "show you" section (Figma 53:73, tablet 279:208,
+mobile 294:1136), built in `src/app/landing/show-you-section.tsx`: the
+warm-to-dark handoff and the page's first deliberate parallax moment.
+
+- **The dark blob.** One contained organic shape: the section's Obsidian
+  body plus a top cap and a bottom cap whose contours are traced from Figma's
+  waves around the section (top: 165:1221 Landing Twilight, 165:1223
+  Obsidian; bottom: 165:1225, 165:1227), each Obsidian contour with its
+  Twilight rim behind it. The contours are generated into
+  `src/app/landing/show-you-blob.ts` (reference renders `blob-top.svg` and
+  `blob-bottom.svg` in `design-assets/figma/landing-2026/show-you/`): each
+  shape's outer edge across the full width, so no notch, lobe or straight
+  edge shows at any width. Each cap reaches 80 units back into the section,
+  more than it ever moves. The section sits above its neighbours (`z-20`) so
+  the caps can overlap them, and clips sideways only. Each cap keeps Figma's
+  size up to 1440px wide and scales with the width beyond.
+- **"But it's easier to just show you."** Figtree ExtraBold in Warm Snow,
+  `text-mobile-section` / `text-landing-section` (tablet uses the desktop
+  role; its frame's 36px has no token), wrapped in `TextReveal`.
+- **Background lettering.** Three rows of BROTHERHOOD. SISTERHOOD. COMMUNITY
+  SERVICE. TARBIYYAH., from Figma's vector rows: solid Warm Snow, outlined
+  (a 1.5px Warm Snow line outside the letters), solid. Each row repeats one
+  four-phrase tile (`design-assets/figma/landing-2026/show-you/`) so it never
+  shows an end, and bleeds off both sides.
+- **The highlight-reel card** (`show-you-reel.tsx`): the Figma photo under a
+  40% Obsidian overlay, the `play_arrow` Material Symbol (66px, 100px on
+  desktop), "30 SECOND WATCH" (`text-xs`, `text-body` on desktop) and "Young
+  Muslims Highlight Reel" (`text-landing-copy` / `text-lead` /
+  `text-mobile-display`, the 32px role). Landscape on tablet and desktop,
+  portrait on mobile; on desktop it sits 200px right of centre, as in Figma; from `2xl` (1536px) it centres, with the stage spanning the viewport, per the approved wide-screen layout that `test:responsive` checks.
+  With a fine pointer it grows slightly on hover and a PLAY label follows the
+  pointer (standing in for it). A click plays the reel in place, with sound
+  and the browser's own controls; from then on the hover effects stop.
+- **Parallax**, from one scroll-linked value across the section's scroll,
+  written straight to GPU-composited transforms (`translate3d` on HTML
+  layers; no per-frame CSS transitions, since Lenis already smooths the
+  scroll): the blob breathes, its top edge rising and its bottom edge falling
+  as the page scrolls down (the Twilight rims half as much again, for
+  depth); the marquee rows drift in opposite directions (top and bottom left
+  as the page scrolls down, middle right), reaching their Figma places when
+  the section is centred.
+- **Reduced motion:** no parallax (everything at its Figma place), no hover
+  growth, no PLAY label.
+
+Spacing uses Tailwind's spacing scale; mobile values first, tablet from `md`,
+desktop from `xl`:
+
+| Token                                                  | Value                            | Use                                                                                                |
+| ------------------------------------------------------ | -------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `--show-marquee-row-height`                            | 2.4593 / 3.4996 / 3.7599rem      | One lettering row (39.35 / 55.99 / 60.16 Figma units); spacing and offsets scale with it           |
+| `--show-marquee-drift`                                 | 6                                | Each row's drift in row heights across the section (half either side of rest): 361 / 336 / 236px   |
+| `--show-edge-drift`                                    | 1.5rem                           | How far the blob's top and bottom edges move either side of rest (48px in all); the rims move 1.5x |
+| `--ease-show-you`                                      | `cubic-bezier(0.22, 1, 0.36, 1)` | The card's hover growth and the PLAY label's follow                                                |
+| `--show-reel-hover-scale`                              | 1.025                            | The card's growth on hover, before it is played                                                    |
+| `--duration-show-reel-hover`                           | 450ms                            | The card's hover growth                                                                            |
+| `--duration-show-reel-follow`                          | 160ms                            | How far the PLAY label trails the pointer                                                          |
+| `--aspect-show-reel` / `--aspect-show-reel-portrait`   | 833 / 529, 296 / 397             | The card's shape: landscape (tablet, desktop) and portrait (mobile)                                |
+| `--show-blob-top-height` / `--show-blob-bottom-height` | 33.75rem / 28.75rem              | The drawn caps (540 and 460 Figma units, including the overlap), 1:1 up to 1440px wide             |
+| `--show-blob-overlap`                                  | 5rem                             | How far each cap reaches back into the section (80 units; 5.5556% of the width once scaled)        |
+
+The video files and how they are encoded are in
+`design-assets/video-source/README.md`.
 
 ## Blob reveal
 

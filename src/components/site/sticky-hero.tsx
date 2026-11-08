@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { HeroWave } from "./hero-wave";
+import { StickyHeroCover } from "./sticky-hero-cover";
 import styles from "./sticky-hero.module.css";
 
 /** Classes for hero media (a video or image) so it covers the hero. */
@@ -22,6 +23,10 @@ export const stickyHeroMediaClassName =
  * sticky hero keeps its 100dvh in the layout so no spacer is needed. Scrolling
  * is native, so Lenis needs nothing special.
  *
+ * Once the page has scrolled past the hero's wave, the hero is fully covered:
+ * StickyHeroCover hides it and pauses its videos until it comes back, so it
+ * costs nothing while the rest of the page scrolls.
+ *
  * The header scrim is driven by an invisible 100dvh marker that scrolls
  * normally and carries `data-header-hero`; the pinned hero itself is always in
  * view, so it cannot be the sentinel.
@@ -42,7 +47,7 @@ export function StickyHero({
   children: ReactNode;
 }) {
   return (
-    <div className="relative isolate">
+    <div data-sticky-hero-root className="relative isolate">
       <div
         data-header-hero
         aria-hidden
@@ -50,7 +55,8 @@ export function StickyHero({
       />
       <section
         aria-label={label}
-        className="sticky top-0 z-0 h-dvh w-full overflow-hidden bg-brand-obsidian"
+        data-sticky-hero
+        className="sticky top-0 z-0 h-dvh w-full overflow-hidden bg-brand-obsidian data-covered:invisible"
       >
         {media}
         {overlay ? (
@@ -61,6 +67,7 @@ export function StickyHero({
       </section>
       <div className={styles.following}>
         <HeroWave />
+        <StickyHeroCover />
         {children}
       </div>
     </div>
