@@ -1,0 +1,105 @@
+/*
+ * The principles section's two layouts, from one DOM. Tokens: "Principles
+ * section" in globals.css and DESIGN-SYSTEM.md.
+ *
+ * Stacked (the default, set by the utilities in principles-section.tsx):
+ * four full-height panels one after another, scrolling normally. Used under
+ * reduced motion and on short viewports (30rem tall or less, the `short:`
+ * variant).
+ *
+ * Pinned (the media query below, the exact complement of those two cases):
+ * the section is the stage plus the scroll runway; the stage sticks to the
+ * viewport while the runway scrolls past, and principles-motion.tsx scrubs
+ * the panels with compositor-only transforms. Keep the query in step with
+ * PINNED_QUERY in principles-motion.tsx.
+ *
+ * Panels never change size. Panel i (from 1) always occupies the stage from
+ * the header clearance plus i strips down to its foot; it rises into place with translate3d, and the next panel
+ * rising over it is what reduces it to its strip.
+ */
+
+/* Word, description and button, anchored above the panel's foot. */
+.content {
+  bottom: var(--principles-content-bottom);
+}
+
+@media (prefers-reduced-motion: no-preference) and (height > 30rem) {
+  .section {
+    height: calc(var(--principles-stage-height) + var(--principles-runway));
+  }
+
+  .stage {
+    position: sticky;
+    top: 0;
+    height: var(--principles-stage-height);
+    overflow: clip;
+  }
+
+  .heading {
+    z-index: 0;
+    color: var(--color-brand-obsidian);
+  }
+
+  .panel {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: auto;
+    min-height: 0;
+    will-change: transform;
+    /* Below the stage until the motion takes over. */
+    transform: translate3d(0, 100%, 0);
+  }
+
+  .panel0 {
+    top: 0;
+    /* Peeking up from 64.36% down, as the section arrives. */
+    transform: translate3d(
+      0,
+      calc(var(--principles-stage-height) * var(--principles-peek)),
+      0
+    );
+  }
+
+  /* Later panels rest below the header clearance, one strip apart. */
+  .panel1 {
+    top: calc(var(--principles-header-clearance) + var(--principles-strip));
+  }
+
+  .panel2 {
+    top: calc(var(--principles-header-clearance) + var(--principles-strip) * 2);
+  }
+
+  .panel3 {
+    top: calc(var(--principles-header-clearance) + var(--principles-strip) * 3);
+  }
+
+  /* The photo keeps the stage's full height, aligned to its foot, so each
+     panel shows its photo framed as in Figma whatever its top. */
+  .photo {
+    top: auto;
+    height: var(--principles-stage-height);
+    will-change: transform;
+  }
+
+  /* Tall enough for the first strip's band, which includes the header
+     clearance; on later panels the excess is under the next panel. */
+  .scrim {
+    display: block;
+    height: calc(var(--principles-header-clearance) + var(--principles-strip));
+    will-change: opacity;
+  }
+
+  .word {
+    will-change: transform;
+  }
+
+  .fade {
+    will-change: opacity;
+  }
+
+  .headingCopy {
+    display: block;
+    will-change: transform, opacity;
+  }
+}

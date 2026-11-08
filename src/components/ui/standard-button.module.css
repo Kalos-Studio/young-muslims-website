@@ -58,3 +58,19 @@
     transition: none;
   }
 }
+
+/* The dark tone (Figma 246:124), for dark backgrounds: the underline and
+   fill are Warm Snow, and the text turns Obsidian as the fill rises. */
+.dark::before {
+  background-color: var(--color-brand-warm-snow);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dark:hover {
+    color: var(--color-brand-obsidian);
+  }
+}
+
+.dark:focus-visible {
+  color: var(--color-brand-obsidian);
+}

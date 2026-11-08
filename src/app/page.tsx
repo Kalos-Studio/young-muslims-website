@@ -8,7 +8,7 @@ import { LandingHero } from "./landing/landing-hero";
 import { LandingCtaSection } from "./landing/landing-new-sections";
 import { PeopleStoriesSection } from "./landing/people-stories-section";
 import { ShowYouSection } from "./landing/show-you-section";
-import { WhatWeStandOnSection } from "./landing/what-we-stand-on-section";
+import { PrinciplesSection } from "./landing/principles-section";
 import { WordOnTheStreetSection } from "./landing/word-on-the-street-section";
 
 // WIREFRAME: ContentFrame only supplies the prototype's shared content width.
@@ -34,11 +34,9 @@ export default function Home() {
 
         <AllAboutSection />
 
-        <WhatWeStandOnSection />
+        <PrinciplesSection />
 
-        <ContentFrame bleed>
-          <EverywhereSection />
-        </ContentFrame>
+        <EverywhereSection />
 
         <ContentFrame bleed>
           <PeopleStoriesSection />

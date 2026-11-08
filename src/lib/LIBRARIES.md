@@ -58,7 +58,10 @@ Choose the smallest tool that fully expresses the interaction.
 panels, content reveals, gestures, layout animation, and coordinated component
 transitions. Section text below the hero uses the shared `TextReveal`
 (`src/components/site/text-reveal.tsx`), and scroll-linked scenes such as the
-landing belonging ring use `useScroll`; see `DESIGN-SYSTEM.md`.
+landing belonging ring, the show-you blob and the pinned principles reveal use
+`useScroll`, writing compositor-only transforms (`translate3d`, `scale`,
+`opacity`) straight to promoted layers; see `DESIGN-SYSTEM.md`. A pinned scene
+uses a tall section with a `position: sticky` stage, never `position: fixed`.
 
 Use a Client Component when the animation needs hooks, gestures, state, or
 `AnimatePresence`:

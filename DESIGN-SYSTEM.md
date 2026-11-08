@@ -237,6 +237,12 @@ CTAs and the end-of-page CTA sections, which keep their own styles. Pass
   the fill, so the fill leads.
 - **Reduced motion:** hover and focus switch straight to the filled state,
   with no fill rise, roll or launch.
+- **Dark tone (`tone="dark"`, Figma 246:124):** for dark backgrounds such as
+  photos under a dark overlay. Resting: Warm Snow text and 2px underline, the
+  ↗ arrow in Obsidian on a Warm Snow square. Hover and focus: a Warm Snow
+  fill rises and the text turns Obsidian; the square merges into the fill.
+  Same mechanics, timing and reduced-motion behaviour as the default `light`
+  tone. Used by the principles section's "Learn more" buttons.
 - The hover is CSS only, so the component is a Server Component.
 
 | Token                                   | Value                            | Use                                                                     |
@@ -470,6 +476,152 @@ bottom wave (drawn by that section, above this one) hangs over its top.
 | `--all-about-wave-depth-base` / `--all-about-wave-depth`          | 19.125rem / max(base, 21.25%) | The show-you rim's resting depth over this section: 306 units, 1:1 up to 1440 wide, then 21.25% of the width. Width-relative, so padding and margin only                    |
 | `--all-about-wave-clearance`                                      | 14.3125rem                    | How far below that depth the copy starts: the rim's 165px drift plus the desktop frame's 64px gap (535px in all up to 1440)                                                 |
 | `--aspect-all-about-tile`                                         | 298 / 482                     | A tile's Figma shape; mobile tiles scale with the content width at this ratio (296 x 479 at 360, 366 x 592 at 430, at most 384 wide) so their photos keep their proportions |
+
+## Principles section
+
+The landing page's "What we're built on." section (Figma 208:3, tablet
+279:334, mobile 295:1194; the scroll mechanic adapts storyboard 572:434),
+built in `src/app/landing/principles-section.tsx` with its motion in
+`principles-motion.tsx` and its layouts in `principles-section.module.css`.
+
+- **Content:** the heading (`text-mobile-section` / `text-landing-section`)
+  and subline (`text-body` / `text-landing-copy`), in `TextReveal`, then four
+  full-viewport principles: Tarbiyyah, Diversity, Sustainability, Societal
+  Impact. Each is a photo under Figma's overlay (clear at 9.5% to 48%
+  Obsidian at 110%), the word in Boldonse (`font-display`, `text-stat` 54px,
+  `text-mobile-section` 30px on mobile; no `TextReveal`, the scroll is its
+  entrance), a `text-body` Medium description and a dark-tone
+  `StandardButton` "Learn more" to `/about`. The tablet frame's 36px heading
+  and Figma's 12px mobile description have no tokens, so tablet uses the
+  desktop roles and mobile uses `text-body`. Without Figma's -2% tracking,
+  Diversity's description needs a 480px measure (Figma 465) to keep its two
+  lines. The ghost previews of upcoming words in the frames are dropped.
+- **Photos:** pre-cropped by `scripts/principles-photos.mjs` from the masters
+  in `design-assets/figma/landing-2026/new-sections/` to the desktop frame
+  (1440 x 1024 at 2560 wide, used on tablet too) and the mobile frame
+  (360 x 808), and served art-directed through a `<picture>` built with
+  `getImageProps`. They are decoded before the section arrives.
+- **Pinned and scrubbed** (no reduced-motion preference, viewport taller
+  than 30rem): the section is the stage plus a scroll runway. The stage
+  sticks to the viewport (`position: sticky`, not fixed: the footer Easter
+  egg transforms the page wrapper) and the runway's scroll scrubs the reveal
+  (Motion `useScroll` across the section; Lenis drives the real scroll, so
+  no Lenis code is involved). The heading opens on Warm Snow with Tarbiyyah
+  peeking from below; Tarbiyyah rises to full, and the heading turns light
+  where the photo reaches it. Each later principle rises over the one before
+  until only that one's strip shows at the top: its word, centred, over a
+  slice of its photo. Once the collapse is complete, a 40% Obsidian scrim
+  fades in over the strip, the last beat. The strips accumulate below
+  the header, so with Societal Impact full all four words are on screen. A
+  short hold follows each principle; then the section releases straight
+  into the next section (Figma's closing wave, 208:4, is not used).
+- **Compositing:** panels never change size. Panel i (from 1) always fills
+  the stage from the header clearance plus i strips down to its foot; it
+  rises with `translate3d`, and the next panel covering it is what leaves
+  its strip. The collapsing panel's word slides into its strip (scaled only
+  if the strip is shorter than the word), its description and button fade
+  and its photo slides up (capped so it never uncovers the panel's
+  background). Its scrim stays clear throughout and fades in only once the
+  collapse has finished, over the start of the hold that follows. The heading is drawn twice, Obsidian on the stage and
+  Warm Snow inside the first panel (held still against its rise), so its
+  colour change is the panel uncovering one copy over the other. Only
+  `translate3d`, `scale` and `opacity` change per frame, on layers promoted
+  with `will-change`, and only for elements whose value changed. Keyboard
+  focus on a hidden "Learn more" scrolls to where that principle is fully
+  revealed.
+- **Stacked** (reduced motion, or a viewport 30rem tall or less): the four
+  panels as normal full-height sections (at least 808px, 1024px from `md`),
+  the heading in Warm Snow over the first, scrolling normally. Both layouts
+  come from one server-rendered DOM and are chosen by the CSS media query
+  (kept in step with `PINNED_QUERY` in the motion component), so nothing
+  differs between the server and the client.
+- **Mobile** pins too: profiled under mobile emulation (390 x 844, DPR 3,
+  touch flings) at 4x and 6x CPU throttling, no frame exceeded 20ms while
+  pinned. To fall back to the stacked layout on mobile, add
+  `and (width >= 48rem)` to both queries.
+
+Mobile values first; tablet and desktop from `md`:
+
+| Token                                                        | Value                                               | Use                                                                                                                                                                |
+| ------------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--principles-stage-height`                                  | 100dvh                                              | The pinned stage, as the sticky hero                                                                                                                               |
+| `--principles-strip-max`                                     | 6.25rem / 10.4375rem                                | A strip's height: 100px on mobile, Figma's 167px from `md`                                                                                                         |
+| `--principles-strip`                                         | min(max, room / 3)                                  | The strip: its max, or less on short screens, so the header clearance and three strips end the strip gap above the last word                                       |
+| `--principles-header-clearance`                              | 5rem / 6.0625rem                                    | The strips stack below the fixed header (80 / 97px); the first strip's band includes it                                                                            |
+| `--principles-strip-gap`                                     | 1.5rem                                              | The least space between the last strip and the last principle's word                                                                                               |
+| `--principles-content-bottom`                                | 5.375rem / clamp(3rem, stage - 52.5rem, 11.5625rem) | How far the button sits above a panel's foot: Figma's 86px on mobile; 185px from `md` at a 1024px stage, closing to 48px on shorter ones                           |
+| `--principles-content-height` / `--principles-content-reach` | 13.6875rem / bottom + height                        | The tallest word-to-button block (219px), and how far its top sits above the foot                                                                                  |
+| `--principles-peek`                                          | 0.6436                                              | Where the first principle peeks from as the section arrives (Figma y 659 of 1024)                                                                                  |
+| `--principles-rise`                                          | 0.65                                                | Stage heights of scroll for the first principle to rise to full                                                                                                    |
+| `--principles-step`                                          | 0.75                                                | Stage heights of scroll for each later principle to rise and collapse the one before                                                                               |
+| `--principles-hold`                                          | 0.15                                                | Stage heights of scroll held after each principle, fully revealed                                                                                                  |
+| `--principles-scrim-fade`                                    | 0.6                                                 | A fresh strip's scrim waits for its collapse to finish, then fades in over this share of the hold after it (0.09 stage heights, about 92px of scroll at 1024 tall) |
+| `--principles-runway`                                        | stage x (rise + 4 holds + 3 steps)                  | The pinned scroll: 3.5 stages, so the section is 4.5 stages tall (4608px at 1024 tall, 3798px at 844)                                                              |
+| `--principles-photo-shift`                                   | 0.5625                                              | How far a collapsing principle's photo slides up (Figma 576 of 1024), so its strip shows the heart of it                                                           |
+
+## Everywhere section
+
+The landing page's "everywhere" impact section (Figma 73:164; the tablet
+279:437 and mobile 296:1237 frames' layouts hold the desktop content, which
+is the content of record), built in `src/app/landing/everywhere-section.tsx`
+with its motion in `everywhere-motion.tsx`.
+
+- **Wave:** the section owns its top edge, a subtle organic wave over the
+  principles section above. It is the hero blob's edge (27:253, shared with
+  `HeroWave`; 97 units of travel across 1440) pressed into a band
+  `--everywhere-wave-height` tall: 32px at 1440, scaling with the width,
+  never under 20px. It does not move.
+- **Copy:** the heading ("everywhere" in `landing-cyan`) and subline in
+  `TextReveal`; the closing line and "See our impact", a `StandardButton`
+  that opens the 2025 annual report PDF in a new tab (full width on mobile).
+- **Stats:** 200+ NeighborNets, 26 States, 10,000s of young Muslims, in
+  Boldonse Royal (`text-stat` on desktop with Figma's 60px `add` icon;
+  `text-mobile-display` with a "+" below `xl`) over `text-lead` /
+  `text-body` SemiBold labels. A row from tablet (on desktop at Figma's 323
+  and 223 gaps), a column on mobile.
+- **Map:** a static image of the globe (`map.jpg`, the map clipped to the
+  1440 globe with its rim, built by `scripts/everywhere-assets.mjs`), 85
+  NeighborNet markers (Royal for brothers, Jade for sisters, the Figma pins)
+  at their Figma places, and Figma's fade into Warm Snow over both. The frame
+  is `--everywhere-map-width` wide (1440 / 1210 / 488, the globe at
+  1 / 0.8406 / 0.3388 scale), centred and cropped by the section. The
+  markers' positions are generated as percentages into
+  `everywhere-markers.module.css`, numbered left to right.
+- **Shape-photos:** four, each a tinted rim and a masked group photo
+  composited into one image by the same script. On desktop at their Figma
+  places, anchored to the screen's corners and drawn above the map's fade;
+  on tablet (0.72x) and mobile (0.6x) at their frames' places, bleeding off
+  the sides.
+- **Motion,** all on the compositor (one-shot Web Animations of transform and
+  opacity, created paused on their first frame and played as each part
+  comes 15% into view; scroll parallax written straight to `translate3d`; no
+  per-frame easing, Lenis smooths the scroll):
+  - Shapes grow from 0.92 as they fade in; drift up through the section's
+    scroll (`--everywhere-shape-drift` times their depth: 0.9, 0.6, 1 and
+    0.75); and, with a fine pointer only, drift towards the cursor
+    (`--everywhere-pointer-drift` times their depth), eased there by a CSS
+    transform transition. Pointer moves are read at most once a frame and
+    only while the section is on screen. No hover effect.
+  - Stats rise and fade in one by one, in reading order (no count-up).
+  - The map fades in growing from 0.96; as it settles, the markers pin on
+    left to right, each dropping in from nothing with a slight overshoot, 12ms
+    after the last (about 1.4s for all 85).
+  - Reduced motion: nothing is created; everything is in place. The DOM is
+    the same either way, so the server and client always agree.
+
+| Token                                                                                          | Value                               | Use                                                                                      |
+| ---------------------------------------------------------------------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------- |
+| `--aspect-everywhere-map`                                                                      | 1440 / 795                          | The map frame                                                                            |
+| `--everywhere-map-width`                                                                       | 30.4936rem / 75.6549rem / 90rem     | The map frame's width (mobile / tablet / desktop)                                        |
+| `--everywhere-wave-height`                                                                     | max(1.25rem, 2.2222vw rounded)      | The subtle top edge's band                                                               |
+| `--ease-everywhere-enter`                                                                      | `cubic-bezier(0.22, 1, 0.36, 1)`    | Shape, stat and map entrances; the pointer drift                                         |
+| `--ease-everywhere-pin`                                                                        | `cubic-bezier(0.34, 1.56, 0.64, 1)` | A marker pinning on: a slight overshoot, then settle                                     |
+| `--duration-everywhere-shape` / `--everywhere-shape-from-scale`                                | 900ms / 0.92                        | A shape's grow-and-fade entrance                                                         |
+| `--everywhere-shape-drift`                                                                     | 5rem                                | A shape's scroll drift across the section, times its depth                               |
+| `--everywhere-pointer-drift` / `--duration-everywhere-pointer`                                 | 0.875rem / 700ms                    | A shape's furthest drift towards the cursor (times its depth), and how long it trails it |
+| `--duration-everywhere-stat` / `--duration-everywhere-stat-stagger` / `--everywhere-stat-rise` | 700ms / 140ms / 1.5rem              | Each stat's rise-and-fade, the delay between stats, and how far each rises               |
+| `--duration-everywhere-map` / `--everywhere-map-from-scale`                                    | 900ms / 0.96                        | The map's fade-and-grow entrance; the markers start as it ends                           |
+| `--duration-everywhere-pin` / `--duration-everywhere-pin-stagger` / `--everywhere-pin-drop`    | 420ms / 12ms / 0.75rem              | Each marker's drop-in, the delay between markers (left to right), and how far each drops |
 
 ## Blob reveal
 

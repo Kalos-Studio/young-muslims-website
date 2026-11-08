@@ -699,6 +699,142 @@
 }
 
 /*
+ * "What we're built on" principles section tokens (Figma 208:3, 279:334 and
+ * 295:1194; scroll storyboard 572:434). Documented in DESIGN-SYSTEM.md under
+ * "Principles section". Mobile values first, tablet and desktop from `md`.
+ */
+:root {
+  /* The pinned stage: one viewport, matching the sticky hero. */
+  --principles-stage-height: 100dvh;
+  /* A collapsed principle's strip: Figma's 167px (frame 3 of the
+     storyboard), 100px on mobile, and shorter on short screens so the header
+     clearance and three strips always end the strip gap above the last
+     principle's word, whose top sits the content reach above the stage's
+     foot. */
+  --principles-strip-max: 6.25rem;
+  /* Each panel's word, description and button sit this far above its foot
+     (Figma: 86px on mobile; 185px from md at a 1024px stage, closing to 48px
+     on shorter screens so the strips keep their room). The block is at most
+     the content height tall (219px: word, description, button and the gaps
+     between), so its top is the content reach above the foot. */
+  --principles-content-bottom: 5.375rem;
+  --principles-content-height: 13.6875rem;
+  --principles-content-reach: calc(
+    var(--principles-content-bottom) + var(--principles-content-height)
+  );
+  --principles-strip-gap: 1.5rem;
+  /* The strips stack below the fixed site header (80px, 97px from md; see
+     "Site menu"), so no strip's word sits behind the navigation. The first
+     strip's band runs from the top of the screen to one strip below it. */
+  --principles-header-clearance: 5rem;
+  --principles-strip: min(
+    var(--principles-strip-max),
+    calc(
+      (
+          var(--principles-stage-height) - var(--principles-content-reach) -
+            var(--principles-strip-gap) - var(--principles-header-clearance)
+        ) /
+        3
+    )
+  );
+  /* Scrubbed timeline, in stage heights of scroll. The first principle
+     peeks up from 64.36% down (Figma's y 659 of 1024) as the section
+     arrives and rises to full over the rise; each later principle rises
+     over the step, covering the one before until only its strip shows; a
+     hold follows each, so every principle rests fully revealed for a
+     moment. */
+  --principles-peek: 0.6436;
+  --principles-rise: 0.65;
+  --principles-step: 0.75;
+  --principles-hold: 0.15;
+  /* A fresh strip's scrim waits for its collapse to finish, then fades in
+     over this share of the hold that follows: the last beat, once the panel
+     is only its strip. */
+  --principles-scrim-fade: 0.6;
+  --principles-runway: calc(
+    var(--principles-stage-height) *
+      (
+        var(--principles-rise) + 4 * var(--principles-hold) + 3 *
+          var(--principles-step)
+      )
+  );
+  /* As a principle collapses its photo slides up by this share of the stage
+     (Figma's 576 of 1024), so its strip shows the heart of the photo; it is
+     capped so the photo's foot never rises above the next panel's edge. */
+  --principles-photo-shift: 0.5625;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --principles-strip-max: 10.4375rem;
+    --principles-content-bottom: clamp(
+      3rem,
+      calc(var(--principles-stage-height) - 52.5rem),
+      11.5625rem
+    );
+    --principles-header-clearance: 6.0625rem;
+  }
+}
+
+/*
+ * "Everywhere" impact section tokens (Figma 73:164, 279:437 and 296:1237).
+ * Documented in DESIGN-SYSTEM.md under "Everywhere section". Mobile values
+ * first, tablet from `md`, desktop from `xl`.
+ */
+@theme {
+  /* The map frame (the globe's top under its fade), 1440 x 795. */
+  --aspect-everywhere-map: 1440 / 795;
+  /* Entrances (shapes, stats, map) and the pointer drift: quick to respond,
+     soft to settle; the menu's deceleration. */
+  --ease-everywhere-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  /* A marker pinning onto the map: overshoots slightly, then settles. */
+  --ease-everywhere-pin: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+:root {
+  /* The map frame's width: Figma's 487.9 / 1210.48 / 1440 (the globe at
+     0.3388 / 0.8406 / 1 scale), centred and cropped by the section. */
+  --everywhere-map-width: 30.4936rem;
+  /* The subtle organic top edge over the section above: the hero blob's edge
+     (97 units of travel across 1440) pressed into a band this tall, 32px at
+     1440 and scaling with the width, never under 20px. */
+  --everywhere-wave-height: max(1.25rem, round(calc(100vw * 0.022222), 1px));
+  /* Shape-photos: on entering view each grows from this scale as it fades
+     in; as the section scrolls past each drifts up to this far in all (times
+     its depth); with a fine pointer each drifts up to this far towards the
+     cursor (times its depth), trailing it by the pointer duration. */
+  --duration-everywhere-shape: 900ms;
+  --everywhere-shape-from-scale: 0.92;
+  --everywhere-shape-drift: 5rem;
+  --everywhere-pointer-drift: 0.875rem;
+  --duration-everywhere-pointer: 700ms;
+  /* Stats: each rises this far as it fades in, one after another. */
+  --duration-everywhere-stat: 700ms;
+  --duration-everywhere-stat-stagger: 140ms;
+  --everywhere-stat-rise: 1.5rem;
+  /* The map fades in growing from this scale; once it has settled the
+     markers pin on, left to right, each dropping this far as it scales in,
+     one stagger after the last. */
+  --duration-everywhere-map: 900ms;
+  --everywhere-map-from-scale: 0.96;
+  --duration-everywhere-pin: 420ms;
+  --duration-everywhere-pin-stagger: 12ms;
+  --everywhere-pin-drop: 0.75rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --everywhere-map-width: 75.6549rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --everywhere-map-width: 90rem;
+  }
+}
+
+/*
  * Blob reveal and entry animation tokens. Documented in DESIGN-SYSTEM.md under
  * "Blob reveal" and "Entry animation".
  */

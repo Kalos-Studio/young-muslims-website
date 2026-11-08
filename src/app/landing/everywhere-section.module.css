@@ -1,0 +1,44 @@
+/* Sizes and motion come from the everywhere tokens in globals.css
+   (DESIGN-SYSTEM.md, "Everywhere section"). */
+
+/* The subtle organic edge over the section above. Its fill runs a few units
+   past the band, into the section, so no seam shows where they meet. */
+.wave {
+  display: block;
+  width: 100%;
+  height: var(--everywhere-wave-height);
+  overflow: visible;
+}
+
+/* The map frame: wider than the content on mobile and tablet, centred, and
+   cropped by the section. */
+.map {
+  flex-shrink: 0;
+  width: var(--everywhere-map-width);
+  aspect-ratio: var(--aspect-everywhere-map);
+}
+
+/* A marker's 32 x 32 art box (24 x 24 pin plus its shadow), in map-frame
+   percentages; it pins on from its tip. */
+.marker {
+  position: absolute;
+  width: 2.2222%;
+  aspect-ratio: 1;
+  transform-origin: 50% 75%;
+}
+
+/* With a fine pointer, each shape's pointer layer trails the cursor: the
+   script sets its target, and this compositor transition eases it there. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .pointer {
+    transition: transform var(--duration-everywhere-pointer)
+      var(--ease-everywhere-enter);
+    will-change: transform;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .parallax {
+    will-change: transform;
+  }
+}
