@@ -17,6 +17,8 @@ than automatic syncing.
   expressive headlines only.
 - **Figtree** is the default face. `font-sans` applies it to body copy,
   navigation, controls, labels, and supporting headings.
+  `font-heading` is an alias for the same face, for headings that want to say
+  so; it is not a separate typeface.
 - No other font families are exposed by Tailwind. Technical labels and
   prototype tooling use Figtree too.
 
@@ -36,6 +38,30 @@ The desktop website roles come directly from Figma node `26:188`:
 | Statistic         | `text-stat`          | Boldonse Regular    | 54px |      -2% |
 
 Every role uses Figma's Auto line height, represented by `normal` in CSS.
+
+The landing page and shared components add these roles (from the landing
+frames and each component's Figma node). Boldonse roles are `font-display`,
+the rest Figtree; line height is `normal` unless noted.
+
+| Role                    | Tailwind utility             | Size | Line height | Tracking | Used by                                                 |
+| ----------------------- | ---------------------------- | ---: | ----------: | -------: | ------------------------------------------------------- |
+| Mobile display          | `text-mobile-display`        | 32px |      normal |      -2% | Boldonse heroes and figures on mobile                   |
+| Mobile section heading  | `text-mobile-section`        | 30px |         1.2 |      -2% | Figtree ExtraBold section headings on mobile            |
+| Landing display         | `text-landing-display`       | 48px |      normal |      -2% | The landing and Stories heroes' Boldonse display lines  |
+| Landing section heading | `text-landing-section`       | 40px |         1.2 |      -2% | Landing section headings from tablet                    |
+| Landing hero subtitle   | `text-landing-hero-subtitle` | 20px |         1.2 |      -2% | The landing and Stories heroes' introductions           |
+| Landing copy            | `text-landing-copy`          | 20px |         1.2 |      -2% | Landing sublines and body copy from tablet              |
+| Landing statistic       | `text-landing-stat`          | 48px |      normal |      -2% | Boldonse figures (the NeighborNets page)                |
+| Landing statistic label | `text-landing-stat-label`    | 24px |         1.2 |      -2% | Labels under landing figures (reserved: no current use) |
+| Marquee                 | `text-marquee`               | 60px |      normal |      -2% | Boldonse lettering rows (the highlight reel)            |
+| CTA button              | `text-cta`                   | 18px |      normal |      -2% | The closing CTA's box buttons (Figtree Bold)            |
+| Footer legal            | `text-footer-legal`          | 10px |      normal |      -2% | The footer's copyright, credit and privacy links (Bold) |
+| Footer tagline          | `text-footer-tagline`        | 40px |      normal |      -2% | The footer's Boldonse tagline on desktop                |
+| Footer tagline, tablet  | `text-footer-tagline-tablet` | 38px |      normal |      -2% | The footer tagline from `md`                            |
+| Footer tagline, mobile  | `text-footer-tagline-mobile` | 29px |      normal |      -2% | The footer tagline below `md`                           |
+
+Boldonse's glyphs stand about 1.21x the font size, which is why the footer
+tagline's sizes are smaller than its Figma glyph heights (48.6 / 46.2 / 35.3px).
 
 Every type role is also listed in `TYPE_SIZE_TOKENS` in `src/lib/utils.ts`,
 which registers the roles with `cn` as font sizes. Without that, `cn` reads a
@@ -114,6 +140,20 @@ define. These are deliberately kept separate from the brand palette:
   of Deep Obsidian and Warm Snow.
 - `destructive` uses the system danger color `#B42318` with white foreground.
 - Focus rings use Royal Blue.
+- `system-danger` (`--color-system-danger`, `#B42318`) is the functional
+  danger colour behind `destructive`; it is not a brand colour.
+
+The component-library primitives (shadcn/ui, `src/components/ui/`) read a
+standard semantic set, all mapped onto the brand in `globals.css` `:root`:
+
+| Token (utility suffix)                                                                                                                                            | Maps to                                                                                                              | Use                                                                  |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `primary-foreground`, `secondary-foreground`, `accent-foreground`                                                                                                 | Warm Snow                                                                                                            | Text and icons on `primary` / `secondary` / `accent` fills           |
+| `destructive-foreground`                                                                                                                                          | Pure White                                                                                                           | Text on `destructive` fills                                          |
+| `card`, `card-foreground`                                                                                                                                         | Warm Snow / Deep Obsidian                                                                                            | Card surfaces and their text                                         |
+| `popover`, `popover-foreground`                                                                                                                                   | Pure White / Deep Obsidian                                                                                           | Popovers and dropdowns (the blog's filters, the NeighborNet details) |
+| `sidebar`, `sidebar-foreground`, `sidebar-primary`, `sidebar-primary-foreground`, `sidebar-accent`, `sidebar-accent-foreground`, `sidebar-border`, `sidebar-ring` | Warm Snow ground; Obsidian text and primary (Warm Snow on it); `muted` accent (Obsidian on it); `border`; Royal ring | The library's sidebar component (not used by the site yet)           |
+| `chart-1` … `chart-5`                                                                                                                                             | Royal, Jade, Brothers Sky, Sisters Brass, Deep Obsidian                                                              | Chart series, in that order (not used by the site yet)               |
 
 Functional tokens may be changed for accessibility or interaction clarity
 without changing the official brand primitives.
@@ -127,6 +167,13 @@ The landing design defines three reusable radii:
 | Media  | `rounded-media`  |    6px |
 | Card   | `rounded-card`   |   16px |
 | Button | `rounded-pill`   | 9999px |
+
+The component-library primitives use the standard radius scale, derived from
+`--radius` (0.625rem, 10px): `rounded-sm` (x0.6, 6px), `rounded-md` (x0.8,
+8px), `rounded-lg` (x1, 10px), `rounded-xl` (x1.4, 14px), `rounded-2xl` (x1.8,
+18px), `rounded-3xl` (x2.2, 22px) and `rounded-4xl` (x2.6, 26px). Use them only
+inside those primitives (the map's popups, the debug panel, `Button`); site
+surfaces use the three roles above.
 
 Repeated spacing uses Tailwind's existing exact values: 16px (`4`), 24px (`6`),
 32px (`8`), and 80px (`20`). The landing CTA is exactly `px-6 py-4`, and the
@@ -412,18 +459,19 @@ generate:show-you-blob`; edit the script, not its output; reference renders `blo
 Spacing uses Tailwind's spacing scale; mobile values first, tablet from `md`,
 desktop from `xl`:
 
-| Token                                                  | Value                            | Use                                                                                                                                                                                                                                                          |
-| ------------------------------------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--show-marquee-row-height`                            | 2.4593 / 3.4996 / 3.7599rem      | One lettering row (39.35 / 55.99 / 60.16 Figma units); spacing and offsets scale with it                                                                                                                                                                     |
-| `--show-marquee-drift`                                 | 6                                | Each row's drift in row heights across the section (half either side of rest): 361 / 336 / 236px                                                                                                                                                             |
-| `--show-edge-drift`                                    | 6.875rem                         | How far the blob's top edge rises and bottom edge falls (110px each, so the blob grows 220px); the rims move 1.5x (165px). Keep EDGE_DRIFT in scripts/blob-contours.mjs in step: it sizes the overlaps and refuses to generate if a straight edge could show |
-| `--ease-show-you`                                      | `cubic-bezier(0.22, 1, 0.36, 1)` | The card's hover growth and the PLAY label's follow                                                                                                                                                                                                          |
-| `--show-reel-hover-scale`                              | 1.025                            | The card's growth on hover, before it is played                                                                                                                                                                                                              |
-| `--duration-show-reel-hover`                           | 450ms                            | The card's hover growth                                                                                                                                                                                                                                      |
-| `--duration-show-reel-follow`                          | 160ms                            | How far the PLAY label trails the pointer                                                                                                                                                                                                                    |
-| `--aspect-show-reel` / `--aspect-show-reel-portrait`   | 833 / 529, 296 / 397             | The card's shape: landscape (tablet, desktop) and portrait (mobile)                                                                                                                                                                                          |
-| `--show-blob-top-height` / `--show-blob-bottom-height` | 37.5rem / 32.5rem                | The drawn caps (600 and 520 Figma units, including the overlap), 1:1 up to 1440px wide                                                                                                                                                                       |
-| `--show-blob-overlap`                                  | 8.75rem                          | How far each Obsidian cap reaches back into the section (140 units; 9.7222% of the width once scaled)                                                                                                                                                        |
+| Token                                                                                            | Value                                       | Use                                                                                                                                                                                                                                                          |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--show-marquee-row-height`                                                                      | 2.4593 / 3.4996 / 3.7599rem                 | One lettering row (39.35 / 55.99 / 60.16 Figma units); spacing and offsets scale with it                                                                                                                                                                     |
+| `--show-marquee-drift`                                                                           | 6                                           | Each row's drift in row heights across the section (half either side of rest): 361 / 336 / 236px                                                                                                                                                             |
+| `--spacing-show-marquee-top` / `-row-gap` / `-first-offset` / `-second-offset` / `-third-offset` | 23.829 / 1.372 / 27.698 / 42.131 / 1.617rem | Unused: theme spacing from an earlier marquee layout, superseded by the module's row-height-based placement (`--show-marquee-row-height`). Candidates for removal                                                                                            |
+| `--show-edge-drift`                                                                              | 6.875rem                                    | How far the blob's top edge rises and bottom edge falls (110px each, so the blob grows 220px); the rims move 1.5x (165px). Keep EDGE_DRIFT in scripts/blob-contours.mjs in step: it sizes the overlaps and refuses to generate if a straight edge could show |
+| `--ease-show-you`                                                                                | `cubic-bezier(0.22, 1, 0.36, 1)`            | The card's hover growth and the PLAY label's follow                                                                                                                                                                                                          |
+| `--show-reel-hover-scale`                                                                        | 1.025                                       | The card's growth on hover, before it is played                                                                                                                                                                                                              |
+| `--duration-show-reel-hover`                                                                     | 450ms                                       | The card's hover growth                                                                                                                                                                                                                                      |
+| `--duration-show-reel-follow`                                                                    | 160ms                                       | How far the PLAY label trails the pointer                                                                                                                                                                                                                    |
+| `--aspect-show-reel` / `--aspect-show-reel-portrait`                                             | 833 / 529, 296 / 397                        | The card's shape: landscape (tablet, desktop) and portrait (mobile)                                                                                                                                                                                          |
+| `--show-blob-top-height` / `--show-blob-bottom-height`                                           | 37.5rem / 32.5rem                           | The drawn caps (600 and 520 Figma units, including the overlap), 1:1 up to 1440px wide                                                                                                                                                                       |
+| `--show-blob-overlap`                                                                            | 8.75rem                                     | How far each Obsidian cap reaches back into the section (140 units; 9.7222% of the width once scaled)                                                                                                                                                        |
 
 The video files and how they are encoded are in
 `design-assets/video-source/README.md`.
