@@ -47,7 +47,7 @@ export function NeighborNetsSection() {
         >
           <NeighborNetSwitcher
             intro={
-              <TextReveal className="max-w-74 md:max-w-134.5">
+              <TextReveal className="md:max-w-134.5">
                 <h2
                   id="neighbornets-heading"
                   className="text-mobile-section font-extrabold md:text-landing-section"

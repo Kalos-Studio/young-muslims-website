@@ -11,7 +11,7 @@
   mask-size: 100% 100%;
   mask-repeat: no-repeat;
   mask-composite: exclude;
-  transition: transform var(--duration-street-hover) var(--ease-street);
+  transition: transform var(--duration-street-hover) var(--ease-street-hover);
   will-change: transform;
 }
 
@@ -35,18 +35,19 @@
 }
 
 /* The Obsidian overlay and "Read article": transparent at rest; only
-   opacity and transform change. */
+   opacity and transform change, on their own, quicker timing
+   (`--duration-street-label`) than the shape's growth. */
 .overlay,
 .label {
   opacity: 0;
-  transition: opacity var(--duration-street-hover) var(--ease-street);
+  transition: opacity var(--duration-street-label) var(--ease-street-hover);
 }
 
 .label {
   transform: translate3d(0, var(--street-label-rise), 0);
   transition:
-    opacity var(--duration-street-hover) var(--ease-street),
-    transform var(--duration-street-hover) var(--ease-street);
+    opacity var(--duration-street-label) var(--ease-street-hover),
+    transform var(--duration-street-label) var(--ease-street-hover);
 }
 
 /* Fine pointers only: touch has no hover. */

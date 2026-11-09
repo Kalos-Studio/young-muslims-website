@@ -918,9 +918,13 @@
  * the street".
  */
 @theme {
-  /* The card hover and its exit: quick to respond, soft to settle (the
-     menu's deceleration). */
+  /* Card entrances: quick to respond, soft to settle (the menu's
+     deceleration). */
   --ease-street: cubic-bezier(0.22, 1, 0.36, 1);
+  /* The card hover and its exit: a gentle ease-in-out (soft start, long
+     soft landing), so the blob's growth into the square reads as one fluid
+     swell rather than a snap. */
+  --ease-street-hover: cubic-bezier(0.45, 0.05, 0.25, 1);
 }
 
 :root {
@@ -929,12 +933,15 @@
   --duration-street-card: 900ms;
   --street-card-from-scale: 0.92;
   /* The hover (fine pointer) or keyboard focus: the blob grows into the
-     square (its Warm Snow frame scales up to this: past 1.862, the most any
+     square over the hover duration (its Warm Snow frame scales up to this: past 1.862, the most any
      of the three blobs needs to clear its box's corners, with room for the
      mask's soft edge), the 32% Obsidian
      overlay fades in, and "Read article" rises this far into place. */
   --street-reveal-scale: 2;
-  --duration-street-hover: 550ms;
+  --duration-street-hover: 800ms;
+  /* The overlay and "Read article" come in faster than the shape grows, so
+     the label is readable while the blob is still swelling. */
+  --duration-street-label: 320ms;
   --street-label-rise: 0.5rem;
 }
 

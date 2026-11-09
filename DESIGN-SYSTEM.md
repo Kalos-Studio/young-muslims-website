@@ -751,7 +751,7 @@ cards' entrance only) and `word-on-the-street-section.module.css`.
   box's corners; the box clips the frame, so the hole opens out to the
   square's edges. One compositor transform, no path morph and no mask
   animation. The 32% Obsidian overlay (under the frame, so only the revealed
-  photo darkens) fades in with it, and "Read article" (`text-landing-copy`
+  photo darkens) fades in faster (`--duration-street-label`), and "Read article" (`text-landing-copy`
   Bold, white, Material `arrow_outward`) rises `--street-label-rise` into
   the middle, over `--duration-street-hover`. Un-hovering shrinks the frame
   back to the blob. No hover on touch.
@@ -761,14 +761,16 @@ cards' entrance only) and `word-on-the-street-section.module.css`.
   appear at once, with no growth. The DOM is the same either way, so the server and client
   agree.
 
-| Token                                                 | Value                            | Use                                                                                              |
-| ----------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `--color-caption` (`text-caption`)                    | `#484848`                        | The cards' descriptions                                                                          |
-| `--text-article-title` / `--text-article-meta`        | 1.125rem / 0.75rem, -2%          | The cards' title and date + author                                                               |
-| `--duration-street-card` / `--street-card-from-scale` | 900ms / 0.92                     | A card photo's grow-and-fade entrance                                                            |
-| `--street-reveal-scale`                               | 2                                | How far the Warm Snow frame scales on hover, so the blob clears the box (the widest needs 1.862) |
-| `--duration-street-hover` / `--street-label-rise`     | 550ms / 0.5rem                   | The hover, and how far "Read article" rises                                                      |
-| `--ease-street`                                       | `cubic-bezier(0.22, 1, 0.36, 1)` | The hover and the entrance                                                                       |
+| Token                                                 | Value                               | Use                                                                                              |
+| ----------------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `--color-caption` (`text-caption`)                    | `#484848`                           | The cards' descriptions                                                                          |
+| `--text-article-title` / `--text-article-meta`        | 1.125rem / 0.75rem, -2%             | The cards' title and date + author                                                               |
+| `--duration-street-card` / `--street-card-from-scale` | 900ms / 0.92                        | A card photo's grow-and-fade entrance                                                            |
+| `--street-reveal-scale`                               | 2                                   | How far the Warm Snow frame scales on hover, so the blob clears the box (the widest needs 1.862) |
+| `--duration-street-hover` / `--street-label-rise`     | 800ms / 0.5rem                      | The shape's growth into the square, and how far "Read article" rises                             |
+| `--duration-street-label`                             | 320ms                               | The overlay and "Read article" fading (and rising) in: quicker than the shape                    |
+| `--ease-street`                                       | `cubic-bezier(0.22, 1, 0.36, 1)`    | The card entrance                                                                                |
+| `--ease-street-hover`                                 | `cubic-bezier(0.45, 0.05, 0.25, 1)` | The hover: a gentle ease-in-out, so the blob swells into the square fluidly                      |
 
 ## NeighborNet switcher
 

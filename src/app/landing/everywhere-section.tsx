@@ -149,7 +149,7 @@ export function EverywhereSection() {
       <EverywhereWave />
 
       <div className="relative mx-auto flex max-w-360 flex-col items-center px-8 pt-10.25 pb-74 text-center text-brand-obsidian md:px-16 md:pt-37.75 md:pb-67.25 xl:px-20 xl:pt-58 xl:pb-13.75">
-        <TextReveal className="max-w-74 md:max-w-110">
+        <TextReveal className="w-full md:max-w-110">
           <h2
             id="everywhere-heading"
             className="text-mobile-section font-extrabold md:text-landing-section"
@@ -223,7 +223,7 @@ export function EverywhereSection() {
           />
         </div>
 
-        <TextReveal className="relative mt-10.5 flex max-w-74 flex-col items-center md:mt-6.5 md:max-w-140 xl:-mt-5">
+        <TextReveal className="relative mt-10.5 flex w-full flex-col items-center md:mt-6.5 md:max-w-140 xl:-mt-5">
           <p className="text-body font-medium md:text-landing-copy">
             Wherever you go, there&apos;s a Young Muslim. A brother or sister in
             a city you&apos;ve never been to, dealing with the same things you

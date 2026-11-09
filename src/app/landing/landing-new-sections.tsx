@@ -19,11 +19,11 @@ export function LandingCtaSection() {
       />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(23,23,37,0.7),rgba(23,23,37,0.22)_60%,rgba(23,23,37,0.45))] xl:bg-brand-obsidian/30" />
       <PhotoTopCurve />
-      <div className="absolute top-0 left-1/2 h-full w-[360px] -translate-x-1/2 xl:w-[1440px] 2xl:left-0 2xl:w-full 2xl:translate-x-0">
-        <h2 className="absolute top-[155px] left-8 w-[296px] text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:text-landing-section md:leading-[1.2] xl:top-[314px] xl:left-[129px] xl:w-[692px] xl:text-left 2xl:left-20">
+      <div className="absolute inset-y-0 left-0 w-full xl:left-1/2 xl:w-[1440px] xl:-translate-x-1/2 2xl:left-0 2xl:w-full 2xl:translate-x-0">
+        <h2 className="absolute top-[155px] right-8 left-8 text-center text-[30px] leading-normal font-extrabold tracking-[-0.02em] text-brand-warm-snow md:text-landing-section md:leading-[1.2] xl:top-[314px] xl:right-auto xl:left-[129px] xl:w-[692px] xl:text-left 2xl:left-20">
           Seeking the pleasure of Allah (SWT) by empowering Muslim youth.
         </h2>
-        <div className="absolute top-[490px] left-8 flex w-[296px] flex-col gap-8 xl:top-[285px] xl:left-[902px] xl:w-[312px] 2xl:right-20 2xl:left-auto">
+        <div className="absolute top-[490px] right-8 left-8 flex flex-col gap-8 xl:top-[285px] xl:right-auto xl:left-[902px] xl:w-[312px] 2xl:right-20 2xl:left-auto">
           <Link
             href="/neighbornets"
             className="ym-cta-trigger flex h-[61px] items-center gap-3 bg-brand-warm-snow px-[31px] text-[18px] font-bold tracking-[-0.02em] text-brand-obsidian transition-colors hover:bg-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none"
