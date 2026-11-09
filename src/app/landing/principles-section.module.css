@@ -102,6 +102,18 @@
     display: block;
     will-change: transform, opacity;
   }
+
+  /* The title stands alone, centred in the band above the first
+     principle's peek (half its peek down the stage, pulled up by half its
+     own height; `translate` composes with the script's transform on the
+     heading copy). */
+  .headingBlock {
+    top: calc(var(--principles-stage-height) * var(--principles-peek) / 2);
+  }
+
+  .headingText {
+    translate: 0 -50%;
+  }
 }
 
 /* Pinned, from tablet up: photos flagged `lowerPhoto` (Sustainability,

@@ -269,6 +269,11 @@ scrolls up over it. Pass the media (a video or image with
 - The header scrim is driven by an invisible 100dvh marker with
   `data-header-hero` that scrolls normally (the pinned hero is always in
   view, so it cannot be the sentinel).
+- The scrim (`site-header.module.css`) is Deep Obsidian at 65% easing out to
+  clear, reaching `--header-scrim-reach` (200%) of the header's height below
+  its top: the alpha falls quickly, then tapers to zero before the layer's
+  foot, so it fades into the page with no visible edge. (A straight 65% to 0
+  ramp ending at the bar's foot read as a hard line there.)
 - The media and wave are full-bleed; overlay content caps at the 1440 bound
   with the header's side padding.
 - On short viewports the overlay title drops to `text-mobile-display` so it
@@ -556,8 +561,9 @@ The landing page's "What we're built on." section (Figma 208:3, tablet
 built in `src/app/landing/principles-section.tsx` with its motion in
 `principles-motion.tsx` and its layouts in `principles-section.module.css`.
 
-- **Content:** the heading (`text-mobile-section` / `text-landing-section`)
-  and subline (`text-body` / `text-landing-copy`), in `TextReveal`, then four
+- **Content:** the heading, "What we're built on." (`text-mobile-section` /
+  `text-landing-section`), alone, in `TextReveal` (pinned, it is centred in
+  the band above the first principle's peek), then four
   full-viewport principles: Tarbiyyah, Diversity, Sustainability, Societal
   Impact. Each is a photo under Figma's overlay (clear at 9.5% to 48%
   Obsidian at 110%), the word in Boldonse (`font-display`, `text-stat` 54px,

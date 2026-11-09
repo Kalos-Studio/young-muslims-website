@@ -455,6 +455,9 @@
   --menu-primary-line-height: 1.21;
   --menu-primary-tracking: -0.02em;
   /* The primary links' Warm Snow outline. */
+  /* The header's scrim reaches this far (of the header's height) below
+     its top, easing out to clear, so it fades into the page with no edge. */
+  --header-scrim-reach: 200%;
   --menu-primary-stroke: 1.2px;
   /* The primary links' label roll: the room kept inside its clip above and
      below the label (Boldonse's capitals fill the line box, and the stroke

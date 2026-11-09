@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 
 import { useFooterPageStage } from "./footer-page-stage";
+import styles from "./site-header.module.css";
+import { cn } from "@/lib/utils";
 
 /**
  * The fixed site header shell. The bar itself (`SiteNavigation`) is
@@ -23,7 +25,7 @@ import { useFooterPageStage } from "./footer-page-stage";
  * legible; a hero that streams in later is picked up when it appears. Lenis
  * drives real window scrolling, so the observer stays in sync with it.
  *
- * The scrim is a CSS gradient (Deep Obsidian at 65% fading to transparent),
+ * The scrim is a CSS gradient (Deep Obsidian at 65% easing out to clear, reaching below the bar so no edge shows; site-header.module.css),
  * matching the Figma navigation's raster gradient, which measures about 67%.
  * Its fade is disabled under reduced motion.
  */
@@ -88,7 +90,10 @@ export function SiteHeader({ children }: { children: ReactNode }) {
     >
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-linear-to-b from-brand-obsidian/65 to-transparent opacity-0 transition-opacity duration-300 group-data-scrim:opacity-100 motion-reduce:transition-none"
+        className={cn(
+          "pointer-events-none opacity-0 transition-opacity duration-300 group-data-scrim:opacity-100 motion-reduce:transition-none",
+          styles.scrim,
+        )}
       />
       <div className="relative">{children}</div>
     </motion.header>

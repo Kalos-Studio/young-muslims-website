@@ -73,13 +73,17 @@ const PANEL_POSITION = [
 ];
 
 const HEADING = "What we’re built on.";
-const SUBLINE =
-  "The friendships are real. So is the foundation underneath them. These are what shape everything about Young Muslims.";
 
-/** The heading block's place and type, shared by its two copies. */
-const HEADING_BLOCK =
-  "absolute inset-x-0 top-19 px-8 text-center md:top-22 xl:top-21";
-const HEADING_TEXT = "mx-auto max-w-134.5";
+/**
+ * The heading block's place and type, shared by its two copies. Pinned, the
+ * title stands alone centred in the band above the first principle's peek
+ * (CSS module); unpinned it keeps its place near the top.
+ */
+const HEADING_BLOCK = cn(
+  "absolute inset-x-0 top-19 px-8 text-center md:top-22 xl:top-21",
+  styles.headingBlock,
+);
+const HEADING_TEXT = cn("mx-auto max-w-134.5", styles.headingText);
 
 /** The photo, art-directed: the mobile crop below `md`, the desktop one from it. */
 function PanelPhoto({ principle }: { principle: Principle }) {
@@ -194,9 +198,6 @@ function Panel({ principle, index }: { principle: Principle; index: number }) {
             <p className="text-mobile-section font-extrabold md:text-landing-section">
               {HEADING}
             </p>
-            <p className="mt-4 text-body font-medium md:text-landing-copy">
-              {SUBLINE}
-            </p>
           </div>
         </div>
       ) : null}
@@ -212,7 +213,7 @@ function Panel({ principle, index }: { principle: Principle; index: number }) {
  * Four full-viewport principles (Tarbiyyah, Diversity, Sustainability,
  * Societal Impact): a photo under Figma's dark overlay, the principle word in
  * Boldonse, a description and a dark-tone "Learn more" StandardButton to
- * /about. The heading and subline open the section, in TextReveal; the
+ * /about. The heading opens the section, in TextReveal; the
  * principle words have no TextReveal (the scroll is their entrance).
  *
  * Pinned (principles-motion.tsx): the section pins and scroll scrubs the
@@ -244,9 +245,6 @@ export function PrinciplesSection() {
             >
               {HEADING}
             </h2>
-            <p className="mt-4 text-body font-medium md:text-landing-copy">
-              {SUBLINE}
-            </p>
           </TextReveal>
         </div>
         {PRINCIPLES.map((principle, index) => (
