@@ -1,0 +1,36 @@
+name: SEO
+
+# Pull requests cover branch work; push runs only on main so each change
+# to a branch with an open pull request is not built twice.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  merge_group:
+
+permissions:
+  contents: read
+
+jobs:
+  seo:
+    # Production must be indexable with a matching sitemap; previews must not
+    # be indexable even when SITE_INDEXABLE is inherited by mistake.
+    name: SEO (${{ matrix.context }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        context: [production, deploy-preview]
+    env:
+      CONTEXT: ${{ matrix.context }}
+      SITE_INDEXABLE: "true"
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.11"
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - run: bun run test:seo

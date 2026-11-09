@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getBlogContent } from "@/lib/sanity-blog";
-import { ArticleBody } from "../article-body";
+import { blogPosts, getBlogPost, isBlogPostIndexable } from "@/lib/blog";
 
 type BlogArticleProps = { params: Promise<{ slug: string }> };
 
@@ -18,6 +17,9 @@ export async function generateMetadata({
     title: post.title,
     description: post.excerpt,
     alternates: { canonical: `/blog/${post.id}` },
+    ...(isBlogPostIndexable(post)
+      ? {}
+      : { robots: { index: false, follow: true } }),
   };
 }
 
