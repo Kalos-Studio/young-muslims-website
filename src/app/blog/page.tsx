@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
-import { LandingCtaSection } from "@/app/landing/landing-new-sections";
+import { ClosingCta } from "@/components/site/closing-cta";
+
+import ymatxRailing from "../../../design-assets/figma/landing-2026/cta/ymatx-railing.jpg";
 import { BlogInteractions } from "./blog-interactions";
 import { blogPosts, featuredPosts } from "@/lib/blog";
 import { FeaturedBlogCarousel } from "./featured-blog-carousel";
@@ -23,7 +25,11 @@ export default function BlogPage() {
         <BlogInteractions posts={blogPosts} />
       </div>
 
-      <LandingCtaSection />
+      <ClosingCta
+        image={ymatxRailing}
+        alt="Young Muslims brothers in YMATX shirts at a railing, looking out over the city"
+        imageFocus="low"
+      />
     </main>
   );
 }

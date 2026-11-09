@@ -719,6 +719,134 @@ mobile frames), built in `src/app/landing/people-stories-section.tsx`,
 | `--stories-pair-height`                                                      | min(11vw, 14dvh), rounded        | Desktop's layered-edge frame (143px at 1440 x 1024, 101px at 1280 x 720)                                                                                  |
 | `--duration-stories-fade`                                                    | 400ms                            | The story's content fading in once covered, and out before the blob leaves                                                                                |
 
+## Site footer
+
+The shared footer (Figma 273:618, tablet 280:843, mobile 298:1459), in
+`src/components/site/site-footer.tsx`, with `footer-scroll-layers.tsx`
+(client: the shapes and tagline motion), `footer-shapes.ts` (the shape
+paths) and `site-footer.module.css`. Every page inherits it from the root
+layout.
+
+- **Easter egg (load-bearing, unchanged):** the bottom-edge montage, its
+  listeners (scroll, resize, wheel, touch, keydown), `isAtPageBottom`,
+  `canPlay` (footer on screen, no `<html>` overflow lock from the entry
+  animation or menu, no open dialog), the page translation it shares with
+  the header through `FooterPageStage`, and its timings are left exactly as
+  they were. The visual layers below only write transforms on their own
+  elements inside the clipped wrapper and change no layout. Verify with
+  `bun run test:footer` (batch routes with `FOOTER_AUDIT_ROUTES`).
+- **Dark surface:** one organic shape (`.surface`): the Obsidian ground with
+  the wavy top as its own edge (`footer/wave.svg`, a vector band over the
+  solid body), rising `--footer-wave-height` above the footer's box. It is
+  absolutely positioned, so the box (794px on mobile, 525 from tablet, its
+  bottom the document's bottom, which the Easter egg reads) is unchanged.
+  It is the clip for the shapes and tagline, so the shapes rise into the
+  wave and are cut by its curve, not a straight line.
+- **Layout:** Desktop: the
+  logo (to `/`), the nav and the contact block in a row at 80px insets;
+  tablet: logo and contact left, nav right; mobile: stacked and centred at
+  32px gutters. The bottom line: "© Young Muslims 2026" and "Made by Kalos
+  Studio" (Slate, underlined, to kalos.so in a new tab), the four social
+  links (32px, new tabs) and Privacy Policy / Donor Privacy (PLACEHOLDER
+  links, `/privacy` and `/donor-privacy`), all `text-footer-legal` Bold.
+- **Nav:** two columns (Find a Chapter, Who We Are, Stories, Donate; The
+  Feed, Store), `text-nav` SemiBold Warm Snow; hover is the label roll only
+  (`.ym-cta-roll`, no arrow).
+- **Contact:** the copy and "Contact us", the dark `StandardButton` (Warm
+  Snow on Obsidian), to `/contact`.
+- **Shapes (all sizes; tablet and mobile added beyond the frames):** a
+  royal pair from the left
+  and a jade pair from the right (the green turned
+  `--footer-shape-rotation`), each the brand colour with its smaller partner
+  under a 10% Warm Snow layer (Figma's lighter shades, no extra colours).
+  Placed in units of `--footer-shape-unit` (the desktop frame's height;
+  10rem on mobile and 15rem on tablet, so they read subtly), so they keep
+  their size at any width. On mobile and tablet each pair rests lower
+  (`--footer-shape-offset-*`), so its crest stays below the seam with the
+  section above. As the footer scrolls into view they slide in from
+  `--footer-shape-drift` out, and recede on the way back up.
+- **Tagline:** "FOR THE YOUTH. BY THE YOUTH." in Boldonse, Warm Snow at 12%
+  (`text-footer-tagline`, `-tablet`, `-mobile`: 40 / 38 / 29px, as
+  Boldonse's glyphs stand about 1.21x the font size), drifting `--footer-marquee-drift` with the scroll (the show-you
+  marquee's mechanic).
+- **Wavy top:** the surface's own edge is the hand-off on pages without
+  `ClosingCta`; where `ClosingCta` is used, its wavy foot (with the
+  parallax) meets it over the Obsidian band.
+- **Social icons:** each `footer-*.svg` holds its own glyph (Facebook and X
+  were swapped on disk and are fixed), which also fixes the menu's icons.
+- **Reduced motion:** the shapes sit in place and the tagline is still; the
+  label roll and button hover are instant; the Easter egg is suppressed as
+  before. The DOM is the same either way.
+
+| Token                                           | Value                                                         | Use                                                                                                             |
+| ----------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `--text-footer-legal`                           | 0.625rem, -2%                                                 | The bottom line                                                                                                 |
+| `--text-footer-tagline` / `-tablet` / `-mobile` | 2.5rem / 2.375rem / 1.8125rem, -2%                            | The tagline (Figma's 48.6 / 46.2 / 35.3px-tall glyphs)                                                          |
+| `--footer-frame-height`                         | 32.8125rem                                                    | The desktop frame's height: the unit the shapes are placed in                                                   |
+| `--footer-shape-unit`                           | 10rem / 15rem / frame height                                  | The shapes' unit on mobile / tablet / desktop                                                                   |
+| `--footer-shape-offset-blue` / `-green`         | 1rem / 12.5rem (mobile), 1.5rem / 18rem (tablet), 0 (desktop) | How much lower each pair rests on the smaller screens, so its crest stays below the seam with the section above |
+| `--footer-wave-height` / `--footer-wave-seam`   | 6.875rem / 1px                                                | The wavy top band above the box, and its mask seam                                                              |
+| `--footer-shape-rotation`                       | 30deg                                                         | The green pair's turn                                                                                           |
+| `--footer-shape-drift`                          | 3rem / 4.5rem / 6rem                                          | How far out the shapes start (mobile / tablet / desktop)                                                        |
+| `--footer-marquee-drift`                        | 30rem                                                         | The tagline's drift (half either side of its place)                                                             |
+
+## Closing CTA
+
+The closing call to action above the footer (Figma 270:301, tablet 280:788,
+mobile 297:1442): `ClosingCta` in `src/components/site/closing-cta.tsx`
+(server), with `closing-cta-photo.tsx` (client: the photo's parallax only)
+and `closing-cta.module.css`. Shared by every page, each with its own photo.
+
+- **API:** `<ClosingCta image={photo} alt="…" imageFocus="low" />`. `image`
+  is a static import, `alt` its description, and `imageFocus` frames it
+  (`"center"` by default; `"low"` for a tall photo whose subject sits low
+  in it: on mobile and tablet the photo's box is made taller than its layer
+  (`--closing-cta-low-height-mobile` / `-tablet`), anchored at its foot, so
+  the photo is drawn larger and the subject rides higher; desktop anchors the
+  subject with `--closing-cta-low-focus-desktop`, so it stays the same
+  distance below the top at any width and is never cropped on ultra-wide
+  screens). The mission line ("Seeking the pleasure of Allah (SWT) by
+  empowering Muslim youth.") is the same everywhere and is not a prop. The
+  landing page and the blog pass the YMATX railing photo
+  (`landing-2026/cta/ymatx-railing.jpg`).
+- **Shape:** each frame's organic silhouette is a vector mask (an SVG
+  path, crisp at any width) over the whole section
+  (`shape-{mobile,tablet,desktop}.svg`, traced by
+  `scripts/closing-cta-assets.mjs` from Figma's exports), stretched to the
+  width. Its wavy top hands off from the Warm Snow section above. Its wavy
+  foot is an Obsidian cap over the photo (`foot-*.svg`, running 120 units
+  past the section's foot), which drifts `--closing-cta-foot-drift` with the
+  scroll (the footer's wave parallax lives here, where it shows), over an
+  Obsidian band that runs into the footer. The photo is full-bleed
+  inside it, under a 40% Obsidian overlay.
+- **Parallax:** the photo drifts `--closing-cta-drift` in all within the
+  shape as the section scrolls past (translate3d on its own layer, which is
+  that much taller than the shape); the shape stays put. Under reduced
+  motion the photo is still.
+- **Layout:** desktop sets the mission line (`text-landing-section`
+  ExtraBold, Warm Snow, 692 wide) left and the buttons (312 wide, stacked
+  32 apart) right, both centred vertically (Figma's 129 / 226 insets);
+  tablet stacks them left-aligned, centred in the section; mobile centres the
+  line (`text-mobile-section`) and stacks full-width buttons between the
+  32px gutters. Content caps at 1440.
+- **Buttons** (box buttons, `text-cta` Bold, 61px tall): "Get involved"
+  (Warm Snow fill, Obsidian text, to `/contact`) and "Support us" (1px Warm
+  Snow outline, Warm Snow text, to `/support`), both with the label roll
+  and the diagonal ↗ launch (`AnimatedCtaLabel arrowMotion="diagonal"`) on
+  the standard button's timing. "Support us" also fills: a Warm Snow fill
+  rises from the bottom (a compositor `scaleY`) as its text and arrow turn
+  Obsidian. Under reduced motion there is no roll or launch and the fill is
+  there at once.
+
+| Token                                                                                             | Value                   | Use                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--text-cta`                                                                                      | 1.125rem, -2%           | The box buttons' labels                                                                                                                                |
+| `--closing-cta-drift`                                                                             | 10rem                   | The photo's scroll drift within its shape (160px in all; its layer is that much taller, so no edge shows)                                              |
+| `--closing-cta-foot-drift`                                                                        | 4rem                    | The wavy foot cap's scroll drift (64px in all)                                                                                                         |
+| `--closing-cta-low-height-mobile` / `-tablet`                                                     | 130% / 150%             | `imageFocus="low"`: the photo box's height against its layer on mobile / tablet                                                                        |
+| `--closing-cta-low-focus-desktop`                                                                 | calc(14.4375rem - 87vw) | `imageFocus="low"` on desktop: the photo's top against its box, keeping the subject fixed as the frame widens (1440 unchanged; heads in frame at 2560) |
+| `--duration-standard-button` / `--ease-standard-button` / `--duration-standard-button-swap-delay` | (Standard button)       | The buttons' fill, roll and launch timing                                                                                                              |
+
 ## Word on the street
 
 The landing page's blog snippet (Figma 270:289, tablet 280:735, mobile

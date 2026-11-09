@@ -369,6 +369,12 @@
   --text-article-meta--line-height: normal;
   --text-article-meta--letter-spacing: -0.02em;
 
+  /* The closing CTA's box buttons (Figma 270:301: Figtree Bold 17.9px,
+     -2%). */
+  --text-cta: 1.125rem;
+  --text-cta--line-height: normal;
+  --text-cta--letter-spacing: -0.02em;
+
   --text-body: 1rem;
   --text-body--line-height: normal;
   --text-body--letter-spacing: 0;
@@ -385,6 +391,27 @@
   --text-marquee: 3.75rem;
   --text-marquee--line-height: normal;
   --text-marquee--letter-spacing: -0.02em;
+
+  /* The footer's tagline marquee, per breakpoint: Boldonse's glyphs stand
+     about 1.21x the font size, so Figma's 48.6 / 46.2 / 35.3px-tall
+     tagline (273:618, 280:843, 298:1459) is set at 40 / 38 / 29px. */
+  --text-footer-tagline: 2.5rem;
+  --text-footer-tagline--line-height: normal;
+  --text-footer-tagline--letter-spacing: -0.02em;
+
+  --text-footer-tagline-tablet: 2.375rem;
+  --text-footer-tagline-tablet--line-height: normal;
+  --text-footer-tagline-tablet--letter-spacing: -0.02em;
+
+  --text-footer-tagline-mobile: 1.8125rem;
+  --text-footer-tagline-mobile--line-height: normal;
+  --text-footer-tagline-mobile--letter-spacing: -0.02em;
+
+  /* The footer's legal line (copyright, credit, privacy links: Figtree Bold
+     10px, -2%). */
+  --text-footer-legal: 0.625rem;
+  --text-footer-legal--line-height: normal;
+  --text-footer-legal--letter-spacing: -0.02em;
 
   --spacing-show-marquee-top: 23.82898rem;
   --spacing-show-marquee-row-gap: 1.37172rem;
@@ -943,6 +970,88 @@
      the label is readable while the blob is still swelling. */
   --duration-street-label: 320ms;
   --street-label-rise: 0.5rem;
+}
+
+/*
+ * Site footer tokens (components/site/site-footer.tsx; Figma 273:618,
+ * tablet 280:843, mobile 298:1459). Documented in DESIGN-SYSTEM.md under
+ * "Site footer". The Easter egg's own timings stay in site-footer.tsx.
+ */
+:root {
+  /* The desktop frame's height: the unit the shapes are placed in (their
+     Figma offsets and sizes are multiples of it, so they keep their size
+     at any width, anchored to the footer's left and right edges). */
+  --footer-frame-height: 32.8125rem;
+  /* The footer's organic top edge: the wave band its dark surface rises
+     into above the footer's box (the box itself keeps its height: the
+     Easter egg reads it), and the mask's seam so no hairline shows where the
+     band meets the body. */
+  --footer-wave-height: 6.875rem;
+  --footer-wave-seam: 1px;
+  /* The unit the shapes are placed in (their Figma offsets and sizes over
+     the desktop frame's height): the frame's height on desktop, smaller on
+     tablet and mobile so the shapes read subtly in the narrow footer. */
+  --footer-shape-unit: 10rem;
+  /* On mobile and tablet the shapes rest lower, so even the green pair's
+     crest (it is turned, so it rises furthest) stays below the seam with
+     the section above instead of being cut by it. Desktop: in place. */
+  --footer-shape-offset-blue: 1rem;
+  --footer-shape-offset-green: 12.5rem;
+  /* The green pair is turned as in Figma. */
+  --footer-shape-rotation: 30deg;
+  /* As the footer scrolls into view, the blue pair slides in from the left
+     and the green from the right, from this far out to their places (less
+     on the smaller screens); they recede the same way on the way back up. */
+  --footer-shape-drift: 3rem;
+  /* The tagline drifts this far in all as the footer scrolls into view
+     (the show-you marquee's mechanic: half either side of its place). */
+  --footer-marquee-drift: 30rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --footer-shape-unit: 15rem;
+    --footer-shape-drift: 4.5rem;
+    --footer-shape-offset-blue: 1.5rem;
+    --footer-shape-offset-green: 18rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --footer-shape-unit: var(--footer-frame-height);
+    --footer-shape-drift: 6rem;
+    --footer-shape-offset-blue: 0rem;
+    --footer-shape-offset-green: 0rem;
+  }
+}
+
+/*
+ * Closing CTA tokens (components/site/closing-cta.tsx; Figma 270:301,
+ * tablet 280:788, mobile 297:1442). Documented in DESIGN-SYSTEM.md under
+ * "Closing CTA".
+ */
+:root {
+  /* The photo drifts this far in all within its shape as the section
+     scrolls past (half above its place, half below); the photo layer is
+     that much taller than the shape, so its edges never show. */
+  --closing-cta-drift: 10rem;
+  /* The shape's wavy foot, an Obsidian cap over the photo, drifts this far
+     in all as the section scrolls past (half either side of its place); the
+     cap runs well past the section's foot, so its lower edge never shows. */
+  --closing-cta-foot-drift: 4rem;
+  /* `imageFocus="low"` on mobile and tablet: the photo's box, this tall
+     against its layer and anchored at its foot, so the photo is drawn
+     larger and its subject sits higher in the narrow frames. */
+  --closing-cta-low-height-mobile: 130%;
+  --closing-cta-low-height-tablet: 150%;
+  /* `imageFocus="low"` on desktop: where the photo's top sits against its
+     box, so the subject stays put as the frame widens. The cover-fit photo
+     (3:2 portrait) is 1.5x the width tall and their heads sit 58% down it,
+     so the width share is 1.5 x 0.58 = 87vw; the fixed part puts them where
+     the 80% framing did at 1440 (unchanged there), about 87px below the
+     section's top at every width. */
+  --closing-cta-low-focus-desktop: calc(14.4375rem - 87vw);
 }
 
 /*

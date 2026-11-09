@@ -1,0 +1,166 @@
+/* Sizes and motion come from the closing CTA tokens in globals.css and the
+   standard button's hover tokens (DESIGN-SYSTEM.md, "Closing CTA"). */
+
+/* The organic photo shape: each Figma frame's silhouette as a vector mask
+   (an SVG path, crisp at any width) over the whole section, stretched to its width (the mobile frame below `md`,
+   the tablet frame to `xl`, the desktop frame from it). Its wavy top hands
+   off from the section above (the Warm Snow around it); below its wavy
+   foot the Obsidian band shows, running into the footer. */
+.shape {
+  mask-image: url("../../../design-assets/figma/landing-2026/cta/shape-mobile.svg");
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}
+
+@media (width >= 48rem) {
+  .shape {
+    mask-image: url("../../../design-assets/figma/landing-2026/cta/shape-tablet.svg");
+  }
+}
+
+@media (width >= 80rem) {
+  .shape {
+    mask-image: url("../../../design-assets/figma/landing-2026/cta/shape-desktop.svg");
+  }
+}
+
+/* The wavy foot's cap: Obsidian below the foot's curve, running 120 frame
+   units past the section's foot (the frame plus that, as a share of the
+   frame's height) so the drift never shows its lower edge. */
+.foot {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 113.4228%;
+  mask-image: url("../../../design-assets/figma/landing-2026/cta/foot-mobile.svg");
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
+@media (width >= 48rem) {
+  .foot {
+    mask-image: url("../../../design-assets/figma/landing-2026/cta/foot-tablet.svg");
+  }
+}
+
+@media (width >= 80rem) {
+  .foot {
+    height: 116.5975%;
+    mask-image: url("../../../design-assets/figma/landing-2026/cta/foot-desktop.svg");
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .foot {
+    will-change: transform;
+  }
+}
+
+/* The photo layer: taller than the shape by the drift, half above and half
+   below, so the parallax never shows its edges. The script moves it. */
+.photo {
+  position: absolute;
+  inset: calc(-0.5 * var(--closing-cta-drift)) 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .photo {
+    will-change: transform;
+  }
+}
+
+/* `imageFocus="low"`: for a tall photo whose subject sits low in it (the
+   landing's brothers at the railing). On mobile and tablet the photo's box
+   (a wrapper: next/image sets the image's own box inline) is made taller
+   than its layer, anchored at the layer's foot, so the photo
+   is drawn larger and its subject rides higher in the frame (cover-fit
+   alone leaves the narrow frames no room to move it). Desktop, wide and
+   short, anchors the subject instead: the photo's top sits a fixed amount
+   less a share of the width above the frame, so their heads stay the same
+   distance below its top at any width (a percentage would drift them up
+   and crop them on ultra-wide screens), with the railing mid-frame. The box never leaves the layer's foot, so the drift never
+   shows an edge. */
+.focusLowBox {
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--closing-cta-low-height-mobile);
+}
+
+.focusLow {
+  object-position: 50% 100%;
+}
+
+@media (width >= 48rem) {
+  .focusLowBox {
+    height: var(--closing-cta-low-height-tablet);
+  }
+}
+
+@media (width >= 80rem) {
+  .focusLowBox {
+    inset: 0;
+    height: 100%;
+  }
+
+  .focusLow {
+    object-position: 50% var(--closing-cta-low-focus-desktop);
+  }
+}
+
+/* The box buttons' shared label roll and diagonal arrow launch
+   (.ym-cta-roll, .ym-cta-arrow in globals.css) run on the standard button's
+   timing, so the roll, launch and fill read as one hover. */
+.button :global(.ym-cta-roll__text),
+.button :global(.ym-cta-arrow__icon) {
+  transition-duration: var(--duration-standard-button);
+  transition-timing-function: var(--ease-standard-button);
+  transition-delay: var(--duration-standard-button-swap-delay);
+}
+
+/* "Support us": outlined. On hover or focus a Warm Snow fill rises from the
+   bottom (a compositor transform) and the text and arrow turn Obsidian. */
+.outline {
+  isolation: isolate;
+  overflow: hidden;
+  transition: color var(--duration-standard-button) var(--ease-standard-button);
+}
+
+.outline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--color-brand-warm-snow);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--duration-standard-button)
+    var(--ease-standard-button);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .outline:hover {
+    color: var(--color-brand-obsidian);
+  }
+
+  .outline:hover::before {
+    transform: scaleY(1);
+  }
+}
+
+.outline:focus-visible {
+  color: var(--color-brand-obsidian);
+}
+
+.outline:focus-visible::before {
+  transform: scaleY(1);
+}
+
+/* Reduced motion: the fill is there at once; the roll and launch are
+   already removed by the shared CTA rule. */
+@media (prefers-reduced-motion: reduce) {
+  .outline,
+  .outline::before {
+    transition: none;
+  }
+}
