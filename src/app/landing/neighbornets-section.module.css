@@ -1,0 +1,219 @@
+/* Sizes and motion come from the NeighborNet switcher tokens in globals.css
+   (DESIGN-SYSTEM.md, "NeighborNet switcher"). */
+
+/* --- The background shape ---------------------------------------------- */
+
+/* The room the edges drift outward into: Warm Snow above and below the
+   shape, as deep as the bigger copy's furthest drift, inside the section
+   (which clips), so no edge is ever cut off. */
+.section {
+  padding-block: var(--neighbornets-edge-headroom);
+}
+
+/* The section's Obsidian body, between its two caps. */
+.body {
+  position: absolute;
+  inset-inline: 0;
+  top: var(--neighbornets-edge-height);
+  bottom: var(--neighbornets-edge-height);
+}
+
+/* A cap (the Obsidian edge, or its bigger copy behind): its own layer, moved
+   by the compositor only. */
+.cap {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: var(--neighbornets-edge-height);
+  will-change: transform;
+}
+
+.capTop {
+  top: 0;
+}
+
+.capBottom {
+  bottom: 0;
+}
+
+/* The shape draws far past its frame, into the body, further than any
+   drift, so the body's straight edges never show. */
+.capShape {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* The bottom cap is the top one turned round. */
+.capTurned {
+  transform: scale(-1);
+}
+
+/* The content, masked to the Obsidian edge at rest (the edges only move
+   outward), so the tile's shape never shows past the section. */
+.content {
+  mask-image:
+    url("../../../design-assets/figma/landing-2026/neighbornets/edge-mask-top.svg"),
+    linear-gradient(black, black),
+    url("../../../design-assets/figma/landing-2026/neighbornets/edge-mask-bottom.svg");
+  mask-size:
+    100% var(--neighbornets-edge-height),
+    100%
+      calc(
+        100% - 2 * var(--neighbornets-edge-height) + 2 *
+          var(--neighbornets-edge-seam)
+      ),
+    100% var(--neighbornets-edge-height);
+  mask-position:
+    0 0,
+    0 calc(var(--neighbornets-edge-height) - var(--neighbornets-edge-seam)),
+    left 0 bottom 0;
+  mask-repeat: no-repeat;
+}
+
+/* --- The tile -------------------------------------------------------- */
+
+/* The tile, its shape with it, pinned (sticky, never fixed: the footer
+   Easter egg transforms the page). It is the desktop tile at most, scaled
+   down proportionally on smaller screens (`--neighbornets-tile-width`):
+   centred on mobile, against the right edge from tablet. */
+.pin {
+  position: sticky;
+  top: var(--neighbornets-tile-top);
+  width: var(--neighbornets-tile-width);
+  margin-inline: auto;
+}
+
+@media (width >= 48rem) {
+  .pin {
+    margin-inline-end: 0;
+  }
+}
+
+/* The cards and the shapes are each a stack: only the selected one shows,
+   and, while a switch plays, the one leaving slides away above it. Each card
+   clips its own photo, so the leaving card can slide out past the tile. */
+.card,
+.shape {
+  position: absolute;
+  visibility: hidden;
+}
+
+.card {
+  inset: 0;
+  overflow: hidden;
+}
+
+.card[data-state="active"],
+.shape[data-state="active"] {
+  z-index: 1;
+  visibility: visible;
+}
+
+.card[data-state="leaving"],
+.shape[data-state="leaving"] {
+  z-index: 2;
+  visibility: visible;
+}
+
+/* The city name sits 217 / 484 of the tile's width down (Figma). */
+.cardBody {
+  padding-top: 44.8%;
+}
+
+/* Boldonse's first stylistic set, as Figma sets Tampa and Brooklyn. */
+.alternates {
+  font-feature-settings: "ss01";
+}
+
+/* --- The tile's shape --------------------------------------------------- */
+
+/* The shapes' layer drifts with the scroll. */
+@media (prefers-reduced-motion: no-preference) {
+  .layer {
+    will-change: transform;
+  }
+}
+
+/* Each shape's box relative to the tile (Figma: its frame offset and size
+   over the tile's 484 x 547.6). */
+.houston {
+  top: -48.03%;
+  left: -61.78%;
+  width: 220.93%;
+  height: 197.99%;
+}
+
+.stamford {
+  top: -26.48%;
+  left: -33.06%;
+  width: 160.33%;
+  height: 145.73%;
+}
+
+.suwanee {
+  top: -27.94%;
+  left: -38.84%;
+  width: 176.65%;
+  height: 155.22%;
+}
+
+.tampa {
+  top: -41.64%;
+  left: -63.22%;
+  width: 220.66%;
+  height: 192.48%;
+}
+
+.brooklyn {
+  top: -23.01%;
+  left: -51.86%;
+  width: 220.15%;
+  height: 151.74%;
+}
+
+/* --- Mobile ------------------------------------------------------------ */
+
+/* Scroll-driven: the names run in a long column over the pinned tile, one
+   step apart. The one in the tile's name slot sticks there (the tile's own
+   name is hidden) until the next pushes it out; the script makes the one in
+   the slot the selection. Not tappable: scrolling drives it. */
+@media (width < 48rem) and (prefers-reduced-motion: no-preference) {
+  .names {
+    padding-top: var(--neighbornets-name-inset);
+    padding-bottom: var(--neighbornets-names-end);
+    text-align: center;
+    pointer-events: none;
+  }
+
+  /* The last name gets a full step too, so it holds the slot alone (the one
+     before it scrolled clear) before it and the tile leave together. */
+  .step {
+    height: var(--neighbornets-name-step);
+  }
+
+  .name {
+    position: sticky;
+    top: var(--neighbornets-name-top);
+  }
+
+  .cardName {
+    visibility: hidden;
+  }
+}
+
+/* Reduced motion: no scroll-driven progression. The names are a plain list
+   of buttons under the tile, tapped to switch, and the tile shows its own
+   name. */
+@media (width < 48rem) and (prefers-reduced-motion: reduce) {
+  .names {
+    grid-row-start: 3;
+    padding-top: calc(var(--spacing) * 10);
+    text-align: center;
+  }
+
+  .viewAll {
+    grid-row-start: 4;
+  }
+}

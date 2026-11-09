@@ -3,10 +3,11 @@
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { useRef, useSyncExternalStore } from "react";
+import { motion, useInView } from "motion/react";
 
 import { AnimatedArrow } from "@/components/ui/animated-arrow";
+import { REDUCED_MOTION } from "@/lib/shape-motion";
 
 import articleMentalHealth from "../../../design-assets/figma/landing-2026/new-sections/270-449-source-01.png";
 import articleJudgement from "../../../design-assets/figma/landing-2026/new-sections/270-488-source-01.jpeg";
@@ -47,6 +48,25 @@ const ARTICLES = [
 
 type Article = (typeof ARTICLES)[number] & { image: StaticImageData };
 
+function subscribeReducedMotion(onChange: () => void) {
+  const query = window.matchMedia(REDUCED_MOTION);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+/**
+ * The reduced-motion preference, read after hydration: the server, and the
+ * client's hydrating render, assume no preference, so their HTML agrees;
+ * the real preference applies on the next render.
+ */
+function usePrefersReducedMotion() {
+  return useSyncExternalStore(
+    subscribeReducedMotion,
+    () => window.matchMedia(REDUCED_MOTION).matches,
+    () => false,
+  );
+}
+
 function ArticleCard({
   article,
   index,
@@ -56,7 +76,7 @@ function ArticleCard({
   article: Article;
   index: number;
   isVisible: boolean;
-  reduceMotion: boolean | null;
+  reduceMotion: boolean;
 }) {
   const delay = reduceMotion ? 0 : index * ARTICLE_STAGGER;
 
@@ -71,7 +91,11 @@ function ArticleCard({
         visible: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.65, delay, ease: REVEAL_EASE },
+          transition: {
+            duration: reduceMotion ? 0 : 0.65,
+            delay,
+            ease: REVEAL_EASE,
+          },
         },
       }}
     >
@@ -162,7 +186,7 @@ export function WordOnTheStreetSection() {
     once: true,
     amount: 0.2,
   });
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
 
   return (
     <section className="relative h-[2084px] w-full overflow-hidden bg-brand-warm-snow xl:h-[1024px]">

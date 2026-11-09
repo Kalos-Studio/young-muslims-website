@@ -899,6 +899,90 @@
 }
 
 /*
+ * Landing NeighborNet switcher tokens ("Let's find your story", Figma
+ * 251:509, tablet 279:645, mobile 296:1365). Documented in DESIGN-SYSTEM.md
+ * under "NeighborNet switcher". Mobile values first, tablet from `md`,
+ * desktop from `xl`.
+ */
+@theme {
+  /* The photo tile, 484 x 547.6 (Figma 255:102). */
+  --aspect-neighbornets-tile: 484 / 547.6;
+  /* The card-stack switch: an ease-out cubic, gentler than the menu's
+     deceleration, so the new card's expand-in reads across the switch
+     rather than in its first frames. */
+  --ease-neighbornets: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+:root {
+  /* The section's background shape: its organic caps (the hero wave's pair,
+     246 units) pressed into this height, 7.5% of the width between 64 and
+     112px. As the section scrolls past, the Obsidian edges drift outward up
+     to this far (110px, the show-you blob's drift; the bigger copies behind
+     half as much again, 165px), into the Warm Snow room the section keeps
+     above and below the shape for them (that, and a little more, so the
+     bigger copy's peak never meets the section's clip); the content mask's
+     seam. */
+  --neighbornets-edge-height: clamp(
+    4rem,
+    round(calc(100vw * 0.075), 1px),
+    7rem
+  );
+  --neighbornets-edge-drift: 6.875rem;
+  --neighbornets-edge-headroom: calc(
+    var(--neighbornets-edge-drift) * 1.5 + 0.5rem
+  );
+  --neighbornets-edge-seam: 1px;
+  /* The tile: the desktop tile (484px) at most, scaled down proportionally
+     (the full width on phones, half of it on tablets). */
+  --neighbornets-tile-width: min(100vw, 30.25rem);
+  /* Where the tile pins. Mobile: near the top, under the header. Tablet and
+     desktop: centred in the viewport (the tile is 1.1314 times as tall as
+     wide), never above 1rem. */
+  --neighbornets-tile-top: 5rem;
+  /* Mobile's scroll-driven names: each sits in a step this tall; the one in
+     the tile's name slot (217 / 484 of the tile's width down, where the
+     tile's own name would be) sticks there until the next pushes it out
+     (the last holds it for a full step). The list ends this far below the
+     last step (the rest of the tile less the name's line), so the last name
+     and the tile leave together. */
+  --neighbornets-name-step: 26.5rem;
+  --neighbornets-name-inset: calc(var(--neighbornets-tile-width) * 0.448);
+  --neighbornets-name-top: calc(
+    var(--neighbornets-tile-top) + var(--neighbornets-name-inset)
+  );
+  --neighbornets-names-end: calc(
+    var(--neighbornets-tile-width) * 0.683405 - 3rem
+  );
+  /* The card-stack switch, the card and its shape together: the old ones
+     slide right this far as they fade, quickly (a snappy deal); the new ones
+     expand into place from this scale over the longer reveal, so the
+     expand-in still reads after the old card has gone. */
+  --neighbornets-slide: 5rem;
+  --duration-neighbornets-slide: 380ms;
+  --neighbornets-reveal-from-scale: 0.94;
+  --duration-neighbornets-reveal: 600ms;
+  /* The tile's shape drifts up to this far in all as the section scrolls
+     past. */
+  --neighbornets-shape-drift: 3rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --neighbornets-tile-width: min(50vw, 30.25rem);
+    --neighbornets-tile-top: max(
+      1rem,
+      calc(50dvh - var(--neighbornets-tile-width) * 0.565702)
+    );
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --neighbornets-tile-width: 30.25rem;
+  }
+}
+
+/*
  * Blob reveal and entry animation tokens. Documented in DESIGN-SYSTEM.md under
  * "Blob reveal" and "Entry animation".
  */

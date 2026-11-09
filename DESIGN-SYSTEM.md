@@ -712,6 +712,101 @@ mobile frames), built in `src/app/landing/people-stories-section.tsx`,
 | `--stories-pair-height`                                                      | min(11vw, 14dvh), rounded        | Desktop's layered-edge frame (143px at 1440 x 1024, 101px at 1280 x 720)                                                                                  |
 | `--duration-stories-fade`                                                    | 400ms                            | The story's content fading in once covered, and out before the blob leaves                                                                                |
 
+## NeighborNet switcher
+
+The landing page's "Let's find your story" section (Figma 251:509, tablet
+279:645, mobile 296:1365), built in `src/app/landing/neighbornets-section.tsx`
+(server: the section, the copy and "View all NeighborNets"),
+`neighbornets-backdrop.tsx` (client: the section's background shape and its
+parallax) and `neighbornet-switcher.tsx` (client: the names, the tile, its
+shape and their motion), styled by `neighbornets-section.module.css`.
+
+- **Content:** "Let's find your story." and its subline (Warm Snow, in
+  `TextReveal`), the NeighborNet names in Boldonse caps (`text-stat` on
+  desktop, `text-landing-section` below), "View all NeighborNets" (dark
+  `StandardButton`, to `/neighbornets`), and the selected NeighborNet's photo
+  tile: its city in Boldonse, its state (Figtree Bold caps) and "Visit" (dark
+  `StandardButton` at its own width, to `/neighbornets`), over a gradient
+  into Obsidian. The NeighborNets are one swappable array, `neighbornets.ts`
+  (Houston, Stamford, Suwanee, Tampa, Brooklyn): city, state, highlight
+  colour class (Brass, Slate, Jade, Sky, Buttercup), photo (pre-cropped to the tile by `scripts/neighbornets-assets.mjs`: Houston framed from its full-resolution original, the group across the tile with faces about 30% down and its exposure matched to the Figma fill; the others to their Figma framing) and shape
+  (the Figma vector's path, Houston's 29.9deg turn baked in). The selected
+  name shows in its highlight colour, the others in white; Houston is
+  selected at first.
+- **Background shape (two-tone pair + parallax):** the section's backdrop is
+  a dark organic shape on the Warm Snow of its neighbours, as the show-you
+  section's blob: an Obsidian body with an organic cap at each end, and
+  behind each cap the same shape, bigger and offset, in Landing Twilight (the
+  show-you rims' colour). The edges are the hero wave's own pair (`HeroWave`:
+  the photo blob for the bigger copy, the pale blob for the Obsidian edge) in
+  their 246-unit frame, pressed into `--neighbornets-edge-height`; the
+  bottom cap is the top one turned round. As the section scrolls past, the
+  top edge rises `--neighbornets-edge-drift` (110px, the show-you blob's
+  drift) over the first half and the bottom edge falls by the same over the
+  second, the bigger copies moving half as much again (165px), so the pair parts as it breathes (one translate3d per
+  cap). The edges only move outward, into `--neighbornets-edge-headroom`:
+  Warm Snow room the section keeps above and below the shape (the bigger
+  copy's 165px and a little more), so no edge is ever cut off, and each cap
+  draws far enough into the body that no gap opens. The caps stay inside
+  the section (they would otherwise cover the stories
+  snippet's headshots), and the content is masked to the Obsidian edge at
+  rest (`edge-mask-*.svg`, built by the script), so the tile's shape never
+  shows past it.
+- **Layout:** desktop puts the copy, names and button in the left column and
+  the 484 x 547.6 tile (`aspect-neighbornets-tile`) on the right (Figma's 90
+  / 140 insets); tablet sets the copy across the top, then the names and the
+  tile, against the right edge; mobile sets the tile with the names over it.
+  The tile is the desktop tile at most and scales down proportionally
+  (`--neighbornets-tile-width`: the full width on phones, half of it on
+  tablets, never over 484px), with the same photo framing and overlay
+  composition at every size.
+- **Selection, tablet and desktop:** click or tap a name. The tile pins at
+  the viewport's centre (`position: sticky`, never fixed: the footer Easter
+  egg transforms the page; `--neighbornets-tile-top`) while the left column
+  scrolls by. The tile sits in its own grid-area wrapper, which is its sticky
+  containing block (a grid item's would be the whole grid).
+- **Selection, mobile:** scroll-driven, no tapping. The tile pins near the
+  top; the names run in a long column over it, each in a
+  `--neighbornets-name-step` step, centred. The name in the tile's name slot
+  (`--neighbornets-name-inset` down, where the tile's own, hidden, name would
+  be) sticks there until the next pushes it out, and the script makes the
+  name nearest the slot the selection. The last name holds the slot for a
+  full step; the list ends `--neighbornets-names-end` below it, so the last
+  name and the tile leave together.
+- **Card-stack switch:** every NeighborNet's card is stacked in the tile, and
+  every NeighborNet's shape behind it. On a switch the old card and its shape
+  slide right `--neighbornets-slide` and fade away above the new ones,
+  quickly (`--duration-neighbornets-slide`), while the new ones expand into
+  place from `--neighbornets-reveal-from-scale` over the longer
+  `--duration-neighbornets-reveal`, so the expand-in still reads after the
+  old card has gone, as if stacked just behind: card and shape move as one stack (Web Animations of
+  translate3d, opacity and scale; each card clips its own photo, so it can
+  slide out past the tile). A switch mid-reveal cancels it cleanly.
+- **The tile's shape:** a single organic shape per NeighborNet (Warm Snow at
+  7% over Obsidian, Figma's `#262639`), placed as in Figma relative to the
+  tile so it pins with it, drifting up to `--neighbornets-shape-drift` as the
+  section scrolls past (one translate3d on its layer).
+- **Reduced motion:** the cards and shapes swap at once, nothing drifts.
+  Mobile has no scroll-driven progression: the names become a plain list of
+  buttons under the tile, tapped to switch, and the tile shows its own name
+  (CSS, under `prefers-reduced-motion: reduce`). The DOM is the same either
+  way, so the server and client agree.
+
+| Token                                                              | Value                                               | Use                                                                                                                                      |
+| ------------------------------------------------------------------ | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `--aspect-neighbornets-tile`                                       | 484 / 547.6                                         | The photo tile                                                                                                                           |
+| `--neighbornets-tile-width`                                        | min(100vw, 30.25rem); min(50vw, 30.25rem); 30.25rem | The tile: the desktop tile at most, scaled down proportionally                                                                           |
+| `--neighbornets-tile-top`                                          | 5rem; max(1rem, 50dvh - tile width x 0.5657)        | Where the tile pins: under the header on mobile, centred in the viewport from tablet                                                     |
+| `--neighbornets-edge-height`                                       | clamp(4rem, 7.5vw rounded, 7rem)                    | The background shape's caps (the hero pair's 246-unit frame)                                                                             |
+| `--neighbornets-edge-drift` / `--neighbornets-edge-headroom`       | 6.875rem / 1.5 x drift + 0.5rem                     | How far the Obsidian edges drift outward (110px, as show-you; the bigger copies 1.5x, 165px), and the Warm Snow room kept for it (173px) |
+| `--neighbornets-edge-seam`                                         | 1px                                                 | The content mask's overlap, so no hairline shows                                                                                         |
+| `--neighbornets-name-step` / `--neighbornets-name-inset`           | 26.5rem / tile width x 0.448                        | Mobile: the names' spacing, and the tile's name slot (217 / 484 of the tile down)                                                        |
+| `--neighbornets-name-top` / `--neighbornets-names-end`             | tile top + name inset / tile width x 0.6834 - 3rem  | Mobile: where a name sticks, and the list's end below the last step                                                                      |
+| `--neighbornets-slide` / `--neighbornets-reveal-from-scale`        | 5rem / 0.94                                         | The switch: how far the old card and shape slide right, and the scale the new ones expand from                                           |
+| `--duration-neighbornets-slide` / `--duration-neighbornets-reveal` | 380ms / 600ms                                       | The switch: the old card and shape sliding out (snappy), and the new ones expanding in                                                   |
+| `--neighbornets-shape-drift`                                       | 3rem                                                | The tile's shape's scroll drift across the section                                                                                       |
+| `--ease-neighbornets`                                              | `cubic-bezier(0.33, 1, 0.68, 1)`                    | The switch (an ease-out cubic, so the expand-in reads across it)                                                                         |
+
 ## Blob reveal
 
 `BlobReveal` (`src/components/site/blob-reveal.tsx`) is the reusable wipe for

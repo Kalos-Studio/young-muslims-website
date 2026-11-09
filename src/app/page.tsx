@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 
 import { AllAboutSection } from "./landing/all-about-section";
 import { BelongingSection } from "./landing/belonging-section";
-import { ChapterFinderSection } from "./landing/chapter-finder-section";
 import { EverywhereSection } from "./landing/everywhere-section";
 import { LandingHero } from "./landing/landing-hero";
 import { LandingCtaSection } from "./landing/landing-new-sections";
+import { NeighborNetsSection } from "./landing/neighbornets-section";
 import { PeopleStoriesSection } from "./landing/people-stories-section";
 import { ShowYouSection } from "./landing/show-you-section";
 import { PrinciplesSection } from "./landing/principles-section";
@@ -37,7 +37,8 @@ export default function Home() {
 
         <PeopleStoriesSection />
 
-        <ChapterFinderSection />
+        <NeighborNetsSection />
+
         <WordOnTheStreetSection />
         <LandingCtaSection />
       </LandingHero>

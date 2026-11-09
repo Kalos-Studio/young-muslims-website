@@ -14,9 +14,10 @@ export const HERO_BLOB =
 const ROTATION = "0.9801598191 0.1982086748 -0.1982086748 0.9801598191";
 /*
  * Placements in Figma page coordinates (the BG frame sits 47.76 above the
- * page top): each blob's rotated origin from the node metadata.
+ * page top): each blob's rotated origin from the node metadata. The pale
+ * blob is exported too, for the NeighborNet switcher's layered edges.
  */
-const PALE_BLOB = `matrix(${ROTATION} -377.2776 -1322.5624)`;
+export const PALE_BLOB = `matrix(${ROTATION} -377.2776 -1322.5624)`;
 export const HERO_PHOTO_BLOB = `matrix(${ROTATION} -122.2947 -985.8739) scale(0.811688)`;
 
 /**
