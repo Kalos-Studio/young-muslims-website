@@ -5,7 +5,7 @@ import { PhotoTopCurve } from "@/components/site/photo-top-curve";
 
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 
-import landingPageFooter from "../../../landing page footer.png";
+import landingPageFooter from "../../../design-assets/figma/landing-2026/cta/footer-photo.jpg";
 
 export function LandingCtaSection() {
   return (

@@ -969,7 +969,9 @@ The first-load entry screen (`EntryScreen` inside `EntryAnimation`) follows
 Figma frame `273:620`: Brothers Slate monograms above "YOUNG MUSLIMS" in live
 Boldonse, whose letterforms window group photos, with film grain. It is on
 screen at first paint, flashes the photos through the wordmark, waits for the
-landing page's fonts, images and hero video (capped at 5s), then wipes away
+landing page's fonts, images and hero video (the video capped at 5s, and the
+whole asset wait, entry photos included, capped at 5s from mount so a stalled
+or failed asset can never trap the visitor), then wipes away
 with a centre-origin `BlobReveal`: a blob grows from the middle of the
 composition and uncovers the page outward. Photo 7 is vendored pre-cropped to
 its Figma frame crop, so its subjects sit as high as the design.

@@ -8,6 +8,13 @@ import { entryPhotos } from "./entry-photos";
 import styles from "./entry-animation.module.css";
 
 const VIDEO_READY_TIMEOUT_MS = 5_000;
+/**
+ * The most the entry waits for its photos and the landing page's images
+ * before revealing anyway: a stalled or failed asset must never trap the
+ * visitor on the entry screen. Normally everything is ready well before
+ * this (about 2.5s locally) and the reveal follows the assets, as before.
+ */
+const ASSET_WAIT_TIMEOUT_MS = 5_000;
 /** Extra time after the reveal's duration before the safety finish runs. */
 const REVEAL_SAFETY_MS = 500;
 
@@ -25,7 +32,6 @@ async function preloadImage(src: string) {
 
 async function waitForPageImage(image: HTMLImageElement) {
   image.loading = "eager";
-
   if (!image.complete) {
     await new Promise<void>((resolve) => {
       image.addEventListener("load", () => resolve(), { once: true });
@@ -99,7 +105,8 @@ function showEntryPhoto(index: number) {
 /**
  * The first-load entry sequence. `screen` (the server-rendered EntryScreen)
  * is on screen at first paint; photos flash through its wordmark, and once
- * the page underneath is ready the whole screen wipes away with a
+ * the page underneath is ready (or `ASSET_WAIT_TIMEOUT_MS` has passed, so a
+ * stalled asset never traps the visitor) the whole screen wipes away with a
  * centre-origin BlobReveal: a blob grows from the middle of the composition
  * and uncovers the page outward.
  *
@@ -158,12 +165,19 @@ export function EntryAnimation({
     }
 
     document.documentElement.style.overflow = "hidden";
-    const landingContentReady = isLandingPage
-      ? waitForLandingContent()
-      : Promise.resolve();
-    const photosReady = Promise.all(
-      entryPhotos.map((photo) => preloadImage(photo.src)),
-    );
+    // Wait for the assets OR the deadline, whichever comes first: one
+    // deadline from mount covers both waits.
+    const deadline = new Promise<void>((resolve) => {
+      timers.push(window.setTimeout(resolve, ASSET_WAIT_TIMEOUT_MS));
+    });
+    const landingContentReady = Promise.race([
+      isLandingPage ? waitForLandingContent() : Promise.resolve(),
+      deadline,
+    ]);
+    const photosReady = Promise.race([
+      Promise.all(entryPhotos.map((photo) => preloadImage(photo.src))),
+      deadline,
+    ]);
 
     // Each photo gets an equal share of the flash; the last one is held.
     const frameDuration =
