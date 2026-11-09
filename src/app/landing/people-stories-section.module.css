@@ -1,9 +1,240 @@
-@media (max-width: 767px) {
-  .orbit {
-    /* Let portraits orbit beyond the viewport while clearing the central copy. */
-    width: calc(100% + 600px);
-    max-width: none;
-    height: 900px;
-    aspect-ratio: auto;
+/* Sizes and motion come from the stories tokens in globals.css
+   (DESIGN-SYSTEM.md, "Stories snippet"). */
+
+/* --- The floating headshots ------------------------------------------- */
+
+/* With a fine pointer, the drift layer trails the cursor: the script sets
+   its target, and this compositor transition eases it there. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .drift {
+    transition: transform var(--duration-stories-pointer) var(--ease-stories);
+    will-change: transform;
+  }
+}
+
+/* The idle float: a slow rise and fall, each headshot on its own period and
+   out of step with the others. Compositor-only. */
+@keyframes float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, calc(-1 * var(--stories-float-distance)), 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .float {
+    animation: float var(--duration-stories-float) ease-in-out infinite;
+  }
+
+  .float1 {
+    animation-duration: calc(var(--duration-stories-float) * 1.1);
+    animation-delay: calc(var(--duration-stories-float) * -0.2);
+  }
+
+  .float2 {
+    animation-duration: calc(var(--duration-stories-float) * 0.9);
+    animation-delay: calc(var(--duration-stories-float) * -0.55);
+  }
+
+  .float3 {
+    animation-duration: calc(var(--duration-stories-float) * 1.2);
+    animation-delay: calc(var(--duration-stories-float) * -0.35);
+  }
+
+  .float4 {
+    animation-duration: calc(var(--duration-stories-float) * 0.95);
+    animation-delay: calc(var(--duration-stories-float) * -0.75);
+  }
+
+  .float5 {
+    animation-duration: calc(var(--duration-stories-float) * 1.05);
+    animation-delay: calc(var(--duration-stories-float) * -0.1);
+  }
+}
+
+/* The hover pop: the headshot's own silhouette (its mask class below),
+   bigger, in the colour picked for this hover, behind the portrait. At rest
+   it is shrunk to sit hidden behind the portrait; on hover or keyboard focus
+   it slides out to full size. Only transform and opacity change. */
+.pop {
+  position: absolute;
+  inset: calc((100% - var(--stories-pop-size)) / 2);
+  opacity: 0;
+  transform: scale(var(--stories-pop-from-scale));
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  transition:
+    transform var(--duration-stories-pop) var(--ease-stories),
+    opacity var(--duration-stories-pop) var(--ease-stories);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .headshot:hover .pop {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.headshot:focus-visible .pop {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop {
+    transition: none;
+  }
+}
+
+.maskRahmah {
+  mask-image: url("../../../design-assets/figma/landing-2026/stories/mask-rahmah-k.png");
+}
+
+.maskMustafa {
+  mask-image: url("../../../design-assets/figma/landing-2026/stories/mask-mustafa-r.png");
+}
+
+.maskMaryam {
+  mask-image: url("../../../design-assets/figma/landing-2026/stories/mask-maryam-t.png");
+}
+
+.maskLayla {
+  mask-image: url("../../../design-assets/figma/landing-2026/stories/mask-layla-h.png");
+}
+
+.maskBilal {
+  mask-image: url("../../../design-assets/figma/landing-2026/stories/mask-bilal-s.png");
+}
+
+.maskYusuf {
+  mask-image: url("../../../design-assets/figma/landing-2026/stories/mask-yusuf-a.png");
+}
+
+/* --- The story view --------------------------------------------------- */
+
+/* Above the page and the header, below the page-transition cover. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+}
+
+.content {
+  opacity: 0;
+  transition: opacity var(--duration-stories-fade) var(--ease-stories);
+}
+
+.content[data-shown] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content {
+    transition: none;
+  }
+}
+
+/* The story fits the screen: a full-height column in which the text keeps
+   its natural height and the photo band takes the rest, up to its height
+   token and down to its minimum. Only if even that cannot fit (an extreme
+   screen) does the overlay's own scroller come into play. */
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.body {
+  position: relative;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* The photo band, cut along a wavy bottom edge (the overlay's colour shows
+   below it). */
+.photo {
+  flex: 0 1 var(--stories-photo-height);
+  min-height: var(--stories-photo-min);
+  mask-image:
+    linear-gradient(black, black),
+    url("../../../design-assets/figma/landing-2026/stories/edge-photo.svg");
+  mask-size:
+    100% calc(100% - var(--stories-edge-height) + var(--stories-edge-seam)),
+    100% var(--stories-edge-height);
+  mask-position: top, bottom;
+  mask-repeat: no-repeat;
+}
+
+/* The lighter band (Warm Snow at 10% over the colour), with a wavy top
+   edge. */
+.band {
+  mask-image:
+    url("../../../design-assets/figma/landing-2026/stories/edge-band.svg"),
+    linear-gradient(black, black);
+  mask-size:
+    100% var(--stories-edge-height),
+    100% calc(100% - var(--stories-edge-height) + var(--stories-edge-seam));
+  mask-position: top, bottom;
+  mask-repeat: no-repeat;
+}
+
+/* Desktop: the layered edges, the hero wave's own pair (one blob, and the
+   same blob bigger and offset below it, in one frame
+   `--stories-pair-height` tall at the photo's foot). The photo shows above
+   the smaller copy's edge; the lighter band (Warm Snow at 10%, reaching up
+   into that frame) below the bigger copy's edge; the colour between. Photos
+   with a desktop crop keep their face, 30% down, in view. */
+@media (width >= 80rem) {
+  .photoFramed {
+    object-position: 50% 30%;
+  }
+
+  .photo {
+    mask-image:
+      linear-gradient(black, black),
+      url("../../../design-assets/figma/landing-2026/stories/edge-pair-photo.svg");
+    mask-size:
+      100% calc(100% - var(--stories-pair-height) + var(--stories-edge-seam)),
+      100% var(--stories-pair-height);
+  }
+
+  .band {
+    top: calc(-1 * var(--stories-pair-height));
+    mask-image:
+      url("../../../design-assets/figma/landing-2026/stories/edge-pair-band.svg"),
+      linear-gradient(black, black);
+    mask-size:
+      100% var(--stories-pair-height),
+      100% calc(100% - var(--stories-pair-height) + var(--stories-edge-seam));
+  }
+}
+
+/* Landscape phones (the `short:` height): the photo becomes a column beside
+   the text, with a straight edge. */
+@media (max-height: 30rem) {
+  .layout {
+    flex-direction: row;
+  }
+
+  .photo {
+    flex: 0 0 40%;
+    min-height: 0;
+    mask-image: none;
+  }
+
+  .body {
+    flex: 1 1 auto;
+  }
+
+  .band {
+    top: 0;
+    mask-image: none;
   }
 }

@@ -11,9 +11,6 @@ import { ShowYouSection } from "./landing/show-you-section";
 import { PrinciplesSection } from "./landing/principles-section";
 import { WordOnTheStreetSection } from "./landing/word-on-the-street-section";
 
-// WIREFRAME: ContentFrame only supplies the prototype's shared content width.
-// The page imagery and layout below follow the approved Figma composition.
-import { ContentFrame } from "@/components/wireframe/content-frame";
 import { PageFrame } from "@/components/wireframe/page-frame";
 
 export const metadata: Metadata = {
@@ -38,9 +35,7 @@ export default function Home() {
 
         <EverywhereSection />
 
-        <ContentFrame bleed>
-          <PeopleStoriesSection />
-        </ContentFrame>
+        <PeopleStoriesSection />
 
         <ChapterFinderSection />
         <WordOnTheStreetSection />

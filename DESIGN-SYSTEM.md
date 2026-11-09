@@ -242,7 +242,8 @@ CTAs and the end-of-page CTA sections, which keep their own styles. Pass
   ↗ arrow in Obsidian on a Warm Snow square. Hover and focus: a Warm Snow
   fill rises and the text turns Obsidian; the square merges into the fill.
   Same mechanics, timing and reduced-motion behaviour as the default `light`
-  tone. Used by the principles section's "Learn more" buttons.
+  tone. Used by the principles section's "Learn more" buttons, and by the
+  stories snippet's "View the full story" on dark colours.
 - The hover is CSS only, so the component is a Server Component.
 
 | Token                                   | Value                            | Use                                                                     |
@@ -626,6 +627,91 @@ with its motion in `everywhere-motion.tsx`.
 | `--everywhere-pin-trigger`                                                                     | 45%                                 | How far up the viewport the map's top must rise before the markers start (a line, not a share of the map, which is wider than the screen on tablet and mobile) |
 | `--duration-everywhere-pin` / `--duration-everywhere-pin-stagger` / `--everywhere-pin-drop`    | 420ms / 12ms / 0.75rem              | Each marker's drop-in, the delay between markers (left to right), and how far each drops                                                                       |
 
+## Stories snippet
+
+The landing page's stories snippet (Figma 84:219, tablet 279:507, mobile
+296:1295; hover 249:59; story views 246:85 and 249:18, and their tablet and
+mobile frames), built in `src/app/landing/people-stories-section.tsx`,
+`people-stories-field.tsx` and `story-overlay.tsx`.
+
+- **Content:** "But a number can't show you what it actually feels like. The
+  people can." ("The people can" in `landing-cyan`) and "View Stories" (to
+  `/stories`), in `TextReveal`, with six floating headshot shapes round them.
+  The six stories are placeholders in one file, `story-snippets.ts` (four
+  invented, flagged `placeholderStory`); the portraits and story photos are
+  real. Swap the file for YM's real stories.
+- **Layout:** the field follows the frames (360 x 734, 768 x 886,
+  1440 x 1114), centred and capped at their widths; the headshots scale
+  0.489 / 0.674 / 1. On mobile three sit above the copy and three below. On
+  desktop the two right-hand headshots are placed from the right edge, so
+  they stay on screen down to 1280.
+- **Motion:** the shared shape motion (`src/lib/shape-motion.ts`, also used
+  by the everywhere section): each headshot grows and fades in on entering
+  view and, with a fine pointer, drifts towards the cursor; a slow CSS float
+  (`--stories-float-*`) keeps them alive, each on its own period. They do not
+  orbit.
+- **Hover pop** (fine pointer, or keyboard focus): the headshot's own
+  silhouette (`mask-*.png`, its alpha, built by `scripts/stories-assets.mjs`)
+  sits behind it at `--stories-pop-size`, in a colour picked at random from
+  the brand palette less Warm Snow and white (never the colour that headshot
+  showed last), and slides out from `--stories-pop-from-scale`. Transform and
+  opacity only; no other hover effect.
+- **Story overlay:** clicking opens that person's story over the page (not a
+  route) in the hover's colour (on touch, a colour picked then). The overlay
+  is the `BlobReveal` layer itself: it sweeps in from a random side to cover
+  the page, the content fades in (`--duration-stories-fade`); closing fades
+  the content and sweeps the blob back out the way it came. It is a Base UI
+  dialog portalled into `<body>` (focus trap, Escape, inert page, scroll lock;
+  Lenis stopped while open); Back closes it (one same-URL history entry), and
+  the page keeps its scroll position. Text, and the "View the full story"
+  button's tone, flip by the colour's luminance (`needsDarkText` in
+  `brand-palette.ts`, the page transition's threshold). The button goes to
+  `/stories/[slug]` through the page transition, whose cover sweeps over the
+  overlay.
+- **Story view layout:** the whole story fits one screen with no scrolling
+  (the overlay's scroller is only a fallback for extreme screens): the text
+  keeps its natural height (sizes trimmed from Figma's: pull-quote
+  `text-landing-copy`, `text-mobile-display` from `xl`; narrative and
+  attribution `text-body`, `text-landing-copy` from `xl`) and the photo band
+  takes the rest, up to `--stories-photo-height` and down to
+  `--stories-photo-min`. On landscape phones (the `short:` height) the photo
+  is a column beside the text. Each photo is pre-cropped to its Figma framing
+  (`scripts/stories-assets.mjs`; Mustafa's to the front row, as in 249:18).
+  Desktop's band is wide and short, so Maryam, Layla, Bilal and Yusuf have a
+  wider desktop crop each (art-directed from `xl`), 2.4:1 with the face 30%
+  down and shown at `object-position: 50% 30%`, keeping the face above the
+  wavy edge at any desktop band height.
+- **Layered edges (desktop):** the hero wave's own pair, as in `HeroWave`:
+  one blob, and the same blob bigger and offset below it, drawn in one frame
+  `--stories-pair-height` tall at the photo's foot (masks `edge-pair-photo`
+  and `edge-pair-band`). The photo shows above the smaller copy's edge, the
+  random colour between the two, and the lighter band (Warm Snow at 10% over
+  the colour) below the bigger copy's edge: the site's two-tone layered
+  depth, with no new shade. Tablet and mobile keep their single-edge masks.
+  The photo band is cut along a wavy edge, then the colour with a lighter band (Warm Snow at 10%) under
+  a mirrored wavy edge (both edges the site's hero-blob edge, as masks), the
+  quote mark (Figma's vector, white at 6%), the pull-quote, the narrative and
+  the attribution. Desktop sets the quote beside the narrative; tablet stacks
+  them (the quote centred); mobile centres everything, with a full-width
+  button. The close button is the site's shared `.ym-close` (Material
+  `close` on a white square, turning 90deg on hover, as in the menu; no turn
+  under reduced motion) and stays top right.
+- **Reduced motion:** no entrance, drift or float; the pop appears without
+  sliding; the overlay opens and closes at once. The DOM is the same either
+  way, so the server and client agree.
+
+| Token                                                                        | Value                            | Use                                                                                                                                                       |
+| ---------------------------------------------------------------------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--duration-stories-shape` / `--stories-shape-from-scale`                    | 900ms / 0.92                     | A headshot's grow-and-fade entrance (the everywhere section's values)                                                                                     |
+| `--stories-pointer-drift` / `--duration-stories-pointer`                     | 0.875rem / 700ms                 | A headshot's furthest drift towards the cursor (times its depth), and how long it trails                                                                  |
+| `--stories-float-distance` / `--duration-stories-float`                      | 0.5rem / 6s                      | The idle float's rise and period (each headshot 0.9 to 1.2 times it, out of step)                                                                         |
+| `--stories-pop-size` / `--stories-pop-from-scale` / `--duration-stories-pop` | 135% / 0.74 / 420ms              | The pop's size behind the headshot (1.35x, subtler than Figma's 1.54x), its resting scale (about 1 / 1.35, hidden behind the portrait), and its slide-out |
+| `--ease-stories`                                                             | `cubic-bezier(0.22, 1, 0.36, 1)` | The pop, the drift and the content fade                                                                                                                   |
+| `--stories-photo-height` / `--stories-photo-min`                             | 22rem / 28rem / 37.5rem; 6.25rem | The story view's photo band at most (mobile / tablet / desktop), and at least when the text needs the room                                                |
+| `--stories-edge-height` / `--stories-edge-seam`                              | max(2.5rem, 4.5vw rounded) / 1px | The wavy edges' height, and their masks' overlap so no hairline shows                                                                                     |
+| `--stories-pair-height`                                                      | min(11vw, 14dvh), rounded        | Desktop's layered-edge frame (143px at 1440 x 1024, 101px at 1280 x 720)                                                                                  |
+| `--duration-stories-fade`                                                    | 400ms                            | The story's content fading in once covered, and out before the blob leaves                                                                                |
+
 ## Blob reveal
 
 `BlobReveal` (`src/components/site/blob-reveal.tsx`) is the reusable wipe for
@@ -693,7 +779,7 @@ navigation while other click handlers (such as the menu closing) still run.
 4. The same blob continues across and off-screen, revealing the new page,
    which has already scrolled to the top or to its `#anchor`.
 
-The cover colours are the full brand palette: Deep Obsidian, Warm Snow, Royal
+The cover colours (and their contrast check) live in `src/lib/brand-palette.ts`, shared with the stories snippet. They are the full brand palette: Deep Obsidian, Warm Snow, Royal
 Blue, Jade Foliage, Pure White, Midnight Blue, Cool Slate, Sky Blue, Deep
 Forest Green, Warm Brass and Buttercup Yellow (`COVER_COLORS` in
 page-transition.tsx). The cover shows the entry's stacked YM composition

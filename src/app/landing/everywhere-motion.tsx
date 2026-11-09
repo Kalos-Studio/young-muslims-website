@@ -5,38 +5,22 @@ import { type ComponentProps, useLayoutEffect, useRef } from "react";
 
 import { readTimeToken } from "@/components/site/blob-reveal";
 import { readLengthToken } from "@/lib/motion-tokens";
-
-const REDUCED = "(prefers-reduced-motion: reduce)";
-const FINE_POINTER = "(hover: hover) and (pointer: fine)";
+import {
+  armShapeEntrances,
+  onEnter,
+  pausedAnimation,
+  readRootToken,
+  REDUCED_MOTION,
+  trackPointerDrift,
+} from "@/lib/shape-motion";
 
 type Shape = { parallax: HTMLElement; pointer: HTMLElement; depth: number };
 
-function readRoot(name: string, fallback: string) {
-  return (
-    getComputedStyle(document.documentElement).getPropertyValue(name).trim() ||
-    fallback
-  );
-}
-
-/** Plays `animations` once `element` comes into view (or is already past). */
-function onEnter(element: Element, play: () => void, rise = "15%") {
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry.isIntersecting && entry.boundingClientRect.top > 0) return;
-      observer.disconnect();
-      play();
-    },
-    // Fires once, as the element's top comes `rise` up from the viewport's
-    // foot (15% by default, as TextReveal does), or if it is already past.
-    { rootMargin: `0px 0px -${rise} 0px` },
-  );
-  observer.observe(element);
-  return observer;
-}
-
 /**
  * The "everywhere" section's motion. It renders the section element and
- * finds its parts by `data-everywhere`. Everything runs on the compositor:
+ * finds its parts by `data-everywhere`. The shape entrance and pointer drift
+ * are the shared shape motion (lib/shape-motion.ts, also used by the stories
+ * snippet). Everything runs on the compositor:
  * one-shot entrances are Web Animations of transform and opacity (created
  * paused on their first frame when the section mounts, played on entering
  * view), the scroll parallax is written straight to translate3d, and the
@@ -83,12 +67,12 @@ export function EverywhereMotion({
 
   useLayoutEffect(() => {
     const section = ref.current;
-    if (!section || window.matchMedia(REDUCED).matches) return;
+    if (!section || window.matchMedia(REDUCED_MOTION).matches) return;
     const all = (name: string) => [
       ...section.querySelectorAll<HTMLElement>(`[data-everywhere="${name}"]`),
     ];
-    const enter = readRoot("--ease-everywhere-enter", "ease-out");
-    const pin = readRoot("--ease-everywhere-pin", "ease-out");
+    const enter = readRootToken("--ease-everywhere-enter", "ease-out");
+    const pin = readRootToken("--ease-everywhere-pin", "ease-out");
     const observers: IntersectionObserver[] = [];
     const animations: Animation[] = [];
     const paused = (
@@ -96,31 +80,17 @@ export function EverywhereMotion({
       keyframes: Keyframe[],
       options: KeyframeAnimationOptions,
     ) => {
-      const animation = element.animate(keyframes, {
-        fill: "both",
-        ...options,
-      });
-      animation.pause();
+      const animation = pausedAnimation(element, keyframes, options);
       animations.push(animation);
       return animation;
     };
 
-    // Shapes: grow and fade in.
-    const fromScale = readRoot("--everywhere-shape-from-scale", "0.92");
-    for (const art of all("shape-art")) {
-      const animation = paused(
-        art,
-        [
-          { opacity: 0, transform: `scale(${fromScale})` },
-          { opacity: 1, transform: "scale(1)" },
-        ],
-        {
-          duration: readTimeToken("--duration-everywhere-shape", 900),
-          easing: enter,
-        },
-      );
-      observers.push(onEnter(art, () => animation.play()));
-    }
+    // Shapes: grow and fade in (shared with the stories snippet).
+    const disarmShapes = armShapeEntrances(all("shape-art"), {
+      duration: "--duration-everywhere-shape",
+      fromScale: "--everywhere-shape-from-scale",
+      easing: "--ease-everywhere-enter",
+    });
 
     // Stats: rise and fade in, one by one.
     const stats = all("stat");
@@ -153,7 +123,7 @@ export function EverywhereMotion({
     const map = all("map")[0];
     if (map) {
       const mapDuration = readTimeToken("--duration-everywhere-map", 900);
-      const mapScale = readRoot("--everywhere-map-from-scale", "0.96");
+      const mapScale = readRootToken("--everywhere-map-from-scale", "0.96");
       const mapAnimation = paused(
         map,
         [
@@ -188,7 +158,7 @@ export function EverywhereMotion({
         onEnter(
           map,
           () => markerAnimations.forEach((a) => a.play()),
-          readRoot("--everywhere-pin-trigger", "45%"),
+          readRootToken("--everywhere-pin-trigger", "45%"),
         ),
       );
     }
@@ -208,46 +178,11 @@ export function EverywhereMotion({
     apply(scrollYProgress.get());
 
     // Pointer drift, fine pointers only, while the section is on screen.
-    const finePointer = window.matchMedia(FINE_POINTER);
-    const reach = readLengthToken("--everywhere-pointer-drift", 14);
-    let frame = 0;
-    let pointer: { x: number; y: number } | null = null;
-    const place = () => {
-      frame = 0;
-      const nx = pointer ? (pointer.x / window.innerWidth - 0.5) * 2 : 0;
-      const ny = pointer ? (pointer.y / window.innerHeight - 0.5) * 2 : 0;
-      for (const shape of shapes) {
-        const x = nx * reach * shape.depth;
-        const y = ny * reach * shape.depth;
-        shape.pointer.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
-      }
-    };
-    const onMove = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse") return;
-      pointer = { x: event.clientX, y: event.clientY };
-      if (!frame) frame = requestAnimationFrame(place);
-    };
-    const onLeave = () => {
-      pointer = null;
-      if (!frame) frame = requestAnimationFrame(place);
-    };
-    let listening = false;
-    const listen = (on: boolean) => {
-      if (on === listening) return;
-      listening = on;
-      if (on) {
-        window.addEventListener("pointermove", onMove, { passive: true });
-        document.documentElement.addEventListener("pointerleave", onLeave);
-      } else {
-        window.removeEventListener("pointermove", onMove);
-        document.documentElement.removeEventListener("pointerleave", onLeave);
-        onLeave();
-      }
-    };
-    const visibility = new IntersectionObserver(([entry]) =>
-      listen(entry.isIntersecting && finePointer.matches),
+    const stopDrift = trackPointerDrift(
+      section,
+      shapes.map((shape) => ({ element: shape.pointer, depth: shape.depth })),
+      "--everywhere-pointer-drift",
     );
-    visibility.observe(section);
 
     const resize = () => {
       if (shapesRef.current)
@@ -261,15 +196,11 @@ export function EverywhereMotion({
 
     return () => {
       observers.forEach((observer) => observer.disconnect());
-      visibility.disconnect();
-      listen(false);
-      if (frame) cancelAnimationFrame(frame);
+      disarmShapes();
+      stopDrift();
       window.removeEventListener("resize", resize);
       animations.forEach((animation) => animation.cancel());
-      for (const shape of shapes) {
-        shape.parallax.style.transform = "";
-        shape.pointer.style.transform = "";
-      }
+      for (const shape of shapes) shape.parallax.style.transform = "";
       shapesRef.current = null;
     };
   }, [scrollYProgress]);

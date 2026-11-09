@@ -159,7 +159,10 @@ export function SideNav() {
               >
                 <Logo className="h-5" aria-hidden />
               </Link>
-              <Dialog.Close aria-label="Close menu" className="ym-menu-close">
+              <Dialog.Close
+                aria-label="Close menu"
+                className="ym-close ym-menu-close"
+              >
                 {/* The icon's size is inline, so each breakpoint gets its own:
                     24px in the 40px mobile square, 32px in the 54px square.
                     Flex wrappers avoid the inline baseline gap that pushed

@@ -837,6 +837,68 @@
 }
 
 /*
+ * Landing stories snippet tokens (Figma 84:219, 279:507 and 296:1295; hover
+ * 249:59; story views 246:85 and 249:18). Documented in DESIGN-SYSTEM.md
+ * under "Stories snippet". Mobile values first, tablet from `md`, desktop
+ * from `xl`.
+ */
+@theme {
+  /* The hover pop's slide-out and the story's content fade. */
+  --ease-stories: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  /* Headshot entrances and cursor drift: the everywhere section's values,
+     through the shared shape motion (lib/shape-motion.ts). */
+  --duration-stories-shape: 900ms;
+  --stories-shape-from-scale: 0.92;
+  --stories-pointer-drift: 0.875rem;
+  --duration-stories-pointer: 700ms;
+  /* The idle float: each headshot rises this far and back over about this
+     long (each a little longer and out of step with the others). */
+  --stories-float-distance: 0.5rem;
+  --duration-stories-float: 6s;
+  /* The hover pop: the headshot's own silhouette, drawn this much bigger
+     behind it (1.35x, subtler than Figma's 1.54x); at rest it is shrunk to
+     the from-scale (about 1 / 1.35, so it sits hidden behind the portrait),
+     and slides out to full size on hover. */
+  --stories-pop-size: 135%;
+  --stories-pop-from-scale: 0.74;
+  --duration-stories-pop: 420ms;
+  /* The story view fits the screen: the text keeps its natural height and
+     the photo band takes the rest, up to its height here and down to its
+     minimum (shorter screens shrink the photo first). Its wavy edges' height,
+     and the content's fade. */
+  --stories-photo-height: 22rem;
+  --stories-photo-min: 6.25rem;
+  --stories-edge-height: max(2.5rem, round(calc(100vw * 0.045), 1px));
+  /* The wavy edge's mask and the plain part's overlap, so no hairline shows
+     where they meet. */
+  --stories-edge-seam: 1px;
+  /* Desktop's layered edges: the frame holding the hero wave's two-blob pair
+     (246 units): 11% of the width, but no more than 14% of the screen's
+     height, so short screens keep most of the photo (143px at 1440 x 1024,
+     101px at 1280 x 720). */
+  --stories-pair-height: min(
+    round(calc(100vw * 0.11), 1px),
+    round(calc(100dvh * 0.14), 1px)
+  );
+  --duration-stories-fade: 400ms;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --stories-photo-height: 28rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --stories-photo-height: 37.5rem;
+  }
+}
+
+/*
  * Blob reveal and entry animation tokens. Documented in DESIGN-SYSTEM.md under
  * "Blob reveal" and "Entry animation".
  */
@@ -1136,9 +1198,10 @@
   box-shadow: 0 0 0 3px var(--color-sisters-buttercup);
 }
 
-/* The negative margin centres the square on the header's menu trigger, so the
-   X lands where the hamburger was. */
-.ym-menu-close {
+/* The site's close (X) button: Obsidian on a white square, turning 90deg on
+   hover (not under reduced motion). Shared by the menu and the landing story
+   overlay. */
+.ym-close {
   display: grid;
   cursor: pointer;
   place-items: center;
@@ -1148,17 +1211,22 @@
   transition:
     opacity 200ms ease,
     transform 450ms cubic-bezier(0.645, 0.045, 0.355, 1);
-  @apply -mr-1 size-10 md:-mr-2.75 md:size-13.5;
 }
 
-.ym-menu-close:hover {
+.ym-close:hover {
   transform: rotate(90deg);
 }
 
-.ym-menu-close:focus-visible {
+.ym-close:focus-visible {
   box-shadow:
     0 0 0 2px var(--color-brand-obsidian),
     0 0 0 4px var(--color-brand-pure-white);
+}
+
+/* The negative margin centres the square on the header's menu trigger, so the
+   X lands where the hamburger was. */
+.ym-menu-close {
+  @apply -mr-1 size-10 md:-mr-2.75 md:size-13.5;
 }
 
 /* At the frame heights, primary links start 156px from the top, below the
@@ -1395,9 +1463,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .ym-close:hover {
+    transform: none;
+  }
+
   .ym-blob-reveal,
   .ym-menu-popup,
-  .ym-menu-close,
+  .ym-close,
   .ym-menu-link-list a,
   .ym-menu-social-link,
   .ym-cta-roll__text,

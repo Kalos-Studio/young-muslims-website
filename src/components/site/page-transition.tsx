@@ -4,6 +4,11 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
 
+import {
+  BRAND_COLORS,
+  type BrandColor,
+  needsDarkText,
+} from "@/lib/brand-palette";
 import { cn } from "@/lib/utils";
 
 import {
@@ -16,25 +21,10 @@ import { YmComposition } from "./ym-composition";
 import styles from "./page-transition.module.css";
 import { startSmoothScroll, stopSmoothScroll } from "./smooth-scroll-provider";
 
-/**
- * The cover colours: the full brand palette (brand, Brothers and Sisters
- * families). `token` is read at runtime to choose the composition colour.
- */
-const COVER_COLORS = [
-  { token: "--color-brand-obsidian", className: "bg-brand-obsidian" },
-  { token: "--color-brand-warm-snow", className: "bg-brand-warm-snow" },
-  { token: "--color-brand-royal", className: "bg-brand-royal" },
-  { token: "--color-brand-jade", className: "bg-brand-jade" },
-  { token: "--color-brand-pure-white", className: "bg-brand-pure-white" },
-  { token: "--color-brothers-midnight", className: "bg-brothers-midnight" },
-  { token: "--color-brothers-slate", className: "bg-brothers-slate" },
-  { token: "--color-brothers-sky", className: "bg-brothers-sky" },
-  { token: "--color-sisters-forest", className: "bg-sisters-forest" },
-  { token: "--color-sisters-brass", className: "bg-sisters-brass" },
-  { token: "--color-sisters-buttercup", className: "bg-sisters-buttercup" },
-] as const;
+/** The cover colours: the full brand palette (brand, Brothers and Sisters). */
+const COVER_COLORS = BRAND_COLORS;
 
-type CoverColor = (typeof COVER_COLORS)[number];
+type CoverColor = BrandColor;
 
 /** The reveal continues the cover's direction of travel: one sweep through. */
 const OPPOSITE: Record<BlobRevealDirection, BlobRevealDirection> = {
@@ -57,36 +47,6 @@ type ActiveTransition = {
   color: CoverColor;
   darkLogo: boolean;
 };
-
-/**
- * WCAG relative luminance of a colour token. The token's value can be in any
- * CSS colour form (production CSS shortens `#ffffff` to `#fff`), so it is
- * normalised to `#rrggbb` through a canvas context's `fillStyle` first.
- */
-function tokenLuminance(token: string) {
-  const value = getComputedStyle(document.documentElement)
-    .getPropertyValue(token)
-    .trim();
-  const context = document.createElement("canvas").getContext("2d");
-  if (context) context.fillStyle = value;
-  const normalised = String(context?.fillStyle ?? "");
-  const hex = normalised.match(/^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i);
-  const channels = hex
-    ? hex.slice(1).map((part) => Number.parseInt(part, 16))
-    : [0, 0, 0];
-  const [r, g, b] = channels.map((channel) => {
-    const c = channel / 255;
-    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-  });
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-}
-
-function readNumberToken(name: string, fallback: number) {
-  const value = Number.parseFloat(
-    getComputedStyle(document.documentElement).getPropertyValue(name),
-  );
-  return Number.isNaN(value) ? fallback : value;
-}
 
 /** Waits for fonts and the destination's visible images, within a budget. */
 async function waitForDestination(budgetMs: number) {
@@ -202,9 +162,7 @@ export function PageTransition() {
         pathname: url.pathname,
         origin: pickBlobRevealOrigin(),
         color,
-        darkLogo:
-          tokenLuminance(color.token) >
-          readNumberToken("--page-transition-contrast-threshold", 0.195),
+        darkLogo: needsDarkText(color),
       });
     };
 
@@ -282,7 +240,7 @@ export function PageTransition() {
       origin={phase === "revealing" ? OPPOSITE[active.origin] : active.origin}
       onCovered={onCovered}
       onRevealed={onRevealed}
-      className={cn(styles.cover, active.color.className)}
+      className={cn(styles.cover, active.color.bg)}
     >
       {/* The entry's stacked composition in one solid contrast colour. */}
       <YmComposition
