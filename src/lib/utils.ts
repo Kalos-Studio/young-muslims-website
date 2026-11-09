@@ -11,6 +11,8 @@ export const TYPE_SIZE_TOKENS = [
   "section",
   "lead",
   "card-title",
+  "article-title",
+  "article-meta",
   "body",
   "nav",
   "stat",

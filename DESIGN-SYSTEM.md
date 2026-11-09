@@ -22,16 +22,18 @@ than automatic syncing.
 
 The desktop website roles come directly from Figma node `26:188`:
 
-| Role              | Tailwind utility  | Typeface and weight | Size | Tracking |
-| ----------------- | ----------------- | ------------------- | ---: | -------: |
-| Display           | `text-display`    | Boldonse Regular    | 56px |      -2% |
-| Section heading   | `text-section`    | Figtree ExtraBold   | 54px |      -2% |
-| Hero introduction | `text-lead`       | Figtree Semibold    | 24px |      -2% |
-| Large body        | `text-lead`       | Figtree Medium      | 24px |      -2% |
-| Card title        | `text-card-title` | Figtree Semibold    | 28px |       0% |
-| Body              | `text-body`       | Figtree Regular     | 16px |       0% |
-| Navigation        | `text-nav`        | Figtree Bold        | 14px |      -2% |
-| Statistic         | `text-stat`       | Boldonse Regular    | 54px |      -2% |
+| Role              | Tailwind utility     | Typeface and weight | Size | Tracking |
+| ----------------- | -------------------- | ------------------- | ---: | -------: |
+| Display           | `text-display`       | Boldonse Regular    | 56px |      -2% |
+| Section heading   | `text-section`       | Figtree ExtraBold   | 54px |      -2% |
+| Hero introduction | `text-lead`          | Figtree Semibold    | 24px |      -2% |
+| Large body        | `text-lead`          | Figtree Medium      | 24px |      -2% |
+| Card title        | `text-card-title`    | Figtree Semibold    | 28px |       0% |
+| Article title     | `text-article-title` | Figtree Semibold    | 18px |      -2% |
+| Article meta      | `text-article-meta`  | Figtree Medium      | 12px |      -2% |
+| Body              | `text-body`          | Figtree Regular     | 16px |       0% |
+| Navigation        | `text-nav`           | Figtree Bold        | 14px |      -2% |
+| Statistic         | `text-stat`          | Boldonse Regular    | 54px |      -2% |
 
 Every role uses Figma's Auto line height, represented by `normal` in CSS.
 
@@ -87,13 +89,18 @@ elements, matching the brand guidance.
 
 Components should use semantic utilities by default:
 
-| Semantic token          | Brand mapping |
-| ----------------------- | ------------- |
-| `background`, `card`    | Warm Snow     |
-| `foreground`, `primary` | Deep Obsidian |
-| `secondary`             | Royal Blue    |
-| `accent`                | Jade Foliage  |
-| `ring`                  | Royal Blue    |
+| Semantic token          | Brand mapping            |
+| ----------------------- | ------------------------ |
+| `background`, `card`    | Warm Snow                |
+| `foreground`, `primary` | Deep Obsidian            |
+| `secondary`             | Royal Blue               |
+| `accent`                | Jade Foliage             |
+| `ring`                  | Royal Blue               |
+| `caption`               | Caption gray (`#484848`) |
+
+`caption` (`text-caption`, `--color-caption`) is the gray for caption and
+description copy on Warm Snow (9.3:1), first used by the landing article
+cards' descriptions (Figma 270:289).
 
 Use a brand primitive directly only when a surface explicitly represents the
 Brothers identity, Sisters identity, or a prescribed brand treatment.
@@ -711,6 +718,57 @@ mobile frames), built in `src/app/landing/people-stories-section.tsx`,
 | `--stories-edge-height` / `--stories-edge-seam`                              | max(2.5rem, 4.5vw rounded) / 1px | The wavy edges' height, and their masks' overlap so no hairline shows                                                                                     |
 | `--stories-pair-height`                                                      | min(11vw, 14dvh), rounded        | Desktop's layered-edge frame (143px at 1440 x 1024, 101px at 1280 x 720)                                                                                  |
 | `--duration-stories-fade`                                                    | 400ms                            | The story's content fading in once covered, and out before the blob leaves                                                                                |
+
+## Word on the street
+
+The landing page's blog snippet (Figma 270:289, tablet 280:735, mobile
+297:1394; hover 270:511), built in `src/app/landing/word-on-the-street-section.tsx`
+(server), `street-articles.ts` (data), `street-cards-motion.tsx` (client: the
+cards' entrance only) and `word-on-the-street-section.module.css`.
+
+- **Content:** "Word on the street." and its subline (Obsidian, in
+  `TextReveal`) with "View latest" (`StandardButton`, to `/blog`) beside them
+  from tablet, under them (full width) on mobile; then three article cards,
+  one swappable array in `street-articles.ts`. Each whole card is a link to
+  its report's PDF (new tab, `rel="noopener noreferrer"`): the photo in its
+  organic blob, the title (`text-article-title`, Obsidian), the date and
+  author (`text-article-meta`, Jade; Figma's placeholder "October 1, 2026 •
+  Muneeb Syed", flagged editable in the data) and the description
+  (`text-nav` Medium, `text-caption`).
+- **Layout:** desktop sets the cards in a row of three, 378 wide and 68
+  apart (Figma's 90 / 80 insets, capped at 1440); tablet in two columns;
+  mobile in one, spanning the full width between the 32px gutters.
+- **Photos:** each is pre-cropped to its card's image box exactly as the
+  Figma frame places it, and each blob's silhouette is a mask from the Figma
+  vector's alpha (`scripts/street-assets.mjs`: `photo-*.jpg`,
+  `mask-*.png`). The judgement card uses its desktop blob at every size
+  (Figma's tablet and mobile frames use a slightly wider variant).
+- **Hover** (fine pointer, or keyboard focus): the blob grows into the full
+  square. The photo never moves: over it sits a Warm Snow frame (the
+  section's colour) with the blob cut out of it (`mask-*.png`, excluded from
+  a full rect), and the frame scales up from the blob's centre to
+  `--street-reveal-scale`, past the 1.862 the widest blob needs to clear its
+  box's corners; the box clips the frame, so the hole opens out to the
+  square's edges. One compositor transform, no path morph and no mask
+  animation. The 32% Obsidian overlay (under the frame, so only the revealed
+  photo darkens) fades in with it, and "Read article" (`text-landing-copy`
+  Bold, white, Material `arrow_outward`) rises `--street-label-rise` into
+  the middle, over `--duration-street-hover`. Un-hovering shrinks the frame
+  back to the blob. No hover on touch.
+- **Entrance:** the heading's `TextReveal`; each card's photo grows from
+  `--street-card-from-scale` as it fades in (the shared shape motion).
+- **Reduced motion:** no entrance; on hover the square, overlay and label
+  appear at once, with no growth. The DOM is the same either way, so the server and client
+  agree.
+
+| Token                                                 | Value                            | Use                                                                                              |
+| ----------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `--color-caption` (`text-caption`)                    | `#484848`                        | The cards' descriptions                                                                          |
+| `--text-article-title` / `--text-article-meta`        | 1.125rem / 0.75rem, -2%          | The cards' title and date + author                                                               |
+| `--duration-street-card` / `--street-card-from-scale` | 900ms / 0.92                     | A card photo's grow-and-fade entrance                                                            |
+| `--street-reveal-scale`                               | 2                                | How far the Warm Snow frame scales on hover, so the blob clears the box (the widest needs 1.862) |
+| `--duration-street-hover` / `--street-label-rise`     | 550ms / 0.5rem                   | The hover, and how far "Read article" rises                                                      |
+| `--ease-street`                                       | `cubic-bezier(0.22, 1, 0.36, 1)` | The hover and the entrance                                                                       |
 
 ## NeighborNet switcher
 

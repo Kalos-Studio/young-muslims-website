@@ -101,6 +101,9 @@
   --color-landing-card-ink: #000000;
   /* The pale band of the hero's bottom wave (Figma 27:253). */
   --color-landing-pale: #f7f3f0;
+  /* Caption and description copy on Warm Snow: the landing article cards'
+     descriptions (Figma 270:289). 9.3:1 on Warm Snow. */
+  --color-caption: #484848;
 
   /* Functional UI color, intentionally separate from the brand palette. */
   --color-system-danger: #b42318;
@@ -354,6 +357,17 @@
   --text-card-title: 1.75rem;
   --text-card-title--line-height: normal;
   --text-card-title--letter-spacing: 0;
+
+  /* Article cards (the landing "Word on the street" snippet, Figma 270:289):
+     the title (Figtree Semibold 18px) and the date and author (Figtree
+     Medium 12px). Their descriptions use `text-nav` (14px, -2%). */
+  --text-article-title: 1.125rem;
+  --text-article-title--line-height: normal;
+  --text-article-title--letter-spacing: -0.02em;
+
+  --text-article-meta: 0.75rem;
+  --text-article-meta--line-height: normal;
+  --text-article-meta--letter-spacing: -0.02em;
 
   --text-body: 1rem;
   --text-body--line-height: normal;
@@ -896,6 +910,32 @@
   :root {
     --stories-photo-height: 37.5rem;
   }
+}
+
+/*
+ * Landing "Word on the street" tokens (Figma 270:289, tablet 280:735, mobile
+ * 297:1394, hover 270:511). Documented in DESIGN-SYSTEM.md under "Word on
+ * the street".
+ */
+@theme {
+  /* The card hover and its exit: quick to respond, soft to settle (the
+     menu's deceleration). */
+  --ease-street: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  /* Card entrances (the shared shape motion): each card's photo grows from
+     this scale as it fades in, as it enters view. */
+  --duration-street-card: 900ms;
+  --street-card-from-scale: 0.92;
+  /* The hover (fine pointer) or keyboard focus: the blob grows into the
+     square (its Warm Snow frame scales up to this: past 1.862, the most any
+     of the three blobs needs to clear its box's corners, with room for the
+     mask's soft edge), the 32% Obsidian
+     overlay fades in, and "Read article" rises this far into place. */
+  --street-reveal-scale: 2;
+  --duration-street-hover: 550ms;
+  --street-label-rise: 0.5rem;
 }
 
 /*

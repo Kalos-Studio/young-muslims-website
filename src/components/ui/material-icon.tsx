@@ -4,6 +4,7 @@ import type { StaticImageData } from "next/image";
 import add from "../../../design-assets/icons/material-symbols-outlined/add.svg";
 import alternateEmail from "../../../design-assets/icons/material-symbols-outlined/alternate_email.svg";
 import arrowBack from "../../../design-assets/icons/material-symbols-outlined/arrow_back.svg";
+import arrowOutward from "../../../design-assets/icons/material-symbols-outlined/arrow_outward.svg";
 import arrowForward from "../../../design-assets/icons/material-symbols-outlined/arrow_forward.svg";
 import call from "../../../design-assets/icons/material-symbols-outlined/call.svg";
 import close from "../../../design-assets/icons/material-symbols-outlined/close.svg";
@@ -25,6 +26,7 @@ const MATERIAL_ICONS = {
   alternate_email: alternateEmail,
   arrow_back: arrowBack,
   arrow_forward: arrowForward,
+  arrow_outward: arrowOutward,
   call,
   close,
   expand_more: expandMore,
