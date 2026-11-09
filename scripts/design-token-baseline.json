@@ -78,7 +78,6 @@
   "[\"src/app/globals.css\",\"css-value\",\"font-size: clamp(2.25rem, min(3.5rem, 7dvh, 6vw), 3.5rem)\"]": 1,
   "[\"src/app/globals.css\",\"css-value\",\"line-height: 1.037\"]": 1,
   "[\"src/app/globals.css\",\"css-value\",\"letter-spacing: -0.02em\"]": 1,
-  "[\"src/app/globals.css\",\"css-value\",\"-webkit-text-stroke: 2px var(--color-brand-warm-snow)\"]": 1,
   "[\"src/app/globals.css\",\"css-value\",\"gap: clamp(0.75rem, 4dvh, 2.5rem)\"]": 1,
   "[\"src/app/globals.css\",\"css-value\",\"box-shadow: 0 0 0 0.1875rem var(--color-brand-warm-snow)\"]": 3,
   "[\"src/app/globals.css\",\"css-value\",\"width: min(24.9375rem, 100%)\"]": 1,

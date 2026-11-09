@@ -140,20 +140,32 @@ Figma menu frames: desktop `298:1507`, tablet `301:1594` and mobile
 mobile) instead of the frames' 123px. That keeps the logo and menu trigger in
 place when the menu opens. These approved tokens exist only for the menu:
 
-| Token                                                         | Value                                             | Use                                                           |
-| ------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------- |
-| `--ease-menu-reveal`                                          | `cubic-bezier(0.22, 1, 0.36, 1)`                  | Reveal and conceal easing                                     |
-| `--duration-menu-reveal` / `--duration-menu-conceal`          | 800ms / 550ms                                     | Open and close durations                                      |
-| `--menu-viewport-width` / `--menu-viewport-height`            | 100vw / 100dvh                                    | Size the reveal circle to the farthest viewport corner        |
-| `--menu-primary-line-height` / `--menu-primary-tracking`      | 1.21 / -2%                                        | Outlined Boldonse primary links                               |
-| `--menu-fit`                                                  | At most 1px                                       | Scale for every vertical size below; 1px at the frame heights |
-| `--menu-primary-size`                                         | 48 × fit from `md`, 41.36 × fit below             | Primary link size                                             |
-| `--menu-primary-gap` / `--menu-pad-top` / `--menu-pad-bottom` | Frame values × fit                                | Primary spacing and outer padding                             |
-| `--menu-section-gap` / `--menu-footer-gap`                    | Frame values × fit                                | Space between blocks                                          |
-| `--menu-secondary-padding` / `--menu-secondary-gap`           | Frame values × fit                                | Secondary link rows                                           |
-| `--menu-mark-size`                                            | 66.667vw tablet, 42.98vw from `xl`                | Decorative monogram size                                      |
-| `--menu-mark-top`                                             | 0vw tablet, -5.417vw from `xl`                    | Filled monogram top; the outline mark sits directly below     |
-| `--menu-mark-filled-left` / `--menu-mark-outline-left`        | 37.22% / 63.57% tablet, 47.43% / 64.42% from `xl` | Monogram left offsets                                         |
+| Token                                                         | Value                                                                                        | Use                                                                                                                     |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `--ease-menu-reveal`                                          | `cubic-bezier(0.22, 1, 0.36, 1)`                                                             | Reveal and conceal easing                                                                                               |
+| `--duration-menu-reveal` / `--duration-menu-conceal`          | 800ms / 550ms                                                                                | Open and close durations                                                                                                |
+| `--menu-viewport-width` / `--menu-viewport-height`            | 100vw / 100dvh                                                                               | Size the reveal circle to the farthest viewport corner                                                                  |
+| `--menu-primary-line-height` / `--menu-primary-tracking`      | 1.21 / -2%                                                                                   | Boldonse primary links (Obsidian fill, Warm Snow outline)                                                               |
+| `--menu-primary-stroke`                                       | 1.2px                                                                                        | The primary links' Warm Snow outline (all sizes)                                                                        |
+| `--menu-primary-roll-room` / `--menu-primary-roll-gap`        | 0.125rem / 0.3125rem                                                                         | The primary links' label roll: room in its clip for the outline, and the gap before the rolling copy                    |
+| `--menu-fit`                                                  | At most 1px                                                                                  | Scale for every vertical size below; 1px at the frame heights                                                           |
+| `--menu-primary-size`                                         | 48 × fit from `md`, 41.36 × fit below                                                        | Primary link size                                                                                                       |
+| `--menu-primary-gap` / `--menu-pad-top` / `--menu-pad-bottom` | Frame values × fit                                                                           | Primary spacing and outer padding                                                                                       |
+| `--menu-section-gap` / `--menu-footer-gap`                    | Frame values × fit                                                                           | Space between blocks                                                                                                    |
+| `--menu-secondary-padding` / `--menu-secondary-gap`           | Frame values × fit                                                                           | Secondary link rows                                                                                                     |
+| `--menu-mark-size`                                            | min(91.83vw, 55.36dvh) mobile, min(66.667vw, 50dvh) tablet, min(42.98vw, 60.45dvh) from `xl` | Decorative monogram size: the frame's width share, capped by height so the two marks never overlap                      |
+| `--menu-mark-top`                                             | size x 0.0484 mobile, 0vw tablet, size x -0.126 from `xl`                                    | The filled (Brothers) mark's top: it hangs from the top edge                                                            |
+| `--menu-mark-outline-bottom`                                  | size x -0.2419 mobile, 0vw tablet, size x -0.2197 from `xl`                                  | The outline (Sisters) mark's bottom: it rises from the bottom edge, so both stay equally in view at any viewport height |
+| `--menu-mark-filled-left` / `--menu-mark-outline-left`        | -41.94% / 38.75% mobile, 37.22% / 63.57% tablet, 47.43% / 64.42% from `xl`                   | Monogram left offsets                                                                                                   |
+
+The primary links rest as Obsidian letters with a 1.2px Warm Snow outline: the
+fill knocks out the monograms behind them, so the marks never show through the
+letterforms. Hover, keyboard focus and the current page fill them Warm Snow;
+hover and focus also roll the label (the site's `.ym-cta-roll`, no arrow),
+both copies carrying the fill and outline. The roll's clip keeps
+`--menu-primary-roll-room` above and below the label so the outline is never
+shaved, and the rolling copy waits `--menu-primary-roll-gap` below it. Under
+reduced motion there is no roll; the fill still applies.
 
 The primary-link sizes are measured from the Figma outlines: with the standard
 -2% tracking, rendered glyph bounds match the frames (WHO WE ARE is 344×58 on
@@ -179,8 +191,12 @@ the trigger. Under reduced motion both are instant.
 
 The decorative monograms are full-opacity Royal Blue and Jade assets in
 `design-assets/figma/menu/`. They sit outside the menu's content so they stay
-anchored to the viewport and bleed off its edges, and they are hidden below
-`md`.
+anchored to the viewport and bleed off its edges, at every size (mobile
+301:1667 now shows them too). The filled Brothers mark hangs from the top edge
+and the outlined Sisters mark rises from the bottom edge, so both are equally
+in view whatever the viewport's height; each mark's size is capped by the
+height, so the two never overlap (at most their boxes just touch, as in the
+frames).
 
 ## Sticky hero
 
@@ -550,22 +566,23 @@ built in `src/app/landing/principles-section.tsx` with its motion in
 
 Mobile values first; tablet and desktop from `md`:
 
-| Token                                                        | Value                                               | Use                                                                                                                                                                |
-| ------------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--principles-stage-height`                                  | 100dvh                                              | The pinned stage, as the sticky hero                                                                                                                               |
-| `--principles-strip-max`                                     | 6.25rem / 10.4375rem                                | A strip's height: 100px on mobile, Figma's 167px from `md`                                                                                                         |
-| `--principles-strip`                                         | min(max, room / 3)                                  | The strip: its max, or less on short screens, so the header clearance and three strips end the strip gap above the last word                                       |
-| `--principles-header-clearance`                              | 5rem / 6.0625rem                                    | The strips stack below the fixed header (80 / 97px); the first strip's band includes it                                                                            |
-| `--principles-strip-gap`                                     | 1.5rem                                              | The least space between the last strip and the last principle's word                                                                                               |
-| `--principles-content-bottom`                                | 5.375rem / clamp(3rem, stage - 52.5rem, 11.5625rem) | How far the button sits above a panel's foot: Figma's 86px on mobile; 185px from `md` at a 1024px stage, closing to 48px on shorter ones                           |
-| `--principles-content-height` / `--principles-content-reach` | 13.6875rem / bottom + height                        | The tallest word-to-button block (219px), and how far its top sits above the foot                                                                                  |
-| `--principles-peek`                                          | 0.6436                                              | Where the first principle peeks from as the section arrives (Figma y 659 of 1024)                                                                                  |
-| `--principles-rise`                                          | 0.65                                                | Stage heights of scroll for the first principle to rise to full                                                                                                    |
-| `--principles-step`                                          | 0.75                                                | Stage heights of scroll for each later principle to rise and collapse the one before                                                                               |
-| `--principles-hold`                                          | 0.15                                                | Stage heights of scroll held after each principle, fully revealed                                                                                                  |
-| `--principles-scrim-fade`                                    | 0.6                                                 | A fresh strip's scrim waits for its collapse to finish, then fades in over this share of the hold after it (0.09 stage heights, about 92px of scroll at 1024 tall) |
-| `--principles-runway`                                        | stage x (rise + 4 holds + 3 steps)                  | The pinned scroll: 3.5 stages, so the section is 4.5 stages tall (4608px at 1024 tall, 3798px at 844)                                                              |
-| `--principles-photo-shift`                                   | 0.5625                                              | How far a collapsing principle's photo slides up (Figma 576 of 1024), so its strip shows the heart of it                                                           |
+| Token                                                        | Value                                               | Use                                                                                                                                                                                      |
+| ------------------------------------------------------------ | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--principles-stage-height`                                  | 100dvh                                              | The pinned stage, as the sticky hero                                                                                                                                                     |
+| `--principles-strip-max`                                     | 6.25rem / 10.4375rem                                | A strip's height: 100px on mobile, Figma's 167px from `md`                                                                                                                               |
+| `--principles-strip`                                         | min(max, room / 3)                                  | The strip: its max, or less on short screens, so the header clearance and three strips end the strip gap above the last word                                                             |
+| `--principles-header-clearance`                              | 5rem / 6.0625rem                                    | The strips stack below the fixed header (80 / 97px); the first strip's band includes it                                                                                                  |
+| `--principles-strip-gap`                                     | 1.5rem                                              | The least space between the last strip and the last principle's word                                                                                                                     |
+| `--principles-content-bottom`                                | 5.375rem / clamp(3rem, stage - 52.5rem, 11.5625rem) | How far the button sits above a panel's foot: Figma's 86px on mobile; 185px from `md` at a 1024px stage, closing to 48px on shorter ones                                                 |
+| `--principles-content-height` / `--principles-content-reach` | 13.6875rem / bottom + height                        | The tallest word-to-button block (219px), and how far its top sits above the foot                                                                                                        |
+| `--principles-peek`                                          | 0.6436                                              | Where the first principle peeks from as the section arrives (Figma y 659 of 1024)                                                                                                        |
+| `--principles-rise`                                          | 0.65                                                | Stage heights of scroll for the first principle to rise to full                                                                                                                          |
+| `--principles-step`                                          | 0.75                                                | Stage heights of scroll for each later principle to rise and collapse the one before                                                                                                     |
+| `--principles-hold`                                          | 0.5                                                 | Stage heights of scroll held after each principle, fully revealed (a long beat before the next takes over)                                                                               |
+| `--principles-scrim-fade`                                    | 0.6                                                 | A fresh strip's scrim waits for its collapse to finish, then fades in over this share of the hold after it (0.09 stage heights, about 92px of scroll at 1024 tall)                       |
+| `--principles-runway`                                        | stage x (rise + 4 holds + 3 steps)                  | The pinned scroll: 4.9 stages, so the section is 5.9 stages tall (6042px at 1024 tall, 4980px at 844)                                                                                    |
+| `--principles-photo-shift`                                   | 0.5625                                              | How far a collapsing principle's photo slides up (Figma 576 of 1024), so its strip shows the heart of it                                                                                 |
+| `--principles-photo-lower-sustainability` / `-impact`        | 0.2 / 0.16                                          | Sustainability and Societal Impact (`lowerPhoto`): drawn from their top and lowered this share of the stage on the pinned panels from tablet up, so their faces clear the earlier strips |
 
 ## Everywhere section
 

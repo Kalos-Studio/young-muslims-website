@@ -232,7 +232,7 @@ export function PrinciplesMotion({
         peek: readNumber("--principles-peek", 0.6436),
         rise: readNumber("--principles-rise", 0.65),
         step: readNumber("--principles-step", 0.75),
-        hold: readNumber("--principles-hold", 0.15),
+        hold: readNumber("--principles-hold", 0.5),
         scrimFade: readNumber("--principles-scrim-fade", 0.6),
         total: 0,
         headingCopy,

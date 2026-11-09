@@ -189,9 +189,18 @@ export function SideNav() {
                             href={link.href}
                             onClick={closeMenu}
                             aria-current={isCurrent ? "page" : undefined}
-                            className="ym-menu-primary-link"
+                            className="ym-cta-trigger ym-menu-primary-link"
                           >
-                            {link.label}
+                            {/* The site's label roll (no arrow): both copies
+                                inherit the outlined fill and stroke. */}
+                            <span className="ym-cta-roll">
+                              <span
+                                className="ym-cta-roll__text"
+                                data-text={link.label}
+                              >
+                                {link.label}
+                              </span>
+                            </span>
                           </Link>
                         </li>
                       );

@@ -454,6 +454,15 @@
      match the frames' outlines. 1.21 reproduces their line boxes. */
   --menu-primary-line-height: 1.21;
   --menu-primary-tracking: -0.02em;
+  /* The primary links' Warm Snow outline. */
+  --menu-primary-stroke: 1.2px;
+  /* The primary links' label roll: the room kept inside its clip above and
+     below the label (Boldonse's capitals fill the line box, and the stroke
+     sits just outside them, so the clip would otherwise shave it), and the
+     gap between the label and the copy that rolls in, wider than that room
+     so the copy never shows at rest. */
+  --menu-primary-roll-room: 0.125rem;
+  --menu-primary-roll-gap: 0.3125rem;
 
   /* Viewport fit. Every vertical size below is its Figma value times
      --menu-fit, which is 1px at the frame heights and shrinks on shorter
@@ -471,19 +480,37 @@
   --menu-secondary-gap: calc(4 * var(--menu-fit));
   --menu-footer-gap: calc(36 * var(--menu-fit));
 
-  /* Decorative monograms (tablet frame). The outline mark sits directly
-     beneath the filled mark. Hidden below `md`, as in the mobile frame. */
-  --menu-mark-size: 66.667vw;
-  /* A unit is required: the outline mark adds this to a length in calc(). */
-  --menu-mark-top: 0vw;
-  --menu-mark-filled-left: 37.22%;
-  --menu-mark-outline-left: 63.57%;
+  /* Decorative monograms, per frame (mobile 301:1667 here; tablet 301:1594
+     and desktop 298:1507 below). The filled Brothers mark hangs from the
+     top and the outlined Sisters mark rises from the bottom, each anchored
+     to its own edge, so both stay equally in view at any viewport height
+     (positioned from the width alone, the Sisters mark used to fall below
+     the fold on wide, short screens). They must never overlap: each mark's
+     size follows its frame's width but is capped by the viewport's height,
+     so the filled mark's foot never passes the outline's top (at most they
+     just touch, as in the frames: the round marks then clear each other).
+     The cap is height / (2 + top share - bleed share). Tops and the
+     outline's bleed past the foot are shares of the size; lefts follow the
+     width. Mobile: 330.6px at 360 (cap 55.36dvh), the filled mark at
+     (-151, 16), the outline 80px past the foot. */
+  --menu-mark-size: min(91.83vw, 55.36dvh);
+  --menu-mark-top: calc(var(--menu-mark-size) * 0.0484);
+  --menu-mark-filled-left: -41.94%;
+  --menu-mark-outline-left: 38.75%;
+  --menu-mark-outline-bottom: calc(var(--menu-mark-size) * -0.2419);
 }
 
 /* Tablet and desktop frames: 97px bar + 87px of text + 32px socials;
    687.24px scalable. */
 @media (width >= 48rem) {
   :root {
+    /* Tablet: 512px at 768 (cap 50dvh), the filled mark at the top, the
+       outline resting on the foot. */
+    --menu-mark-size: min(66.667vw, 50dvh);
+    --menu-mark-top: 0vw;
+    --menu-mark-filled-left: 37.22%;
+    --menu-mark-outline-left: 63.57%;
+    --menu-mark-outline-bottom: 0vw;
     --menu-fit: min(1px, calc((100dvh - 13.5rem) / 695));
     --menu-pad-top: calc(59 * var(--menu-fit));
     --menu-pad-bottom: calc(80 * var(--menu-fit));
@@ -524,10 +551,13 @@
 /* Desktop frame values, from `xl` like the header's full navigation. */
 @media (width >= 80rem) {
   :root {
-    --menu-mark-size: 42.98vw;
-    --menu-mark-top: -5.417vw;
+    --menu-mark-size: min(42.98vw, 60.45dvh);
+    --menu-mark-top: calc(var(--menu-mark-size) * -0.126);
     --menu-mark-filled-left: 47.43%;
     --menu-mark-outline-left: 64.42%;
+    /* Desktop: 619px at 1440 (cap 60.45dvh), the filled mark 78px above
+       the top, the outline 136px past the foot. */
+    --menu-mark-outline-bottom: calc(var(--menu-mark-size) * -0.2197);
   }
 }
 
@@ -783,11 +813,11 @@
      arrives and rises to full over the rise; each later principle rises
      over the step, covering the one before until only its strip shows; a
      hold follows each, so every principle rests fully revealed for a
-     moment. */
+     long beat (half a stage of scroll) before the next takes over. */
   --principles-peek: 0.6436;
   --principles-rise: 0.65;
   --principles-step: 0.75;
-  --principles-hold: 0.15;
+  --principles-hold: 0.5;
   /* A fresh strip's scrim waits for its collapse to finish, then fades in
      over this share of the hold that follows: the last beat, once the panel
      is only its strip. */
@@ -803,6 +833,13 @@
      (Figma's 576 of 1024), so its strip shows the heart of the photo; it is
      capped so the photo's foot never rises above the next panel's edge. */
   --principles-photo-shift: 0.5625;
+  /* Sustainability and Societal Impact (`lowerPhoto`) are drawn from their
+     top and lowered this share of the stage on the pinned panels from tablet
+     up, so their faces clear the earlier strips (Sustainability's faces sit
+     higher in its photo, so it drops further). The opened gap stays behind
+     the strips: under the panels' top offsets at any desktop height. */
+  --principles-photo-lower-sustainability: 0.2;
+  --principles-photo-lower-impact: 0.16;
 }
 
 @media (width >= 48rem) {
@@ -1393,7 +1430,6 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  @apply hidden md:block;
 }
 
 .ym-menu-mark {
@@ -1410,7 +1446,8 @@
 }
 
 .ym-menu-mark--outline {
-  top: calc(var(--menu-mark-top) + var(--menu-mark-size));
+  top: auto;
+  bottom: var(--menu-mark-outline-bottom);
   left: var(--menu-mark-outline-left);
 }
 
@@ -1600,8 +1637,11 @@
   display: block;
   width: fit-content;
   font-family: var(--font-boldonse);
-  color: transparent;
-  -webkit-text-stroke: 2px var(--color-brand-warm-snow);
+  /* Obsidian letters with a 1.2px Warm Snow outline: the fill knocks out the
+     monograms behind them; hover, focus and the current page fill Warm Snow.
+     Hover and focus also roll the label (.ym-cta-roll, no arrow). */
+  color: var(--color-brand-obsidian);
+  -webkit-text-stroke: var(--menu-primary-stroke) var(--color-brand-warm-snow);
   white-space: nowrap;
   text-transform: uppercase;
   font-size: var(--menu-primary-size);
@@ -1621,6 +1661,29 @@
 
 .ym-menu-primary-link:focus-visible {
   box-shadow: 0 0 0 0.1875rem var(--color-brand-warm-snow);
+}
+
+/* The label roll on the outlined links: room inside the clip for the stroke
+   (offset by a matching negative margin, so the layout does not move), and a
+   wider gap before the rolling copy. Both copies inherit the link's fill and
+   stroke, so they fill Warm Snow together with it. */
+.ym-menu-primary-link .ym-cta-roll {
+  padding-block: var(--menu-primary-roll-room);
+  margin-block: calc(-1 * var(--menu-primary-roll-room));
+}
+
+.ym-menu-primary-link .ym-cta-roll__text::after {
+  top: calc(100% + var(--menu-primary-roll-gap));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ym-menu-primary-link.ym-cta-trigger:hover .ym-cta-roll__text {
+    transform: translate3d(0, calc(-100% - var(--menu-primary-roll-gap)), 0);
+  }
+}
+
+.ym-menu-primary-link.ym-cta-trigger:focus-visible .ym-cta-roll__text {
+  transform: translate3d(0, calc(-100% - var(--menu-primary-roll-gap)), 0);
 }
 
 .ym-menu-footer {

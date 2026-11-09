@@ -103,3 +103,30 @@
     will-change: transform, opacity;
   }
 }
+
+/* Pinned, from tablet up: photos flagged `lowerPhoto` (Sustainability,
+   Societal Impact) are drawn from their top and lowered by
+   `--principles-photo-lower-*` of the stage. Later panels start below the
+   earlier strips, which hide the top of a photo framed from its foot, and
+   these two photos' faces sit high; lowered, the faces come out from under
+   the strips. The gap this opens above the image stays behind the strips,
+   and the panel clips what runs past its foot. */
+@media (prefers-reduced-motion: no-preference) and (height > 30rem) and (width >= 48rem) {
+  .photoLowerSustainability,
+  .photoLowerImpact {
+    object-position: 50% 0%;
+  }
+
+  .photoLowerSustainability {
+    top: calc(
+      var(--principles-stage-height) *
+        var(--principles-photo-lower-sustainability)
+    );
+  }
+
+  .photoLowerImpact {
+    top: calc(
+      var(--principles-stage-height) * var(--principles-photo-lower-impact)
+    );
+  }
+}

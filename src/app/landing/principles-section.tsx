@@ -24,6 +24,8 @@ type Principle = {
   mobile: StaticImageData;
   /** The description's measure from `md` (Figma 428; 465 for Diversity, which needs 480 to keep its two lines without Figma's -2% tracking). */
   measure: string;
+  /** Draw the photo lower on the pinned panels from tablet up, so faces near its top clear the earlier strips (CSS module). */
+  lowerPhoto?: "sustainability" | "impact";
 };
 
 const PRINCIPLES: Principle[] = [
@@ -50,6 +52,7 @@ const PRINCIPLES: Principle[] = [
     desktop: sustainabilityDesktop,
     mobile: sustainabilityMobile,
     measure: "md:max-w-107",
+    lowerPhoto: "sustainability",
   },
   {
     title: "SOCIETAL IMPACT",
@@ -58,6 +61,7 @@ const PRINCIPLES: Principle[] = [
     desktop: impactDesktop,
     mobile: impactMobile,
     measure: "md:max-w-107",
+    lowerPhoto: "impact",
   },
 ];
 
@@ -95,7 +99,12 @@ function PanelPhoto({ principle }: { principle: Principle }) {
         alt=""
         loading="lazy"
         decoding="async"
-        className="absolute inset-0 size-full object-cover"
+        className={cn(
+          "absolute inset-0 size-full object-cover",
+          principle.lowerPhoto === "sustainability" &&
+            styles.photoLowerSustainability,
+          principle.lowerPhoto === "impact" && styles.photoLowerImpact,
+        )}
       />
     </picture>
   );
