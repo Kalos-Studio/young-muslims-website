@@ -967,8 +967,9 @@
      to this far (110px, the show-you blob's drift; the bigger copies behind
      half as much again, 165px), into the Warm Snow room the section keeps
      above and below the shape for them (that, and a little more, so the
-     bigger copy's peak never meets the section's clip); the content mask's
-     seam. */
+     bigger copy's peak never meets the section's clip); the one-pixel seam
+     overlap (the content mask's, and the section's over the stories section
+     above). */
   --neighbornets-edge-height: clamp(
     4rem,
     round(calc(100vw * 0.075), 1px),

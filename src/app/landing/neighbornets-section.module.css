@@ -8,6 +8,10 @@
    (which clips), so no edge is ever cut off. */
 .section {
   padding-block: var(--neighbornets-edge-headroom);
+  /* Overlaps the stories section by a pixel: on desktop the boundary can
+     fall on a fractional pixel, which left a grey hairline (the dark page
+     behind the landing stack) along the section's top. */
+  margin-top: calc(-1 * var(--neighbornets-edge-seam));
 }
 
 /* The section's Obsidian body, between its two caps. */
