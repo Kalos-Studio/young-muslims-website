@@ -115,6 +115,27 @@ export function areaAround(
   return [x0, y0, x1, y1];
 }
 
+/** The box around `points`, grown to at least `span` map units each way. */
+export function boxAround(
+  points: readonly { x: number; y: number }[],
+  span: number,
+): [number, number, number, number] {
+  let [x0, y0, x1, y1] = [Infinity, Infinity, -Infinity, -Infinity];
+  for (const { x, y } of points) {
+    x0 = Math.min(x0, x);
+    y0 = Math.min(y0, y);
+    x1 = Math.max(x1, x);
+    y1 = Math.max(y1, y);
+  }
+  const grow = (lo: number, hi: number) => {
+    const extra = Math.max(0, span - (hi - lo)) / 2;
+    return [lo - extra, hi + extra];
+  };
+  [x0, x1] = grow(x0, x1);
+  [y0, y1] = grow(y0, y1);
+  return [x0, y0, x1, y1];
+}
+
 function round(value: number, places = 2) {
   const f = 10 ** places;
   return Math.round(value * f) / f;

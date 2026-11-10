@@ -32,6 +32,21 @@
   cursor: grabbing;
 }
 
+/* The zoom hint, centred across the map at the pointer's height (its
+   `translate`, set by NeighborNetsMapMotion). It fades in and out (`data-
+   show`): UI chrome over the map, the one exception to the map's no-fades
+   rule, so it never flickers. It takes no pointer input. */
+.hint {
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity var(--duration-neighbornets-map-zoom-hint-fade)
+    var(--ease-standard-button);
+}
+
+.hint[data-show] {
+  opacity: 1;
+}
+
 /* A state under the pointer can be clicked. */
 .frame[data-hovered-state]:not([data-hovered-state=""]) {
   cursor: pointer;

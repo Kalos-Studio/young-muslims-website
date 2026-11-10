@@ -33,10 +33,12 @@ import { format } from "prettier";
 
 import { brotherLocations } from "../src/generated/brother-neighbornets.ts";
 import { sisterLocations } from "../src/generated/sister-neighbornets.ts";
+import { normalizeSearchText, placeChunkKey } from "../src/lib/search-text.ts";
 import { USPS, projection } from "./neighbornets-projection.mjs";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = resolve(projectRoot, "src/generated/neighbornets-context");
+const SEARCH_DIR = resolve(projectRoot, "src/generated/neighbornets-search");
 const sourcesArg = process.argv.indexOf("--sources");
 const SOURCES =
   sourcesArg > 0
@@ -55,6 +57,10 @@ const FILES = {
   subdivisions: {
     url: `${GAZETTEER}/2023_Gaz_cousubs_national.zip`,
     file: "2023_Gaz_cousubs_national.txt",
+  },
+  zips: {
+    url: `${GAZETTEER}/2023_Gaz_zcta_national.zip`,
+    file: "2023_Gaz_zcta_national.txt",
   },
   population: {
     url: "https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/cities/totals/sub-est2023.csv",
@@ -176,8 +182,17 @@ const key = (name) =>
 const round = (value) => Math.round(value * 10 ** DIGITS) / 10 ** DIGITS;
 const STATES = new Set(Object.values(USPS));
 const project = (row) => {
-  const point = projection([Number(row.INTPTLONG), Number(row.INTPTLAT)]);
-  return point && { x: round(point[0]), y: round(point[1]) };
+  const lon = Number(row.INTPTLONG);
+  const lat = Number(row.INTPTLAT);
+  const point = projection([lon, lat]);
+  return (
+    point && {
+      x: round(point[0]),
+      y: round(point[1]),
+      lat: Math.round(lat * 1000) / 1000,
+      lon: Math.round(lon * 1000) / 1000,
+    }
+  );
 };
 const tierOf = (people) => TIERS.find(([, more]) => people > more)?.[0] ?? 0;
 
@@ -237,8 +252,14 @@ for (const net of nets) {
   // "Washington, DC": the city's name without its state.
   const name = net.city.replace(new RegExp(`, ${net.state}$`), "");
   const id = `${net.state}:${key(name)}`;
-  const entry = netCities.get(id) ?? { ...net, city: name, points: [] };
+  const entry = netCities.get(id) ?? {
+    ...net,
+    city: name,
+    points: [],
+    nets: [],
+  };
   entry.points.push(projection([net.longitude, net.latitude]));
+  entry.nets.push(net);
   netCities.set(id, entry);
 }
 for (const city of netCities.values()) {
@@ -262,10 +283,17 @@ for (const city of netCities.values()) {
   // Not a Census place by that name (a neighbourhood the geocoder named):
   // labelled at its nets' mean point.
   unmatched.push(`${city.city}, ${city.state}`);
+  const mean = (field) =>
+    Math.round(
+      (city.nets.reduce((sum, net) => sum + net[field], 0) / city.nets.length) *
+        1000,
+    ) / 1000;
   list.push({
     name: city.city,
     x: round(nx),
     y: round(ny),
+    lat: mean("latitude"),
+    lon: mean("longitude"),
     people: 0,
     kind: "place",
     nn: true,
@@ -340,6 +368,141 @@ ${codes.map((code) => `  ${code}: () => import("./${code}.json"),`).join("\n")}
 writeFileSync(
   resolve(OUT_DIR, "index.ts"),
   await format(index, { parser: "typescript" }),
+);
+
+// --- Search index -------------------------------------------------------
+//
+// The map's search (src/app/neighbornets/map-search.ts) finds a place by
+// name, or a ZIP, with no geocoding service: every Census place (and New
+// England, New Jersey and Pennsylvania town) and every NeighborNet city, one
+// chunk per first letter of its search text, and every ZIP code area's
+// internal point (2023 ZCTA Gazetteer), one chunk per first two digits.
+// Each chunk is loaded only when a query needs it.
+
+mkdirSync(SEARCH_DIR, { recursive: true });
+const tenth = (value) => Math.round(value * 10) / 10;
+const hundredth = (value) => Math.round(value * 100) / 100;
+// Written minified (and left out of Prettier): what ships is what is here.
+const byLetter = new Map();
+for (const [state, list] of candidates) {
+  // One entry per name in a state: its NeighborNet city, else its largest.
+  const best = new Map();
+  for (const place of list) {
+    if (place.kind !== "place" && !place.nn) continue;
+    const text = normalizeSearchText(place.name);
+    if (!text) continue;
+    const held = best.get(text);
+    if (
+      !held ||
+      (place.nn && !held.nn) ||
+      (Boolean(place.nn) === Boolean(held.nn) && place.people > held.people)
+    )
+      best.set(text, place);
+  }
+  for (const [text, place] of best) {
+    const letter = placeChunkKey(text);
+    const rows = byLetter.get(letter) ?? [];
+    // Coarse enough for a search (0.1 map unit, about 450 m; 0.01 degrees,
+    // about 1 km), small enough to load per keystroke's letter.
+    rows.push([
+      place.name,
+      state,
+      tenth(place.x),
+      tenth(place.y),
+      hundredth(place.lat),
+      hundredth(place.lon),
+      Math.round(place.people / 1000),
+      place.nn ? 1 : 0,
+    ]);
+    byLetter.set(letter, rows);
+  }
+}
+let searchPlaces = 0;
+for (const [letter, rows] of byLetter) {
+  rows.sort((a, b) => b[7] - a[7] || b[6] - a[6]);
+  searchPlaces += rows.length;
+  writeFileSync(
+    resolve(SEARCH_DIR, `places-${letter}.json`),
+    `${JSON.stringify(rows)}\n`,
+  );
+}
+
+// ZIPs outside the lower 48 and DC (Puerto Rico and the islands, Hawaii,
+// the Pacific territories, Alaska) are not on the map.
+const OFF_MAP_ZIP = /^(00[6-9]|96[7-9]|99[5-9])/;
+const byPrefix = new Map();
+for (const row of readGazetteer(await source(FILES.zips))) {
+  const zip = row.GEOID;
+  if (OFF_MAP_ZIP.test(zip)) continue;
+  const at = project(row);
+  if (!at || at.x < 0 || at.x > 1000 || at.y < 0 || at.y > 640) continue;
+  const prefix = zip.slice(0, 2);
+  const rows = byPrefix.get(prefix) ?? [];
+  rows.push([
+    zip,
+    tenth(at.x),
+    tenth(at.y),
+    hundredth(at.lat),
+    hundredth(at.lon),
+  ]);
+  byPrefix.set(prefix, rows);
+}
+let searchZips = 0;
+for (const [prefix, rows] of byPrefix) {
+  searchZips += rows.length;
+  writeFileSync(
+    resolve(SEARCH_DIR, `zips-${prefix}.json`),
+    `${JSON.stringify(rows)}\n`,
+  );
+}
+
+const letters = [...byLetter.keys()].sort();
+const prefixes = [...byPrefix.keys()].sort();
+const searchIndex = `// Generated by scripts/neighbornets-context.mjs. Do not edit directly.
+
+/**
+ * A searchable place: its name, USPS state, point in map units, latitude
+ * and longitude, population in thousands, and whether a NeighborNet meets
+ * there (1). A chunk lists NeighborNet cities first, then by population.
+ */
+export type SearchPlace = readonly [
+  name: string,
+  state: string,
+  x: number,
+  y: number,
+  latitude: number,
+  longitude: number,
+  thousands: number,
+  neighborNet: 0 | 1,
+];
+
+/** A ZIP code area: the ZIP, its point in map units, latitude, longitude. */
+export type SearchZip = readonly [
+  zip: string,
+  x: number,
+  y: number,
+  latitude: number,
+  longitude: number,
+];
+
+type Chunk = () => Promise<{ default: unknown }>;
+
+/** Places by the first letter of their search text ("0": a digit). */
+export const SEARCH_PLACES: Record<string, Chunk> = {
+${letters.map((letter) => `  ${letter === "0" ? '"0"' : letter}: () => import("./places-${letter}.json"),`).join("\n")}
+};
+
+/** ZIP code areas by their first two digits. */
+export const SEARCH_ZIPS: Record<string, Chunk> = {
+${prefixes.map((prefix) => `  "${prefix}": () => import("./zips-${prefix}.json"),`).join("\n")}
+};
+`;
+writeFileSync(
+  resolve(SEARCH_DIR, "index.ts"),
+  await format(searchIndex, { parser: "typescript" }),
+);
+console.log(
+  `Search: ${searchPlaces} places in ${letters.length} chunks, ${searchZips} ZIPs in ${prefixes.length} chunks.`,
 );
 
 sizes.sort((a, b) => b[2] - a[2]);

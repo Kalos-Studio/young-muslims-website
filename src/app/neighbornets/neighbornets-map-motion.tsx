@@ -38,11 +38,14 @@ import pinRoyal from "../../../design-assets/figma/neighbornets/map/pin-royal-se
 import {
   FULL_VIEW,
   areaAround,
+  boxAround,
   fitView,
   mapPoint,
   viewBox,
   type View,
 } from "./map-view";
+import { useFinder } from "./map-finder";
+import type { SearchResult } from "./map-search";
 import { createMapLabels, type Box, type LabelSpace } from "./map-labels";
 import {
   NeighborNetsMapPanel,
@@ -50,9 +53,18 @@ import {
 } from "./neighbornets-map-panel";
 import styles from "./neighbornets-map.module.css";
 
-/** What the map shows: everything, a state, or one NeighborNet's area. */
+/**
+ * What the map shows: everything, a state, one NeighborNet, or a search's
+ * result (its NeighborNets, or the nearest to a place without one).
+ */
 export type Selection =
-  { kind: "state"; code: string } | { kind: "net"; id: string } | null;
+  | { kind: "state"; code: string }
+  | { kind: "net"; id: string }
+  | {
+      kind: "search";
+      result: Extract<SearchResult, { kind: "nets" | "nearest" }>;
+    }
+  | null;
 
 const NETS = new Map<string, NeighborNetLocation>(
   [...brotherLocations, ...sisterLocations].map((net) => [net.id, net]),
@@ -63,6 +75,18 @@ const POINTS = new Map<string, MapPoint>(
 const STATES = new Map(MAP_STATE_INDEX.map((state) => [state.code, state]));
 
 function contentFor(selection: NonNullable<Selection>): PanelContent | null {
+  if (selection.kind === "search") {
+    const { result } = selection;
+    if (result.kind === "nearest") {
+      const nets = result.nearest.flatMap(({ id, miles }) => {
+        const net = NETS.get(id);
+        return net ? [{ net, miles }] : [];
+      });
+      return { kind: "nearest", place: result.place, nets };
+    }
+    const nets = result.ids.flatMap((id) => NETS.get(id) ?? []);
+    return { kind: "results", query: result.query, nets };
+  }
   if (selection.kind === "net") {
     const net = NETS.get(selection.id);
     return net ? { kind: "net", net } : null;
@@ -80,13 +104,20 @@ function contentFor(selection: NonNullable<Selection>): PanelContent | null {
   return { kind: "state", name: state.name, nets };
 }
 
+const selectionKey = (selection: Selection) =>
+  !selection
+    ? ""
+    : selection.kind === "state"
+      ? `state:${selection.code}`
+      : selection.kind === "net"
+        ? `net:${selection.id}`
+        : `search:${selection.result.kind}:${selection.result.query}:${
+            selection.result.kind === "nets"
+              ? selection.result.ids.join(",")
+              : selection.result.place
+          }`;
 const sameSelection = (a: Selection, b: Selection) =>
-  a?.kind === b?.kind &&
-  (a?.kind === "state"
-    ? a.code === (b as { code: string }).code
-    : a?.kind === "net"
-      ? a.id === (b as { id: string }).id
-      : true);
+  selectionKey(a) === selectionKey(b);
 
 /** The imperative map (the zoom, the markers): see NeighborNetsMapMotion. */
 type MapEngine = { show: (selection: Selection) => void };
@@ -156,6 +187,12 @@ export function NeighborNetsMapMotion({
     () => true,
     () => false,
   );
+  // The zoom hint's key: ⌘ on a Mac, Ctrl elsewhere (and before hydration).
+  const zoomKey = useSyncExternalStore(
+    subscribeNothing,
+    () => (/Mac|iPhone|iPad/.test(navigator.platform) ? "⌘" : "Ctrl"),
+    () => "Ctrl",
+  );
 
   const selectionRef = useRef<Selection>(null);
   const select = useCallback((next: Selection) => {
@@ -173,6 +210,15 @@ export function NeighborNetsMapMotion({
   useEffect(() => {
     selectRef.current = select;
   });
+  // The search field above the map selects through the finder.
+  const finderRef = useFinder();
+  useEffect(() => {
+    if (!finderRef) return;
+    finderRef.current = select;
+    return () => {
+      finderRef.current = null;
+    };
+  }, [finderRef, select]);
 
   // The map: hover, hit test, zoom, filter, lock.
   useEffect(() => {
@@ -185,6 +231,7 @@ export function NeighborNetsMapMotion({
     const statesSvg = part<SVGSVGElement>("states");
     const markersLayer = part<HTMLElement>("markers");
     const labelsLayer = part<HTMLElement>("labels");
+    const hint = part<HTMLElement>("hint");
     const highlightSvg = highlight?.ownerSVGElement;
     if (!frame || !lens || !highlight || !statesSvg || !markersLayer) return;
     if (!labelsLayer) return;
@@ -655,6 +702,20 @@ export function NeighborNetsMapMotion({
         const point = POINTS.get(selection.id);
         return point && [point.x, point.y, point.x, point.y];
       }
+      if (selection.kind === "search") {
+        // The place searched and its NeighborNets (or the nearest), at
+        // least the area span across.
+        const { result } = selection;
+        const ids =
+          result.kind === "nets"
+            ? result.ids
+            : result.nearest.map((entry) => entry.id);
+        const points: { x: number; y: number }[] = ids.flatMap(
+          (id) => POINTS.get(id) ?? [],
+        );
+        if (result.focus) points.push(result.focus);
+        return points.length > 0 ? boxAround(points, span) : undefined;
+      }
       const nets = MAP_POINTS.filter((point) => point.state === selection.code);
       if (nets.length === 0) return STATES.get(selection.code)?.bounds;
       return areaAround(nets[0], nets, Infinity, span);
@@ -710,10 +771,13 @@ export function NeighborNetsMapMotion({
       // state's fit (for a net, its state's), never above where this view
       // starts, so the reset is always within reach and never immediate.
       const area = visibleArea(measured, scrollBy);
+      // (A search's result has no state: its own fit is its reset's base.)
       const stateCode =
         selection.kind === "state"
           ? selection.code
-          : POINTS.get(selection.id)?.state;
+          : selection.kind === "net"
+            ? POINTS.get(selection.id)?.state
+            : undefined;
       const stateBounds =
         stateCode && boundsFor({ kind: "state", code: stateCode });
       const stateFit = stateBounds
@@ -766,9 +830,9 @@ export function NeighborNetsMapMotion({
     /**
      * Whether the map takes a gesture: a touch always (a pinch zooms; one
      * finger pans only once zoomed in, until then a vertical swipe scrolls
-     * the page, by `touch-action`); a mouse's drag and the wheel only with a
-     * state or net open or the map zoomed in (on the whole map the wheel
-     * scrolls the page and the hover lens has the pointer).
+     * the page, by `touch-action`); a mouse's drag only with a state or net
+     * open or the map zoomed in. (The wheel has its own rule: only ctrl or ⌘
+     * zooms, see onWheel.)
      */
     const free = (event?: { pointerType: string }) =>
       !resetting &&
@@ -875,8 +939,39 @@ export function NeighborNetsMapMotion({
       if (next !== t && !resetting)
         wheelFrame = requestAnimationFrame(wheelStep);
     };
+    // The zoom hint ("Use ⌘ + scroll to zoom"): faded in at the pointer's
+    // height over the map while plain scrolls come, out a moment after the
+    // last.
+    const hintMs = readTimeToken("--duration-neighbornets-map-zoom-hint", 1500);
+    let hintTimer = 0;
+    const showHint = (clientY: number) => {
+      if (!hint || !finePointer.matches) return;
+      const box = frame.getBoundingClientRect();
+      const y = Math.min(Math.max(clientY - box.top, 0), box.height);
+      hint.style.translate = `0 ${Math.round(y)}px`;
+      hint.dataset.show = "";
+      window.clearTimeout(hintTimer);
+      hintTimer = window.setTimeout(hideHint, hintMs);
+    };
+    const hideHint = () => {
+      window.clearTimeout(hintTimer);
+      if (hint) delete hint.dataset.show;
+    };
+
+    /**
+     * The wheel. A plain scroll is always the page's (the map never takes
+     * it over), with the zoom hint while the map is in use; ctrl or ⌘ and a
+     * scroll, or a trackpad pinch (which arrives as ctrl + wheel), zooms the
+     * map about the pointer. Touch screens pinch instead (pointer events).
+     */
     const onWheel = (event: WheelEvent) => {
-      if (!free()) return; // the whole map: the page scrolls as usual
+      if (!(event.ctrlKey || event.metaKey)) {
+        if (selectionRef.current !== null || shown.k > 1.001)
+          showHint(event.clientY);
+        return; // Lenis (or the browser) scrolls the page
+      }
+      if (resetting) return;
+      hideHint();
       event.preventDefault();
       const from = wheelTarget ?? begin();
       const box = liveBox ?? frame.getBoundingClientRect();
@@ -886,7 +981,12 @@ export function NeighborNetsMapMotion({
           : event.deltaMode === 2
             ? window.innerHeight
             : 1;
-      const rate = event.ctrlKey ? pinchRate : wheelRate;
+      // A trackpad pinch sends small ctrl deltas; a mouse wheel's notch
+      // (with ctrl or ⌘) is a large one, at the wheel's rate.
+      const rate =
+        event.ctrlKey && Math.abs(event.deltaY * lines) < 50
+          ? pinchRate
+          : wheelRate;
       const k = Math.min(
         maxZoom,
         from.k * Math.exp(-event.deltaY * lines * rate),
@@ -1118,6 +1218,7 @@ export function NeighborNetsMapMotion({
       frame.removeEventListener("pointerup", onPointerUp);
       frame.removeEventListener("pointercancel", onPointerUp);
       window.clearTimeout(wheelTimer);
+      window.clearTimeout(hintTimer);
       cancelAnimationFrame(wheelFrame);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", onResize);
@@ -1151,6 +1252,18 @@ export function NeighborNetsMapMotion({
   return (
     <div ref={ref} data-neighbornets-map className={className}>
       {children}
+      {/* Desktop: plain scrolling over the map scrolls the page; this says
+          how to zoom it instead (NeighborNetsMapMotion shows it). */}
+      <p
+        aria-hidden
+        data-map-part="hint"
+        className={cn(
+          "pointer-events-none absolute top-0 left-1/2 z-20 bg-brand-obsidian px-4 py-2.5 text-nav font-semibold whitespace-nowrap text-brand-warm-snow",
+          styles.hint,
+        )}
+      >
+        Use {zoomKey} + scroll to zoom
+      </p>
       {markers &&
         selectedPoint &&
         createPortal(
@@ -1202,6 +1315,10 @@ function writeUrl(selection: Selection) {
   const url = new URL(window.location.href);
   url.searchParams.delete("state");
   url.searchParams.delete("nn");
+  url.searchParams.delete("q");
+  // A search is kept as its query (NeighborNetsMapSearch opens it on load).
+  if (selection?.kind === "search")
+    url.searchParams.set("q", selection.result.query);
   if (selection?.kind === "state")
     url.searchParams.set("state", selection.code);
   if (selection?.kind === "net") url.searchParams.set("nn", selection.id);

@@ -7,3 +7,7 @@ bun.lock
 
 # Static assets.
 public/
+
+# The map search's index chunks, written minified by
+# scripts/neighbornets-context.mjs (what ships is what is committed).
+src/generated/neighbornets-search/*.json

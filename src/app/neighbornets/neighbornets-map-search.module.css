@@ -1,0 +1,11 @@
+/* The map search's submit arrow (DESIGN-SYSTEM.md, "NeighborNets map",
+   Search): Figma 370:120's arrow_forward, a mask in Warm Snow on its Royal
+   tile. Two copies roll through the tile on hover (.ym-cta-arrow--horizontal);
+   the button's fill and underline are the standard button's. */
+.arrow {
+  background-color: currentColor;
+  mask-image: url("../../../design-assets/figma/neighbornets/map/search/arrow-forward.svg");
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}

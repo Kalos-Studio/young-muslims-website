@@ -122,6 +122,16 @@
      caption grey, haloed in Warm Snow so they read over the outlines. */
   --color-neighbornets-map-label: var(--color-caption);
   --color-neighbornets-map-label-halo: var(--color-brand-warm-snow);
+  /* The map search's suggestions float over the map on this shadow (no
+     outline): a close, soft Obsidian shade and a wider, fainter one. */
+  --shadow-neighbornets-search:
+    0 0.125rem 0.25rem
+      color-mix(in srgb, var(--color-brand-obsidian) 8%, transparent),
+    0 0.75rem 1.5rem
+      color-mix(in srgb, var(--color-brand-obsidian) 14%, transparent);
+  /* The map search's suggestion under the arrow keys or the pointer: the
+     map's hover fill (Obsidian 10% into Warm Snow), on the white list. */
+  --color-neighbornets-search-active: var(--color-neighbornets-map-hover);
 
   /* Functional UI color, intentionally separate from the brand palette. */
   --color-system-danger: #b42318;
@@ -695,6 +705,19 @@
   );
   --neighbornets-map-label-halo-width: 0.25rem;
   --neighbornets-map-label-gap: 0.25rem;
+  /* The map search (stage 5; all local): NeighborNets within this many
+     miles of a searched place are its results; a place with none in reach
+     offers this many nearest; the field suggests at most this many. */
+  --neighbornets-map-search-radius: 25;
+  --neighbornets-map-search-nearest: 3;
+  --neighbornets-map-search-suggestions: 6;
+  /* Desktop: a plain scroll over the map scrolls the page; while the map is
+     in use (a panel open, or zoomed in) it shows "Use ⌘ + scroll to zoom"
+     (Ctrl off a Mac) for this long after the last scroll. */
+  --duration-neighbornets-map-zoom-hint: 1500ms;
+  /* The hint fades in and out (UI chrome over the map, not its content,
+     which never fades): this long, on the standard button's ease. */
+  --duration-neighbornets-map-zoom-hint-fade: 240ms;
 }
 
 /*
@@ -1701,6 +1724,14 @@
   transform: translate(-120%, 120%);
 }
 
+/* Horizontal roll for a forward (→) arrow, a "go": the arrow leaves to the
+ * right and its copy enters from the left. Timing, easing and
+ * reduced-motion handling come from the shared rules for `.ym-cta-arrow__icon`.
+ */
+.ym-cta-arrow--horizontal .ym-cta-arrow__icon--next {
+  transform: translateX(-120%);
+}
+
 /* Current-page dot for header links: a small Pure White dot centered in the
  * link's bottom padding. It is keyed to `aria-current`, so the visual and the
  * announced state always agree, and it is static with no layout cost.
@@ -1727,6 +1758,20 @@
     .ym-cta-arrow--diagonal
     .ym-cta-arrow__icon--next {
     transform: translate(0, 0);
+  }
+
+  .ym-cta-trigger:hover .ym-cta-arrow--horizontal .ym-cta-arrow__icon--current,
+  .ym-cta-trigger:focus-visible
+    .ym-cta-arrow--horizontal
+    .ym-cta-arrow__icon--current {
+    transform: translateX(120%);
+  }
+
+  .ym-cta-trigger:hover .ym-cta-arrow--horizontal .ym-cta-arrow__icon--next,
+  .ym-cta-trigger:focus-visible
+    .ym-cta-arrow--horizontal
+    .ym-cta-arrow__icon--next {
+    transform: translateX(0);
   }
 }
 

@@ -42,6 +42,7 @@ const SIDE = {
  *   In a row, cards stretch to the tallest (a long name can wrap): the
  *   header takes the extra, so the contacts line up along the bottom.
  * - `selected`: the 6px Obsidian border in a 6px Sisters Brass ring.
+ * - `distance` (a search's nearest nets): after the city, "· 12 mi away".
  * - `onSelect` (a results card): the card selects its net when clicked
  *   anywhere but its links (its name is the button, for keyboards), and
  *   lifts on hover.
@@ -52,11 +53,13 @@ const SIDE = {
 export function NeighborNetCard({
   net,
   selected = false,
+  distance,
   onSelect,
   className,
 }: {
   net: NeighborNetLocation;
   selected?: boolean;
+  distance?: string;
   onSelect?: () => void;
   className?: string;
 }) {
@@ -111,10 +114,10 @@ export function NeighborNetCard({
             net.name
           )}
         </h3>
-        {net.city && (
+        {(net.city || distance) && (
           <p className="flex items-center gap-1 text-article-meta font-semibold">
             <Image src={locationIcon} alt="" className="size-4 shrink-0" />
-            {net.city}
+            {[net.city, distance].filter(Boolean).join(" · ")}
           </p>
         )}
       </div>

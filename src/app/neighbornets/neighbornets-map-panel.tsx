@@ -12,7 +12,20 @@ import styles from "./neighbornets-map-panel.module.css";
 
 export type PanelContent =
   | { kind: "state"; name: string; nets: NeighborNetLocation[] }
-  | { kind: "net"; net: NeighborNetLocation };
+  | { kind: "net"; net: NeighborNetLocation }
+  /** A search's NeighborNets (Figma 371:394: "Results for ‘Houston’"). */
+  | { kind: "results"; query: string; nets: NeighborNetLocation[] }
+  /** A searched place with none in reach: the nearest, with distances. */
+  | {
+      kind: "nearest";
+      place: string;
+      nets: { net: NeighborNetLocation; miles: number }[];
+    };
+
+/** A distance as the cards show it: "4 mi away", "Under 1 mi away". */
+function milesAway(miles: number) {
+  return miles < 1 ? "Under 1 mi away" : `${Math.round(miles)} mi away`;
+}
 
 /**
  * A results panel (Figma 370:14 / 375:897 / 401:2667, and the single net's,
@@ -20,7 +33,9 @@ export type PanelContent =
  * every width, titled, with a close button, and its NeighborNet cards in a
  * row that scrolls sideways (native scroll, snapping to each card; Lenis
  * leaves it alone). A state's panel lists its nets; a net's panel shows its
- * card alone, selected.
+ * card alone, selected; a search's lists the NeighborNets it found, nearest
+ * first, or, for a place with none in reach, says so and offers the nearest
+ * with their distances.
  *
  * `open` slides it up; a panel being replaced is kept, with `open` false,
  * until it has dropped away (`onGone`). The open one takes focus on its
@@ -81,7 +96,18 @@ export function NeighborNetsMapPanel({
   const title =
     content.kind === "state"
       ? "Results for this area"
-      : `${content.net.name} - NeighborNet`;
+      : content.kind === "results"
+        ? `Results for \u2018${content.query}\u2019`
+        : content.kind === "nearest"
+          ? `No NeighborNet in ${content.place} yet`
+          : `${content.net.name} - NeighborNet`;
+  // Every card in the row, with its distance where the panel gives one.
+  const rowNets =
+    content.kind === "net"
+      ? []
+      : content.kind === "nearest"
+        ? content.nets
+        : content.nets.map((net) => ({ net, miles: undefined }));
 
   return (
     <section
@@ -122,7 +148,7 @@ export function NeighborNetsMapPanel({
           <div className="mx-auto mt-6 w-full max-w-360 px-5 md:px-8 xl:mt-10 xl:px-19.5">
             <NeighborNetCard net={content.net} selected />
           </div>
-        ) : content.nets.length > 0 ? (
+        ) : rowNets.length > 0 ? (
           // The row runs the viewport's full width, so cards are cut by the
           // screen's edge (more to come), not a box's; it starts in line
           // with the title. Its top padding is room for a card's hover lift
@@ -134,10 +160,11 @@ export function NeighborNetsMapPanel({
               styles.row,
             )}
           >
-            {content.nets.map((net) => (
+            {rowNets.map(({ net, miles }) => (
               <li key={net.id} className="flex shrink-0 snap-start">
                 <NeighborNetCard
                   net={net}
+                  distance={miles === undefined ? undefined : milesAway(miles)}
                   onSelect={() => onSelectNet(net.id)}
                 />
               </li>
@@ -145,7 +172,8 @@ export function NeighborNetsMapPanel({
           </ul>
         ) : (
           <p className="mx-auto mt-4 w-full max-w-360 px-5 text-body md:mt-6 md:px-8 xl:mt-10 xl:px-19.5">
-            There&rsquo;s no NeighborNet in {content.name} yet.
+            There&rsquo;s no NeighborNet in{" "}
+            {content.kind === "state" ? content.name : "this area"} yet.
           </p>
         )}
       </div>
