@@ -1973,15 +1973,39 @@
      is the same at every size; the distance scales with the photos. */
   --duration-neighbornets-explainer-marquee-top: 70s;
   --duration-neighbornets-explainer-marquee-bottom: 76s;
-  /* Fine pointers: the rows trail the cursor (the shared shape drift, at
-     the landing's reach and timing; the bottom row at 60% of the top's). */
-  --neighbornets-explainer-pointer-drift: var(--everywhere-pointer-drift);
-  --duration-neighbornets-explainer-pointer: var(--duration-everywhere-pointer);
-  --ease-neighbornets-explainer-pointer: var(--ease-everywhere-enter);
+  /* The page's photo marquees (this section and the NeighborNet branding
+     rows), fine pointers: the rows trail the cursor (the shared shape
+     drift, at the landing's reach and timing; each row a share of it). */
+  --neighbornets-marquee-pointer-drift: var(--everywhere-pointer-drift);
+  --duration-neighbornets-marquee-pointer: var(--duration-everywhere-pointer);
+  --ease-neighbornets-marquee-pointer: var(--ease-everywhere-enter);
   /* The YOUNG MUSLIMS watermark behind the rows moves this far in all as
      the section scrolls through the viewport (half either side of its
      Figma place, reached when the section is centred). */
   --neighbornets-explainer-watermark-drift: 5rem;
+}
+
+/*
+ * The NeighborNet branding rows (src/app/neighbornets/neighbornet-branding.tsx;
+ * Figma 372:66, tablet 374:734, mobile 401:1877). Documented in
+ * DESIGN-SYSTEM.md under "NeighborNet branding".
+ */
+:root {
+  /* Each tile's height (Figma 212 on phones, 360 from tablet up; a tile is
+     226 / 360 as wide) and so each row's: three rows, flush. */
+  --neighbornets-branding-row-height: 13.25rem;
+  /* One loop of each row (its nine tiles): top right, middle left, bottom
+     right, at the section above's pace (about 27px/s on desktop), each a
+     little different so the rows never move as one block. */
+  --duration-neighbornets-branding-marquee-top: 75s;
+  --duration-neighbornets-branding-marquee-middle: 81s;
+  --duration-neighbornets-branding-marquee-bottom: 70s;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --neighbornets-branding-row-height: 22.5rem;
+  }
 }
 
 @media (width >= 48rem) {

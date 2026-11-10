@@ -1,42 +1,10 @@
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
-import { ChapterImageMarquee } from "./chapter-image-marquee";
 
-import tile01 from "../../../design-assets/figma/neighbornets/2026-page/3b4cd.png";
-import tile02 from "../../../design-assets/figma/neighbornets/2026-page/f29fa.png";
-import tile03 from "../../../design-assets/figma/neighbornets/2026-page/4f0d3.png";
-import tile04 from "../../../design-assets/figma/neighbornets/2026-page/ffac9.png";
-import tile05 from "../../../design-assets/figma/neighbornets/2026-page/33797.png";
-import tile06 from "../../../design-assets/figma/neighbornets/2026-page/59811.png";
-import tile07 from "../../../design-assets/figma/neighbornets/2026-page/2d29c.png";
-import tile08 from "../../../design-assets/figma/neighbornets/2026-page/ca616.png";
-import tile09 from "../../../design-assets/figma/neighbornets/2026-page/f62af.png";
-import tile10 from "../../../design-assets/figma/neighbornets/2026-page/2efe7.png";
-import tile11 from "../../../design-assets/figma/neighbornets/2026-page/6364f.png";
-import tile12 from "../../../design-assets/figma/neighbornets/2026-page/d3926.png";
-import tile13 from "../../../design-assets/figma/neighbornets/2026-page/234fa.png";
-import tile14 from "../../../design-assets/figma/neighbornets/2026-page/2a722.png";
-import tile15 from "../../../design-assets/figma/neighbornets/2026-page/ec2af.png";
-import tile16 from "../../../design-assets/figma/neighbornets/2026-page/d68e7.png";
-import tile17 from "../../../design-assets/figma/neighbornets/2026-page/a1f98.png";
-import tile18 from "../../../design-assets/figma/neighbornets/2026-page/2666e.png";
-import tile19 from "../../../design-assets/figma/neighbornets/2026-page/03266.png";
-import tile20 from "../../../design-assets/figma/neighbornets/2026-page/241bd.png";
-import tile21 from "../../../design-assets/figma/neighbornets/2026-page/5e320.png";
-import tile22 from "../../../design-assets/figma/neighbornets/2026-page/3fb20.png";
-import tile23 from "../../../design-assets/figma/neighbornets/2026-page/0e843.png";
-import tile24 from "../../../design-assets/figma/neighbornets/2026-page/cd6a3.png";
-import tile25 from "../../../design-assets/figma/neighbornets/2026-page/c13d5.png";
 import eventArt from "../../../design-assets/figma/neighbornets/2026-page/3d762.png";
 import retreatArt from "../../../design-assets/figma/neighbornets/2026-page/77d81.png";
 import conferenceArt from "../../../design-assets/figma/neighbornets/2026-page/ff281.png";
-
-const chapterTileRows: StaticImageData[][] = [
-  [tile01, tile02, tile03, tile04, tile05, tile06, tile07, tile08, tile09],
-  [tile10, tile09, tile11, tile12, tile13, tile14, tile15, tile16, tile17],
-  [tile18, tile17, tile19, tile20, tile21, tile22, tile23, tile24, tile25],
-];
 
 const involvementCards = [
   {
@@ -58,10 +26,6 @@ const involvementCards = [
       "Weekend-long gatherings that bring young Muslims together from across the country: workshops, speakers, and a few thousand new friends.",
   },
 ] as const;
-
-export function ChapterImageGrid() {
-  return <ChapterImageMarquee rows={chapterTileRows} />;
-}
 
 export function OtherWaysSection() {
   return (

@@ -8,36 +8,17 @@
   position: relative;
 }
 
-/* A row: the layer that trails the cursor (NeighborNetExplainerMotion sets
-   its target; this transition eases it there), holding its looping track. */
+/* A row (the shared drift layer, photo-marquee.module.css): one photo
+   high. Its track holds four copies of the row's three photos, each copy one
+   loop (its photos and gaps), started one loop left of Figma's first photo
+   (measured from the centre), so a loop's move never shows an end on
+   screens up to 5,600px wide. */
 .row {
-  position: relative;
   height: var(--neighbornets-explainer-row-height);
 }
 
 .row + .row {
   margin-top: var(--neighbornets-explainer-row-gap);
-}
-
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .row {
-    transition: transform var(--duration-neighbornets-explainer-pointer)
-      var(--ease-neighbornets-explainer-pointer);
-    will-change: transform;
-  }
-}
-
-/* A track: four copies of the row's three photos, each copy one loop (its
-   photos and their gaps), started one loop left of Figma's first photo
-   (measured from the centre), so a loop's move never shows an end on
-   screens up to 5,600px wide. The loop is one compositor animation of
-   `transform`, by exactly one copy, so it wraps without a seam. */
-.track {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  display: flex;
-  height: 100%;
 }
 
 .trackTop {
@@ -48,12 +29,8 @@
   margin-left: calc(var(--neighbornets-explainer-row-height) * -8.91944);
 }
 
+/* The top row drifts right, the bottom row left. */
 @media (prefers-reduced-motion: no-preference) {
-  .track {
-    will-change: transform;
-  }
-
-  /* The top row drifts right, the bottom row left. */
   .trackTop {
     animation: drift-right var(--duration-neighbornets-explainer-marquee-top)
       linear infinite;
@@ -62,11 +39,6 @@
   .trackBottom {
     animation: drift-left var(--duration-neighbornets-explainer-marquee-bottom)
       linear infinite;
-  }
-
-  /* Off screen, the loops wait. */
-  .paused .track {
-    animation-play-state: paused;
   }
 }
 
@@ -124,7 +96,7 @@
 
 /* The watermark (the YM primary logo, Obsidian at 8%): full-bleed, centred
    on the gap between the rows, behind them. Tablet and desktop only (the
-   mobile frame has none). NeighborNetExplainerMotion moves it with the
+   mobile frame has none). PhotoMarqueeMotion moves it with the
    scroll. */
 .watermarkLine {
   position: absolute;

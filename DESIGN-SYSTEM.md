@@ -1248,7 +1248,9 @@ button use the site's text reveal.
 - **Watermark:** the YM primary logo (Obsidian at 8%, as exported),
   full-bleed and centred on the gap between the rows, behind them; tablet
   and desktop only.
-- **Motion** (`NeighborNetExplainerMotion`), three layers that compose
+- **Motion** (`PhotoMarqueeMotion`, `photo-marquee-motion.tsx` and
+  `photo-marquee.module.css`, shared with the NeighborNet branding rows),
+  three layers that compose
   because each moves its own element, all on the compositor:
   - **Loop:** each row's track holds four copies of its three photos and
     moves by exactly one copy in a CSS animation, so it wraps without a
@@ -1260,7 +1262,7 @@ button use the site's text reveal.
   - **Cursor drift** (fine pointers): the shared shape drift
     (`trackPointerDrift`, as the landing's everywhere and stories sections)
     moves each row's layer, which holds its track, toward the cursor, up to
-    `--neighbornets-explainer-pointer-drift` (the bottom row 60% of that),
+    `--neighbornets-marquee-pointer-drift` (the bottom row 60% of that),
     eased by a transition; the loop runs inside it, so the drift is an
     offset added to the loop. Touch gets the loop alone.
   - **Watermark parallax:** one scroll-linked value (the show-you
@@ -1269,16 +1271,48 @@ button use the site's text reveal.
   - Under reduced motion none of it runs: the rows rest at Figma's places,
     the watermark too.
 
-| Token                                              | Value                                          | Use                                                               |
-| -------------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------- |
-| `--neighbornets-explainer-row-height`              | `12.5rem` / `15.25rem` (md) / `22.5rem` (xl)   | Each photo's height; widths, gaps and the loop follow from it     |
-| `--neighbornets-explainer-row-gap`                 | `2.75rem` / `3.375rem` (md) / `5.5rem` (xl)    | Space between the two rows                                        |
-| `--duration-neighbornets-explainer-marquee-top`    | `70s`                                          | One loop of the top row (drifting right)                          |
-| `--duration-neighbornets-explainer-marquee-bottom` | `76s`                                          | One loop of the bottom row (drifting left)                        |
-| `--neighbornets-explainer-pointer-drift`           | `var(--everywhere-pointer-drift)` (`0.875rem`) | How far the top row trails the cursor (fine pointers)             |
-| `--duration-neighbornets-explainer-pointer`        | `var(--duration-everywhere-pointer)` (`700ms`) | The drift's easing time                                           |
-| `--ease-neighbornets-explainer-pointer`            | `var(--ease-everywhere-enter)`                 | The drift's easing                                                |
-| `--neighbornets-explainer-watermark-drift`         | `5rem`                                         | The watermark's whole parallax travel across the section's scroll |
+| Token                                              | Value                                          | Use                                                                                                     |
+| -------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `--neighbornets-explainer-row-height`              | `12.5rem` / `15.25rem` (md) / `22.5rem` (xl)   | Each photo's height; widths, gaps and the loop follow from it                                           |
+| `--neighbornets-explainer-row-gap`                 | `2.75rem` / `3.375rem` (md) / `5.5rem` (xl)    | Space between the two rows                                                                              |
+| `--duration-neighbornets-explainer-marquee-top`    | `70s`                                          | One loop of the top row (drifting right)                                                                |
+| `--duration-neighbornets-explainer-marquee-bottom` | `76s`                                          | One loop of the bottom row (drifting left)                                                              |
+| `--neighbornets-marquee-pointer-drift`             | `var(--everywhere-pointer-drift)` (`0.875rem`) | How far a photo marquee's top row trails the cursor (fine pointers; this section and the branding rows) |
+| `--duration-neighbornets-marquee-pointer`          | `var(--duration-everywhere-pointer)` (`700ms`) | The marquees' drift easing time                                                                         |
+| `--ease-neighbornets-marquee-pointer`              | `var(--ease-everywhere-enter)`                 | The marquees' drift easing                                                                              |
+| `--neighbornets-explainer-watermark-drift`         | `5rem`                                         | The watermark's whole parallax travel across the section's scroll                                       |
+
+## NeighborNet branding
+
+`src/app/neighbornets/neighbornet-branding.tsx` (Figma 372:66, tablet
+374:734, mobile 401:1877), below "What's a NeighborNet?": three full-bleed
+rows of NeighborNets' own Young Muslims lockups (Maryam, Chicago, Dallas,
+Houston, Frisco, New York, Niles, Shelter Rock and more), nine to a row,
+flush, edge to edge; no heading, copy or button. The tiles are decorative;
+the section is labelled for what they show.
+
+- **Tiles:** 226 x 360 at tablet and desktop, 133 x 212 on phones
+  (`--neighbornets-branding-row-height`, a tile 0.62778 of it wide).
+- **Motion:** the page's photo marquee (`PhotoMarqueeMotion`, as "What's a
+  NeighborNet?"), three rows: each track holds four copies of its nine
+  tiles and moves by exactly one copy in a CSS animation, so it wraps without
+  a seam: top right, middle left, bottom right, at slightly different paces
+  (`--duration-neighbornets-branding-marquee-*`) so the rows never move as
+  one block, about 27px/s on desktop like the section above. Paused off
+  screen. Fine pointers: each row's layer trails the cursor sideways only
+  (the shared shape drift, `axes: "x"`; middle 60%, bottom 80% of the
+  top's), the loop running inside it: the rows are flush, so a vertical
+  drift would open Warm Snow seams between them and at the section's edges.
+  Sideways, each track reaches about 2,900px either side of the centre at
+  any point in its loop, far past the drift's 14px.
+  Under reduced motion it all rests at Figma's places.
+
+| Token                                             | Value                       | Use                                         |
+| ------------------------------------------------- | --------------------------- | ------------------------------------------- |
+| `--neighbornets-branding-row-height`              | `13.25rem` / `22.5rem` (md) | Each tile's (and row's) height              |
+| `--duration-neighbornets-branding-marquee-top`    | `75s`                       | One loop of the top row (drifting right)    |
+| `--duration-neighbornets-branding-marquee-middle` | `81s`                       | One loop of the middle row (drifting left)  |
+| `--duration-neighbornets-branding-marquee-bottom` | `70s`                       | One loop of the bottom row (drifting right) |
 
 ## Closing CTA
 

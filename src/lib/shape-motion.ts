@@ -85,12 +85,15 @@ export function armShapeEntrances(
  * With a fine pointer, and only while `area` is on screen, each layer drifts
  * towards the cursor: up to the `reach` token's length times its depth, from
  * where the cursor sits relative to the viewport's centre. Pointer moves are
- * read at most once a frame. Returns a cleanup.
+ * read at most once a frame. `axes: "x"` keeps the layers level (only
+ * sideways), for layers that must stay edge to edge with their neighbours
+ * (flush marquee rows). Returns a cleanup.
  */
 export function trackPointerDrift(
   area: Element,
   layers: { element: HTMLElement; depth: number }[],
   reachToken: string,
+  { axes = "both" }: { axes?: "both" | "x" } = {},
 ) {
   const finePointer = window.matchMedia(FINE_POINTER);
   const reach = readLengthToken(reachToken, 14);
@@ -99,7 +102,10 @@ export function trackPointerDrift(
   const place = () => {
     frame = 0;
     const nx = pointer ? (pointer.x / window.innerWidth - 0.5) * 2 : 0;
-    const ny = pointer ? (pointer.y / window.innerHeight - 0.5) * 2 : 0;
+    const ny =
+      pointer && axes === "both"
+        ? (pointer.y / window.innerHeight - 0.5) * 2
+        : 0;
     for (const layer of layers) {
       const x = nx * reach * layer.depth;
       const y = ny * reach * layer.depth;

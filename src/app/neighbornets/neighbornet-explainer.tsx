@@ -12,8 +12,9 @@ import groupPhoto from "../../../design-assets/figma/neighbornets/2026-page/24e0
 import gatheringPhoto from "../../../design-assets/figma/neighbornets/2026-page/695b1.png";
 import talkingPhoto from "../../../design-assets/figma/neighbornets/2026-page/94a21.jpg";
 import halaqaPhoto from "../../../design-assets/figma/neighbornets/2026-page/8cd27.png";
-import { NeighborNetExplainerMotion } from "./neighbornet-explainer-motion";
 import styles from "./neighbornet-explainer.module.css";
+import { PhotoMarqueeMotion } from "./photo-marquee-motion";
+import marquee from "./photo-marquee.module.css";
 
 type Photo = { image: StaticImageData; alt: string; wide: boolean };
 
@@ -67,6 +68,9 @@ const ROWS: {
   },
 ];
 
+/** The cursor drift's share per row: the bottom row trails less. */
+const ROW_DEPTHS = [1, 0.6];
+
 /** Copies of each row in its track: one loop's move never shows an end. */
 const COPIES = 4;
 
@@ -75,13 +79,14 @@ const COPIES = 4;
  * below the map: the heading, two rows of photos looping in opposite
  * directions over the faint YOUNG MUSLIMS watermark (full-bleed), the copy,
  * and a standard button to start a NeighborNet. The motion (the loops, the
- * cursor drift, the watermark's parallax) is NeighborNetExplainerMotion;
+ * cursor drift, the watermark's parallax) is PhotoMarqueeMotion;
  * the text uses the site's text reveal.
  */
 export function NeighborNetExplainer() {
   return (
-    <NeighborNetExplainerMotion
+    <PhotoMarqueeMotion
       labelledBy="neighbornet-explainer-heading"
+      depths={ROW_DEPTHS}
       className="overflow-x-clip bg-brand-warm-snow pt-25.75 pb-42.75 md:pb-36 xl:pb-33.5"
     >
       <TextReveal className="mx-auto w-full max-w-360 px-8 text-center md:px-16 xl:px-22.5">
@@ -98,13 +103,17 @@ export function NeighborNetExplainer() {
           <Image
             src={logo}
             alt=""
-            data-explainer="watermark"
+            data-marquee="watermark"
             className={cn("h-auto w-full", styles.watermark)}
           />
         </div>
         {ROWS.map((row, rowIndex) => (
-          <div key={rowIndex} data-explainer="row" className={styles.row}>
-            <div className={cn(styles.track, row.track)}>
+          <div
+            key={rowIndex}
+            data-marquee="row"
+            className={cn(marquee.row, styles.row)}
+          >
+            <div className={cn(marquee.track, row.track)}>
               {Array.from({ length: COPIES }, (_, copy) =>
                 row.photos.map((photo) => (
                   <div
@@ -158,6 +167,6 @@ export function NeighborNetExplainer() {
           className="mt-8 xl:mt-15"
         />
       </TextReveal>
-    </NeighborNetExplainerMotion>
+    </PhotoMarqueeMotion>
   );
 }

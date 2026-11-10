@@ -6,40 +6,57 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { readLengthToken } from "@/lib/motion-tokens";
 import { REDUCED_MOTION, trackPointerDrift } from "@/lib/shape-motion";
 
-import styles from "./neighbornet-explainer.module.css";
-
-/** The cursor drift's depth per row: the bottom row trails less. */
-const ROW_DEPTHS = [1, 0.6];
+import styles from "./photo-marquee.module.css";
 
 /**
- * "What's a NeighborNet?"'s motion. It renders the section and finds its
- * parts by `data-explainer`. Three motions, each on its own layer, so they
+ * The NeighborNets page's photo marquees' motion ("What's a NeighborNet?",
+ * the NeighborNet branding rows). It renders the section and finds its parts
+ * by `data-marquee`. Up to three motions, each on its own layer, so they
  * compose rather than fight, and all on the compositor:
  *
- * - **Loop** (CSS, the photo tracks): the top row drifts right and the
- *   bottom row left, forever, by one copy of the row a loop. Paused while
- *   the section is off screen (the `paused` class, from an observer here).
+ * - **Loop** (CSS, each row's track, from its section's module): the row
+ *   drifts one way forever, by one copy of the row a loop. Paused while the
+ *   section is off screen (the shared module's `paused` class, from an
+ *   observer here).
  * - **Cursor drift** (each row, around its track): with a fine pointer, the
  *   shared shape drift (lib/shape-motion.ts `trackPointerDrift`, as the
  *   landing's everywhere and stories sections): each row's layer moves
- *   toward the cursor and a CSS transition eases it there; the track's loop
- *   runs inside it, so the drift is an offset added to the loop.
- * - **Watermark parallax** (the logo): one scroll-linked value (0 as the
- *   section's top enters the viewport, 1 as its bottom leaves; Lenis already
- *   smooths the scroll), written straight to its transform: it moves
- *   `--neighbornets-explainer-watermark-drift` in all, down as the page
- *   scrolls down, so it lags behind the photos.
+ *   toward the cursor, `depths` of `--neighbornets-marquee-pointer-drift`,
+ *   and a CSS transition eases it there; the track's loop runs inside it,
+ *   so the drift is an offset added to the loop. `level` rows (flush ones)
+ *   drift only sideways, so no seam ever opens between them. Sideways the
+ *   tracks reach thousands of pixels past both edges (four copies, started a
+ *   loop out), far beyond the drift's reach. Touch gets the loop alone.
+ * - **Watermark parallax** (a `data-marquee="watermark"` element, if any):
+ *   one scroll-linked value (0 as the section's top enters the viewport, 1
+ *   as its bottom leaves; Lenis already smooths the scroll), written
+ *   straight to its transform: it moves `--neighbornets-explainer-watermark-
+ *   drift` in all, down as the page scrolls down, so it lags behind the
+ *   photos.
  *
- * Under reduced motion nothing moves: the rows rest at Figma's places, the
- * watermark too.
+ * Under reduced motion nothing moves: rows and watermark rest at Figma's
+ * places.
  */
-export function NeighborNetExplainerMotion({
+export function PhotoMarqueeMotion({
   className,
   labelledBy,
+  label,
+  depths,
+  level = false,
   children,
 }: {
   className: string;
-  labelledBy: string;
+  /** The section's heading's id, or */
+  labelledBy?: string;
+  /** its name, when it has no heading. */
+  label?: string;
+  /** Each row's share of the cursor drift, top to bottom. */
+  depths: readonly number[];
+  /**
+   * Rows drift only sideways (flush rows: a vertical drift would open
+   * Warm Snow seams between them and at the section's edges).
+   */
+  level?: boolean;
   children: ReactNode;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -72,19 +89,20 @@ export function NeighborNetExplainerMotion({
       return () => visibility.disconnect();
 
     const rows = [
-      ...section.querySelectorAll<HTMLElement>('[data-explainer="row"]'),
+      ...section.querySelectorAll<HTMLElement>('[data-marquee="row"]'),
     ];
     const stopDrift = trackPointerDrift(
       section,
       rows.map((element, index) => ({
         element,
-        depth: ROW_DEPTHS[index] ?? 1,
+        depth: depths[index] ?? 1,
       })),
-      "--neighbornets-explainer-pointer-drift",
+      "--neighbornets-marquee-pointer-drift",
+      { axes: level ? "x" : "both" },
     );
 
     watermarkRef.current = section.querySelector<HTMLElement>(
-      '[data-explainer="watermark"]',
+      '[data-marquee="watermark"]',
     );
     const measure = () => {
       driftRef.current = readLengthToken(
@@ -104,7 +122,7 @@ export function NeighborNetExplainerMotion({
       if (watermarkRef.current) watermarkRef.current.style.transform = "";
       watermarkRef.current = null;
     };
-  }, [scrollYProgress]);
+  }, [scrollYProgress, depths, level]);
 
   useMotionValueEvent(scrollYProgress, "change", apply);
 
@@ -112,6 +130,7 @@ export function NeighborNetExplainerMotion({
     <section
       ref={sectionRef}
       aria-labelledby={labelledBy}
+      aria-label={label}
       className={className}
     >
       {children}
