@@ -8,6 +8,11 @@ type AnimatedArrowProps = Omit<HTMLAttributes<HTMLSpanElement>, "children"> & {
 
 type AnimatedCtaLabelProps = {
   arrowSize?: number;
+  /**
+   * `vertical` (default) rolls the arrow up. `diagonal` launches it up and to
+   * the right, the way the ↗ glyph points.
+   */
+  arrowMotion?: "vertical" | "diagonal";
   label: string;
   textClassName?: string;
 };
@@ -46,6 +51,7 @@ export function AnimatedArrow({
 /** Shared rolling label and upward arrow for landing-page CTA buttons. */
 export function AnimatedCtaLabel({
   arrowSize = 20,
+  arrowMotion = "vertical",
   label,
   textClassName,
 }: AnimatedCtaLabelProps) {
@@ -56,7 +62,12 @@ export function AnimatedCtaLabel({
           {label}
         </span>
       </span>
-      <AnimatedArrow size={arrowSize} />
+      <AnimatedArrow
+        size={arrowSize}
+        className={
+          arrowMotion === "diagonal" ? "ym-cta-arrow--diagonal" : undefined
+        }
+      />
     </>
   );
 }

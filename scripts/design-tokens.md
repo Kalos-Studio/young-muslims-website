@@ -13,6 +13,9 @@ The checker parses JS/TS/JSX/TSX with TypeScript and CSS with PostCSS. It flags:
 - JSX `style` attributes, including references to externally defined objects.
 - CSS literal dimensions, raw colors, common visual declarations, local custom
   properties, and arbitrary values in `@apply`.
+- Type roles out of step with `cn`: every `--text-*` font size in a `@theme`
+  block of `globals.css` must be in `TYPE_SIZE_TOKENS` (`src/lib/utils.ts`),
+  and nothing else, or `cn()` drops the size next to a text colour.
 
 Use named Tailwind utilities. New approved tokens belong in `@theme` or
 `:root` custom-property definitions in `src/app/globals.css`, and must be

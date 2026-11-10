@@ -1,0 +1,25 @@
+/* The header's scrim. Its reach comes from the header tokens in globals.css
+   (DESIGN-SYSTEM.md, "Site menu"). */
+
+/* Deep Obsidian at 65% fading to clear, reaching well below the bar
+   (`--header-scrim-reach` of the header's height) on an eased curve: the
+   alpha falls quickly near the top and then tapers, flattening out before
+   the layer's foot, so no edge shows where it ends. A straight 65% to 0
+   ramp ending exactly at the bar's foot read as a hard line there. */
+.scrim {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: var(--header-scrim-reach);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-brand-obsidian) 65%, transparent) 0%,
+    color-mix(in srgb, var(--color-brand-obsidian) 54%, transparent) 14%,
+    color-mix(in srgb, var(--color-brand-obsidian) 41%, transparent) 28%,
+    color-mix(in srgb, var(--color-brand-obsidian) 28%, transparent) 42%,
+    color-mix(in srgb, var(--color-brand-obsidian) 17%, transparent) 56%,
+    color-mix(in srgb, var(--color-brand-obsidian) 8%, transparent) 70%,
+    color-mix(in srgb, var(--color-brand-obsidian) 3%, transparent) 84%,
+    transparent 100%
+  );
+}

@@ -37,10 +37,7 @@ const locations = [...brotherLocations, ...sisterLocations];
 
 function ChapterCtaSection() {
   return (
-    <section
-      data-header-theme="dark"
-      className="relative h-[560px] w-full overflow-hidden bg-brand-warm-snow md:h-[723px]"
-    >
+    <section className="relative h-[560px] w-full overflow-hidden bg-brand-warm-snow md:h-[723px]">
       <div className="absolute inset-x-0 bottom-0 h-[55%] bg-brand-obsidian" />
       <div className="absolute top-0 left-1/2 h-full w-[1720px] -translate-x-1/2 md:top-[-79px] md:h-[756px] md:w-[2311px] md:rotate-[3.7deg]">
         <Image
@@ -83,7 +80,7 @@ export default function NeighborNetsPage() {
       className="w-full overflow-x-clip bg-brand-warm-snow text-brand-obsidian"
     >
       <section
-        data-header-theme="dark"
+        data-header-hero
         className="relative h-[720px] w-full overflow-hidden bg-brand-obsidian md:h-svh"
       >
         <Image
@@ -120,10 +117,7 @@ export default function NeighborNetsPage() {
         </svg>
       </section>
 
-      <section
-        data-header-theme="light"
-        className="relative w-full bg-brand-warm-snow px-5 pt-20 pb-28 md:min-h-[1727px] md:px-8 md:pt-[334px] md:pb-[286px]"
-      >
+      <section className="relative w-full bg-brand-warm-snow px-5 pt-20 pb-28 md:min-h-[1727px] md:px-8 md:pt-[334px] md:pb-[286px]">
         <svg
           aria-hidden="true"
           viewBox="0 0 1440 180"

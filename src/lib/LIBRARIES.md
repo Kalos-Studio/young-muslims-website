@@ -26,16 +26,16 @@ library is added, removed, or given a materially different responsibility.
 
 ## Styling and interface primitives
 
-| Library                                                                           | Purpose                                                       | Status and guidance                                                                                                                                                                                                                      |
-| --------------------------------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Tailwind CSS](https://tailwindcss.com/docs)                                      | Utility classes, responsive styles, and design tokens         | Core. This project uses Tailwind 4 CSS-first configuration in `src/app/globals.css`; do not add `tailwind.config.ts`.                                                                                                                    |
-| [`@tailwindcss/postcss`](https://tailwindcss.com/docs/installation/using-postcss) | Compiles Tailwind through PostCSS                             | Build tooling. It is configured in `postcss.config.mjs`.                                                                                                                                                                                 |
-| [shadcn](https://ui.shadcn.com)                                                   | Component registry tooling and shared Tailwind styles         | Installed and its CSS is imported by `src/app/globals.css`. Registry components are copied into the repository and become source we own; shadcn is not a runtime component API.                                                          |
-| [Base UI](https://base-ui.com/react/overview/quick-start)                         | Accessible, unstyled primitives for complex controls          | Installed but not currently imported in `src/`. Prefer it when a new dialog, menu, popover, tabs, tooltip, or similar interaction needs complete keyboard and focus behavior. Do not use it for simple semantic HTML controls.           |
-| [Class Variance Authority](https://cva.style/docs)                                | Typed component variants                                      | Used by shared UI and wireframe components such as `src/components/ui/button.tsx`. Use it when a reusable component has meaningful visual variants, not for one-off class lists.                                                         |
-| [`cn`](https://www.npmjs.com/package/cn)                                          | Combines conditional class names                              | Used directly and re-exported from `src/lib/utils.ts`. Use it when class names are conditional or passed in by a caller.                                                                                                                 |
-| [Google Material Symbols](https://github.com/google/material-design-icons)        | Interface icons                                               | The required outlined SVGs are vendored under `design-assets/icons/material-symbols-outlined`. Use the shared `MaterialIcon` component so symbols inherit text color, remain animatable, and retain accessible labels on their controls. |
-| [`tw-animate-css`](https://github.com/Wombosvideo/tw-animate-css)                 | Small CSS animation utilities used by shadcn-style components | Imported globally. Use for small, self-contained state transitions when a JavaScript animation library is unnecessary.                                                                                                                   |
+| Library                                                                           | Purpose                                                       | Status and guidance                                                                                                                                                                                                                                                                                                                                                          |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Tailwind CSS](https://tailwindcss.com/docs)                                      | Utility classes, responsive styles, and design tokens         | Core. This project uses Tailwind 4 CSS-first configuration in `src/app/globals.css`; do not add `tailwind.config.ts`.                                                                                                                                                                                                                                                        |
+| [`@tailwindcss/postcss`](https://tailwindcss.com/docs/installation/using-postcss) | Compiles Tailwind through PostCSS                             | Build tooling. It is configured in `postcss.config.mjs`.                                                                                                                                                                                                                                                                                                                     |
+| [shadcn](https://ui.shadcn.com)                                                   | Component registry tooling and shared Tailwind styles         | Installed and its CSS is imported by `src/app/globals.css`. Registry components are copied into the repository and become source we own; shadcn is not a runtime component API.                                                                                                                                                                                              |
+| [Base UI](https://base-ui.com/react/overview/quick-start)                         | Accessible, unstyled primitives for complex controls          | Used by the landing stories snippet's story overlay (`Dialog`: focus trap, Escape, inert page, scroll lock; portalled into `<body>`, not the top layer, so the page transition can cover it). Prefer it when a new dialog, menu, popover, tabs, tooltip, or similar interaction needs complete keyboard and focus behavior. Do not use it for simple semantic HTML controls. |
+| [Class Variance Authority](https://cva.style/docs)                                | Typed component variants                                      | Used by shared UI and wireframe components such as `src/components/ui/button.tsx`. Use it when a reusable component has meaningful visual variants, not for one-off class lists.                                                                                                                                                                                             |
+| [`cn`](https://www.npmjs.com/package/cn)                                          | Combines conditional class names                              | Used directly and re-exported from `src/lib/utils.ts`. Use it when class names are conditional or passed in by a caller.                                                                                                                                                                                                                                                     |
+| [Google Material Symbols](https://github.com/google/material-design-icons)        | Interface icons                                               | The required outlined SVGs are vendored under `design-assets/icons/material-symbols-outlined`. Use the shared `MaterialIcon` component so symbols inherit text color, remain animatable, and retain accessible labels on their controls.                                                                                                                                     |
+| [`tw-animate-css`](https://github.com/Wombosvideo/tw-animate-css)                 | Small CSS animation utilities used by shadcn-style components | Imported globally. Use for small, self-contained state transitions when a JavaScript animation library is unnecessary.                                                                                                                                                                                                                                                       |
 
 The website's colors, typography, and token rules are documented separately in
 [`DESIGN-SYSTEM.md`](DESIGN-SYSTEM.md).
@@ -56,7 +56,12 @@ Choose the smallest tool that fully expresses the interaction.
 
 [Motion for React](https://motion.dev/docs/react) is installed for sliding
 panels, content reveals, gestures, layout animation, and coordinated component
-transitions. It is available but is not yet imported by a production component.
+transitions. Section text below the hero uses the shared `TextReveal`
+(`src/components/site/text-reveal.tsx`), and scroll-linked scenes such as the
+landing belonging ring, the show-you blob and the pinned principles reveal use
+`useScroll`, writing compositor-only transforms (`translate3d`, `scale`,
+`opacity`) straight to promoted layers; see `DESIGN-SYSTEM.md`. A pinned scene
+uses a tall section with a `position: sticky` stage, never `position: fixed`.
 
 Use a Client Component when the animation needs hooks, gestures, state, or
 `AnimatePresence`:
@@ -78,6 +83,23 @@ import * as motion from "motion/react-client";
 Animation must respect the user's reduced-motion preference. Prefer opacity or
 an immediate state change when `useReducedMotion()` is true. Avoid animating a
 large page subtree when a small animated component boundary will do.
+
+### Lenis (smooth scrolling)
+
+[Lenis](https://lenis.darkroom.engineering) provides app-wide smooth wheel
+scrolling, pinned at `1.3.26`. It is mounted once in the root layout by
+`src/components/site/smooth-scroll-provider.tsx`, the only file that imports
+it. Lenis drives the real window scroll, so `scroll` listeners, `scrollY` reads
+and Motion `useScroll` stay in sync without subscribing to Lenis. Do not move
+them onto a Lenis event source. It is not created when
+`prefers-reduced-motion: reduce` is set, and it is skipped while `<html>` has
+`overflow: hidden`. Do not import `lenis/dist/lenis.css`; its
+`height: auto` rule breaks the full-height layout.
+
+Tracked follow-up: when the NeighborNets map (`components/ui/map.tsx`) and the
+story dialog are rebuilt, add `data-lenis-prevent` to the map and to modal
+scroll containers. Until then, wheel-zooming the map also scrolls the page.
+Remove Lenis by deleting the provider, its layout wrapper and this section.
 
 ### Embla Carousel
 

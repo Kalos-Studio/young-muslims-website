@@ -56,3 +56,17 @@ test("baseline allows existing occurrences but rejects copies and changed values
     1,
   );
 });
+
+test("type roles in @theme must match cn's TYPE_SIZE_TOKENS", async () => {
+  const { compareTypeSizes } = await import("./check-design-tokens.mjs");
+  const css =
+    "@theme { --text-nav: 0.875rem; --text-nav--line-height: normal; --text-body: 1rem; } :root { --text-reveal-rise: 1.25rem; }";
+  assert.deepEqual(
+    compareTypeSizes(css, 'TYPE_SIZE_TOKENS = ["nav", "body"] as const;'),
+    { missingFromCn: [], notInTheme: [] },
+  );
+  assert.deepEqual(
+    compareTypeSizes(css, 'TYPE_SIZE_TOKENS = ["nav", "hero"] as const;'),
+    { missingFromCn: ["body"], notInTheme: ["hero"] },
+  );
+});

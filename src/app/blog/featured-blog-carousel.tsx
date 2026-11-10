@@ -77,7 +77,7 @@ export function FeaturedBlogCarousel({ slides }: { slides: BlogPost[] }) {
 
   return (
     <section
-      data-header-theme="dark"
+      data-header-hero
       aria-label="Featured blog resources"
       aria-roledescription="carousel"
       className="relative isolate grid overflow-hidden bg-foreground text-background"

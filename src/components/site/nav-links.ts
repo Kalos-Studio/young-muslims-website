@@ -12,6 +12,7 @@ type DestinationId =
 export type NavigationSurface =
   | "header-primary"
   | "header-cta"
+  | "header-donate"
   | "drawer-primary"
   | "drawer-secondary"
   | "footer-primary"
@@ -52,6 +53,11 @@ const DESTINATIONS = {
     href: "/support",
     label: "Support",
     currentRoute: "prefix",
+    labels: {
+      "header-donate": "Donate",
+      "drawer-primary": "Donate",
+      "footer-primary": "Donate",
+    },
   },
   store: {
     href: "/store",
@@ -62,6 +68,11 @@ const DESTINATIONS = {
     href: "/blog",
     label: "Blog",
     currentRoute: "prefix",
+    labels: {
+      "header-primary": "The Feed",
+      "drawer-secondary": "The Feed",
+      "footer-secondary": "The Feed",
+    },
   },
   contact: {
     href: "/contact",
@@ -72,8 +83,9 @@ const DESTINATIONS = {
 } as const satisfies Record<DestinationId, Destination>;
 
 const DESTINATIONS_BY_SURFACE = {
-  "header-primary": ["about", "stories", "support", "blog", "store"],
+  "header-primary": ["about", "stories", "blog", "store"],
   "header-cta": ["chapters"],
+  "header-donate": ["support"],
   "drawer-primary": ["chapters", "about", "stories", "support"],
   "drawer-secondary": ["store", "blog", "contact"],
   "footer-primary": ["chapters", "about", "stories", "support"],

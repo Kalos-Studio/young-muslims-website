@@ -1,0 +1,76 @@
+/*
+ * The standard button's hover, all in CSS. Values come from the
+ * standard-button tokens in globals.css (DESIGN-SYSTEM.md, "Standard
+ * button").
+ */
+
+.button {
+  transition: color var(--duration-standard-button) var(--ease-standard-button);
+}
+
+/* The Royal fill. At rest it is clipped to the bottom underline; on hover
+   and focus the clip opens upward until it fills the button, so the
+   underline is the seed of the fill. */
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--color-brand-royal);
+  clip-path: inset(calc(100% - var(--standard-button-underline)) 0 0 0);
+  transition: clip-path var(--duration-standard-button)
+    var(--ease-standard-button);
+}
+
+/* The shared label roll and arrow launch (.ym-cta-roll, .ym-cta-arrow in
+   globals.css) run on the button's timing here, so all three read as one
+   hover. Other CTAs keep their own timing. */
+.button :global(.ym-cta-roll__text),
+.button :global(.ym-cta-arrow__icon) {
+  transition-duration: var(--duration-standard-button);
+  transition-timing-function: var(--ease-standard-button);
+  transition-delay: var(--duration-standard-button-swap-delay);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    color: var(--color-brand-warm-snow);
+  }
+
+  .button:hover::before {
+    clip-path: inset(0);
+  }
+}
+
+.button:focus-visible {
+  color: var(--color-brand-warm-snow);
+}
+
+.button:focus-visible::before {
+  clip-path: inset(0);
+}
+
+/* Reduced motion: hover and focus switch straight to the filled state. The
+   roll and launch are already removed by the shared CTA rule. */
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .button::before {
+    transition: none;
+  }
+}
+
+/* The dark tone (Figma 246:124), for dark backgrounds: the underline and
+   fill are Warm Snow, and the text turns Obsidian as the fill rises. */
+.dark::before {
+  background-color: var(--color-brand-warm-snow);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dark:hover {
+    color: var(--color-brand-obsidian);
+  }
+}
+
+.dark:focus-visible {
+  color: var(--color-brand-obsidian);
+}
