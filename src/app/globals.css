@@ -637,6 +637,13 @@
      this. Both on the standard button's timing. */
   --neighbornets-map-marker-hover-scale: 1.15;
   --neighbornets-map-card-lift: 0.25rem;
+  /* Phones (below `md`): every marker and the pin are this much larger
+     than the map's own proportion (2.8984% of a phone-wide map is about
+     11px, too small to see and tap), and when the map is zoomed in (a state
+     or net open, or pinched in past the whole map) larger again by the
+     zoomed scale. */
+  --neighbornets-map-marker-scale-mobile: 1.4;
+  --neighbornets-map-marker-zoomed-scale-mobile: 1.25;
   /* Free pan and zoom (while a state or net is open). Zooming out below
      this share of the state's fit zoom (a net's state's) returns to the
      whole map, as the close button does. */

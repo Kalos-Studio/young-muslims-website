@@ -163,6 +163,34 @@
   }
 }
 
+/* Phones (below `md`): the markers and the pin are larger by the mobile
+   marker scale on the whole map, and by the mobile zoomed scale on top of
+   that when zoomed in (a state or net open, or pinched in past the whole
+   map); about their points (the `scale` scales about the box's top-left,
+   which the transform puts on the point). One size per state of the map,
+   switched at once, never grown through a move; still on the supersampled
+   layer, so sharp. Phones have no hover, so nothing else sets `scale`. */
+@media (width < 48rem) {
+  .marker {
+    transition: none;
+  }
+
+  .marker,
+  .pin {
+    scale: var(--neighbornets-map-marker-scale-mobile);
+  }
+
+  .frame[data-zoomed] .marker,
+  .frame[data-locked] .marker,
+  .frame[data-zoomed] .pin,
+  .frame[data-locked] .pin {
+    scale: calc(
+      var(--neighbornets-map-marker-scale-mobile) *
+        var(--neighbornets-map-marker-zoomed-scale-mobile)
+    );
+  }
+}
+
 /* Outside the state on show, the selected net (its pin stands in), or off
    the screen (not moved while away): not shown. Never faded: the map moves,
    it does not fade. */
