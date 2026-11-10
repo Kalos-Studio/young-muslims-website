@@ -76,22 +76,14 @@ whole subtree into a client-rendered app and undoes the above.
 
 **Hosted on Netlify**, using the Netlify Next.js runtime.
 
-**Maps use [mapcn](https://mapcn.dev) on top of MapLibre GL.** mapcn is a
-shadcn-style registry, so `src/components/ui/map.tsx` is vendored source we own
-rather than a dependency we import from. Re-adding it with
-`bunx shadcn@latest add @mapcn/map` overwrites that file, which is why it is
-excluded from eslint and Prettier: any local formatting would be churn.
-
-MapLibre's web worker is served from our own origin rather than the unpkg CDN
-mapcn defaults to. `scripts/copy-maplibre-worker.mjs` copies it out of
-node_modules into `public/` on postinstall, and `src/lib/maplibre-worker.ts`
-points MapLibre at that copy. Import `@/lib/maplibre-worker` before the map
-component in any module that uses it, or the CDN fallback wins and the map
-silently renders no tiles wherever unpkg is unreachable.
-
-US state polygons live at `public/us-states.geojson` for the same reason: a map
-of our own chapters should not depend on a third party staying up. The data is
-derived from US Census cartographic boundary files, which are public domain.
+**The NeighborNets map is plain SVG, generated at build time.**
+`scripts/neighbornets-map.mjs` projects the US Census 1:10m state boundaries
+(the `us-atlas` package; public domain) and every NeighborNet's coordinates
+through the same US Albers projection (`d3-geo`), into
+`src/generated/neighbornets-map.ts`. Nothing is fetched at runtime and no map
+library ships to the browser. Each net's city and ZIP were reverse-geocoded
+once by `scripts/reverse-geocode-neighbornets.mjs` and are committed in
+`data/neighbornet-places.csv`.
 
 ## To dos
 

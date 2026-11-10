@@ -152,11 +152,7 @@ function main() {
     })) {
       const file = `${dir}/${entry.name}`;
       if (entry.isDirectory()) walk(file);
-      // Generated upstream component; matches the existing ESLint exclusion.
-      else if (
-        /\.(?:[jt]sx?|css)$/.test(file) &&
-        file !== "src/components/ui/map.tsx"
-      ) {
+      else if (/\.(?:[jt]sx?|css)$/.test(file)) {
         findings.push(
           ...scanSource(file, fs.readFileSync(path.join(root, file), "utf8")),
         );

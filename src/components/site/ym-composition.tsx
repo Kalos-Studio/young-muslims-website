@@ -3,6 +3,7 @@ import type { StaticImageData } from "next/image";
 import { cn } from "@/lib/utils";
 
 import styles from "./ym-composition.module.css";
+import { GrainPrimitives } from "./grain-filter";
 
 /*
  * The stacked YM composition from the Figma entry frame (273:620; the page
@@ -91,35 +92,7 @@ export function YmComposition(props: YmCompositionProps) {
               height="1"
               colorInterpolationFilters="sRGB"
             >
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency="0.85"
-                numOctaves={2}
-                seed={7}
-                stitchTiles="stitch"
-                result="noise"
-              />
-              {/* The noise's alpha channel, centred near 0.5, as opaque grey.
-                  Its colour channels are premultiplied and would darken. */}
-              <feColorMatrix
-                in="noise"
-                type="matrix"
-                values="0 0 0 1 0  0 0 0 1 0  0 0 0 1 0  0 0 0 0 1"
-                result="grain"
-              />
-              {/* Source + 0.24 x (grain - 0.5): speckle without shifting the
-                  average colour. */}
-              <feComposite
-                in="SourceGraphic"
-                in2="grain"
-                operator="arithmetic"
-                k1="0"
-                k2="1"
-                k3="0.24"
-                k4="-0.12"
-                result="grained"
-              />
-              <feComposite in="grained" in2="SourceGraphic" operator="in" />
+              <GrainPrimitives />
             </filter>
           ) : null}
 

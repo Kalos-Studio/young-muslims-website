@@ -1,0 +1,59 @@
+/* Sizes come from the NeighborNets map tokens in globals.css
+   (DESIGN-SYSTEM.md, "NeighborNets map"). */
+
+/* The map's frame: full width on mobile and tablet; on desktop the Figma
+   frame's share of the page (xl, 80rem). The markers are placed against it. */
+.frame {
+  position: relative;
+  width: 100%;
+  margin-inline: auto;
+}
+
+@media (width >= 80rem) {
+  .frame {
+    width: var(--neighbornets-map-width-desktop);
+  }
+}
+
+.map {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Each state filled and outlined; the outline stays the same width at any
+   size or zoom. (Shared borders are drawn by both states, identically.) */
+.states {
+  stroke-width: var(--neighbornets-map-outline-width);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Not inherited, so set on each path. */
+.states > path {
+  vector-effect: non-scaling-stroke;
+}
+
+.markers {
+  position: absolute;
+  inset: 0;
+}
+
+/* A marker's box, centred on its NeighborNet's point (the generated
+   position class sets the point). */
+.marker {
+  position: absolute;
+  width: var(--neighbornets-map-marker-box);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+}
+
+/* Nets sharing a spot, fanned out side by side. */
+.slotBefore {
+  translate: calc(-50% - var(--neighbornets-map-slot-offset)) -50%;
+}
+
+.slotAfter {
+  translate: calc(-50% + var(--neighbornets-map-slot-offset)) -50%;
+}

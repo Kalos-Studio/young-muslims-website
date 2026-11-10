@@ -258,6 +258,17 @@ scrolls up over it. Pass the media (a video or image with
   edge so the hero shows through, the `landing-pale` band, then Warm Snow. It
   is one shape that moves with the content, so it cannot misalign with the
   hero, and it rises over the pinned hero like a mask line.
+- `wave="neighbornets"` swaps in `NeighborNetsHeroWave`, the same build from
+  the NeighborNets hero's own blob (Figma 301:2108 / 301:2118, one path:
+  the pale band and the photo at 0.9486 of it, turned 9.31deg), with its own
+  band height and the same peek share (`--neighbornets-hero-wave-height`,
+  `--neighbornets-hero-peek`).
+- **Film grain:** `GrainFilter` (`src/components/site/grain-filter.tsx`) is
+  the entry screen's grain as a shared SVG filter: static fractal noise laid
+  over the source as source + 0.24 x (noise - 0.5), so it speckles without
+  shifting the average colour. The entry screen's wordmark and monograms and
+  the NeighborNets hero photo (CSS `filter: url(#…)`) use it. It never
+  animates, so reduced motion needs nothing.
 - At load the wave's top hump peeks above the fold, as in the 1440 x 1024
   frame.
 - Sticky rather than fixed: the footer Easter egg transforms the page
@@ -281,10 +292,11 @@ scrolls up over it. Pass the media (a video or image with
   variant, `@media (max-height: 30rem)` (480px). It catches landscape phones
   (about 360-430px tall) but not landscape tablets or laptops.
 
-| Token                | Value                 | Use                                                                                       |
-| -------------------- | --------------------- | ----------------------------------------------------------------------------------------- |
-| `--hero-wave-height` | `max(6rem, 16.944vw)` | The wave band: 244 of 1440 units, with a 6rem minimum so it stays a proper wave on phones |
-| `--hero-peek`        | 15.57% of the band    | How much of the band shows above the fold at load (38 of 244 units)                       |
+| Token                                                          | Value                                      | Use                                                                                                          |
+| -------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| `--hero-wave-height`                                           | `max(6rem, 16.944vw)`                      | The wave band: 244 of 1440 units, with a 6rem minimum so it stays a proper wave on phones                    |
+| `--hero-peek`                                                  | 15.57% of the band                         | How much of the band shows above the fold at load (38 of 244 units)                                          |
+| `--neighbornets-hero-wave-height` / `--neighbornets-hero-peek` | `max(5rem, 13.889vw)` / 15.57% of the band | The NeighborNets hero's wave band (200 of 1440 units; the landing's 6rem minimum in proportion) and its peek |
 
 Both are rounded to whole pixels. Every section edge below the hero sits over
 the pinned hero, and an edge on a fractional pixel lets a hairline of it show
@@ -860,6 +872,66 @@ layout.
 | `--footer-shape-rotation`                       | 30deg                                                         | The green pair's turn                                                                                           |
 | `--footer-shape-drift`                          | 3rem / 4.5rem / 6rem                                          | How far out the shapes start (mobile / tablet / desktop)                                                        |
 | `--footer-marquee-drift`                        | 30rem                                                         | The tagline's drift (half either side of its place)                                                             |
+
+## NeighborNets hero
+
+The NeighborNets ("Find a Chapter") page's hero (Figma 301:2068, tablet
+374:247, mobile 401:1230): `NeighborNetsHero` in
+`src/app/neighbornets/neighbornets-hero.tsx`, the landing hero's
+`StickyHero` shell with a photo instead of a video, and
+`wave="neighbornets"`.
+
+- **Photo:** the group on the field, full-bleed and covering the viewport,
+  art-directed per breakpoint (desktop from `xl`, tablet from `md`, mobile
+  below) from the Figma fill's original, each crop framed as its frame
+  frames it (`scripts/neighbornets-hero-assets.mjs`). The site's film grain
+  (`GrainFilter`) lies over it, and the landing hero's 25% Obsidian tint
+  keeps the white title legible.
+- **Copy:** "FIND YOUR NEIGHBORNET" (Boldonse, `text-mobile-display` to
+  `text-landing-display` from `xl`, as the frames' 32 / 34 / 48px) and its
+  subline (Figtree SemiBold, `text-nav` / `text-body` from `md` /
+  `text-landing-hero-subtitle` from `xl`: the frames' 14 / 16 / 20px),
+  centred in white. Like the landing hero, no `TextReveal`.
+- **Wave and scrim:** the page scrolls up over the pinned hero behind
+  `NeighborNetsHeroWave`; the header scrim follows `StickyHero`'s
+  `data-header-hero` marker, as on the landing page.
+
+## NeighborNets map
+
+The NeighborNets page's map (Figma 301:2121, tablet 374:621, mobile
+401:1582): `NeighborNetsMap` in `src/app/neighbornets/neighbornets-map.tsx`.
+Plain SVG, no map library and no runtime fetch.
+
+- **Geometry:** generated at build time by `scripts/neighbornets-map.mjs`
+  (`src/generated/neighbornets-map.ts`): the lower 48 states and DC from the
+  US Census 1:10m boundaries (`us-atlas`), projected with the standard US
+  Albers conic (`d3-geo`), 1000 map units across. Every NeighborNet's
+  coordinates go through the same projection, so a marker can only land
+  where its coordinates are, and its state is the state polygon that holds
+  it (never the lists' inconsistent `region`). Each state is its own filled
+  and outlined path (`data-state`), so it can be targeted (a shared border
+  is drawn by both states, identically; a separate borders path would cost
+  40 KB more).
+- **Markers:** the Figma map's YM circles, Royal for Brothers and Jade for
+  Sisters, under the landing map's marker shadow, baked into the image
+  (`scripts/neighbornets-map-assets.mjs`). Each is placed by a generated
+  position class (`neighbornets-map-points.module.css`), drawn top to bottom
+  so a lower marker overlaps the one above. Brothers and Sisters nets that
+  share a spot are fanned out side by side.
+- **Off the map:** a net outside the US (Mississauga, Ontario) is not plotted;
+  it is listed in `OFF_MAP_IDS` for the map's "Canada" entry.
+- **Places:** each net's city (in New York City, its borough) and ZIP were
+  reverse-geocoded from its coordinates once
+  (`scripts/reverse-geocode-neighbornets.mjs`, committed to
+  `data/neighbornet-places.csv`; a row marked `manual` is never overwritten).
+
+| Token                              | Value                       | Use                                                                                                               |
+| ---------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `--color-neighbornets-map-outline` | Obsidian 55% into Warm Snow | State borders (Figma #7d7d7d), as a functional neutral: `stroke-neighbornets-map-outline`                         |
+| `--neighbornets-map-outline-width` | `1.75px`                    | Border width at every size and zoom (non-scaling stroke; Figma's 1.75 in both the desktop and tablet frames)      |
+| `--neighbornets-map-marker-box`    | `4.1547%`                   | A marker's box, of the map's width: the circle is 2.8984% of the map in every frame and fills 0.697621 of its box |
+| `--neighbornets-map-width-desktop` | `88.4427%`                  | The map's width from `xl` (1273.57 of the 1440 frame); full width below                                           |
+| `--neighbornets-map-slot-offset`   | `24.42%`                    | Fan-out for nets sharing a spot: 0.35 of a circle each way, so the pair overlaps by 30%                           |
 
 ## Closing CTA
 

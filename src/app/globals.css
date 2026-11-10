@@ -104,6 +104,13 @@
   /* Caption and description copy on Warm Snow: the landing article cards'
      descriptions (Figma 270:289). 9.3:1 on Warm Snow. */
   --color-caption: #484848;
+  /* The NeighborNets map's state borders (Figma 301:2200, #7d7d7d), as a
+     functional neutral: Obsidian mixed into Warm Snow. */
+  --color-neighbornets-map-outline: color-mix(
+    in srgb,
+    var(--color-brand-obsidian) 55%,
+    var(--color-brand-warm-snow)
+  );
 
   /* Functional UI color, intentionally separate from the brand palette. */
   --color-system-danger: #b42318;
@@ -244,24 +251,6 @@
   }
   html {
     @apply font-sans;
-  }
-  .maplibregl-popup-content {
-    @apply rounded-none! bg-transparent! p-0! shadow-none!;
-  }
-  .maplibregl-popup-tip {
-    @apply hidden!;
-  }
-  .maplibregl-ctrl-attrib {
-    @apply rounded-md! border! border-border! bg-background! text-muted-foreground! shadow-sm!;
-  }
-  .maplibregl-ctrl-attrib a {
-    @apply text-muted-foreground!;
-  }
-  .maplibregl-ctrl-attrib a:hover {
-    @apply text-foreground!;
-  }
-  .maplibregl-ctrl-attrib-button {
-    @apply bg-transparent! dark:invert;
   }
 
   /* Full-bleed page heroes begin behind the navigation, matching Figma. */
@@ -578,6 +567,29 @@
      pixels: every section edge below sits over the pinned hero, and an edge
      on a fractional pixel lets a hairline of the hero show through. */
   --hero-peek: round(calc(var(--hero-wave-height) * 0.1557), 1px);
+  /* The NeighborNets hero's wave (its own blob, Figma 301:2068): a 200-unit
+     band (of 1440), with a 5rem minimum (the landing's 6rem in proportion),
+     peeking above the fold by the same share as the landing's. */
+  --neighbornets-hero-wave-height: max(
+    5rem,
+    round(calc(100vw * 0.138889), 1px)
+  );
+  --neighbornets-hero-peek: round(
+    calc(var(--neighbornets-hero-wave-height) * 0.1557),
+    1px
+  );
+  /* The NeighborNets map (Figma 301:2121, 374:621, 401:1582). Its state
+     borders stay 1.75px at every width and zoom (non-scaling stroke). */
+  --neighbornets-map-outline-width: 1.75px;
+  /* A marker's box, as a share of the map's width: the circle is 2.8984% of
+     the map in every frame (36.91 of 1273.57; 22.26 of 768), and fills
+     0.697621 of its box (the rest is room for its shadow). */
+  --neighbornets-map-marker-box: 4.1547%;
+  /* The map's width on desktop (1273.57 of the 1440 frame); full width below. */
+  --neighbornets-map-width-desktop: 88.4427%;
+  /* Nets that share a spot fan out side by side: each centre moves 0.35 of a
+     circle (0.2442 of the box), so the pair overlaps by 30%. */
+  --neighbornets-map-slot-offset: 24.42%;
 }
 
 /*
