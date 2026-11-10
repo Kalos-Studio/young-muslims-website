@@ -66,24 +66,29 @@ export default function NeighborNetsPage() {
       <NeighborNetsHero>
         {/* The finder (Figma 301:2121): the heading over the map. Its
             search row (between them) comes with the search stage; the
-            vertical rhythm is Figma's with that row's space held. */}
+            vertical rhythm is Figma's with that row's space held. The
+            section clips the map's hover lens, and the heading's block
+            (Figma's "Top", 334:2) lies over it, Warm Snow fading out at its
+            foot, so the zoomed map slides under the heading. */}
         <section
           aria-labelledby="find-neighbornet-heading"
-          className="w-full bg-brand-warm-snow pt-25 pb-24 xl:pb-71.5"
+          className="relative w-full overflow-clip bg-brand-warm-snow pb-24 xl:pb-71.5"
         >
-          <div className="mx-auto w-full max-w-360 px-8 md:px-16 xl:px-22.5">
-            <h2
-              id="find-neighbornet-heading"
-              className="text-mobile-section font-extrabold text-brand-obsidian md:text-landing-section"
-            >
-              Find a NeighborNet near you.
-            </h2>
-            <p className="mt-4 text-body font-medium text-brand-obsidian md:text-landing-copy">
-              Search your city, or select a state to see where Young Muslims
-              meets.
-            </p>
+          <div className="relative z-10 bg-linear-to-b from-brand-warm-snow from-83% to-transparent">
+            <div className="mx-auto w-full max-w-360 px-8 pt-25 pb-12 md:px-16 xl:px-22.5 xl:pb-59.25">
+              <h2
+                id="find-neighbornet-heading"
+                className="text-mobile-section font-extrabold text-brand-obsidian md:text-landing-section"
+              >
+                Find a NeighborNet near you.
+              </h2>
+              <p className="mt-4 text-body font-medium text-brand-obsidian md:text-landing-copy">
+                Search your city, or select a state to see where Young Muslims
+                meets.
+              </p>
+            </div>
           </div>
-          <div className="mx-auto mt-16 w-full max-w-360 xl:mt-67.5">
+          <div className="mx-auto mt-4 w-full max-w-360 xl:mt-8.25">
             <NeighborNetsMap />
           </div>
         </section>

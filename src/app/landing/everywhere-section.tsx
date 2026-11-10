@@ -8,8 +8,10 @@ import { StandardButton } from "@/components/ui/standard-button";
 import { cn } from "@/lib/utils";
 
 import mapImage from "../../../design-assets/figma/landing-2026/everywhere/map.jpg";
-import markerJade from "../../../design-assets/figma/landing-2026/everywhere/marker-jade.svg";
-import markerRoyal from "../../../design-assets/figma/landing-2026/everywhere/marker-royal.svg";
+// Crisp at any pixel density: the art unfiltered, its shadow from a
+// silhouette (scripts/marker-art.mjs).
+import markerJade from "../../../design-assets/figma/landing-2026/everywhere/marker-jade-crisp.svg";
+import markerRoyal from "../../../design-assets/figma/landing-2026/everywhere/marker-royal-crisp.svg";
 import shapeBottomLeft from "../../../design-assets/figma/landing-2026/everywhere/shape-bottom-left.webp";
 import shapeBottomRight from "../../../design-assets/figma/landing-2026/everywhere/shape-bottom-right.webp";
 import shapeTopLeft from "../../../design-assets/figma/landing-2026/everywhere/shape-top-left.webp";

@@ -13,6 +13,8 @@
 //   node scripts/neighbornets-map-assets.mjs
 import { readFileSync, writeFileSync } from "node:fs";
 
+import { separateShadow, vectorRing } from "./marker-art.mjs";
+
 const DIR = "design-assets/figma/neighbornets/map";
 const CIRCLE = 36.9137;
 const PAD = 8;
@@ -43,7 +45,85 @@ ${SHADOW}
 </defs>
 </svg>
 `;
-  writeFileSync(`${DIR}/marker-${kind}.svg`, svg);
+  // The art unfiltered, its shadow from a silhouette: crisp at any density.
+  writeFileSync(`${DIR}/marker-${kind}.svg`, separateShadow(svg));
   console.log(`marker-${kind}.svg (${BOX.toFixed(4)} box, circle ${CIRCLE})`);
 }
 console.log(`circle share of the box: ${(CIRCLE / BOX).toFixed(6)}`);
+
+// --- The selected pin -----------------------------------------------------
+//
+// The selected NeighborNet's marker (Figma 583:966): the landing's pin, white
+// edged, in a 4-unit Sisters Brass ring (Figma's selected Royal pin, 583:976,
+// vendored as figma-pin-royal-selected.svg: a 40-unit pin centred in a
+// 56-unit box). Figma draws only the Royal one; the Jade one is the same pin
+// with the Jade pin's art (583:970, figma-pin-jade.svg) set into it. Its
+// point (the pin's square corner) is at 48, 48 of the box.
+const selected = readFileSync(`${DIR}/figma-pin-royal-selected.svg`, "utf8");
+writeFileSync(`${DIR}/pin-royal-selected.svg`, vectorRing(selected));
+const jadePaths = [
+  ...readFileSync(`${DIR}/figma-pin-jade.svg`, "utf8").matchAll(
+    /<path d="[^"]+" fill="[^"]+"\/>/g,
+  ),
+].map(([path]) => path);
+const [jadeShape, ...jadeArt] = jadePaths;
+const royalShape = selected.match(/<path d="[^"]+" fill="#234080"\/>/)[0];
+const royalArt = selected.match(
+  /<path id="Vector" d="[^"]+" fill="#FEFEFE"\/>/,
+)[0];
+const jadeSelected = selected
+  .replace(royalShape, `<g transform="translate(8 8)">${jadeShape}</g>`)
+  .replace(royalArt, `<g transform="translate(8 8)">${jadeArt.join("")}</g>`);
+writeFileSync(`${DIR}/pin-jade-selected.svg`, vectorRing(jadeSelected));
+console.log(
+  "pin-royal-selected.svg, pin-jade-selected.svg (56 box, point 48, 48)",
+);
+
+// --- The card covers --------------------------------------------------------
+//
+// The NeighborNet card's placeholder cover lockup (until each net has a
+// photo): the side's mark and the YOUNG MUSLIMS wordmark, 24 units tall, as
+// Figma's Shadow Creek card (371:390: the Sisters mark, then the wordmark from
+// 29.08 across, 219.55 in all). Sisters: Forest on Sisters Brass (as Figma).
+// Brothers: the Brothers mark (the card watermark's, 370:254) in white, for
+// Royal.
+const CARD = `${DIR}/card`;
+const inner = (svg) =>
+  svg.replace(/^<svg[^>]*>\s*/, "").replace(/\s*<\/svg>\s*$/, "");
+const wordmark = inner(
+  readFileSync(`${CARD}/young-muslims-wordmark.svg`, "utf8"),
+);
+const lockup = (mark, colour) =>
+  `<svg width="219.546" height="24" viewBox="0 0 219.546 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+${mark}
+<g transform="translate(29.0837 0)">${wordmark}</g>
+</svg>
+`
+    .replaceAll("#043222", colour)
+    .replaceAll("#F9F9FA", colour);
+writeFileSync(
+  `${CARD}/cover-sisters.svg`,
+  lockup(inner(readFileSync(`${CARD}/sisters-ym.svg`, "utf8")), "#043222"),
+);
+writeFileSync(
+  `${CARD}/cover-brothers.svg`,
+  lockup(
+    `<g transform="scale(${24 / 167})">${inner(readFileSync(`${CARD}/watermark-brothers.svg`, "utf8"))}</g>`,
+    "#FFFFFF",
+  ),
+);
+console.log("card/cover-brothers.svg, card/cover-sisters.svg");
+
+// --- Chip icon masks -------------------------------------------------------
+//
+// The chips draw their icons as masks in the text's colour (so they turn
+// Warm Snow with the hover fill). Figma's Instagram icon sits on a white
+// square, which as a mask is the whole square: drop it.
+writeFileSync(
+  `${CARD}/instagram-mask.svg`,
+  readFileSync(`${CARD}/instagram-royal.svg`, "utf8").replace(
+    /<rect [^>]*fill="white"\/>\s*/,
+    "",
+  ),
+);
+console.log("card/instagram-mask.svg");

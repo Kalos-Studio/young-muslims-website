@@ -10,7 +10,7 @@ import { readTimeToken } from "@/components/site/blob-reveal";
 import { readLengthToken } from "@/lib/motion-tokens";
 
 export const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
-const FINE_POINTER = "(hover: hover) and (pointer: fine)";
+export const FINE_POINTER = "(hover: hover) and (pointer: fine)";
 
 /** A token from the root, or `fallback` when it is unset. */
 export function readRootToken(name: string, fallback: string) {

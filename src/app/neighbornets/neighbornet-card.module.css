@@ -1,0 +1,109 @@
+/* NeighborNet card hovers (DESIGN-SYSTEM.md, "NeighborNets map"), on the
+   standard button's timing so they read as the site's other links. */
+
+/* A results card lifts on hover (or while something in it has focus): it
+   can be selected. */
+.lift {
+  transition: translate var(--duration-standard-button)
+    var(--ease-standard-button);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lift:hover {
+    translate: 0 calc(-1 * var(--neighbornets-map-card-lift));
+  }
+}
+
+.lift:focus-within {
+  translate: 0 calc(-1 * var(--neighbornets-map-card-lift));
+}
+
+/* --- Contact chips ------------------------------------------------------ */
+
+/* The standard button's hover, for an outlined chip: its side colour rises
+   from the foot to fill it as the text and icon turn Warm Snow, while the
+   label rolls (.ym-cta-roll); no arrow. */
+.chip {
+  position: relative;
+  isolation: isolate;
+  transition: color var(--duration-standard-button) var(--ease-standard-button);
+}
+
+.chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path var(--duration-standard-button)
+    var(--ease-standard-button);
+}
+
+.brothers::before {
+  background-color: var(--color-brand-royal);
+}
+
+.sisters::before {
+  background-color: var(--color-brand-jade);
+}
+
+.chip :global(.ym-cta-roll__text) {
+  transition-duration: var(--duration-standard-button);
+  transition-timing-function: var(--ease-standard-button);
+  transition-delay: var(--duration-standard-button-swap-delay);
+}
+
+/* A long address ends in an ellipsis, in both copies the roll swaps. */
+.chip :global(.ym-cta-roll__text)::after {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover {
+    color: var(--color-brand-warm-snow);
+  }
+
+  .chip:hover::before {
+    clip-path: inset(0);
+  }
+}
+
+.chip:focus-visible {
+  color: var(--color-brand-warm-snow);
+}
+
+.chip:focus-visible::before {
+  clip-path: inset(0);
+}
+
+/* The chip's icon, in the text's colour (a mask of the Figma icon). */
+.icon {
+  background-color: currentColor;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+
+.instagram {
+  mask-image: url("../../../design-assets/figma/neighbornets/map/card/instagram-mask.svg");
+}
+
+.mail {
+  mask-image: url("../../../design-assets/figma/neighbornets/map/card/mail-royal.svg");
+}
+
+/* Reduced motion: no lift; the chip fills at once (the shared CTA rule
+   already stops the roll). */
+@media (prefers-reduced-motion: reduce) {
+  .lift,
+  .chip,
+  .chip::before {
+    transition: none;
+  }
+
+  .lift:hover,
+  .lift:focus-within {
+    translate: none;
+  }
+}

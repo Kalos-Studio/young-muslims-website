@@ -1,5 +1,6 @@
-<svg width="52.9137" height="52.9137" viewBox="-8 -8 52.9137 52.9137" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g filter="url(#shadow)">
+<svg width="211.6548" height="211.6548" viewBox="-8 -8 52.9137 52.9137" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="36.9137" height="36.9137" rx="18.4569" fill="#000" filter="url(#shadow)"/>
+<g>
 <g id="Marker">
 <rect width="36.9137" height="36.9137" rx="18.4569" fill="#397451"/>
 <g id="Vector">
@@ -18,7 +19,6 @@
 <feComposite in2="hardAlpha" operator="out"/>
 <feColorMatrix type="matrix" values="0 0 0 0 0.0901961 0 0 0 0 0.0901961 0 0 0 0 0.145098 0 0 0 0.3 0"/>
 <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 </filter>
 </defs>
 </svg>
