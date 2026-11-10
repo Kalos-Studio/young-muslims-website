@@ -2022,6 +2022,24 @@
   }
 }
 
+/*
+ * "Other ways to get involved." (src/app/neighbornets/neighbornet-
+ * involvement.tsx; Figma 372:91). Documented in DESIGN-SYSTEM.md under
+ * "Other ways to get involved".
+ */
+:root {
+  /* The photo-blobs' entrance: each grows from this scale as it fades in,
+     once, as it enters view (the shared shape motion, at the landing's
+     everywhere timing). */
+  --duration-neighbornets-involved: var(--duration-everywhere-shape);
+  --neighbornets-involved-from-scale: var(--everywhere-shape-from-scale);
+  --ease-neighbornets-involved: var(--ease-everywhere-enter);
+  /* One blob at a time, left to right: each starts this long after the one
+     before (about a third of the entrance, so each reads on its own and the
+     three finish within 1.5s). */
+  --duration-neighbornets-involved-stagger: 300ms;
+}
+
 /* WIREFRAME:start ------------------------------------------------------------
  * Wireframe-only design tokens. Delete this entire fenced block when the
  * wireframe comes out; nothing in the real site should reference `--wf-*` or

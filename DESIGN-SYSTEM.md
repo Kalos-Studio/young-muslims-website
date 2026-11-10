@@ -1314,6 +1314,34 @@ the section is labelled for what they show.
 | `--duration-neighbornets-branding-marquee-middle` | `81s`                       | One loop of the middle row (drifting left)  |
 | `--duration-neighbornets-branding-marquee-bottom` | `70s`                       | One loop of the bottom row (drifting right) |
 
+## Other ways to get involved
+
+`src/app/neighbornets/neighbornet-involvement.tsx` (Figma 372:91, tablet
+374:766, mobile 401:1909), below the NeighborNet branding rows: the heading,
+its line and a standard button ("Get in touch", to `/contact`; full width
+on phones), all in the site's text reveal; then three cards: Events,
+Retreats and Conferences, each a group photo clipped to an organic blob
+(Figma's transparent export, 378 x 373 on desktop, 288 x 284 below) with its
+word in Boldonse (`text-mobile-display`, 32px, Pure White) centred over it,
+and a line about it below (`text-body`). Three in a row on desktop (68px
+apart), two then one centred on tablets, stacked on phones.
+
+- **Entrance:** each blob (with its word) grows from
+  `--neighbornets-involved-from-scale` as it fades in, once, as it enters
+  view: the shared shape motion (`armShapeEntrances`), as the landing's
+  everywhere, stories and street sections
+  (`NeighborNetInvolvementMotion`), one at a time left to right
+  (`--duration-neighbornets-involved-stagger` apart: Events, Retreats, then
+  Conferences; stacked on phones, each as it arrives). Nothing else moves.
+  Under reduced motion the blobs are simply there.
+
+| Token                                      | Value                                         | Use                                                      |
+| ------------------------------------------ | --------------------------------------------- | -------------------------------------------------------- |
+| `--duration-neighbornets-involved`         | `var(--duration-everywhere-shape)` (`900ms`)  | The blobs' expand-and-fade entrance                      |
+| `--neighbornets-involved-from-scale`       | `var(--everywhere-shape-from-scale)` (`0.92`) | The scale each blob grows from                           |
+| `--ease-neighbornets-involved`             | `var(--ease-everywhere-enter)`                | The entrance's easing                                    |
+| `--duration-neighbornets-involved-stagger` | `300ms`                                       | Between one blob's entrance and the next (left to right) |
+
 ## Closing CTA
 
 The closing call to action above the footer (Figma 270:301, tablet 280:788,
@@ -1332,7 +1360,10 @@ and `closing-cta.module.css`. Shared by every page, each with its own photo.
   screens). The mission line ("Seeking the pleasure of Allah (SWT) by
   empowering Muslim youth.") is the same everywhere and is not a prop. The
   landing page and the blog pass the YMATX railing photo
-  (`landing-2026/cta/ymatx-railing.jpg`).
+  (`landing-2026/cta/ymatx-railing.jpg`). The NeighborNets page passes the
+  sisters at the lake (`neighbornets/2026-page/cta-sisters-lake.jpg`,
+  Figma 301:2252; the default `center` framing keeps the group in every
+  frame).
 - **Shape:** each frame's organic silhouette is a vector mask (an SVG
   path, crisp at any width) over the whole section
   (`shape-{mobile,tablet,desktop}.svg`, traced by

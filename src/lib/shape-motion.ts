@@ -51,19 +51,48 @@ export function pausedAnimation(
 
 /**
  * Each shape grows from `fromScale` as it fades in, once, as it enters view.
- * The tokens name the duration, start scale and easing. Returns a cleanup.
+ * The tokens name the duration, start scale and easing. With a `stagger`
+ * token, shapes play one at a time in order (each its own trigger, but
+ * starting at least a stagger after the one before): shapes that enter view
+ * together come in left to right, as the landing's stats do, and one that
+ * enters on its own (a stacked layout) plays as it arrives. Returns a
+ * cleanup.
  */
 export function armShapeEntrances(
   shapes: Element[],
-  tokens: { duration: string; fromScale: string; easing: string },
+  tokens: {
+    duration: string;
+    fromScale: string;
+    easing: string;
+    stagger?: string;
+  },
 ) {
   const fromScale = readRootToken(tokens.fromScale, "0.92");
   const options = {
     duration: readTimeToken(tokens.duration, 900),
     easing: readRootToken(tokens.easing, "ease-out"),
   };
+  const stagger = tokens.stagger ? readTimeToken(tokens.stagger, 0) : 0;
+  // The earliest the next shape may start (document time, ms), and the
+  // shapes that entered view this frame, waiting to be put in order (each
+  // shape has its own observer, and observers report in no set order).
+  let nextStart = 0;
+  let entered: number[] = [];
+  let flush = 0;
+  const playInOrder = () => {
+    flush = 0;
+    for (const index of entered.sort((a, b) => a - b)) {
+      const now = performance.now();
+      const delay = Math.max(0, nextStart - now);
+      nextStart = now + delay + stagger;
+      // Held on its first frame (hidden, small) until its turn.
+      animations[index].effect?.updateTiming({ delay });
+      animations[index].play();
+    }
+    entered = [];
+  };
   const animations: Animation[] = [];
-  const observers = shapes.map((shape) => {
+  const observers = shapes.map((shape, index) => {
     const animation = pausedAnimation(
       shape,
       [
@@ -73,9 +102,17 @@ export function armShapeEntrances(
       options,
     );
     animations.push(animation);
-    return onEnter(shape, () => animation.play());
+    return onEnter(shape, () => {
+      if (!stagger) {
+        animation.play();
+        return;
+      }
+      entered.push(index);
+      if (!flush) flush = requestAnimationFrame(playInOrder);
+    });
   });
   return () => {
+    cancelAnimationFrame(flush);
     observers.forEach((observer) => observer.disconnect());
     animations.forEach((animation) => animation.cancel());
   };
