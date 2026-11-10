@@ -1,0 +1,71 @@
+/* The NeighborNet branding rows (DESIGN-SYSTEM.md, "NeighborNet branding";
+   Figma 372:66). Sizes in tile heights (360 units): a tile is 226 wide
+   (0.62778), nine to a row, flush, so a row's loop is 5.65 tiles high. */
+
+/* A row (the shared drift layer, photo-marquee.module.css): one tile high,
+   the rows flush. Its track holds four copies of the row's nine tiles,
+   started one loop left of Figma's first tile (191 left of the 1440 frame:
+   2.53056 tile heights left of the centre), so a loop's move never shows an
+   end on screens up to 6,000px wide. */
+.row {
+  height: var(--neighbornets-branding-row-height);
+}
+
+.track {
+  margin-left: calc(var(--neighbornets-branding-row-height) * -8.18056);
+}
+
+/* Top right, middle left, bottom right. */
+@media (prefers-reduced-motion: no-preference) {
+  .trackTop {
+    animation: drift-right var(--duration-neighbornets-branding-marquee-top)
+      linear infinite;
+  }
+
+  .trackMiddle {
+    animation: drift-left var(--duration-neighbornets-branding-marquee-middle)
+      linear infinite;
+  }
+
+  .trackBottom {
+    animation: drift-right var(--duration-neighbornets-branding-marquee-bottom)
+      linear infinite;
+  }
+}
+
+@keyframes drift-right {
+  from {
+    transform: translate3d(
+      calc(var(--neighbornets-branding-row-height) * -5.65),
+      0,
+      0
+    );
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes drift-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(
+      calc(var(--neighbornets-branding-row-height) * -5.65),
+      0,
+      0
+    );
+  }
+}
+
+/* A tile, cropped to its frame. */
+.tile {
+  position: relative;
+  flex: none;
+  width: calc(var(--neighbornets-branding-row-height) * 0.62778);
+  height: 100%;
+  overflow: hidden;
+}

@@ -135,18 +135,31 @@ export function EverywhereMotion({
       const drop = readLengthToken("--everywhere-pin-drop", 12);
       const pinDuration = readTimeToken("--duration-everywhere-pin", 420);
       const pinStagger = readTimeToken("--duration-everywhere-pin-stagger", 12);
+      // Each entrance is dropped once it has played (it ends where the page
+      // already is): a finished animation, held, keeps its element on its
+      // own compositor layer, which is rastered soft on high-density screens.
+      const release = (animation: Animation) => {
+        animation.finished.then(() => animation.cancel()).catch(() => {});
+        return animation;
+      };
+      release(mapAnimation);
       const markerAnimations = all("marker").map((marker, index) =>
-        paused(
-          marker,
-          [
-            { opacity: 0, transform: `translate3d(0, ${-drop}px, 0) scale(0)` },
-            { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" },
-          ],
-          {
-            duration: pinDuration,
-            delay: index * pinStagger,
-            easing: pin,
-          },
+        release(
+          paused(
+            marker,
+            [
+              {
+                opacity: 0,
+                transform: `translate3d(0, ${-drop}px, 0) scale(0)`,
+              },
+              { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" },
+            ],
+            {
+              duration: pinDuration,
+              delay: index * pinStagger,
+              easing: pin,
+            },
+          ),
         ),
       );
       observers.push(onEnter(map, () => mapAnimation.play()));

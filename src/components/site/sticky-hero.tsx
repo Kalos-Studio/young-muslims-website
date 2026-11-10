@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 
-import { HeroWave } from "./hero-wave";
+import { cn } from "@/lib/utils";
+
+import { HeroWave, NeighborNetsHeroWave } from "./hero-wave";
 import { StickyHeroCover } from "./sticky-hero-cover";
 import styles from "./sticky-hero.module.css";
 
@@ -35,6 +37,7 @@ export function StickyHero({
   label,
   media,
   overlay,
+  wave = "landing",
   children,
 }: {
   /** Accessible name for the hero region. */
@@ -43,6 +46,11 @@ export function StickyHero({
   media: ReactNode;
   /** Content centred over the media, such as the page title. */
   overlay?: ReactNode;
+  /**
+   * The bottom wave: the landing hero's blob (default) or the NeighborNets
+   * hero's, each with its own band height and peek.
+   */
+  wave?: "landing" | "neighbornets";
   /** The rest of the page. */
   children: ReactNode;
 }) {
@@ -65,8 +73,13 @@ export function StickyHero({
           </div>
         ) : null}
       </section>
-      <div className={styles.following}>
-        <HeroWave />
+      <div
+        className={cn(
+          styles.following,
+          wave === "neighbornets" && styles.followingNeighborNets,
+        )}
+      >
+        {wave === "neighbornets" ? <NeighborNetsHeroWave /> : <HeroWave />}
         <StickyHeroCover />
         {children}
       </div>

@@ -14,3 +14,16 @@
   height: var(--hero-wave-height);
   overflow: visible;
 }
+
+/* The NeighborNets hero's wave and peek (its own blob; see
+   NeighborNetsHeroWave). */
+.followingNeighborNets {
+  margin-top: calc(-1 * var(--neighbornets-hero-peek));
+}
+
+.waveNeighborNets {
+  display: block;
+  width: 100%;
+  height: var(--neighbornets-hero-wave-height);
+  overflow: visible;
+}

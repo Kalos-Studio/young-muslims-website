@@ -1,0 +1,277 @@
+/* Sizes come from the NeighborNets map tokens in globals.css
+   (DESIGN-SYSTEM.md, "NeighborNets map"). */
+
+/* The map's frame: full width on mobile and tablet; on desktop the Figma
+   frame's share of the page (xl, 80rem). The markers are placed against it. */
+.frame {
+  position: relative;
+  width: 100%;
+  margin-inline: auto;
+}
+
+@media (width >= 80rem) {
+  .frame {
+    width: var(--neighbornets-map-width-desktop);
+  }
+}
+
+/* The page and the map share gestures (the page never locks). Zoomed out,
+   a vertical swipe scrolls the page and a pinch is the map's; zoomed in,
+   every drag is the map's (one finger pans it). A mouse drags a zoomed-in
+   map. */
+.frame {
+  touch-action: pan-y;
+}
+
+.frame[data-zoomed] {
+  touch-action: none;
+  cursor: grab;
+}
+
+.frame[data-dragging] {
+  cursor: grabbing;
+}
+
+/* The zoom hint, centred across the map at the pointer's height (its
+   `translate`, set by NeighborNetsMapMotion). It fades in and out (`data-
+   show`): UI chrome over the map, the one exception to the map's no-fades
+   rule, so it never flickers. It takes no pointer input. */
+.hint {
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity var(--duration-neighbornets-map-zoom-hint-fade)
+    var(--ease-standard-button);
+}
+
+.hint[data-show] {
+  opacity: 1;
+}
+
+/* A state under the pointer can be clicked. */
+.frame[data-hovered-state]:not([data-hovered-state=""]) {
+  cursor: pointer;
+}
+
+/* Everything a zoom magnifies (the states and the hover fill), as one
+   layer. The hover lens, a flight to a state or a NeighborNet, and a pan or
+   zoom gesture set the SVGs' viewBox each frame (NeighborNetsMapMotion),
+   never a transform, so the non-scaling outlines stay the outline width on
+   screen through every move. It takes no pointer input, so the hover area
+   is the frame's own box. */
+.lens {
+  position: relative;
+  transform-origin: 0 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* The hovered state's fill, under the outlines, on its own layer: changing
+   its one path redraws this layer alone, never the outlines or markers. */
+.highlight {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  will-change: transform;
+}
+
+.map {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  will-change: transform;
+}
+
+/* Each state filled and outlined; the outline stays the same width at any
+   size or zoom. (Shared borders are drawn by both states, identically.) */
+.states {
+  stroke-width: var(--neighbornets-map-outline-width);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Not inherited, so set on each path. */
+.states > path {
+  vector-effect: non-scaling-stroke;
+}
+
+/* The place labels (map-labels.ts), over the states and under the
+   markers: informational text, never magnified and never clickable. Each
+   is centred on its place's point and moved there by a `translate` (its own
+   layer, like a marker), set when the map commits a view and each frame of
+   a move; a label the declutter drops is `hidden`. Haloed in Warm Snow (a
+   text stroke painted under the letters) so it reads over the outlines. */
+.labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  line-height: normal;
+  color: var(--color-neighbornets-map-label);
+  -webkit-text-stroke: var(--neighbornets-map-label-halo-width)
+    var(--color-neighbornets-map-label-halo);
+  paint-order: stroke fill;
+  will-change: translate;
+}
+
+.city {
+  font-size: var(--neighbornets-map-label-city-size);
+  letter-spacing: var(--neighbornets-map-label-city-tracking);
+}
+
+.place {
+  font-size: var(--neighbornets-map-label-place-size);
+  letter-spacing: var(--neighbornets-map-label-place-tracking);
+}
+
+/* The markers, over the lens and never magnified: each is placed for the
+   whole map by its position class, and moved to where the view on screen
+   puts it by a `translate`, set each frame of a move. So a marker keeps its
+   size at any zoom and is drawn at 1x, always sharp. */
+.markers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* A marker: the YM circle, centred on its NeighborNet's point. The button
+   is the circle, rounded (`rounded-full`), so its hit area is the visible
+   circle and nothing around it; its art, shadow and all, is a larger layer
+   behind it that takes no pointer input. Each marker is its own layer
+   (moved on the compositor, never repainted as the map moves), laid out at
+   `--neighbornets-map-marker-supersample` times its size and scaled back
+   down: a layer this small is rastered below the screen's density, soft on
+   high-density screens, and the extra size makes up for it. */
+.marker {
+  position: absolute;
+  width: calc(
+    var(--neighbornets-map-marker-circle) *
+      var(--neighbornets-map-marker-supersample)
+  );
+  aspect-ratio: 1;
+  transform: scale(calc(1 / var(--neighbornets-map-marker-supersample)))
+    translate(-50%, -50%);
+  transform-origin: 0 0;
+  pointer-events: auto;
+  cursor: pointer;
+  will-change: translate;
+}
+
+.marker::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--neighbornets-map-marker-art);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.royal::before {
+  background-image: url("../../../design-assets/figma/neighbornets/map/marker-royal.svg");
+}
+
+.jade::before {
+  background-image: url("../../../design-assets/figma/neighbornets/map/marker-jade.svg");
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .marker {
+    transition: scale var(--duration-standard-button)
+      var(--ease-standard-button);
+  }
+}
+
+/* The marker under the pointer comes forward, above its neighbours, and
+   grows by the hover scale (about its point): the one a click will select,
+   even in a dense cluster. Under reduced motion it only comes forward. */
+@media (hover: hover) and (pointer: fine) {
+  .marker:hover {
+    z-index: 1;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .marker:hover {
+    scale: var(--neighbornets-map-marker-hover-scale);
+  }
+}
+
+/* Phones (below `md`): the markers and the pin are larger by the mobile
+   marker scale on the whole map, and by the mobile zoomed scale on top of
+   that when zoomed in (a state or net open, or pinched in past the whole
+   map); about their points (the `scale` scales about the box's top-left,
+   which the transform puts on the point). One size per state of the map,
+   switched at once, never grown through a move; still on the supersampled
+   layer, so sharp. Phones have no hover, so nothing else sets `scale`. */
+@media (width < 48rem) {
+  .marker {
+    transition: none;
+  }
+
+  .marker,
+  .pin {
+    scale: var(--neighbornets-map-marker-scale-mobile);
+  }
+
+  .frame[data-zoomed] .marker,
+  .frame[data-zoomed] .pin {
+    scale: calc(
+      var(--neighbornets-map-marker-scale-mobile) *
+        var(--neighbornets-map-marker-zoomed-scale-mobile)
+    );
+  }
+}
+
+/* Outside the state on show, the selected net (its pin stands in), or off
+   the screen (not moved while away): not shown. Never faded: the map moves,
+   it does not fade. */
+.marker[data-hidden],
+.marker[data-selected],
+.marker[data-offscreen] {
+  visibility: hidden;
+}
+
+/* Nets sharing a spot, fanned out side by side. */
+.slotBefore {
+  transform: scale(calc(1 / var(--neighbornets-map-marker-supersample)))
+    translate(calc(-50% - var(--neighbornets-map-slot-offset)), -50%);
+}
+
+.slotAfter {
+  transform: scale(calc(1 / var(--neighbornets-map-marker-supersample)))
+    translate(calc(-50% + var(--neighbornets-map-slot-offset)), -50%);
+}
+
+/* The selected NeighborNet's pin: its point on the net's point, its own
+   layer, moved with the markers, never magnified. */
+.pin {
+  position: absolute;
+  width: calc(
+    var(--neighbornets-map-pin-box) * var(--neighbornets-map-marker-supersample)
+  );
+  aspect-ratio: 1;
+  transform: scale(calc(1 / var(--neighbornets-map-marker-supersample)))
+    translate(
+      calc(-1 * var(--neighbornets-map-pin-point)),
+      calc(-1 * var(--neighbornets-map-pin-point))
+    );
+  transform-origin: 0 0;
+  pointer-events: none;
+  will-change: translate;
+}

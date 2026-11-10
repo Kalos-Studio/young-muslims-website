@@ -21,7 +21,6 @@ Use named Tailwind utilities. New approved tokens belong in `@theme` or
 `:root` custom-property definitions in `src/app/globals.css`, and must be
 explained in `DESIGN-SYSTEM.md`. Ordinary CSS rules in globals.css are checked.
 Arbitrary selector variants such as `[&>svg]:size-4` are permitted.
-The vendored `src/components/ui/map.tsx` is excluded, matching ESLint.
 
 ## Existing debt
 

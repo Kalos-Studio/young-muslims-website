@@ -1,0 +1,123 @@
+/* "What's a NeighborNet?" (DESIGN-SYSTEM.md). Sizes are the section's
+   tokens in globals.css; the numbers are Figma 332:10 measurements in photo
+   heights (360 units): photos 540 or 524 wide (1.5 / 1.45556), the top
+   row's gaps 99 (0.275), the bottom row's 151 (0.41944). */
+
+/* The two rows and the watermark between them, full-bleed. */
+.marquee {
+  position: relative;
+}
+
+/* A row (the shared drift layer, photo-marquee.module.css): one photo
+   high. Its track holds four copies of the row's three photos, each copy one
+   loop (its photos and gaps), started one loop left of Figma's first photo
+   (measured from the centre), so a loop's move never shows an end on
+   screens up to 5,600px wide. */
+.row {
+  height: var(--neighbornets-explainer-row-height);
+}
+
+.row + .row {
+  margin-top: var(--neighbornets-explainer-row-gap);
+}
+
+.trackTop {
+  margin-left: calc(var(--neighbornets-explainer-row-height) * -7.95);
+}
+
+.trackBottom {
+  margin-left: calc(var(--neighbornets-explainer-row-height) * -8.91944);
+}
+
+/* The top row drifts right, the bottom row left. */
+@media (prefers-reduced-motion: no-preference) {
+  .trackTop {
+    animation: drift-right var(--duration-neighbornets-explainer-marquee-top)
+      linear infinite;
+  }
+
+  .trackBottom {
+    animation: drift-left var(--duration-neighbornets-explainer-marquee-bottom)
+      linear infinite;
+  }
+}
+
+@keyframes drift-right {
+  from {
+    transform: translate3d(
+      calc(var(--neighbornets-explainer-row-height) * -5.28056),
+      0,
+      0
+    );
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes drift-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(
+      calc(var(--neighbornets-explainer-row-height) * -5.66944),
+      0,
+      0
+    );
+  }
+}
+
+/* A photo, cropped to its frame (square corners, as in Figma). */
+.photo {
+  position: relative;
+  flex: none;
+  height: 100%;
+  overflow: hidden;
+}
+
+.wide {
+  width: calc(var(--neighbornets-explainer-row-height) * 1.5);
+}
+
+.narrow {
+  width: calc(var(--neighbornets-explainer-row-height) * 1.45556);
+}
+
+.gapTop {
+  margin-right: calc(var(--neighbornets-explainer-row-height) * 0.275);
+}
+
+.gapBottom {
+  margin-right: calc(var(--neighbornets-explainer-row-height) * 0.41944);
+}
+
+/* The watermark (the YM primary logo, Obsidian at 8%): full-bleed, centred
+   on the gap between the rows, behind them. Tablet and desktop only (the
+   mobile frame has none). PhotoMarqueeMotion moves it with the
+   scroll. */
+.watermarkLine {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(
+    var(--neighbornets-explainer-row-height) +
+      var(--neighbornets-explainer-row-gap) / 2
+  );
+  display: none;
+  align-items: center;
+  height: 0;
+}
+
+@media (width >= 48rem) {
+  .watermarkLine {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .watermark {
+    will-change: transform;
+  }
+}

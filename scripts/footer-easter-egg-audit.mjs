@@ -78,8 +78,8 @@ async function evaluate(client, sessionId, expression) {
   return result.result.value;
 }
 
-async function waitUntil(client, sessionId, expression) {
-  const deadline = Date.now() + 30000;
+async function waitUntil(client, sessionId, expression, timeout = 30000) {
+  const deadline = Date.now() + timeout;
   while (Date.now() < deadline) {
     if (await evaluate(client, sessionId, expression)) return;
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -183,13 +183,27 @@ try {
         sessionId,
         `document.querySelector('footer')?.dataset.footerPhase === 'flashing'`,
       );
-      const revealed = await evaluate(
-        client,
-        sessionId,
-        `getComputedStyle(document.querySelector('[data-site-page-stage]')).transform.includes('-200') && getComputedStyle(document.querySelector('[data-footer-stage]')).visibility === 'visible'`,
-      );
-      if (!revealed)
-        throw new Error(`${route}: ${input} did not reveal the montage`);
+      // The page stage shifts up as the flash starts: wait for it to settle
+      // at -200 rather than reading it the instant the phase flips (which
+      // raced the shift and failed now and then). Bounded, so a montage that
+      // never reveals still fails, with the stage's state in the message.
+      try {
+        await waitUntil(
+          client,
+          sessionId,
+          `getComputedStyle(document.querySelector('[data-site-page-stage]')).transform.includes('-200') && getComputedStyle(document.querySelector('[data-footer-stage]')).visibility === 'visible'`,
+          3000,
+        );
+      } catch {
+        const state = await evaluate(
+          client,
+          sessionId,
+          `({stage:getComputedStyle(document.querySelector('[data-site-page-stage]')).transform,footer:getComputedStyle(document.querySelector('[data-footer-stage]')).visibility,phase:document.querySelector('footer')?.dataset.footerPhase})`,
+        );
+        throw new Error(
+          `${route}: ${input} did not reveal the montage: ${JSON.stringify(state)}`,
+        );
+      }
       await waitUntil(
         client,
         sessionId,

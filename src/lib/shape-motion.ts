@@ -10,7 +10,7 @@ import { readTimeToken } from "@/components/site/blob-reveal";
 import { readLengthToken } from "@/lib/motion-tokens";
 
 export const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
-const FINE_POINTER = "(hover: hover) and (pointer: fine)";
+export const FINE_POINTER = "(hover: hover) and (pointer: fine)";
 
 /** A token from the root, or `fallback` when it is unset. */
 export function readRootToken(name: string, fallback: string) {
@@ -51,19 +51,48 @@ export function pausedAnimation(
 
 /**
  * Each shape grows from `fromScale` as it fades in, once, as it enters view.
- * The tokens name the duration, start scale and easing. Returns a cleanup.
+ * The tokens name the duration, start scale and easing. With a `stagger`
+ * token, shapes play one at a time in order (each its own trigger, but
+ * starting at least a stagger after the one before): shapes that enter view
+ * together come in left to right, as the landing's stats do, and one that
+ * enters on its own (a stacked layout) plays as it arrives. Returns a
+ * cleanup.
  */
 export function armShapeEntrances(
   shapes: Element[],
-  tokens: { duration: string; fromScale: string; easing: string },
+  tokens: {
+    duration: string;
+    fromScale: string;
+    easing: string;
+    stagger?: string;
+  },
 ) {
   const fromScale = readRootToken(tokens.fromScale, "0.92");
   const options = {
     duration: readTimeToken(tokens.duration, 900),
     easing: readRootToken(tokens.easing, "ease-out"),
   };
+  const stagger = tokens.stagger ? readTimeToken(tokens.stagger, 0) : 0;
+  // The earliest the next shape may start (document time, ms), and the
+  // shapes that entered view this frame, waiting to be put in order (each
+  // shape has its own observer, and observers report in no set order).
+  let nextStart = 0;
+  let entered: number[] = [];
+  let flush = 0;
+  const playInOrder = () => {
+    flush = 0;
+    for (const index of entered.sort((a, b) => a - b)) {
+      const now = performance.now();
+      const delay = Math.max(0, nextStart - now);
+      nextStart = now + delay + stagger;
+      // Held on its first frame (hidden, small) until its turn.
+      animations[index].effect?.updateTiming({ delay });
+      animations[index].play();
+    }
+    entered = [];
+  };
   const animations: Animation[] = [];
-  const observers = shapes.map((shape) => {
+  const observers = shapes.map((shape, index) => {
     const animation = pausedAnimation(
       shape,
       [
@@ -73,9 +102,17 @@ export function armShapeEntrances(
       options,
     );
     animations.push(animation);
-    return onEnter(shape, () => animation.play());
+    return onEnter(shape, () => {
+      if (!stagger) {
+        animation.play();
+        return;
+      }
+      entered.push(index);
+      if (!flush) flush = requestAnimationFrame(playInOrder);
+    });
   });
   return () => {
+    cancelAnimationFrame(flush);
     observers.forEach((observer) => observer.disconnect());
     animations.forEach((animation) => animation.cancel());
   };
@@ -85,12 +122,15 @@ export function armShapeEntrances(
  * With a fine pointer, and only while `area` is on screen, each layer drifts
  * towards the cursor: up to the `reach` token's length times its depth, from
  * where the cursor sits relative to the viewport's centre. Pointer moves are
- * read at most once a frame. Returns a cleanup.
+ * read at most once a frame. `axes: "x"` keeps the layers level (only
+ * sideways), for layers that must stay edge to edge with their neighbours
+ * (flush marquee rows). Returns a cleanup.
  */
 export function trackPointerDrift(
   area: Element,
   layers: { element: HTMLElement; depth: number }[],
   reachToken: string,
+  { axes = "both" }: { axes?: "both" | "x" } = {},
 ) {
   const finePointer = window.matchMedia(FINE_POINTER);
   const reach = readLengthToken(reachToken, 14);
@@ -99,7 +139,10 @@ export function trackPointerDrift(
   const place = () => {
     frame = 0;
     const nx = pointer ? (pointer.x / window.innerWidth - 0.5) * 2 : 0;
-    const ny = pointer ? (pointer.y / window.innerHeight - 0.5) * 2 : 0;
+    const ny =
+      pointer && axes === "both"
+        ? (pointer.y / window.innerHeight - 0.5) * 2
+        : 0;
     for (const layer of layers) {
       const x = nx * reach * layer.depth;
       const y = ny * reach * layer.depth;

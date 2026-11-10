@@ -104,6 +104,34 @@
   /* Caption and description copy on Warm Snow: the landing article cards'
      descriptions (Figma 270:289). 9.3:1 on Warm Snow. */
   --color-caption: #484848;
+  /* The NeighborNets map's state borders (Figma 301:2200, #7d7d7d), as a
+     functional neutral: Obsidian mixed into Warm Snow. */
+  --color-neighbornets-map-outline: color-mix(
+    in srgb,
+    var(--color-brand-obsidian) 55%,
+    var(--color-brand-warm-snow)
+  );
+  /* The state under the pointer (Figma 334:2's hover fill, #e6e5e4), the
+     same way: Obsidian 10% into Warm Snow. */
+  --color-neighbornets-map-hover: color-mix(
+    in srgb,
+    var(--color-brand-obsidian) 10%,
+    var(--color-brand-warm-snow)
+  );
+  /* The map's place labels (no Figma design: the approved defaults): the
+     caption grey, haloed in Warm Snow so they read over the outlines. */
+  --color-neighbornets-map-label: var(--color-caption);
+  --color-neighbornets-map-label-halo: var(--color-brand-warm-snow);
+  /* The map search's suggestions float over the map on this shadow (no
+     outline): a close, soft Obsidian shade and a wider, fainter one. */
+  --shadow-neighbornets-search:
+    0 0.125rem 0.25rem
+      color-mix(in srgb, var(--color-brand-obsidian) 8%, transparent),
+    0 0.75rem 1.5rem
+      color-mix(in srgb, var(--color-brand-obsidian) 14%, transparent);
+  /* The map search's suggestion under the arrow keys or the pointer: the
+     map's hover fill (Obsidian 10% into Warm Snow), on the white list. */
+  --color-neighbornets-search-active: var(--color-neighbornets-map-hover);
 
   /* Functional UI color, intentionally separate from the brand palette. */
   --color-system-danger: #b42318;
@@ -244,24 +272,6 @@
   }
   html {
     @apply font-sans;
-  }
-  .maplibregl-popup-content {
-    @apply rounded-none! bg-transparent! p-0! shadow-none!;
-  }
-  .maplibregl-popup-tip {
-    @apply hidden!;
-  }
-  .maplibregl-ctrl-attrib {
-    @apply rounded-md! border! border-border! bg-background! text-muted-foreground! shadow-sm!;
-  }
-  .maplibregl-ctrl-attrib a {
-    @apply text-muted-foreground!;
-  }
-  .maplibregl-ctrl-attrib a:hover {
-    @apply text-foreground!;
-  }
-  .maplibregl-ctrl-attrib-button {
-    @apply bg-transparent! dark:invert;
   }
 
   /* Full-bleed page heroes begin behind the navigation, matching Figma. */
@@ -578,6 +588,136 @@
      pixels: every section edge below sits over the pinned hero, and an edge
      on a fractional pixel lets a hairline of the hero show through. */
   --hero-peek: round(calc(var(--hero-wave-height) * 0.1557), 1px);
+  /* The NeighborNets hero's wave (its own blob, Figma 301:2068): a 200-unit
+     band (of 1440), with a 5rem minimum (the landing's 6rem in proportion),
+     peeking above the fold by the same share as the landing's. */
+  --neighbornets-hero-wave-height: max(
+    5rem,
+    round(calc(100vw * 0.138889), 1px)
+  );
+  --neighbornets-hero-peek: round(
+    calc(var(--neighbornets-hero-wave-height) * 0.1557),
+    1px
+  );
+  /* The NeighborNets map (Figma 301:2121, 374:621, 401:1582). Its state
+     borders stay 1.75px at every width and zoom (non-scaling stroke). */
+  --neighbornets-map-outline-width: 1.75px;
+  /* A marker's circle, as a share of the map's width: 2.8984% in every
+     frame (36.91 of 1273.57; 22.26 of 768). It is the marker's button (and
+     hit area); its art, with room for the shadow, is this share of it (the
+     circle fills 0.697621 of the art's box). */
+  --neighbornets-map-marker-circle: 2.8984%;
+  --neighbornets-map-marker-art: 143.344%;
+  /* Each marker (and the selected pin) is laid out at this many times its
+     size on its own layer and scaled back down: a small layer is rastered
+     below the screen's density, so at 1x it is soft on high-density screens
+     (4x measured within 4% of an unlayered marker's sharpness at DPR 3). */
+  --neighbornets-map-marker-supersample: 4;
+  /* Markers off the map's visible area are hidden (not moved while away)
+     only when zoomed in past this: at the whole map and the hover lens
+     (1.677) every marker stays, so none blinks at the edges. */
+  --neighbornets-map-cull-zoom: 2.5;
+  /* The map's width on desktop (1273.57 of the 1440 frame); full width below. */
+  --neighbornets-map-width-desktop: 88.4427%;
+  /* Nets that share a spot fan out side by side: each centre moves 0.35 of a
+     circle, so the pair overlaps by 30%. */
+  --neighbornets-map-slot-offset: 35%;
+  /* The hover lens (fine pointers): the map grows to Figma 334:2's scale
+     (2135.66 of 1273.57) about the pointer, and trails it there, quick to
+     respond and soft to settle (the landing's pointer drift timing). */
+  --neighbornets-map-lens-zoom: 1.677;
+  --duration-neighbornets-map-lens: 700ms;
+  --ease-neighbornets-map-lens: cubic-bezier(0.22, 1, 0.36, 1);
+  /* The selected NeighborNet's pin (Figma 583:966): its 56-unit box (a
+     40-unit pin in a 4-unit Brass ring) at the circle markers' scale (36.91
+     units = 2.8984% of the map), its point at 48, 48 of the box. */
+  --neighbornets-map-pin-box: 4.397%;
+  --neighbornets-map-pin-point: 85.7143%;
+  /* Zooms to a state or a NeighborNet (map units: 1000 across the map):
+     never past the max zoom; a state's nets are framed at least the span
+     across (about 180 km); a NeighborNet is zoomed into deep, centred on it,
+     at the net zoom (the max: about 190 km across the frame). */
+  --neighbornets-map-max-zoom: 24;
+  --neighbornets-map-area-span: 40;
+  --neighbornets-map-net-zoom: 24;
+  /* Scrolled away: once less than this share of the map's section shows,
+     an open panel closes and a zoomed-in map returns to the whole US. */
+  --neighbornets-map-leave-ratio: 0.1;
+  /* The clear margin a zoom leaves around the state or area it fits. */
+  --neighbornets-map-fit-padding: 1.5rem;
+  /* The results panels (Figma 370:14, 583:966) slide up from the viewport's
+     foot; a new panel rises just after the one it replaces drops, so a
+     switch reads as a new panel, not new contents. */
+  --duration-neighbornets-map-panel: 500ms;
+  --duration-neighbornets-map-panel-stagger: 160ms;
+  /* Hovers (fine pointers): the marker under the pointer grows by this and
+     comes forward (the one a click will select); a results card lifts by
+     this. Both on the standard button's timing. */
+  --neighbornets-map-marker-hover-scale: 1.15;
+  --neighbornets-map-card-lift: 0.25rem;
+  /* Phones (below `md`): every marker and the pin are this much larger
+     than the map's own proportion (2.8984% of a phone-wide map is about
+     11px, too small to see and tap), and when the map is zoomed in (a state
+     or net open, or pinched in past the whole map) larger again by the
+     zoomed scale. */
+  --neighbornets-map-marker-scale-mobile: 1.4;
+  --neighbornets-map-marker-zoomed-scale-mobile: 1.25;
+  /* Free pan and zoom. With a state or net open, zooming out below
+     this share of the state's fit zoom (a net's state's) closes the panel
+     and returns the map to the whole US. */
+  --neighbornets-map-reset-ratio: 0.8;
+  /* Dragging past the US's bounds (the view's centre outside the map's
+     1000 x 636 units) keeps this share of the overshoot; on release the view
+     settles back within them. */
+  --neighbornets-map-bounds-resistance: 0.35;
+  --duration-neighbornets-map-settle: 320ms;
+  /* A press that moves less than this stays a click (a marker, a state);
+     more is a drag, and its click is dropped. */
+  --neighbornets-map-drag-threshold: 6px;
+  /* Wheel zoom: the zoom factor per wheel pixel (e^-rate x delta), for a
+     wheel or two-finger scroll and for a trackpad pinch (ctrl + wheel); the
+     share of the way to the wheel's target the view moves each frame; and
+     the pause after the last wheel event that ends the gesture. */
+  --neighbornets-map-wheel-rate: 0.0025;
+  --neighbornets-map-pinch-rate: 0.01;
+  --neighbornets-map-wheel-ease: 0.35;
+  --duration-neighbornets-map-wheel-idle: 160ms;
+  /* The hover lens trails the pointer as an exponential ease with this time
+     constant (a fifth of the lens duration: within 1% in about 650ms). */
+  --duration-neighbornets-map-lens-trail: 140ms;
+  /* Place labels (stage 4b; no Figma design, the approved defaults): the
+     zoom each kind shows from (cities over 250,000; places over 50,000;
+     every NeighborNet's city; places over 10,000), so the whole map has
+     none. Cities in the article title size, the rest in the article meta
+     size; a halo this wide (half of it outside the letters); and this much
+     clear space kept around each label when the map declutters them. */
+  --neighbornets-map-label-zoom-city: 3;
+  --neighbornets-map-label-zoom-large: 6;
+  --neighbornets-map-label-zoom-net: 8;
+  --neighbornets-map-label-zoom-place: 10;
+  --neighbornets-map-label-city-size: var(--text-article-title);
+  --neighbornets-map-label-city-tracking: var(
+    --text-article-title--letter-spacing
+  );
+  --neighbornets-map-label-place-size: var(--text-article-meta);
+  --neighbornets-map-label-place-tracking: var(
+    --text-article-meta--letter-spacing
+  );
+  --neighbornets-map-label-halo-width: 0.25rem;
+  --neighbornets-map-label-gap: 0.25rem;
+  /* The map search (stage 5; all local): NeighborNets within this many
+     miles of a searched place are its results; a place with none in reach
+     offers this many nearest; the field suggests at most this many. */
+  --neighbornets-map-search-radius: 25;
+  --neighbornets-map-search-nearest: 3;
+  --neighbornets-map-search-suggestions: 6;
+  /* Desktop: a plain scroll over the map scrolls the page; while the map is
+     in use (a panel open, or zoomed in) it shows "Use ⌘ + scroll to zoom"
+     (Ctrl off a Mac) for this long after the last scroll. */
+  --duration-neighbornets-map-zoom-hint: 1500ms;
+  /* The hint fades in and out (UI chrome over the map, not its content,
+     which never fades): this long, on the standard button's ease. */
+  --duration-neighbornets-map-zoom-hint-fade: 240ms;
 }
 
 /*
@@ -1584,6 +1724,14 @@
   transform: translate(-120%, 120%);
 }
 
+/* Horizontal roll for a forward (→) arrow, a "go": the arrow leaves to the
+ * right and its copy enters from the left. Timing, easing and
+ * reduced-motion handling come from the shared rules for `.ym-cta-arrow__icon`.
+ */
+.ym-cta-arrow--horizontal .ym-cta-arrow__icon--next {
+  transform: translateX(-120%);
+}
+
 /* Current-page dot for header links: a small Pure White dot centered in the
  * link's bottom padding. It is keyed to `aria-current`, so the visual and the
  * announced state always agree, and it is static with no layout cost.
@@ -1610,6 +1758,20 @@
     .ym-cta-arrow--diagonal
     .ym-cta-arrow__icon--next {
     transform: translate(0, 0);
+  }
+
+  .ym-cta-trigger:hover .ym-cta-arrow--horizontal .ym-cta-arrow__icon--current,
+  .ym-cta-trigger:focus-visible
+    .ym-cta-arrow--horizontal
+    .ym-cta-arrow__icon--current {
+    transform: translateX(120%);
+  }
+
+  .ym-cta-trigger:hover .ym-cta-arrow--horizontal .ym-cta-arrow__icon--next,
+  .ym-cta-trigger:focus-visible
+    .ym-cta-arrow--horizontal
+    .ym-cta-arrow__icon--next {
+    transform: translateX(0);
   }
 }
 
@@ -1793,6 +1955,89 @@
   .ym-cta-arrow__icon--next {
     display: none;
   }
+}
+
+/*
+ * "What's a NeighborNet?" (src/app/neighbornets/neighbornet-explainer.tsx;
+ * Figma 332:10, tablet 374:709, mobile 401:1856). Documented in
+ * DESIGN-SYSTEM.md under "What's a NeighborNet?".
+ */
+:root {
+  /* Its two photo rows: each photo's height (Figma 200 / 244 / 360 at
+     mobile / tablet / desktop; the widths, gaps and loop follow from it)
+     and the space between the rows. */
+  --neighbornets-explainer-row-height: 12.5rem;
+  --neighbornets-explainer-row-gap: 2.75rem;
+  /* One loop of each row (its three photos and gaps), the top row drifting
+     right and the bottom row left: slow, so it reads as a drift. The time
+     is the same at every size; the distance scales with the photos. */
+  --duration-neighbornets-explainer-marquee-top: 70s;
+  --duration-neighbornets-explainer-marquee-bottom: 76s;
+  /* The page's photo marquees (this section and the NeighborNet branding
+     rows), fine pointers: the rows trail the cursor (the shared shape
+     drift, at the landing's reach and timing; each row a share of it). */
+  --neighbornets-marquee-pointer-drift: var(--everywhere-pointer-drift);
+  --duration-neighbornets-marquee-pointer: var(--duration-everywhere-pointer);
+  --ease-neighbornets-marquee-pointer: var(--ease-everywhere-enter);
+  /* The YOUNG MUSLIMS watermark behind the rows moves this far in all as
+     the section scrolls through the viewport (half either side of its
+     Figma place, reached when the section is centred). */
+  --neighbornets-explainer-watermark-drift: 5rem;
+}
+
+/*
+ * The NeighborNet branding rows (src/app/neighbornets/neighbornet-branding.tsx;
+ * Figma 372:66, tablet 374:734, mobile 401:1877). Documented in
+ * DESIGN-SYSTEM.md under "NeighborNet branding".
+ */
+:root {
+  /* Each tile's height (Figma 212 on phones, 360 from tablet up; a tile is
+     226 / 360 as wide) and so each row's: three rows, flush. */
+  --neighbornets-branding-row-height: 13.25rem;
+  /* One loop of each row (its nine tiles): top right, middle left, bottom
+     right, at the section above's pace (about 27px/s on desktop), each a
+     little different so the rows never move as one block. */
+  --duration-neighbornets-branding-marquee-top: 75s;
+  --duration-neighbornets-branding-marquee-middle: 81s;
+  --duration-neighbornets-branding-marquee-bottom: 70s;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --neighbornets-branding-row-height: 22.5rem;
+  }
+}
+
+@media (width >= 48rem) {
+  :root {
+    --neighbornets-explainer-row-height: 15.25rem;
+    --neighbornets-explainer-row-gap: 3.375rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --neighbornets-explainer-row-height: 22.5rem;
+    --neighbornets-explainer-row-gap: 5.5rem;
+  }
+}
+
+/*
+ * "Other ways to get involved." (src/app/neighbornets/neighbornet-
+ * involvement.tsx; Figma 372:91). Documented in DESIGN-SYSTEM.md under
+ * "Other ways to get involved".
+ */
+:root {
+  /* The photo-blobs' entrance: each grows from this scale as it fades in,
+     once, as it enters view (the shared shape motion, at the landing's
+     everywhere timing). */
+  --duration-neighbornets-involved: var(--duration-everywhere-shape);
+  --neighbornets-involved-from-scale: var(--everywhere-shape-from-scale);
+  --ease-neighbornets-involved: var(--ease-everywhere-enter);
+  /* One blob at a time, left to right: each starts this long after the one
+     before (about a third of the entrance, so each reads on its own and the
+     three finish within 1.5s). */
+  --duration-neighbornets-involved-stagger: 300ms;
 }
 
 /* WIREFRAME:start ------------------------------------------------------------

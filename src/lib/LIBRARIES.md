@@ -96,9 +96,9 @@ them onto a Lenis event source. It is not created when
 `overflow: hidden`. Do not import `lenis/dist/lenis.css`; its
 `height: auto` rule breaks the full-height layout.
 
-Tracked follow-up: when the NeighborNets map (`components/ui/map.tsx`) and the
-story dialog are rebuilt, add `data-lenis-prevent` to the map and to modal
-scroll containers. Until then, wheel-zooming the map also scrolls the page.
+Tracked follow-up: add `data-lenis-prevent` to the NeighborNets map when it
+takes pinch and pan gestures (its interaction stage), and to modal scroll
+containers when the story dialog is rebuilt.
 Remove Lenis by deleting the provider, its layout wrapper and this section.
 
 ### Embla Carousel
@@ -135,11 +135,15 @@ or scroll choreography that Motion and CSS cannot express cleanly.
 
 ## Maps and geospatial data
 
-| Library                                                          | Purpose                                  | Status and guidance                                                                                                                                                      |
-| ---------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/)      | Interactive NeighborNets map             | Used by `src/components/ui/map.tsx` and `src/lib/maplibre-worker.ts`. Import `@/lib/maplibre-worker` before the map component so the self-hosted worker is used.         |
-| [`@types/geojson`](https://www.npmjs.com/package/@types/geojson) | TypeScript types for GeoJSON data        | Used for NeighborNets point data and map component types.                                                                                                                |
-| [mapcn](https://mapcn.dev)                                       | Source of the shadcn-style map component | Not an installed runtime dependency. `src/components/ui/map.tsx` is vendored source owned by this repository. Re-adding it may overwrite local changes; see `README.md`. |
+Build time only: none of these ship to the browser. `scripts/neighbornets-map.mjs`
+uses them to generate the NeighborNets map as plain SVG data
+(`src/generated/neighbornets-map.ts`).
+
+| Library                                                          | Purpose                                     | Status and guidance                                                                                                                            |
+| ---------------------------------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`us-atlas`](https://github.com/topojson/us-atlas)               | US Census 1:10m state boundaries (TopoJSON) | Public-domain Census data. The map's states.                                                                                                   |
+| [`topojson-client`](https://github.com/topojson/topojson-client) | TopoJSON to GeoJSON                         | Unpacks the `us-atlas` states.                                                                                                                 |
+| [`d3-geo`](https://d3js.org/d3-geo)                              | Projection and SVG paths                    | US Albers (`geoAlbers`) for the states and every NeighborNet's coordinates, so markers land exactly; `geoContains` assigns each net its state. |
 
 ## Review and prototype tooling
 
