@@ -950,14 +950,15 @@ Plain SVG, no map library and no runtime fetch.
   over it, Warm Snow fading out over its last 17%, so the zoomed map slides
   under the heading. Touch gets neither (the map stays put). Under reduced
   motion there is no lens; the highlight, which does not move, stays.
-- **A state or a NeighborNet (click, tap, or the URL):** the page locks
-  (`<html>` overflow hidden, as the menu and entry screen do, which Lenis and
-  the footer Easter egg stand down for; Lenis is stopped too), with the map's
-  top scrolled under the header. The map flies to fit a state's NeighborNets
-  (Figma 370:14 frames Texas by its nets; a state without nets fits its
-  outline) or a net and its neighbours within `--neighbornets-map-area-reach`
-  (at least `--neighbornets-map-area-span` across) into what shows of the map
-  above the panel, never past `--neighbornets-map-max-zoom`. The flight
+- **A state or a NeighborNet (click, tap, or the URL):** the page never
+  locks; when nothing was open it scrolls the map's top under the header,
+  for the most room, and stays free to scroll. The map flies to fit a
+  state's NeighborNets (Figma 370:14 frames Texas by its nets, at least
+  `--neighbornets-map-area-span` across; a state without nets fits its
+  outline) into what shows of the map above the panel, never past
+  `--neighbornets-map-max-zoom`; a net is zoomed into deep, centred on it at
+  `--neighbornets-map-net-zoom` (24, the max: about 190 km across the
+  frame, where its city's label and its neighbours show). The flight
   sets the view (both SVGs' viewBox, and the markers' `translate`) each
   frame, eased, and its end is committed as it stands. A state shows only
   its markers; a net's marker gives way to the selected pin (the landing pin,
@@ -965,8 +966,10 @@ Plain SVG, no map library and no runtime fetch.
   The selected state stays filled (`neighbornets-map-hover`, a second path
   in the highlight layer) while its panel is open; while it is, the hover
   fill is off (a second fill would read as a second selection) and only the
-  pointer cursor marks a state as clickable. The map stays live while
-  locked: another state or marker switches the panel. Escape or the panel's close button flies back out and unlocks. The
+  pointer cursor marks a state as clickable. The map stays live: another
+  state or marker switches the panel. Escape or the panel's close button
+  closes the panel and clears the selection, and the map stays where it is
+  (mid-flight too), to explore on from there. The
   selection is in the URL (`?state=TX`, `?nn=<id>`), replaced as it changes
   and opened on load once the entry animation is done. Markers are buttons
   out of the tab order (the panels' cards are the keyboard route, with search
@@ -1005,11 +1008,12 @@ Plain SVG, no map library and no runtime fetch.
   size at every width (288px wide below `md`, 328px from it): Figma's tablet
   and mobile cards are the desktop card scaled down, to 10px and 7.6px type,
   which has no token. Selected: a 6px Obsidian border in a 6px Brass ring.
-- **Free pan and zoom** (only while a state or net is open, the page
-  locked; the whole map keeps only the hover lens): the wheel zooms about
+- **Free pan and zoom:** the wheel (with a state or net open, or the map
+  zoomed in; on the whole map it scrolls the page) zooms about
   the pointer, easing toward its target (`--neighbornets-map-wheel-rate`; a
   trackpad pinch arrives as ctrl + wheel, `--neighbornets-map-pinch-rate`,
-  and the page never zooms); a drag pans (pointer capture; a press moving
+  and the page never zooms); a drag pans once the map is zoomed in (pointer
+  capture; a press moving
   less than `--neighbornets-map-drag-threshold` stays a click, so markers and
   states still select, and a drag's click is dropped); two fingers zoom about
   their midpoint and pan, one finger pans. During a gesture the view is set each
@@ -1017,21 +1021,29 @@ Plain SVG, no map library and no runtime fetch.
   `--duration-neighbornets-map-wheel-idle` after the last wheel event) the
   view is committed. A gesture that starts mid-flight takes over from where
   the view is.
-  Zoom runs to `--neighbornets-map-max-zoom`; below
+  Zoom runs to `--neighbornets-map-max-zoom`; with a state or net open, below
   `--neighbornets-map-reset-ratio` of the state's fit zoom (for a net, its
-  state's; never above the zoom the view opened at) it returns to the whole
-  map, as the close button does. The view's centre stays within the US's
+  state's; never above the zoom the view opened at) the panel closes and the
+  map returns to the whole US. With nothing open it zooms no further out
+  than the whole map, and settles back on it. The view's centre stays within the US's
   1000 x 636 units: a drag past them keeps `--neighbornets-map-bounds-resistance`
   of the overshoot and settles back on release (a hard stop under reduced
   motion, where the wheel steps without easing). Flights and settles are eased frame by frame (the
-  lens ease token), so the markers move with the map. While locked the frame takes
-  `touch-action: none` and `data-lenis-prevent`, and its wheel calls
-  `preventDefault`; unlocked it leaves the page's scrolling alone.
-- **Page lock** (`lockPageScroll`, `src/lib/scroll-lock.ts`): `<html>`
-  overflow hidden (which Lenis and the footer Easter egg stand down for) with
-  a stable scrollbar gutter; on touch devices the body is also fixed at the
-  current scroll (iOS Safari scrolls under overflow alone) and the scroll is
-  restored exactly on unlock. The menu and dialogs keep Base UI's lock.
+  lens ease token), so the markers move with the map.
+- **The page and the map share gestures** (no page lock): the page scrolls
+  freely at all times. The map takes a gesture only while it is being
+  manipulated (a drag, a pinch, a wheel zoom): from its start to its end the
+  frame has `data-lenis-prevent` (Lenis leaves it alone) and the wheel calls
+  `preventDefault`; otherwise Lenis scrolls the page over the map as
+  anywhere. Touch, by `touch-action`: zoomed out (`pan-y`) a one-finger
+  vertical swipe scrolls the page and a pinch zooms the map; zoomed in
+  (`data-zoomed`, `none`) one finger pans the map and a pinch zooms it, and
+  the page scrolls from outside the map.
+- **Leaving the section:** an IntersectionObserver on the map's section;
+  once less than `--neighbornets-map-leave-ratio` (10%) of it shows, with a
+  panel open or the map zoomed in, the panel closes, the selection clears and
+  the map returns to the whole US at once (it is out of view), so coming back
+  finds the default map.
 - **Marker hover (fine pointers):** the marker under the pointer comes
   forward (above its neighbours) and grows by
   `--neighbornets-map-marker-hover-scale` (its `scale`, about its point, on
@@ -1041,8 +1053,8 @@ Plain SVG, no map library and no runtime fetch.
 - **Markers on phones:** below `md` the markers and the pin are
   `--neighbornets-map-marker-scale-mobile` larger at every zoom (their
   `scale`, about their points: about 16px on a 390px-wide map, from 11px),
-  and while the map is zoomed in (a state or net open, `data-locked`; or
-  pinched in past the whole map, `data-zoomed`) larger again by
+  and while the map is zoomed in (`data-zoomed`: a state or net open, or
+  pinched or wheeled in) larger again by
   `--neighbornets-map-marker-zoomed-scale-mobile` (about 20px), for sight
   and tapping. The size switches at once as the map leaves or returns to its
   whole view, and never changes through a move. Tablet and desktop keep one
@@ -1061,11 +1073,54 @@ Plain SVG, no map library and no runtime fetch.
   `--neighbornets-map-cull-zoom`, those off the map's area are simply not
   shown (at the whole map and the hover lens every marker stays, so none
   blinks at the edges), and the map flies between views; panels slide.
-- **Touch, on the whole map:** a vertical swipe scrolls the page
-  (`touch-action: pan-y`); a pinch zooms the map (no lock, no panel), and once
-  zoomed in one finger pans it (`touch-action: none`); pinching back out past
-  the whole map returns it to its own framing. Tapping a state or marker opens
-  it as usual. On desktop the whole map keeps only the hover lens. A finger
+- **Place labels** (`map-labels.ts`; no Figma design, the approved
+  defaults): names of cities and towns for orientation, so a visitor can
+  find the NeighborNet near them. Informational text only: not clickable,
+  hidden from assistive tech (the panels list every net).
+  - **Data** (`scripts/neighbornets-context.mjs`, a one-off build-data
+    script; its output is committed, its sources are not): the 2023 Census
+    Gazetteer places (coordinates) with the Vintage 2023 population
+    estimates (SUB-EST2023), plus the county subdivisions of New Jersey,
+    Pennsylvania and New England, where the township or town is the
+    municipality people name. All projected through the map's own
+    projection (`scripts/neighbornets-projection.mjs`, shared with the
+    states and markers), so a label sits exactly on its place. Kept: places
+    over 10,000 people, and every NeighborNet's city whatever its size (one
+    that is no Census place, such as Cypress, TX, is labelled at its nets).
+    One chunk per state, `src/generated/neighbornets-context/{ST}.json`, in
+    priority order (cities over 250,000, NeighborNet cities, then places
+    over 50,000 and over 10,000).
+  - **Loading:** a state's chunk is a dynamic import, fetched the first
+    time a view zoomed in past the first label zoom touches its bounds
+    (from the client-side state index) and kept; a flight starts loading
+    where it will land. Nothing loads on the whole map.
+  - **What shows:** re-chosen at each commit, never animated: from
+    `--neighbornets-map-label-zoom-city` cities over 250,000; from
+    `--neighbornets-map-label-zoom-large` places over 50,000; from
+    `--neighbornets-map-label-zoom-net` every NeighborNet's city; from
+    `--neighbornets-map-label-zoom-place` places over 10,000. Only places
+    on what shows of the map (under the header, above the panel).
+  - **Declutter:** greedy, in priority order, at each commit: each label
+    takes the first of its spots (on its point, then below, above, right
+    and left of it, a marker's radius aside) that stays on what shows,
+    keeps `--neighbornets-map-label-gap` from every label already placed and
+    covers no marker on show (nor the pin); otherwise it is dropped, except a
+    NeighborNet's city, which takes the spot covering the least of the
+    markers. A whole commit, labels
+    and all, measured at most about 10ms of main-thread work (no frame
+    over 16.7ms).
+  - **Moving:** labels are HTML over the states and under the markers, each
+    on its own layer, moved by a `translate` with the markers every frame of
+    a move (never magnified: they keep their size and stay sharp). Zooming
+    out mid-move hides a label below its kind's zoom at once; new labels
+    wait for the move's commit.
+  - **Look:** `neighbornets-map-label` (Caption grey) with a
+    `--neighbornets-map-label-halo-width` Warm Snow halo (a text stroke
+    painted under the letters, `paint-order: stroke fill`). Cities over
+    250,000 in Figtree Semibold at the article title size; every other
+    label in Figtree Medium at the article meta size.
+- **Touch:** see the shared gestures above. Tapping a state or marker opens
+  it as usual. On desktop the whole map keeps the hover lens. A finger
   dragging or pinching fills the state under it, as a mouse does.
 - **Selected and hovered states:** the selected state is filled with the
   `border` neutral (Obsidian 18%); any other state under the pointer with the
@@ -1077,41 +1132,52 @@ Plain SVG, no map library and no runtime fetch.
   (`scripts/reverse-geocode-neighbornets.mjs`, committed to
   `data/neighbornet-places.csv`; a row marked `manual` is never overwritten).
 
-| Token                                           | Value                            | Use                                                                                                                                                    |
-| ----------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--color-neighbornets-map-outline`              | Obsidian 55% into Warm Snow      | State borders (Figma #7d7d7d), as a functional neutral: `stroke-neighbornets-map-outline`                                                              |
-| `--neighbornets-map-outline-width`              | `1.75px`                         | Border width at every size and zoom (non-scaling stroke; Figma's 1.75 in both the desktop and tablet frames)                                           |
-| `--neighbornets-map-marker-circle`              | `2.8984%`                        | A marker's circle (its button and hit area), of the map's width: 36.91 of 1273.57 and 22.26 of 768                                                     |
-| `--neighbornets-map-marker-art`                 | `143.344%`                       | The marker art's box (circle and shadow), of the circle (the circle fills 0.697621 of it)                                                              |
-| `--neighbornets-map-marker-supersample`         | `4`                              | Each marker (and the pin) laid out at this many times its size on its own layer and scaled back down, so the layer is rastered at the screen's density |
-| `--neighbornets-map-cull-zoom`                  | `2.5`                            | Zoom past which markers off the map's visible area are hidden (below it, at the whole map and the hover lens at 1.677, every marker stays)             |
-| `--neighbornets-map-width-desktop`              | `88.4427%`                       | The map's width from `xl` (1273.57 of the 1440 frame); full width below                                                                                |
-| `--neighbornets-map-slot-offset`                | `35%`                            | Fan-out for nets sharing a spot: 0.35 of a circle each way, so the pair overlaps by 30%                                                                |
-| `--color-neighbornets-map-hover`                | Obsidian 10% into Warm Snow      | The hovered state's fill (Figma 334:2, #e6e5e4): `fill-neighbornets-map-hover`                                                                         |
-| `--neighbornets-map-lens-zoom`                  | `1.677`                          | The hover lens's scale (Figma 334:2: the map 2135.66 wide, of 1273.57)                                                                                 |
-| `--duration-neighbornets-map-lens`              | `700ms`                          | The lens easing to the pointer, and in and out (the landing's pointer drift duration)                                                                  |
-| `--ease-neighbornets-map-lens`                  | `cubic-bezier(0.22, 1, 0.36, 1)` | Quick to respond, soft to settle (the landing's pointer drift curve)                                                                                   |
-| `--neighbornets-map-pin-box`                    | `4.397%`                         | The selected pin's 56-unit box at the markers' scale (of the map's width)                                                                              |
-| `--neighbornets-map-pin-point`                  | `85.7143%`                       | The pin's point in its box (48 of 56), where it sits on the net                                                                                        |
-| `--neighbornets-map-max-zoom`                   | `24`                             | The furthest a state or net zoom goes                                                                                                                  |
-| `--neighbornets-map-area-reach`                 | `25`                             | Map units around a net whose neighbours its zoom takes in (about 110 km)                                                                               |
-| `--neighbornets-map-area-span`                  | `40`                             | The least a net's (or a state's nets') zoom spans, in map units (about 180 km)                                                                         |
-| `--neighbornets-map-fit-padding`                | `1.5rem`                         | The clear margin a zoom leaves around what it fits                                                                                                     |
-| `--duration-neighbornets-map-panel`             | `500ms`                          | A results panel sliding up or down                                                                                                                     |
-| `--duration-neighbornets-map-panel-stagger`     | `160ms`                          | How long after the old panel starts to drop the new one rises                                                                                          |
-| `--neighbornets-map-marker-hover-scale`         | `1.15`                           | The hovered marker's growth (it also comes forward)                                                                                                    |
-| `--neighbornets-map-marker-scale-mobile`        | `1.4`                            | Phones (below `md`): markers and the pin this much larger at every zoom (about 16px on a 390px-wide map); larger screens keep the map's proportion     |
-| `--neighbornets-map-marker-zoomed-scale-mobile` | `1.25`                           | Phones: markers and the pin larger again, on top of the mobile marker scale, while the map is zoomed in (a state or net open, or pinched in)           |
-| `--neighbornets-map-card-lift`                  | `0.25rem`                        | How far a results card lifts on hover                                                                                                                  |
-| `--neighbornets-map-reset-ratio`                | `0.8`                            | Free zoom below this share of the state's fit zoom returns to the whole map                                                                            |
-| `--neighbornets-map-bounds-resistance`          | `0.35`                           | Share of a drag's overshoot past the US's bounds that is kept                                                                                          |
-| `--duration-neighbornets-map-settle`            | `320ms`                          | The settle back inside the bounds after a drag                                                                                                         |
-| `--neighbornets-map-drag-threshold`             | `6px`                            | Movement below which a press stays a click                                                                                                             |
-| `--neighbornets-map-wheel-rate`                 | `0.0025`                         | Zoom per wheel pixel (e^-rate x delta): wheel and two-finger scroll                                                                                    |
-| `--neighbornets-map-pinch-rate`                 | `0.01`                           | Zoom per wheel pixel for a trackpad pinch (ctrl + wheel)                                                                                               |
-| `--neighbornets-map-wheel-ease`                 | `0.35`                           | Share of the way to the wheel's target the view moves each frame                                                                                       |
-| `--duration-neighbornets-map-wheel-idle`        | `160ms`                          | Pause after the last wheel event that ends the gesture                                                                                                 |
-| `--duration-neighbornets-map-lens-trail`        | `140ms`                          | Time constant of the hover lens trailing the pointer (an exponential ease, within 1% in about 650ms)                                                   |
+| Token                                           | Value                              | Use                                                                                                                                                    |
+| ----------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--color-neighbornets-map-outline`              | Obsidian 55% into Warm Snow        | State borders (Figma #7d7d7d), as a functional neutral: `stroke-neighbornets-map-outline`                                                              |
+| `--neighbornets-map-outline-width`              | `1.75px`                           | Border width at every size and zoom (non-scaling stroke; Figma's 1.75 in both the desktop and tablet frames)                                           |
+| `--neighbornets-map-marker-circle`              | `2.8984%`                          | A marker's circle (its button and hit area), of the map's width: 36.91 of 1273.57 and 22.26 of 768                                                     |
+| `--neighbornets-map-marker-art`                 | `143.344%`                         | The marker art's box (circle and shadow), of the circle (the circle fills 0.697621 of it)                                                              |
+| `--neighbornets-map-marker-supersample`         | `4`                                | Each marker (and the pin) laid out at this many times its size on its own layer and scaled back down, so the layer is rastered at the screen's density |
+| `--neighbornets-map-cull-zoom`                  | `2.5`                              | Zoom past which markers off the map's visible area are hidden (below it, at the whole map and the hover lens at 1.677, every marker stays)             |
+| `--neighbornets-map-width-desktop`              | `88.4427%`                         | The map's width from `xl` (1273.57 of the 1440 frame); full width below                                                                                |
+| `--neighbornets-map-slot-offset`                | `35%`                              | Fan-out for nets sharing a spot: 0.35 of a circle each way, so the pair overlaps by 30%                                                                |
+| `--color-neighbornets-map-hover`                | Obsidian 10% into Warm Snow        | The hovered state's fill (Figma 334:2, #e6e5e4): `fill-neighbornets-map-hover`                                                                         |
+| `--neighbornets-map-lens-zoom`                  | `1.677`                            | The hover lens's scale (Figma 334:2: the map 2135.66 wide, of 1273.57)                                                                                 |
+| `--duration-neighbornets-map-lens`              | `700ms`                            | The lens easing to the pointer, and in and out (the landing's pointer drift duration)                                                                  |
+| `--ease-neighbornets-map-lens`                  | `cubic-bezier(0.22, 1, 0.36, 1)`   | Quick to respond, soft to settle (the landing's pointer drift curve)                                                                                   |
+| `--neighbornets-map-pin-box`                    | `4.397%`                           | The selected pin's 56-unit box at the markers' scale (of the map's width)                                                                              |
+| `--neighbornets-map-pin-point`                  | `85.7143%`                         | The pin's point in its box (48 of 56), where it sits on the net                                                                                        |
+| `--neighbornets-map-max-zoom`                   | `24`                               | The furthest a state or net zoom goes                                                                                                                  |
+| `--neighbornets-map-area-span`                  | `40`                               | The least a state's nets' zoom spans, in map units (about 180 km)                                                                                      |
+| `--neighbornets-map-net-zoom`                   | `24`                               | The zoom a NeighborNet opens at, centred on it (deep: about 190 km across the frame)                                                                   |
+| `--neighbornets-map-leave-ratio`                | `0.1`                              | Less than this share of the map's section showing closes the panel and returns the map to the whole US                                                 |
+| `--neighbornets-map-fit-padding`                | `1.5rem`                           | The clear margin a zoom leaves around what it fits                                                                                                     |
+| `--duration-neighbornets-map-panel`             | `500ms`                            | A results panel sliding up or down                                                                                                                     |
+| `--duration-neighbornets-map-panel-stagger`     | `160ms`                            | How long after the old panel starts to drop the new one rises                                                                                          |
+| `--neighbornets-map-marker-hover-scale`         | `1.15`                             | The hovered marker's growth (it also comes forward)                                                                                                    |
+| `--neighbornets-map-marker-scale-mobile`        | `1.4`                              | Phones (below `md`): markers and the pin this much larger at every zoom (about 16px on a 390px-wide map); larger screens keep the map's proportion     |
+| `--neighbornets-map-marker-zoomed-scale-mobile` | `1.25`                             | Phones: markers and the pin larger again, on top of the mobile marker scale, while the map is zoomed in (a state or net open, or pinched in)           |
+| `--neighbornets-map-card-lift`                  | `0.25rem`                          | How far a results card lifts on hover                                                                                                                  |
+| `--neighbornets-map-reset-ratio`                | `0.8`                              | With a state or net open, zooming out below this share of the state's fit zoom closes the panel and returns to the whole map                           |
+| `--neighbornets-map-bounds-resistance`          | `0.35`                             | Share of a drag's overshoot past the US's bounds that is kept                                                                                          |
+| `--duration-neighbornets-map-settle`            | `320ms`                            | The settle back inside the bounds after a drag                                                                                                         |
+| `--neighbornets-map-drag-threshold`             | `6px`                              | Movement below which a press stays a click                                                                                                             |
+| `--neighbornets-map-wheel-rate`                 | `0.0025`                           | Zoom per wheel pixel (e^-rate x delta): wheel and two-finger scroll                                                                                    |
+| `--neighbornets-map-pinch-rate`                 | `0.01`                             | Zoom per wheel pixel for a trackpad pinch (ctrl + wheel)                                                                                               |
+| `--neighbornets-map-wheel-ease`                 | `0.35`                             | Share of the way to the wheel's target the view moves each frame                                                                                       |
+| `--duration-neighbornets-map-wheel-idle`        | `160ms`                            | Pause after the last wheel event that ends the gesture                                                                                                 |
+| `--duration-neighbornets-map-lens-trail`        | `140ms`                            | Time constant of the hover lens trailing the pointer (an exponential ease, within 1% in about 650ms)                                                   |
+| `--color-neighbornets-map-label`                | Caption (`#484848`)                | Place labels' text                                                                                                                                     |
+| `--color-neighbornets-map-label-halo`           | Warm Snow                          | Place labels' halo, so they read over the outlines                                                                                                     |
+| `--neighbornets-map-label-halo-width`           | `0.25rem`                          | The halo's text stroke (half of it outside the letters)                                                                                                |
+| `--neighbornets-map-label-zoom-city`            | `3`                                | Zoom from which cities over 250,000 are labelled                                                                                                       |
+| `--neighbornets-map-label-zoom-large`           | `6`                                | Zoom from which places over 50,000 are labelled                                                                                                        |
+| `--neighbornets-map-label-zoom-net`             | `8`                                | Zoom from which every NeighborNet's city is labelled, whatever its size                                                                                |
+| `--neighbornets-map-label-zoom-place`           | `10`                               | Zoom from which places over 10,000 are labelled                                                                                                        |
+| `--neighbornets-map-label-city-size`            | `var(--text-article-title)` (18px) | Cities over 250,000 (Semibold), with its tracking (`--neighbornets-map-label-city-tracking`)                                                           |
+| `--neighbornets-map-label-place-size`           | `var(--text-article-meta)` (12px)  | Every other label (Medium), with its tracking (`--neighbornets-map-label-place-tracking`)                                                              |
+| `--neighbornets-map-label-gap`                  | `0.25rem`                          | Clear space the declutter keeps around each label                                                                                                      |
 
 ## Closing CTA
 

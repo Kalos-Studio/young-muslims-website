@@ -15,18 +15,15 @@
   }
 }
 
-/* Touch, on the whole map: a vertical swipe scrolls the page; a pinch (and,
-   once zoomed in, any drag) is the map's. While a state or net is open the
-   map takes every gesture itself; the page is locked. */
+/* The page and the map share gestures (the page never locks). Zoomed out,
+   a vertical swipe scrolls the page and a pinch is the map's; zoomed in,
+   every drag is the map's (one finger pans it). A mouse drags a zoomed-in
+   map. */
 .frame {
   touch-action: pan-y;
 }
 
 .frame[data-zoomed] {
-  touch-action: none;
-}
-
-.frame[data-locked] {
   touch-action: none;
   cursor: grab;
 }
@@ -84,6 +81,43 @@
 /* Not inherited, so set on each path. */
 .states > path {
   vector-effect: non-scaling-stroke;
+}
+
+/* The place labels (map-labels.ts), over the states and under the
+   markers: informational text, never magnified and never clickable. Each
+   is centred on its place's point and moved there by a `translate` (its own
+   layer, like a marker), set when the map commits a view and each frame of
+   a move; a label the declutter drops is `hidden`. Haloed in Warm Snow (a
+   text stroke painted under the letters) so it reads over the outlines. */
+.labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  line-height: normal;
+  color: var(--color-neighbornets-map-label);
+  -webkit-text-stroke: var(--neighbornets-map-label-halo-width)
+    var(--color-neighbornets-map-label-halo);
+  paint-order: stroke fill;
+  will-change: translate;
+}
+
+.city {
+  font-size: var(--neighbornets-map-label-city-size);
+  letter-spacing: var(--neighbornets-map-label-city-tracking);
+}
+
+.place {
+  font-size: var(--neighbornets-map-label-place-size);
+  letter-spacing: var(--neighbornets-map-label-place-tracking);
 }
 
 /* The markers, over the lens and never magnified: each is placed for the
@@ -181,9 +215,7 @@
   }
 
   .frame[data-zoomed] .marker,
-  .frame[data-locked] .marker,
-  .frame[data-zoomed] .pin,
-  .frame[data-locked] .pin {
+  .frame[data-zoomed] .pin {
     scale: calc(
       var(--neighbornets-map-marker-scale-mobile) *
         var(--neighbornets-map-marker-zoomed-scale-mobile)

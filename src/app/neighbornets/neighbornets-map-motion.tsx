@@ -26,7 +26,6 @@ import { sisterLocations } from "@/generated/sister-neighbornets";
 import type { NeighborNetLocation } from "@/lib/neighbornets";
 import { readEaseToken, readLengthToken } from "@/lib/motion-tokens";
 import { readTimeToken } from "@/components/site/blob-reveal";
-import { lockPageScroll } from "@/lib/scroll-lock";
 import {
   FINE_POINTER,
   REDUCED_MOTION,
@@ -44,6 +43,7 @@ import {
   viewBox,
   type View,
 } from "./map-view";
+import { createMapLabels, type Box, type LabelSpace } from "./map-labels";
 import {
   NeighborNetsMapPanel,
   type PanelContent,
@@ -104,17 +104,20 @@ const subscribeNothing = () => () => {};
  *   one-path SVG under the outlines, its own layer), found by taking the
  *   pointer back through the lens and the view into map units and testing
  *   each candidate state's filled area, never its outline.
- * - **A state or a NeighborNet (click, tap, or the URL):** the page locks
- *   (`<html>` overflow hidden, which Lenis and the footer Easter egg stand
- *   down for; Lenis is stopped too) with the map's top under the header; the
- *   map flies to fit the state, or the net and its neighbours, into what
- *   shows above the panel; a state shows only its nets; a net's marker
- *   becomes the Brass pin; and the panel slides up. The flight is the lens's
- *   transform; at its end the view is committed in one frame (both SVGs'
- *   viewBox, so the outlines redraw sharp; the markers layer's transform)
- *   and the lens cleared without a transition. While locked the map stays
- *   live: another state or marker switches the panel. Escape, or the
- *   panel's close button, flies back out and unlocks.
+ * - **A state or a NeighborNet (click, tap, or the URL):** the page scrolls
+ *   the map's top under the header (when nothing was open) and stays free to
+ *   scroll; the map flies to fit the state into what shows above the panel,
+ *   or deep into the net (`--neighbornets-map-net-zoom`); a state shows only
+ *   its nets; a net's marker becomes the Brass pin; and the panel slides up.
+ *   The map stays live: another state or marker switches the panel. Escape,
+ *   or the panel's close button, closes the panel and clears the selection,
+ *   and the map stays where it is.
+ * - **Leaving:** once the map's section is scrolled out of view (less than
+ *   `--neighbornets-map-leave-ratio` of it showing) with a panel open or the
+ *   map zoomed in, the panel closes and the map returns to the whole US.
+ * - **Page and map share gestures:** the page scrolls freely; the map takes
+ *   a gesture only while it is being manipulated (a drag, a pinch, a wheel
+ *   zoom), and only then does Lenis leave it alone (`data-lenis-prevent`).
  * - **Markers:** never magnified: each sits over the lens, placed for the
  *   whole map by its position class and moved by a `translate` (its own
  *   layer, on the compositor) to where the view on screen puts it, every
@@ -122,6 +125,10 @@ const subscribeNothing = () => () => {};
  *   (Counter-scaling markers inside a magnified layer made Chrome raster each
  *   one at the layer's zoom: hundreds of huge tiles, which ran the GPU out of
  *   memory, pixelating and then corrupting the map.)
+ * - **Place labels:** names of cities and towns (map-labels.ts), loaded per
+ *   state once a view zooms in past the first label zoom, chosen and
+ *   decluttered at each commit (clear of each other and of the markers on
+ *   show, within what shows of the map) and moved with the markers.
  * - **Panels:** a new panel rises as the one it replaces drops, so a switch
  *   reads as a new panel. They are portalled into <body>, clear of the
  *   footer stage's transformed wrapper.
@@ -177,8 +184,10 @@ export function NeighborNetsMapMotion({
     const selectedFill = part<SVGPathElement>("selected");
     const statesSvg = part<SVGSVGElement>("states");
     const markersLayer = part<HTMLElement>("markers");
+    const labelsLayer = part<HTMLElement>("labels");
     const highlightSvg = highlight?.ownerSVGElement;
     if (!frame || !lens || !highlight || !statesSvg || !markersLayer) return;
+    if (!labelsLayer) return;
     if (!selectedFill) return;
     if (!highlightSvg) return;
     setMarkers(markersLayer);
@@ -190,7 +199,8 @@ export function NeighborNetsMapMotion({
     const lensZoom = number("--neighbornets-map-lens-zoom", 1.677);
     const cullZoom = number("--neighbornets-map-cull-zoom", 2.5);
     const maxZoom = number("--neighbornets-map-max-zoom", 24);
-    const reach = number("--neighbornets-map-area-reach", 25);
+    const netZoom = number("--neighbornets-map-net-zoom", 24);
+    const leaveRatio = number("--neighbornets-map-leave-ratio", 0.1);
     const span = number("--neighbornets-map-area-span", 40);
     // Durations through readTimeToken: the built CSS writes 700ms as .7s.
     const flightMs = readTimeToken("--duration-neighbornets-map-lens", 700);
@@ -215,6 +225,63 @@ export function NeighborNetsMapMotion({
       "--neighbornets-map-drag-threshold",
       6,
     );
+    // Place labels: loaded per state once zoomed in, chosen and decluttered
+    // at each commit, moved with the map each frame (map-labels.ts).
+    const labels = createMapLabels(labelsLayer, {
+      zooms: {
+        city: number("--neighbornets-map-label-zoom-city", 3),
+        large: number("--neighbornets-map-label-zoom-large", 6),
+        net: number("--neighbornets-map-label-zoom-net", 8),
+        place: number("--neighbornets-map-label-zoom-place", 10),
+      },
+      gap: readLengthToken("--neighbornets-map-label-gap", 4),
+      classes: {
+        label: styles.label,
+        city: cn(styles.city, "font-semibold"),
+        place: cn(styles.place, "font-medium"),
+      },
+      // A state's labels arrived: shown now, unless the map is moving (its
+      // next commit shows them).
+      onLoad: () => {
+        if (!move && !live) labels.update(base, frameWidth);
+      },
+      space: () => labelSpace(),
+    });
+
+    /**
+     * Where labels may go now, in frame pixels: what shows of the map (on
+     * screen, under the header, above the panel; the zoomed map draws to
+     * its section's foot), and the markers on show and the pin, which no
+     * label covers. Read at a commit, once the markers are placed.
+     */
+    const labelSpace = (): LabelSpace => {
+      const { box, clipFoot, headerFoot, panelHeight } = measure();
+      const area: Box = [
+        Math.max(0, -box.left),
+        Math.max(0, headerFoot - box.top),
+        Math.min(box.width, window.innerWidth - box.left),
+        Math.min(clipFoot, window.innerHeight - panelHeight) - box.top,
+      ];
+      const obstacles: Box[] = [];
+      let clearance = 0;
+      const shownMarkers = markerEls.filter(
+        (el) =>
+          !el.hasAttribute("data-hidden") &&
+          !el.hasAttribute("data-selected") &&
+          !el.hasAttribute("data-offscreen"),
+      );
+      const pin = markersLayer.querySelector<HTMLElement>("[data-map-pin]");
+      for (const el of pin ? [...shownMarkers, pin] : shownMarkers) {
+        const r = el.getBoundingClientRect();
+        const left = r.left - box.left;
+        const top = r.top - box.top;
+        if (left > area[2] || left + r.width < area[0]) continue;
+        if (top > area[3] || top + r.height < area[1]) continue;
+        obstacles.push([left, top, left + r.width, top + r.height]);
+        if (el !== pin) clearance = Math.max(clearance, r.width / 2);
+      }
+      return { area, obstacles, clearance };
+    };
     const markerEls = [
       ...markersLayer.querySelectorAll<HTMLElement>("[data-neighbornet]"),
     ];
@@ -234,8 +301,9 @@ export function NeighborNetsMapMotion({
     let shown: View = FULL_VIEW;
     let move = 0; // the eased move (a flight or a settle) under way, if any
     let atRest = true; // the whole map, nothing selected: the lens may hover
-    let locked = false;
-    let unlockPage: (() => void) | null = null;
+    // A panel is open (a state or net selected): the map has been brought
+    // into view for it.
+    let open = false;
     let pointer: { x: number; y: number } | null = null;
     let hovered: Target | null = null;
     let frameRequest = 0;
@@ -330,6 +398,7 @@ export function NeighborNetsMapMotion({
           svg.setAttribute("viewBox", box);
       }
       placeMarkers(view);
+      labels.place(view, frameWidth);
     };
 
     /** The map point under a viewport point, in the view on screen. */
@@ -422,11 +491,12 @@ export function NeighborNetsMapMotion({
     /** Draw `view` for real (the SVGs' viewBox, sharp) and drop the lens. */
     const commit = (view: View) => {
       base = view;
-      // The whole map zoomed in by touch takes every drag (CSS); at its own
-      // framing a vertical swipe scrolls the page again.
-      if (!locked && view.k > 1.001) frame.dataset.zoomed = "";
+      // Zoomed in, the map takes every drag (CSS); at its own framing a
+      // vertical swipe scrolls the page.
+      if (view.k > 1.001) frame.dataset.zoomed = "";
       else delete frame.dataset.zoomed;
       render(view);
+      labels.update(view, frameWidth);
       // The map moved under a still pointer: find its state again.
       schedule();
     };
@@ -434,6 +504,8 @@ export function NeighborNetsMapMotion({
     /** Ease from the view on screen to `to`, frame by frame, then commit. */
     const fly = (to: View, arrived: () => void, settle = false) => {
       const id = ++move;
+      // The labels it lands on start loading now, ready for its commit.
+      labels.prepare(to);
       if (reducedMotion.matches) {
         move = 0;
         commit(to);
@@ -522,21 +594,14 @@ export function NeighborNetsMapMotion({
       };
     };
 
-    const lock = () => {
-      locked = true;
-      unlockPage = lockPageScroll();
-      frame.dataset.locked = "";
-      // Lenis leaves the map's wheel and touch alone.
-      frame.setAttribute("data-lenis-prevent", "");
-    };
-    const unlock = () => {
-      if (!locked) return;
-      locked = false;
-      unlockPage?.();
-      unlockPage = null;
-      delete frame.dataset.locked;
-      frame.removeAttribute("data-lenis-prevent");
-      startSmoothScroll();
+    /**
+     * A map gesture (a drag, a pinch, a wheel zoom) is under way: Lenis
+     * leaves the map's wheel and touch alone until it ends; otherwise the
+     * page scrolls as usual, over the map too.
+     */
+    const capture = (on: boolean) => {
+      if (on) frame.setAttribute("data-lenis-prevent", "");
+      else frame.removeAttribute("data-lenis-prevent");
     };
 
     /** The hover fill's outline: the hovered state, unless it is selected. */
@@ -580,12 +645,15 @@ export function NeighborNetsMapMotion({
     /**
      * What a selection zooms to: a state's NeighborNets (as Figma 370:14
      * frames Texas by its nets, not its outline), at least the area span
-     * across, or its outline when it has none; a net and its neighbours.
+     * across, or its outline when it has none; a net, its point alone (the
+     * view centres on it at the net zoom).
      */
-    const boundsFor = (selection: NonNullable<Selection>) => {
+    const boundsFor = (
+      selection: NonNullable<Selection>,
+    ): readonly [number, number, number, number] | undefined => {
       if (selection.kind === "net") {
         const point = POINTS.get(selection.id);
-        return point && areaAround(point, MAP_POINTS, reach, span);
+        return point && [point.x, point.y, point.x, point.y];
       }
       const nets = MAP_POINTS.filter((point) => point.state === selection.code);
       if (nets.length === 0) return STATES.get(selection.code)?.bounds;
@@ -598,28 +666,46 @@ export function NeighborNetsMapMotion({
       // would otherwise commit the old view over the new flight).
       endGesture(true);
       if (!selection) {
+        open = false;
         resetZoom = 0;
         filter(null);
         markState(null);
-        render(shown);
-        if (atRest) return;
-        fly(FULL_VIEW, () => {
-          atRest = true;
-          resetting = false;
-          unlock();
-        });
+        atRest = true;
+        if (resetting) {
+          // Zoomed out past the state, or scrolled away: the whole map.
+          const done = () => {
+            resetting = false;
+            snapReset = false;
+          };
+          if (snapReset) {
+            move = 0;
+            commit(FULL_VIEW);
+            done();
+          } else fly(FULL_VIEW, done);
+          return;
+        }
+        // Closed (X, Escape): the map stays where it is, mid-flight too.
+        move = 0;
+        commit(shown);
         return;
       }
+      // The first selection brings the map into view: its top under the
+      // header, for the most room (the page stays free to scroll).
+      const first = !open;
+      open = true;
       // Reads (one layout), then writes.
-      if (!locked) stopSmoothScroll();
       const measured = measure();
       frameWidth = measured.box.width;
-      // Locking puts the map's top under the header, for the most room.
-      const scrollBy = locked ? 0 : measured.box.top - measured.headerFoot;
+      const scrollBy = first ? measured.box.top - measured.headerFoot : 0;
       const bounds = boundsFor(selection);
       const target =
         bounds &&
-        fitView(bounds, visibleArea(measured, scrollBy), frameWidth, maxZoom);
+        fitView(
+          bounds,
+          visibleArea(measured, scrollBy),
+          frameWidth,
+          selection.kind === "net" ? Math.min(netZoom, maxZoom) : maxZoom,
+        );
       // Zooming out below this returns to the whole map: a share of the
       // state's fit (for a net, its state's), never above where this view
       // starts, so the reset is always within reach and never immediate.
@@ -635,20 +721,22 @@ export function NeighborNetsMapMotion({
         : (target?.k ?? 1);
       resetZoom = Math.min(stateFit, target?.k ?? stateFit) * resetRatio;
       atRest = false;
-      if (!locked) {
-        if (Math.abs(scrollBy) > 1)
-          window.scrollTo({
-            top: window.scrollY + scrollBy,
-            behavior: "instant",
-          });
-        lock();
+      if (Math.abs(scrollBy) > 1) {
+        // Past any smooth scroll under way, which would carry on over it;
+        // Lenis resumes from the new position.
+        stopSmoothScroll();
+        window.scrollTo({
+          top: window.scrollY + scrollBy,
+          behavior: "instant",
+        });
+        startSmoothScroll();
       }
       filter(selection);
       markState(selection);
       render(shown);
       if (target) fly(target, () => {});
     };
-    // --- Free pan and zoom (a state or net open, the page locked) -----------
+    // --- Free pan and zoom ----------------------------------------------------
 
     // The view during a gesture (the lens shows it over `base`); null when
     // no gesture is under way.
@@ -656,6 +744,8 @@ export function NeighborNetsMapMotion({
     let liveBox: DOMRect | null = null;
     let resetZoom = 0;
     let resetting = false;
+    // The reset is at once (the map is out of view), not a flight.
+    let snapReset = false;
     const pointers = new Map<number, { x: number; y: number }>();
     let drag: {
       id: number;
@@ -674,15 +764,17 @@ export function NeighborNetsMapMotion({
     let wheelTimer = 0;
 
     /**
-     * Whether the map takes a gesture: with a state or net open, any; on the
-     * whole map, a touch's (there is no hover lens on touch screens), the
-     * page still scrolling under a vertical swipe until the map is zoomed.
+     * Whether the map takes a gesture: a touch always (a pinch zooms; one
+     * finger pans only once zoomed in, until then a vertical swipe scrolls
+     * the page, by `touch-action`); a mouse's drag and the wheel only with a
+     * state or net open or the map zoomed in (on the whole map the wheel
+     * scrolls the page and the hover lens has the pointer).
      */
     const free = (event?: { pointerType: string }) =>
       !resetting &&
-      (locked
-        ? selectionRef.current !== null
-        : selectionRef.current === null && event?.pointerType === "touch");
+      (event?.pointerType === "touch" ||
+        selectionRef.current !== null ||
+        shown.k > 1.001);
     const unit = () => frameWidth / MAP_VIEWBOX.width;
 
     /**
@@ -706,6 +798,7 @@ export function NeighborNetsMapMotion({
     const begin = () => {
       if (live) return live;
       move = 0;
+      capture(true);
       liveBox = frame.getBoundingClientRect();
       live = shown;
       return shown;
@@ -713,15 +806,15 @@ export function NeighborNetsMapMotion({
 
     /** Show `view` (the lens and the markers move; nothing is redrawn). */
     const apply = (view: View) => {
-      // The whole map (touch) zooms no further out than the whole map.
-      if (!locked && view.k < 1) {
+      // With nothing open the map zooms no further out than the whole map.
+      if (!selectionRef.current && view.k < 1) {
         const cx = view.x + halfW / view.k;
         const cy = view.y + halfH / view.k;
         view = bound({ x: cx - halfW, y: cy - halfH, k: 1 }, 0);
       }
       live = view;
       render(view);
-      if (locked && view.k < resetZoom) reset();
+      if (selectionRef.current && view.k < resetZoom) reset();
     };
 
     /** Zoomed out past the state: back to the whole map, as X does. */
@@ -744,11 +837,12 @@ export function NeighborNetsMapMotion({
       drag = null;
       pinch = null;
       delete frame.dataset.dragging;
+      capture(false);
       const view = live;
       live = null;
       if (!view || abandon) return;
-      // The whole map, zoomed back out (touch): back to its own framing.
-      if (!locked && view.k <= 1.001) {
+      // Nothing open, zoomed back out: back to the whole map's framing.
+      if (!selectionRef.current && view.k <= 1.001) {
         if (reducedMotion.matches) commit(FULL_VIEW);
         else fly(FULL_VIEW, () => {}, true);
         return;
@@ -830,9 +924,9 @@ export function NeighborNetsMapMotion({
       if (!free(event)) return;
       if (event.pointerType === "mouse" && event.button !== 0) return;
       pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-      // On the whole map one finger drags only once it is zoomed in (until
+      // One finger (or a mouse) drags only once the map is zoomed in (until
       // then a swipe scrolls the page); two fingers always pinch.
-      const pans = locked || shown.k > 1.001;
+      const pans = shown.k > 1.001;
       if (pointers.size === 1 && pans) {
         drag = {
           id: event.pointerId,
@@ -927,6 +1021,32 @@ export function NeighborNetsMapMotion({
       }
     };
 
+    /**
+     * The map's section scrolled out of view: close any panel and return the
+     * map to the whole US at once, so coming back finds it fresh.
+     */
+    const leave = () => {
+      if (!selectionRef.current && shown.k <= 1.001 && !move && !live) return;
+      endGesture(true);
+      if (selectionRef.current) {
+        resetting = true;
+        snapReset = true;
+        selectRef.current(null);
+        return;
+      }
+      move = 0;
+      atRest = true;
+      commit(FULL_VIEW);
+    };
+    const section = frame.closest("section") ?? frame;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry && entry.intersectionRatio < leaveRatio) leave();
+      },
+      { threshold: [0, leaveRatio] },
+    );
+    observer.observe(section);
+
     engine.current = { show };
 
     // --- Input ----------------------------------------------------------
@@ -955,6 +1075,8 @@ export function NeighborNetsMapMotion({
       frameWidth = frame.getBoundingClientRect().width;
       for (const marker of placed) marker.on = true;
       render(shown);
+      labels.resize();
+      if (!move && !live) labels.update(base, frameWidth);
     };
 
     frame.addEventListener("pointerenter", onEnter);
@@ -1002,8 +1124,9 @@ export function NeighborNetsMapMotion({
       window.removeEventListener("scroll", schedule);
       window.clearTimeout(waiting);
       if (frameRequest) cancelAnimationFrame(frameRequest);
+      observer.disconnect();
       move = 0;
-      unlock();
+      capture(false);
       engine.current = null;
     };
   }, []);

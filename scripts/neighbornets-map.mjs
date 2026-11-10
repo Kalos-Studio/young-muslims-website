@@ -3,7 +3,8 @@
 // and DC from the US Census 1:10m boundaries (us-atlas), projected with the
 // standard US Albers equal-area conic (d3-geo `geoAlbers`: parallels 29.5 and
 // 45.5, centred on 96W), and every NeighborNet's coordinates through the SAME
-// projection, so a marker can only land where its coordinates are.
+// projection (scripts/neighbornets-projection.mjs, shared with the map's
+// place labels), so a marker can only land where its coordinates are.
 //
 // Each net's map state is the state polygon that contains it; a net just
 // off a simplified coastline (a pier, a beach) falls back to the state its
@@ -20,13 +21,19 @@ import { writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { geoAlbers, geoContains, geoPath } from "d3-geo";
+import { geoContains } from "d3-geo";
 import { format } from "prettier";
-import { feature } from "topojson-client";
-import topology from "us-atlas/states-10m.json" with { type: "json" };
 
 import { brotherLocations } from "../src/generated/brother-neighbornets.ts";
 import { sisterLocations } from "../src/generated/sister-neighbornets.ts";
+import {
+  HEIGHT,
+  USPS,
+  WIDTH,
+  path,
+  projection,
+  states,
+} from "./neighbornets-projection.mjs";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_TS = resolve(projectRoot, "src/generated/neighbornets-map.ts");
@@ -39,85 +46,6 @@ const OUT_CSS = resolve(
   "src/generated/neighbornets-map-points.module.css",
 );
 
-/** Map units across; the height follows from the projection. */
-const WIDTH = 1000;
-/** Room for the outline stroke at the map's edges, in map units. */
-const PAD = 4;
-/** Two places: about a tenth of a pixel at the widest map, sharp when zoomed. */
-const DIGITS = 2;
-
-// FIPS code -> USPS code, the lower 48 and DC (us-atlas feature IDs).
-const USPS = {
-  "01": "AL",
-  "04": "AZ",
-  "05": "AR",
-  "06": "CA",
-  "08": "CO",
-  "09": "CT",
-  10: "DE",
-  11: "DC",
-  12: "FL",
-  13: "GA",
-  16: "ID",
-  17: "IL",
-  18: "IN",
-  19: "IA",
-  20: "KS",
-  21: "KY",
-  22: "LA",
-  23: "ME",
-  24: "MD",
-  25: "MA",
-  26: "MI",
-  27: "MN",
-  28: "MS",
-  29: "MO",
-  30: "MT",
-  31: "NE",
-  32: "NV",
-  33: "NH",
-  34: "NJ",
-  35: "NM",
-  36: "NY",
-  37: "NC",
-  38: "ND",
-  39: "OH",
-  40: "OK",
-  41: "OR",
-  42: "PA",
-  44: "RI",
-  45: "SC",
-  46: "SD",
-  47: "TN",
-  48: "TX",
-  49: "UT",
-  50: "VT",
-  51: "VA",
-  53: "WA",
-  54: "WV",
-  55: "WI",
-  56: "WY",
-};
-
-const geometries = topology.objects.states.geometries.filter(
-  (geometry) => USPS[geometry.id],
-);
-const lower48 = { type: "GeometryCollection", geometries };
-const states = feature(topology, lower48).features;
-if (states.length !== 49) {
-  throw new Error(`Expected the lower 48 and DC, got ${states.length}`);
-}
-
-const projection = geoAlbers().fitWidth(WIDTH - PAD * 2, {
-  type: "FeatureCollection",
-  features: states,
-});
-const [tx, ty] = projection.translate();
-projection.translate([tx + PAD, ty + PAD]);
-const path = geoPath(projection).digits(DIGITS);
-const HEIGHT = Math.ceil(
-  path.bounds({ type: "FeatureCollection", features: states })[1][1] + PAD,
-);
 const round = (value) => Math.round(value * 100) / 100;
 
 const mapStates = states

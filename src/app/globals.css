@@ -118,6 +118,10 @@
     var(--color-brand-obsidian) 10%,
     var(--color-brand-warm-snow)
   );
+  /* The map's place labels (no Figma design: the approved defaults): the
+     caption grey, haloed in Warm Snow so they read over the outlines. */
+  --color-neighbornets-map-label: var(--color-caption);
+  --color-neighbornets-map-label-halo: var(--color-brand-warm-snow);
 
   /* Functional UI color, intentionally separate from the brand palette. */
   --color-system-danger: #b42318;
@@ -619,12 +623,16 @@
      units = 2.8984% of the map), its point at 48, 48 of the box. */
   --neighbornets-map-pin-box: 4.397%;
   --neighbornets-map-pin-point: 85.7143%;
-  /* Zooms to a state or a NeighborNet's area (map units: 1000 across the
-     map): never past this zoom; a net's area takes in its neighbours within
-     the reach and is at least the span across (about 110 and 180 km). */
+  /* Zooms to a state or a NeighborNet (map units: 1000 across the map):
+     never past the max zoom; a state's nets are framed at least the span
+     across (about 180 km); a NeighborNet is zoomed into deep, centred on it,
+     at the net zoom (the max: about 190 km across the frame). */
   --neighbornets-map-max-zoom: 24;
-  --neighbornets-map-area-reach: 25;
   --neighbornets-map-area-span: 40;
+  --neighbornets-map-net-zoom: 24;
+  /* Scrolled away: once less than this share of the map's section shows,
+     an open panel closes and a zoomed-in map returns to the whole US. */
+  --neighbornets-map-leave-ratio: 0.1;
   /* The clear margin a zoom leaves around the state or area it fits. */
   --neighbornets-map-fit-padding: 1.5rem;
   /* The results panels (Figma 370:14, 583:966) slide up from the viewport's
@@ -644,9 +652,9 @@
      zoomed scale. */
   --neighbornets-map-marker-scale-mobile: 1.4;
   --neighbornets-map-marker-zoomed-scale-mobile: 1.25;
-  /* Free pan and zoom (while a state or net is open). Zooming out below
-     this share of the state's fit zoom (a net's state's) returns to the
-     whole map, as the close button does. */
+  /* Free pan and zoom. With a state or net open, zooming out below
+     this share of the state's fit zoom (a net's state's) closes the panel
+     and returns the map to the whole US. */
   --neighbornets-map-reset-ratio: 0.8;
   /* Dragging past the US's bounds (the view's centre outside the map's
      1000 x 636 units) keeps this share of the overshoot; on release the view
@@ -667,6 +675,26 @@
   /* The hover lens trails the pointer as an exponential ease with this time
      constant (a fifth of the lens duration: within 1% in about 650ms). */
   --duration-neighbornets-map-lens-trail: 140ms;
+  /* Place labels (stage 4b; no Figma design, the approved defaults): the
+     zoom each kind shows from (cities over 250,000; places over 50,000;
+     every NeighborNet's city; places over 10,000), so the whole map has
+     none. Cities in the article title size, the rest in the article meta
+     size; a halo this wide (half of it outside the letters); and this much
+     clear space kept around each label when the map declutters them. */
+  --neighbornets-map-label-zoom-city: 3;
+  --neighbornets-map-label-zoom-large: 6;
+  --neighbornets-map-label-zoom-net: 8;
+  --neighbornets-map-label-zoom-place: 10;
+  --neighbornets-map-label-city-size: var(--text-article-title);
+  --neighbornets-map-label-city-tracking: var(
+    --text-article-title--letter-spacing
+  );
+  --neighbornets-map-label-place-size: var(--text-article-meta);
+  --neighbornets-map-label-place-tracking: var(
+    --text-article-meta--letter-spacing
+  );
+  --neighbornets-map-label-halo-width: 0.25rem;
+  --neighbornets-map-label-gap: 0.25rem;
 }
 
 /*

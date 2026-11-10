@@ -8,6 +8,7 @@
     "scrape:sister-neighbornets": "node scripts/scrape-sister-neighbornets.mjs",
     "geocode:sister-neighbornets": "node scripts/geocode-sister-neighbornets.mjs",
     "geocode:neighbornet-places": "bun scripts/reverse-geocode-neighbornets.mjs",
+    "generate:neighbornets-context": "bun scripts/neighbornets-context.mjs",
     "generate:neighbornets": "node scripts/generate-neighbornets.mjs && bun scripts/neighbornets-map.mjs",
     "predev": "bun run generate:neighbornets",
     "dev": "next dev",

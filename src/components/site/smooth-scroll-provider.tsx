@@ -37,12 +37,13 @@ const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
  *   preference is watched, matching the footer, so toggling it takes effect
  *   without a reload.
  *
- * TODO(data-lenis-prevent): touch input over the NeighborNets map and over
- * modal scroll containers is not handed back to the element by
- * `allowNestedScroll` (the map is not an overflow scroller, and a modal with
- * nothing to scroll falls through). Add `data-lenis-prevent` to the map when
- * it takes pinch and pan gestures, and to the story dialog when it is rebuilt
- * against Figma.
+ * - The NeighborNets map is not an overflow scroller, so `allowNestedScroll`
+ *   never hands it input: it sets `data-lenis-prevent` itself while a map
+ *   gesture (a drag, a pinch, a wheel zoom) is under way.
+ *
+ * TODO(data-lenis-prevent): modal scroll containers with nothing to scroll
+ * fall through `allowNestedScroll`. Add `data-lenis-prevent` to the story
+ * dialog when it is rebuilt against Figma.
  */
 /** The live Lenis instance, or null under reduced motion or before mount. */
 let activeLenis: Lenis | null = null;

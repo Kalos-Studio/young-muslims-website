@@ -60,8 +60,9 @@ function Marker({ point }: { point: MapPoint }) {
  *
  * Layers: the lens (NeighborNetsMapMotion magnifies it) holds the selected
  * and hovered states' fills (a small SVG) under the states' outlines
- * (unfilled; the section's Warm Snow shows through); the markers sit over
- * it, never magnified (each is moved to where the view puts it).
+ * (unfilled; the section's Warm Snow shows through); the place labels and
+ * then the markers sit over it, never magnified (each is moved to where the
+ * view puts it).
  */
 export function NeighborNetsMap() {
   return (
@@ -95,6 +96,8 @@ export function NeighborNetsMap() {
           </g>
         </svg>
       </div>
+      {/* Place labels, filled in once the map zooms in (map-labels.ts). */}
+      <div aria-hidden data-map-part="labels" className={styles.labels} />
       <div data-map-part="markers" className={styles.markers}>
         {MAP_POINTS.map((point) => (
           <Marker key={point.id} point={point} />
