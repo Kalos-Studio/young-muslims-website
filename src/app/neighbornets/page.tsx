@@ -4,12 +4,9 @@ import Link from "next/link";
 
 import chapterCtaShape from "../../../design-assets/figma/neighbornets/2026-page/2e336.png";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
-import {
-  ChapterImageGrid,
-  NeighborNetExplainer,
-  OtherWaysSection,
-} from "./chapter-page-sections";
+import { ChapterImageGrid, OtherWaysSection } from "./chapter-page-sections";
 import { NeighborNetsFinder } from "./map-finder";
+import { NeighborNetExplainer } from "./neighbornet-explainer";
 import { NeighborNetsHero } from "./neighbornets-hero";
 import { NeighborNetsMap } from "./neighbornets-map";
 import { NeighborNetsMapSearch } from "./neighbornets-map-search";

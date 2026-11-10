@@ -1,18 +1,8 @@
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
-import {
-  ChapterImageMarquee,
-  ExplainerImageMarquee,
-} from "./chapter-image-marquee";
+import { ChapterImageMarquee } from "./chapter-image-marquee";
 
-import collageLogo from "../../../design-assets/figma/neighbornets/2026-page/a0c41.svg";
-import collageTopLeft from "../../../design-assets/figma/neighbornets/2026-page/abef6.jpg";
-import collageTopMiddle from "../../../design-assets/figma/neighbornets/2026-page/e1518.png";
-import collageTopRight from "../../../design-assets/figma/neighbornets/2026-page/24e0e.jpg";
-import collageBottomLeft from "../../../design-assets/figma/neighbornets/2026-page/695b1.png";
-import collageBottomMiddle from "../../../design-assets/figma/neighbornets/2026-page/94a21.jpg";
-import collageBottomRight from "../../../design-assets/figma/neighbornets/2026-page/8cd27.png";
 import tile01 from "../../../design-assets/figma/neighbornets/2026-page/3b4cd.png";
 import tile02 from "../../../design-assets/figma/neighbornets/2026-page/f29fa.png";
 import tile03 from "../../../design-assets/figma/neighbornets/2026-page/4f0d3.png";
@@ -42,33 +32,6 @@ import eventArt from "../../../design-assets/figma/neighbornets/2026-page/3d762.
 import retreatArt from "../../../design-assets/figma/neighbornets/2026-page/77d81.png";
 import conferenceArt from "../../../design-assets/figma/neighbornets/2026-page/ff281.png";
 
-const collagePhotos = [
-  {
-    image: collageTopLeft,
-    alt: "Young Muslim standing beside a red car",
-  },
-  {
-    image: collageTopMiddle,
-    alt: "Friends reaching their hands together outdoors",
-  },
-  {
-    image: collageTopRight,
-    alt: "Young Muslims gathered for a group photo",
-  },
-  {
-    image: collageBottomLeft,
-    alt: "Young Muslim women together at a community gathering",
-  },
-  {
-    image: collageBottomMiddle,
-    alt: "Young Muslims talking at an event",
-  },
-  {
-    image: collageBottomRight,
-    alt: "Young Muslim women seated together for a halaqa",
-  },
-] as const;
-
 const chapterTileRows: StaticImageData[][] = [
   [tile01, tile02, tile03, tile04, tile05, tile06, tile07, tile08, tile09],
   [tile10, tile09, tile11, tile12, tile13, tile14, tile15, tile16, tile17],
@@ -95,57 +58,6 @@ const involvementCards = [
       "Weekend-long gatherings that bring young Muslims together from across the country: workshops, speakers, and a few thousand new friends.",
   },
 ] as const;
-
-export function NeighborNetExplainer() {
-  return (
-    <section
-      aria-labelledby="neighbornet-explainer-heading"
-      className="overflow-hidden bg-brand-warm-snow pt-20 pb-28 md:pt-[103px] md:pb-[124px]"
-    >
-      <h2
-        id="neighbornet-explainer-heading"
-        className="px-5 text-center text-[32px] leading-[1.2] font-extrabold tracking-[-0.02em] md:text-landing-section"
-      >
-        What&apos;s a NeighborNet?
-      </h2>
-
-      <ExplainerImageMarquee
-        logo={collageLogo}
-        rows={[collagePhotos.slice(0, 3), collagePhotos.slice(3)]}
-      />
-
-      <div className="mx-auto mt-14 flex max-w-[872px] flex-col items-center px-6 text-center text-base leading-normal font-medium tracking-[-0.02em] md:mt-[69px] md:px-0 md:text-[20px]">
-        <p>
-          A NeighborNet is your local Young Muslims. A group of brothers or
-          sisters who meet every week to hang out, grow, and build real
-          friendships rooted in Deen.
-        </p>
-        <p className="mt-7">
-          It&apos;s not a class you attend or a lecture you sit through.
-          It&apos;s grabbing food, playing ball, and talking through what&apos;s
-          actually going on in your life, with people who get it. Some weeks
-          there&apos;s a halaqa, some weeks there&apos;s a bonfire. Every week,
-          there are your people.
-        </p>
-        <p className="mt-7">
-          There are 200+ NeighborNets across the country, each run by the youth,
-          for the youth. Find yours, show up once, and see what it&apos;s about.
-        </p>
-        <Link
-          href="mailto:expansion@ymsite.com?subject=Start%20a%20NeighborNet"
-          className="ym-cta-trigger mt-[60px] inline-flex min-h-12 w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-center text-sm font-bold tracking-[-0.02em] text-brand-pure-white transition-colors hover:bg-brand-obsidian focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
-        >
-          <span className="inline-flex items-center gap-2 sm:hidden">
-            <AnimatedCtaLabel label="Start a NeighborNet" />
-          </span>
-          <span className="hidden items-center gap-2 sm:inline-flex">
-            <AnimatedCtaLabel label="Don't have a NN near you? Start one here" />
-          </span>
-        </Link>
-      </div>
-    </section>
-  );
-}
 
 export function ChapterImageGrid() {
   return <ChapterImageMarquee rows={chapterTileRows} />;

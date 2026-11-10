@@ -1231,6 +1231,55 @@ Plain SVG, no map library and no runtime fetch.
 | `--duration-neighbornets-map-zoom-hint`         | `1500ms`                                                       | How long "Use ⌘ + scroll to zoom" stays after the last plain scroll over the map                                                                       |
 | `--duration-neighbornets-map-zoom-hint-fade`    | `240ms`                                                        | The zoom hint's fade in and out (standard button ease)                                                                                                 |
 
+## What's a NeighborNet?
+
+`src/app/neighbornets/neighbornet-explainer.tsx` (Figma 332:10, tablet
+374:709, mobile 401:1856), below the map: the heading, two rows of photos
+over the faint YOUNG MUSLIMS watermark, the copy, and a standard button
+("Don’t have a NN near you? Start one here", to `/contact`; full width on
+phones, where its label takes two lines). The heading and the copy with its
+button use the site's text reveal.
+
+- **Photos:** the six Figma photos (square corners, as in the frames), in
+  two full-bleed rows: 540 / 524 / 540 wide over 99px gaps on top, 524 / 540
+  / 524 over 151px below, all in photo heights
+  (`--neighbornets-explainer-row-height`, 360px desktop, 244px tablet, 200px
+  phones), the rows `--neighbornets-explainer-row-gap` apart.
+- **Watermark:** the YM primary logo (Obsidian at 8%, as exported),
+  full-bleed and centred on the gap between the rows, behind them; tablet
+  and desktop only.
+- **Motion** (`NeighborNetExplainerMotion`), three layers that compose
+  because each moves its own element, all on the compositor:
+  - **Loop:** each row's track holds four copies of its three photos and
+    moves by exactly one copy in a CSS animation, so it wraps without a
+    seam: the top row drifts right over
+    `--duration-neighbornets-explainer-marquee-top`, the bottom row left
+    over `--duration-neighbornets-explainer-marquee-bottom` (about 27px/s
+    on desktop, slower as the photos shrink). Paused while the section is
+    off screen.
+  - **Cursor drift** (fine pointers): the shared shape drift
+    (`trackPointerDrift`, as the landing's everywhere and stories sections)
+    moves each row's layer, which holds its track, toward the cursor, up to
+    `--neighbornets-explainer-pointer-drift` (the bottom row 60% of that),
+    eased by a transition; the loop runs inside it, so the drift is an
+    offset added to the loop. Touch gets the loop alone.
+  - **Watermark parallax:** one scroll-linked value (the show-you
+    mechanic) moves it `--neighbornets-explainer-watermark-drift` in all,
+    down as the page scrolls down, so it lags behind the photos.
+  - Under reduced motion none of it runs: the rows rest at Figma's places,
+    the watermark too.
+
+| Token                                              | Value                                          | Use                                                               |
+| -------------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------- |
+| `--neighbornets-explainer-row-height`              | `12.5rem` / `15.25rem` (md) / `22.5rem` (xl)   | Each photo's height; widths, gaps and the loop follow from it     |
+| `--neighbornets-explainer-row-gap`                 | `2.75rem` / `3.375rem` (md) / `5.5rem` (xl)    | Space between the two rows                                        |
+| `--duration-neighbornets-explainer-marquee-top`    | `70s`                                          | One loop of the top row (drifting right)                          |
+| `--duration-neighbornets-explainer-marquee-bottom` | `76s`                                          | One loop of the bottom row (drifting left)                        |
+| `--neighbornets-explainer-pointer-drift`           | `var(--everywhere-pointer-drift)` (`0.875rem`) | How far the top row trails the cursor (fine pointers)             |
+| `--duration-neighbornets-explainer-pointer`        | `var(--duration-everywhere-pointer)` (`700ms`) | The drift's easing time                                           |
+| `--ease-neighbornets-explainer-pointer`            | `var(--ease-everywhere-enter)`                 | The drift's easing                                                |
+| `--neighbornets-explainer-watermark-drift`         | `5rem`                                         | The watermark's whole parallax travel across the section's scroll |
+
 ## Closing CTA
 
 The closing call to action above the footer (Figma 270:301, tablet 280:788,

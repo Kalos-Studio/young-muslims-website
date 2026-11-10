@@ -1957,6 +1957,47 @@
   }
 }
 
+/*
+ * "What's a NeighborNet?" (src/app/neighbornets/neighbornet-explainer.tsx;
+ * Figma 332:10, tablet 374:709, mobile 401:1856). Documented in
+ * DESIGN-SYSTEM.md under "What's a NeighborNet?".
+ */
+:root {
+  /* Its two photo rows: each photo's height (Figma 200 / 244 / 360 at
+     mobile / tablet / desktop; the widths, gaps and loop follow from it)
+     and the space between the rows. */
+  --neighbornets-explainer-row-height: 12.5rem;
+  --neighbornets-explainer-row-gap: 2.75rem;
+  /* One loop of each row (its three photos and gaps), the top row drifting
+     right and the bottom row left: slow, so it reads as a drift. The time
+     is the same at every size; the distance scales with the photos. */
+  --duration-neighbornets-explainer-marquee-top: 70s;
+  --duration-neighbornets-explainer-marquee-bottom: 76s;
+  /* Fine pointers: the rows trail the cursor (the shared shape drift, at
+     the landing's reach and timing; the bottom row at 60% of the top's). */
+  --neighbornets-explainer-pointer-drift: var(--everywhere-pointer-drift);
+  --duration-neighbornets-explainer-pointer: var(--duration-everywhere-pointer);
+  --ease-neighbornets-explainer-pointer: var(--ease-everywhere-enter);
+  /* The YOUNG MUSLIMS watermark behind the rows moves this far in all as
+     the section scrolls through the viewport (half either side of its
+     Figma place, reached when the section is centred). */
+  --neighbornets-explainer-watermark-drift: 5rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --neighbornets-explainer-row-height: 15.25rem;
+    --neighbornets-explainer-row-gap: 3.375rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --neighbornets-explainer-row-height: 22.5rem;
+    --neighbornets-explainer-row-gap: 5.5rem;
+  }
+}
+
 /* WIREFRAME:start ------------------------------------------------------------
  * Wireframe-only design tokens. Delete this entire fenced block when the
  * wireframe comes out; nothing in the real site should reference `--wf-*` or

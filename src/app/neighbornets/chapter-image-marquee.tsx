@@ -16,8 +16,6 @@ const rowPositions = [
   "top-[446px] md:top-[720px]",
 ] as const;
 
-type CollagePhoto = { image: StaticImageData; alt: string };
-
 function useMarqueeMotion<T extends HTMLElement>() {
   const containerRef = useRef<T>(null);
   const isVisible = useInView(containerRef, { margin: "100px 0px" });
@@ -52,77 +50,6 @@ function useMarqueeMotion<T extends HTMLElement>() {
     handlePointerMove,
     resetCursor,
   };
-}
-
-export function ExplainerImageMarquee({
-  rows,
-  logo,
-}: {
-  rows: readonly (readonly CollagePhoto[])[];
-  logo: StaticImageData;
-}) {
-  const {
-    containerRef,
-    isVisible,
-    cursorX,
-    cursorY,
-    handlePointerMove,
-    resetCursor,
-  } = useMarqueeMotion<HTMLDivElement>();
-
-  return (
-    <div
-      ref={containerRef}
-      className="relative mx-[-16px] mt-14 h-[400px] w-[calc(100%+32px)] max-w-none overflow-hidden md:mt-[99px] md:h-[899px]"
-      onPointerMove={handlePointerMove}
-      onPointerLeave={resetCursor}
-    >
-      <Image
-        src={logo}
-        alt=""
-        className="pointer-events-none absolute top-1/2 left-1/2 hidden w-[1442px] max-w-none -translate-x-1/2 -translate-y-1/2 md:block"
-      />
-      {rows.map((row, rowIndex) => (
-        <motion.div
-          key={rowIndex}
-          className={`absolute w-max ${rowIndex === 0 ? "top-0 left-0 md:top-[44px]" : "top-[196px] left-0 md:top-[492px]"}`}
-          style={{ x: cursorX, y: cursorY }}
-        >
-          <div
-            className="nn-image-marquee-track nn-explainer-marquee-track flex w-max"
-            data-direction={rowIndex === 0 ? "right" : "left"}
-            style={{
-              animationDirection: rowIndex === 0 ? "reverse" : "normal",
-              animationPlayState: isVisible ? "running" : "paused",
-            }}
-          >
-            {[0, 1, 2, 3].map((copy) => (
-              <div
-                key={copy}
-                aria-hidden={copy > 0}
-                className={`flex shrink-0 gap-4 pr-4 ${rowIndex === 0 ? "md:gap-[99px] md:pr-[99px]" : "md:gap-[151px] md:pr-[151px]"}`}
-              >
-                {row.map(({ image, alt }, imageIndex) => (
-                  <div
-                    key={image.src}
-                    className={`relative h-[180px] w-[270px] shrink-0 overflow-hidden md:h-[360px] ${rowIndex === 0 ? (imageIndex === 1 ? "md:w-[524px]" : "md:w-[540px]") : imageIndex === 1 ? "md:w-[540px]" : "md:w-[524px]"}`}
-                  >
-                    <Image
-                      src={image}
-                      alt={copy === 0 ? alt : ""}
-                      fill
-                      sizes="(max-width: 767px) 270px, 540px"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  );
 }
 
 export function ChapterImageMarquee({ rows }: { rows: StaticImageData[][] }) {
