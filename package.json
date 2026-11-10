@@ -23,7 +23,8 @@
     "format:check": "prettier --check .",
     "lint:tokens": "node scripts/check-design-tokens.mjs",
     "test:tokens": "node --test scripts/check-design-tokens.test.mjs",
-    "generate:show-you-blob": "node scripts/blob-contours.mjs"
+    "generate:show-you-blob": "node scripts/blob-contours.mjs",
+    "test:seo": "node scripts/check-indexing.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

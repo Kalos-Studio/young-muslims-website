@@ -118,3 +118,10 @@ export const featuredPosts = [
 export function getBlogPost(slug: string) {
   return blogPosts.find((post) => post.id === slug);
 }
+
+// A post is ready for search once it carries its full article body. An
+// excerpt-only post still renders, but stays out of the index and sitemap so
+// search engines don't record a thin page in place of the real article.
+export function isBlogPostIndexable(post: BlogPost) {
+  return Boolean(post.content?.length);
+}

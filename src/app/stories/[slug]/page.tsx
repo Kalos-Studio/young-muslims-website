@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getStoryBySlug } from "@/lib/stories";
+import { getStoryBySlug, INDEXABLE_STORY_SLUGS } from "@/lib/stories";
 import { RahmahStory } from "../rahmah-story";
 import { PlaceholderStory } from "../placeholder-story";
 import {
@@ -33,7 +33,9 @@ export async function generateMetadata({
         ? story?.summary
         : "This member’s Young Muslims story is coming soon.",
     alternates: { canonical: `/stories/${slug}` },
-    ...(slug !== "rahmah-k" ? { robots: { index: false, follow: true } } : {}),
+    ...(INDEXABLE_STORY_SLUGS.includes(slug)
+      ? {}
+      : { robots: { index: false, follow: true } }),
   };
 }
 

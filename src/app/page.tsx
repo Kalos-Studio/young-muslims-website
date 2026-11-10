@@ -11,13 +11,15 @@ import { PrinciplesSection } from "./landing/principles-section";
 import { WordOnTheStreetSection } from "./landing/word-on-the-street-section";
 
 import { ClosingCta } from "@/components/site/closing-cta";
+import { JsonLd } from "@/components/site/json-ld";
 import { PageFrame } from "@/components/wireframe/page-frame";
+import { siteJsonLd } from "@/lib/seo";
 
 import ymatxRailing from "../../design-assets/figma/landing-2026/cta/ymatx-railing.jpg";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
-  title: "Young Muslims",
+  title: { absolute: "Young Muslims" },
   description:
     "A nationwide brotherhood and sisterhood, built on real friendships and a shared Deen.",
 };
@@ -25,6 +27,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <PageFrame className="overflow-x-clip" data-landing-page="true">
+      <JsonLd data={siteJsonLd} />
       {/* Every section after the hero scrolls up over the pinned hero. */}
       <LandingHero>
         <BelongingSection />
