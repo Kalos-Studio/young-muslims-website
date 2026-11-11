@@ -18,7 +18,6 @@ export default function ContactPage() {
       <ContactHero />
 
       <section
-        data-header-theme="light"
         id="connect"
         aria-labelledby="connect-heading"
         className="scroll-mt-40 bg-muted py-20"
@@ -91,10 +90,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section
-        className="mx-auto grid max-w-7xl items-center gap-8 px-8 py-20 lg:grid-cols-2 lg:gap-20 lg:px-20"
-        data-header-theme="light"
-      >
+      <section className="mx-auto grid max-w-7xl items-center gap-8 px-8 py-20 lg:grid-cols-2 lg:gap-20 lg:px-20">
         <EditorialPhoto
           src={people}
           alt="A Young Muslims chapter spending time together by the water"

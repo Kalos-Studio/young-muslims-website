@@ -1,0 +1,11 @@
+/* The page-transition cover. The blob itself is the shared BlobReveal mask
+   (.ym-blob-reveal in globals.css); this places the layer above everything,
+   including an open menu, and centres the logo. It blocks input while shown. */
+.cover {
+  position: fixed;
+  z-index: 2147483647;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+}

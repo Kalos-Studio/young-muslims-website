@@ -48,11 +48,7 @@ function PortraitSelector() {
   const navigateToStory = useStoryPageNavigation();
 
   return (
-    <section
-      data-header-theme="light"
-      aria-labelledby="stories-heading"
-      className={styles.gallery}
-    >
+    <section aria-labelledby="stories-heading" className={styles.gallery}>
       <div className={styles.galleryHeading}>
         <h2
           id="stories-heading"
@@ -111,6 +107,8 @@ function PortraitSelector() {
               <Link
                 key={slot.id}
                 data-portrait={index}
+                // Keeps its own StoryPageTransition instead of the page transition.
+                data-page-transition="off"
                 href={`/stories/${portraitSlug(slot)}`}
                 onNavigate={(event) => {
                   const bounds = document

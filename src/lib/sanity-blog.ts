@@ -3,7 +3,6 @@ import type { PortableTextBlock } from "@portabletext/react";
 import { blogPosts, featuredPosts, type BlogPost } from "./blog";
 
 export type CmsBlogPost = BlogPost & {
-  body?: PortableTextBlock[];
   featured?: boolean;
 };
 

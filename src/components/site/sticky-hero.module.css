@@ -1,0 +1,29 @@
+/* Sticky hero layout. Geometry tokens: "Sticky hero" in DESIGN-SYSTEM.md. */
+
+/* Everything after the hero: above it, and pulled up so the wave's top hump
+   peeks above the fold at load. */
+.following {
+  position: relative;
+  z-index: 10;
+  margin-top: calc(-1 * var(--hero-peek));
+}
+
+.wave {
+  display: block;
+  width: 100%;
+  height: var(--hero-wave-height);
+  overflow: visible;
+}
+
+/* The NeighborNets hero's wave and peek (its own blob; see
+   NeighborNetsHeroWave). */
+.followingNeighborNets {
+  margin-top: calc(-1 * var(--neighbornets-hero-peek));
+}
+
+.waveNeighborNets {
+  display: block;
+  width: 100%;
+  height: var(--neighbornets-hero-wave-height);
+  overflow: visible;
+}

@@ -1,3 +1,5 @@
+import type { PortableTextBlock } from "@portabletext/react";
+
 export type ArticleBlock =
   | { type: "paragraph" | "heading"; text: string }
   | { type: "list"; items: string[] };
@@ -14,6 +16,7 @@ export type BlogPost = {
   heroImage?: string;
   imageAlt?: string;
   content?: ArticleBlock[];
+  body?: PortableTextBlock[];
 };
 
 const listedPosts: BlogPost[] = [
@@ -124,5 +127,17 @@ export function getBlogPost(slug: string) {
 // excerpt-only post still renders, but stays out of the index and sitemap so
 // search engines don't record a thin page in place of the real article.
 export function isBlogPostIndexable(post: BlogPost) {
+  if (post.body !== undefined) {
+    return post.body.some(
+      (block) =>
+        block._type === "block" &&
+        block.children?.some(
+          (child) =>
+            child._type === "span" &&
+            typeof child.text === "string" &&
+            child.text.trim().length > 0,
+        ),
+    );
+  }
   return Boolean(post.content?.length);
 }

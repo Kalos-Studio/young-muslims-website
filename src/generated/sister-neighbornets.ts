@@ -11,6 +11,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Arizona",
     latitude: 33.4152,
     longitude: -111.8315,
+    city: "Mesa",
+    postalCode: "85201",
     contact: {
       name: "East Valley Sisters",
       role: "Chapter contact",
@@ -26,6 +28,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "California",
     latitude: 37.870839,
     longitude: -122.272863,
+    city: "Berkeley",
+    postalCode: "94704",
   },
   {
     id: "sisters-california-los-angeles",
@@ -36,6 +40,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "California",
     latitude: 34.053691,
     longitude: -118.242766,
+    city: "Los Angeles",
+    postalCode: "90012",
     contact: {
       name: "Los Angeles Sisters",
       role: "Chapter contact",
@@ -51,6 +57,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "California",
     latitude: 38.581061,
     longitude: -121.493895,
+    city: "Sacramento",
+    postalCode: "95814",
     contact: {
       name: "Sacramento Sisters",
       role: "Chapter contact",
@@ -66,6 +74,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Connecticut",
     latitude: 41.621488,
     longitude: -72.745652,
+    city: "Berlin",
+    postalCode: "06037",
     contact: {
       name: "Berlin Sisters",
       role: "Chapter contact",
@@ -81,6 +91,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Connecticut",
     latitude: 41.562318,
     longitude: -72.650906,
+    city: "Middletown",
+    postalCode: "06457",
     contact: {
       name: "Middletown Sisters",
       role: "Chapter contact",
@@ -96,6 +108,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Connecticut",
     latitude: 41.308214,
     longitude: -72.925052,
+    city: "New Haven",
+    postalCode: "06510",
   },
   {
     id: "sisters-connecticut-stamford",
@@ -106,6 +120,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Connecticut",
     latitude: 41.05343,
     longitude: -73.538734,
+    city: "Stamford",
+    postalCode: "06902",
     contact: {
       name: "Stamford Sisters",
       role: "Chapter contact",
@@ -121,6 +137,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Connecticut",
     latitude: 41.93121,
     longitude: -72.631385,
+    city: "Windsor Locks",
+    postalCode: "06096",
     contact: {
       name: "Windsor Locks Sisters",
       role: "Chapter contact",
@@ -136,6 +154,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Florida",
     latitude: 30.326225,
     longitude: -81.657918,
+    city: "Jacksonville",
+    postalCode: "32202",
     contact: {
       name: "Jacksonville Sisters",
       role: "Chapter contact",
@@ -151,6 +171,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Florida",
     latitude: 28.542122,
     longitude: -81.379045,
+    city: "Orlando",
+    postalCode: "32801",
     contact: {
       name: "Orlando Sisters",
       role: "Chapter contact",
@@ -166,6 +188,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Florida",
     latitude: 26.23786,
     longitude: -80.124767,
+    city: "Pompano Beach",
+    postalCode: "33060",
     contact: {
       name: "Pompano Beach Sisters",
       role: "Chapter contact",
@@ -181,6 +205,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Florida",
     latitude: 26.19114,
     longitude: -80.29355,
+    city: "Sunrise",
+    postalCode: "33351",
     contact: {
       name: "SoFlo Sisters",
       role: "Chapter contact",
@@ -196,6 +222,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Florida",
     latitude: 27.944985,
     longitude: -82.458311,
+    city: "Tampa",
+    postalCode: "33626",
     contact: {
       name: "Tampa Sisters",
       role: "Chapter contact",
@@ -211,6 +239,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Georgia",
     latitude: 34.075596,
     longitude: -84.294596,
+    city: "Alpharetta",
+    postalCode: "30009",
     contact: {
       name: "Alpharetta Sisters",
       role: "Chapter contact",
@@ -226,6 +256,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Georgia",
     latitude: 33.470971,
     longitude: -81.974843,
+    city: "Augusta",
+    postalCode: "30901",
     contact: {
       name: "Augusta Sisters",
       role: "Chapter contact",
@@ -241,6 +273,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Georgia",
     latitude: 33.751497,
     longitude: -84.747714,
+    city: "Douglasville",
+    postalCode: "30134",
     contact: {
       name: "Douglasville Sisters",
       role: "Chapter contact",
@@ -256,6 +290,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Georgia",
     latitude: 34.002857,
     longitude: -84.144105,
+    city: "Duluth",
+    postalCode: "30096",
     contact: {
       name: "Duluth Sisters",
       role: "Chapter contact",
@@ -271,6 +307,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Georgia",
     latitude: 34.235309,
     longitude: -84.133564,
+    city: "Forsyth County",
+    postalCode: "30040",
     contact: {
       name: "Forsyth Sisters",
       role: "Chapter contact",
@@ -286,6 +324,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Georgia",
     latitude: 34.05149,
     longitude: -84.0713,
+    city: "Suwanee",
+    postalCode: "30024",
     contact: {
       name: "Suwanee Sisters",
       role: "Chapter contact",
@@ -301,6 +341,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Illinois",
     latitude: 41.7606,
     longitude: -88.3201,
+    city: "Aurora",
+    postalCode: "60506",
     contact: {
       name: "AMPO Sisters",
       role: "Chapter contact",
@@ -316,6 +358,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Illinois",
     latitude: 42.0334,
     longitude: -87.8834,
+    city: "Des Plaines",
+    postalCode: "60016",
     contact: {
       name: "ICCD Sisters",
       role: "Chapter contact",
@@ -331,6 +375,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Illinois",
     latitude: 42.327889,
     longitude: -87.913117,
+    city: "Libertyville",
+    postalCode: "60048",
     contact: {
       name: "IFN Sisters",
       role: "Chapter contact",
@@ -346,6 +392,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Illinois",
     latitude: 41.557076,
     longitude: -88.190503,
+    city: "Joliet",
+    postalCode: "60404",
     contact: {
       name: "Plainfield Sisters",
       role: "Chapter contact",
@@ -361,6 +409,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Illinois",
     latitude: 41.85003,
     longitude: -87.964508,
+    city: "Oakbrook Terrace",
+    postalCode: "60181",
     contact: {
       name: "Westside Sisters",
       role: "Chapter contact",
@@ -376,6 +426,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Indiana",
     latitude: 41.494202,
     longitude: -87.521707,
+    city: "Dyer",
+    postalCode: "46311",
     contact: {
       name: "Illiana Sisters",
       role: "Chapter contact",
@@ -391,6 +443,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Indiana",
     latitude: 39.80782,
     longitude: -86.178043,
+    city: "Indianapolis",
+    postalCode: "46208",
     contact: {
       name: "North Indy Sisters",
       role: "Chapter contact",
@@ -406,6 +460,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Indiana",
     latitude: 39.7684,
     longitude: -86.2,
+    city: "Indianapolis",
+    postalCode: "46222",
     contact: {
       name: "West Indy Sisters",
       role: "Chapter contact",
@@ -421,6 +477,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Iowa",
     latitude: 41.586865,
     longitude: -93.624949,
+    city: "Des Moines",
+    postalCode: "50309",
     contact: {
       name: "Des Moines Sisters",
       role: "Chapter contact",
@@ -436,6 +494,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Kentucky",
     latitude: 36.99292,
     longitude: -86.442868,
+    city: "Bowling Green",
+    postalCode: "42101",
     contact: {
       name: "Bowling Green Sisters",
       role: "Chapter contact",
@@ -451,6 +511,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Kentucky",
     latitude: 38.046407,
     longitude: -84.497039,
+    city: "Lexington",
+    postalCode: "40507",
     contact: {
       name: "Lexington Sisters",
       role: "Chapter contact",
@@ -466,6 +528,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Louisiana",
     latitude: 30.449416,
     longitude: -91.186966,
+    city: "Baton Rouge",
+    postalCode: "70801",
     contact: {
       name: "Baton Rouge Sisters",
       role: "Chapter contact",
@@ -481,6 +545,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Louisiana",
     latitude: 30.358231,
     longitude: -90.065748,
+    city: "Mandeville",
+    postalCode: "70448",
     contact: {
       name: "Mandeville Sisters",
       role: "Chapter contact",
@@ -496,6 +562,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Louisiana",
     latitude: 29.956142,
     longitude: -90.073393,
+    city: "New Orleans",
+    postalCode: "70170",
     contact: {
       name: "New Orleans Sisters",
       role: "Chapter contact",
@@ -511,6 +579,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Maine",
     latitude: 43.657361,
     longitude: -70.258662,
+    city: "Portland",
+    postalCode: "04101",
     contact: {
       name: "Portland Sisters",
       role: "Chapter contact",
@@ -526,6 +596,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Maryland",
     latitude: 39.5359,
     longitude: -76.3483,
+    city: "Bel Air",
+    postalCode: "21014",
     contact: {
       name: "Bel Air Sisters",
       role: "Chapter contact",
@@ -541,6 +613,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Maryland",
     latitude: 39.139919,
     longitude: -77.192921,
+    city: "Gaithersburg",
+    postalCode: "20877",
     contact: {
       name: "Gaithersburg Sisters",
       role: "Chapter contact",
@@ -556,6 +630,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Maryland",
     latitude: 39.098432,
     longitude: -76.848509,
+    city: "Laurel",
+    postalCode: "20707",
     contact: {
       name: "Laurel Sisters",
       role: "Chapter contact",
@@ -571,6 +647,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Maryland",
     latitude: 38.366027,
     longitude: -75.600996,
+    city: "Salisbury",
+    postalCode: "21801",
     contact: {
       name: "Salisbury Sisters",
       role: "Chapter contact",
@@ -586,6 +664,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Maryland",
     latitude: 39.383655,
     longitude: -76.451127,
+    city: "Perry Hall",
+    postalCode: "21128",
     contact: {
       name: "White Marsh Sisters",
       role: "Chapter contact",
@@ -601,6 +681,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Massachusetts",
     latitude: 42.485093,
     longitude: -71.43284,
+    city: "Acton",
+    postalCode: "01720",
     contact: {
       name: "Acton-Boxborough Sisters",
       role: "Chapter contact",
@@ -616,6 +698,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Massachusetts",
     latitude: 42.65717,
     longitude: -71.140878,
+    city: "Andover",
+    postalCode: "01810",
     contact: {
       name: "Andover Sisters",
       role: "Chapter contact",
@@ -631,6 +715,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Massachusetts",
     latitude: 42.358834,
     longitude: -71.05783,
+    city: "Boston",
+    postalCode: "02109",
     contact: {
       name: "Boston Sisters",
       role: "Chapter contact",
@@ -646,6 +732,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Massachusetts",
     latitude: 42.123733,
     longitude: -71.178728,
+    city: "Sharon",
+    postalCode: "02067",
     contact: {
       name: "Sharon Sisters",
       role: "Chapter contact",
@@ -661,6 +749,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Massachusetts",
     latitude: 42.269431,
     longitude: -71.612991,
+    city: "Westborough",
+    postalCode: "01581",
     contact: {
       name: "Westborough Sisters",
       role: "Chapter contact",
@@ -676,6 +766,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Massachusetts",
     latitude: 42.262562,
     longitude: -71.801888,
+    city: "Worcester",
+    postalCode: "01608",
     contact: {
       name: "Worcester Sisters",
       role: "Chapter contact",
@@ -691,6 +783,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Minnesota",
     latitude: 44.9773,
     longitude: -93.265469,
+    city: "Minneapolis",
+    postalCode: "55415",
     contact: {
       name: "Minneapolis Sisters",
       role: "Chapter contact",
@@ -706,6 +800,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Minnesota",
     latitude: 44.023439,
     longitude: -92.463018,
+    city: "Rochester",
+    postalCode: "55903",
     contact: {
       name: "Rochester Sisters",
       role: "Chapter contact",
@@ -721,6 +817,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Nevada",
     latitude: 36.167426,
     longitude: -115.148413,
+    city: "Las Vegas",
+    postalCode: "89101",
     contact: {
       name: "Las Vegas Sisters",
       role: "Chapter contact",
@@ -736,6 +834,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.281318,
     longitude: -74.570406,
+    city: "West Windsor",
+    postalCode: "08512",
     contact: {
       name: "571 Sisters",
       role: "Chapter contact",
@@ -751,6 +851,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.706409,
     longitude: -74.549273,
+    city: "Bernards",
+    postalCode: "07920",
     contact: {
       name: "Basking Ridge Sisters",
       role: "Chapter contact",
@@ -766,6 +868,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.559813,
     longitude: -74.551715,
+    city: "Bridgewater",
+    postalCode: "08805",
     contact: {
       name: "Bridgewater Sisters",
       role: "Chapter contact",
@@ -781,6 +885,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 39.934835,
     longitude: -75.030726,
+    city: "Cherry Hill",
+    postalCode: "08002",
     contact: {
       name: "Cherry Hill Sisters",
       role: "Chapter contact",
@@ -796,6 +902,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.427884,
     longitude: -74.415984,
+    city: "East Brunswick",
+    postalCode: "08816",
     contact: {
       name: "East Brunswick Sisters",
       role: "Chapter contact",
@@ -811,6 +919,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.500535,
     longitude: -74.398394,
+    city: "Edison",
+    postalCode: "08817",
     contact: {
       name: "Edison Sisters",
       role: "Chapter contact",
@@ -826,6 +936,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.569335,
     longitude: -74.315112,
+    city: "Woodbridge",
+    postalCode: "08830",
     contact: {
       name: "Iselin Sisters",
       role: "Chapter contact",
@@ -841,6 +953,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.721568,
     longitude: -74.047455,
+    city: "Jersey City",
+    postalCode: "07302",
     contact: {
       name: "Jersey City Sisters",
       role: "Chapter contact",
@@ -856,6 +970,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.842718,
     longitude: -74.392147,
+    city: "Parsippany-Troy Hills",
+    postalCode: "07054",
     contact: {
       name: "Morris County Sisters",
       role: "Chapter contact",
@@ -871,6 +987,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.399178,
     longitude: -74.340904,
+    city: "Old Bridge",
+    postalCode: "08857",
   },
   {
     id: "sisters-new-jersey-paramus",
@@ -881,6 +999,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.945291,
     longitude: -74.07359,
+    city: "Paramus",
+    postalCode: "07652",
     contact: {
       name: "Paramus Sisters",
       role: "Chapter contact",
@@ -896,6 +1016,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.546433,
     longitude: -74.466054,
+    city: "Piscataway",
+    postalCode: "08854",
     contact: {
       name: "Piscataway Sisters",
       role: "Chapter contact",
@@ -911,6 +1033,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 41.031764,
     longitude: -74.102087,
+    city: "Saddle River",
+    postalCode: "07458",
   },
   {
     id: "sisters-new-jersey-sayreville",
@@ -921,6 +1045,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.463536,
     longitude: -74.36185,
+    city: "Sayreville",
+    postalCode: "08872",
     contact: {
       name: "Sayreville Sisters",
       role: "Chapter contact",
@@ -936,6 +1062,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.886016,
     longitude: -74.007257,
+    city: "Teaneck",
+    postalCode: "07666",
     contact: {
       name: "Teaneck Sisters",
       role: "Chapter contact",
@@ -951,6 +1079,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New Jersey",
     latitude: 40.220307,
     longitude: -74.7659,
+    city: "Trenton",
+    postalCode: "08608",
     contact: {
       name: "Trenton Sisters",
       role: "Chapter contact",
@@ -966,6 +1096,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New York",
     latitude: 40.579644,
     longitude: -73.96111,
+    city: "Brooklyn",
+    postalCode: "11235",
     contact: {
       name: "Brighton Beach Sisters",
       role: "Chapter contact",
@@ -981,6 +1113,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New York",
     latitude: 40.76543,
     longitude: -73.817429,
+    city: "Queens",
+    postalCode: "11354",
     contact: {
       name: "Flushing Sisters",
       role: "Chapter contact",
@@ -996,6 +1130,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New York",
     latitude: 40.698763,
     longitude: -73.808825,
+    city: "Queens",
+    postalCode: "11435",
     contact: {
       name: "Jamaica Sisters",
       role: "Chapter contact",
@@ -1011,6 +1147,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New York",
     latitude: 40.646215,
     longitude: -73.970694,
+    city: "Brooklyn",
+    postalCode: "11218",
     contact: {
       name: "Kensington Sisters",
       role: "Chapter contact",
@@ -1026,6 +1164,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New York",
     latitude: 40.735216,
     longitude: -73.688324,
+    city: "New Hyde Park",
+    postalCode: "11040",
     contact: {
       name: "New Hyde Park Sisters",
       role: "Chapter contact",
@@ -1041,6 +1181,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New York",
     latitude: 40.799823,
     longitude: -73.650962,
+    city: "Roslyn",
+    postalCode: "11576",
     contact: {
       name: "Roslyn Sisters",
       role: "Chapter contact",
@@ -1056,6 +1198,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "New York",
     latitude: 40.755656,
     longitude: -73.587627,
+    city: "Westbury",
+    postalCode: "11590",
     contact: {
       name: "Westbury Sisters",
       role: "Chapter contact",
@@ -1071,6 +1215,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "North Carolina",
     latitude: 35.227209,
     longitude: -80.843083,
+    city: "Charlotte",
+    postalCode: "28202",
     contact: {
       name: "Charlotte Sisters",
       role: "Chapter contact",
@@ -1086,6 +1232,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Ohio",
     latitude: 39.101281,
     longitude: -84.512741,
+    city: "Cincinnati",
+    postalCode: "45210",
     contact: {
       name: "Cincinnati Sisters",
       role: "Chapter contact",
@@ -1101,6 +1249,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Ohio",
     latitude: 39.96226,
     longitude: -83.000707,
+    city: "Columbus",
+    postalCode: "43215",
     contact: {
       name: "Columbus Sisters",
       role: "Chapter contact",
@@ -1116,6 +1266,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Oklahoma",
     latitude: 35.472989,
     longitude: -97.517054,
+    city: "Oklahoma City",
+    postalCode: "73106",
     contact: {
       name: "Oklahoma City Sisters",
       role: "Chapter contact",
@@ -1131,6 +1283,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Pennsylvania",
     latitude: 40.602255,
     longitude: -75.471611,
+    city: "Allentown",
+    postalCode: "18102",
     contact: {
       name: "Allentown Sisters",
       role: "Chapter contact",
@@ -1146,6 +1300,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Pennsylvania",
     latitude: 39.916778,
     longitude: -75.387693,
+    city: "Media",
+    postalCode: "19063",
     contact: {
       name: "DelCo Sisters",
       role: "Chapter contact",
@@ -1161,6 +1317,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Pennsylvania",
     latitude: 40.04736,
     longitude: -75.422951,
+    city: "Devon",
+    postalCode: "19333",
     contact: {
       name: "Devon Sisters",
       role: "Chapter contact",
@@ -1176,6 +1334,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Pennsylvania",
     latitude: 40.266311,
     longitude: -76.886112,
+    city: "Harrisburg",
+    postalCode: "17120",
     contact: {
       name: "Harrisburg Sisters",
       role: "Chapter contact",
@@ -1191,6 +1351,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Pennsylvania",
     latitude: 39.952724,
     longitude: -75.163526,
+    city: "Philadelphia",
+    postalCode: "19107",
     contact: {
       name: "Philly Sisters",
       role: "Chapter contact",
@@ -1206,6 +1368,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Tennessee",
     latitude: 35.925206,
     longitude: -86.868942,
+    city: "Franklin",
+    postalCode: "36711",
     contact: {
       name: "Franklin Sisters",
       role: "Chapter contact",
@@ -1221,6 +1385,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 29.848485,
     longitude: -95.703357,
+    city: "Houston",
+    postalCode: "77084",
     contact: {
       name: "Bear Creek Sisters",
       role: "Chapter contact",
@@ -1236,6 +1402,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 29.592542,
     longitude: -95.180214,
+    city: "Houston",
+    postalCode: "77034",
     contact: {
       name: "Clear Lake Sisters",
       role: "Chapter contact",
@@ -1251,6 +1419,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 30.622258,
     longitude: -96.347468,
+    city: "College Station",
+    postalCode: "77840",
     contact: {
       name: "College Station Sisters",
       role: "Chapter contact",
@@ -1266,6 +1436,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 29.969112,
     longitude: -95.697169,
+    city: "Cypress",
+    postalCode: "77429",
     contact: {
       name: "Cypress Sisters",
       role: "Chapter contact",
@@ -1281,6 +1453,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 29.567159,
     longitude: -98.580874,
+    city: "San Antonio",
+    postalCode: "78249",
     contact: {
       name: "DeZavala Sisters",
       role: "Chapter contact",
@@ -1296,6 +1470,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 32.837073,
     longitude: -97.081954,
+    city: "Euless",
+    postalCode: "76040",
     contact: {
       name: "Euless Sisters",
       role: "Chapter contact",
@@ -1311,6 +1487,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 33.1506,
     longitude: -96.823818,
+    city: "Frisco",
+    postalCode: "75034",
     contact: {
       name: "Frisco Sisters",
       role: "Chapter contact",
@@ -1326,6 +1504,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 32.829518,
     longitude: -96.944218,
+    city: "Irving",
+    postalCode: "75061",
     contact: {
       name: "Irving Sisters",
       role: "Chapter contact",
@@ -1341,6 +1521,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 30.04772,
     longitude: -95.532441,
+    city: "Klein",
+    postalCode: "77388",
     contact: {
       name: "Klein Sisters",
       role: "Chapter contact",
@@ -1356,6 +1538,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 33.015121,
     longitude: -96.613048,
+    city: "Murphy",
+    postalCode: "75094",
     contact: {
       name: "Murphy Sisters",
       role: "Chapter contact",
@@ -1371,6 +1555,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 32.948179,
     longitude: -96.729721,
+    city: "Richardson",
+    postalCode: "75081",
     contact: {
       name: "Richardson Sisters",
       role: "Chapter contact",
@@ -1386,6 +1572,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 30.508592,
     longitude: -97.678806,
+    city: "Round Rock",
+    postalCode: "78664",
     contact: {
       name: "Round Rock Sisters",
       role: "Chapter contact",
@@ -1401,6 +1589,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 32.976233,
     longitude: -96.59527,
+    city: "Sachse",
+    postalCode: "75048",
   },
   {
     id: "sisters-texas-shadow-creek",
@@ -1411,6 +1601,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 29.569242,
     longitude: -95.411818,
+    city: "Pearland",
+    postalCode: "77584",
     contact: {
       name: "Shadow Creek Sisters",
       role: "Chapter contact",
@@ -1426,6 +1618,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 29.619679,
     longitude: -95.634946,
+    city: "Sugar Land",
+    postalCode: "77478",
     contact: {
       name: "Sugar Land Sisters",
       role: "Chapter contact",
@@ -1441,6 +1635,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Texas",
     latitude: 32.934155,
     longitude: -96.953195,
+    city: "Irving",
+    postalCode: "75057",
     contact: {
       name: "Valley Ranch Sisters",
       role: "Chapter contact",
@@ -1456,6 +1652,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Virginia",
     latitude: 38.80511,
     longitude: -77.047023,
+    city: "Alexandria",
+    postalCode: "22314",
     contact: {
       name: "Alexandria Sisters",
       role: "Chapter contact",
@@ -1471,6 +1669,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Virginia",
     latitude: 38.792741,
     longitude: -77.629202,
+    city: "Gainesville",
+    postalCode: "20109",
     contact: {
       name: "Gainesville Sisters",
       role: "Chapter contact",
@@ -1486,6 +1686,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Virginia",
     latitude: 39.098459,
     longitude: -77.670501,
+    city: "Loudoun County",
+    postalCode: "20175",
     contact: {
       name: "Loudoun Sisters",
       role: "Chapter contact",
@@ -1501,6 +1703,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Virginia",
     latitude: 38.636447,
     longitude: -77.267634,
+    city: "Woodbridge",
+    postalCode: "22191",
     contact: {
       name: "Woodbridge Sisters",
       role: "Chapter contact",
@@ -1516,6 +1720,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Washington",
     latitude: 47.669414,
     longitude: -122.123877,
+    city: "Redmond",
+    postalCode: "98052",
     contact: {
       name: "Redmond Sisters",
       role: "Chapter contact",
@@ -1531,6 +1737,8 @@ export const sisterLocations: NeighborNetLocation[] = [
     region: "Washington, DC",
     latitude: 38.895098,
     longitude: -77.036385,
+    city: "Washington, DC",
+    postalCode: "20500",
     contact: {
       name: "DC Sisters",
       role: "Chapter contact",

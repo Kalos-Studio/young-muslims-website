@@ -1,0 +1,120 @@
+/* Sizes and motion come from the show-you tokens in globals.css
+   (DESIGN-SYSTEM.md, "Show you section"). */
+
+/* The blob's caps: separate layers, moved by the compositor only. Each
+   shape is 1:1 up to 1440px wide (centred and cropped) and grows with the
+   width beyond, and reaches --show-blob-overlap (140 units, 9.7222% of the
+   width once scaled) back into the section, so the body's straight edges
+   never show however the caps move. */
+.cap {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  will-change: transform;
+}
+
+.capTop {
+  bottom: 100%;
+  margin-bottom: calc(-1 * max(var(--show-blob-overlap), 9.7222%));
+}
+
+.capBottom {
+  top: 100%;
+  margin-top: calc(-1 * max(var(--show-blob-overlap), 9.7222%));
+}
+
+.capTopShape {
+  min-height: var(--show-blob-top-height);
+}
+
+.capBottomShape {
+  min-height: var(--show-blob-bottom-height);
+}
+
+/* Marquee rows: each a strip of repeated tiles. The numbers are Figma
+   measurements in row heights (60.16 units): rows 0.3202 apart, tiles
+   0.29177 apart (a 30.994-height repeat), and each row's start, measured
+   from the centre, one repeat further left than in Figma so the drift never
+   shows an end. */
+.row {
+  display: flex;
+  width: max-content;
+  height: var(--show-marquee-row-height);
+  will-change: transform;
+}
+
+.row + .row {
+  margin-top: calc(var(--show-marquee-row-height) * 0.3202);
+}
+
+.rowTop {
+  margin-left: calc(var(--show-marquee-row-height) * -44.846);
+}
+
+.rowMiddle {
+  margin-left: calc(var(--show-marquee-row-height) * -58.92);
+}
+
+.rowBottom {
+  margin-left: calc(var(--show-marquee-row-height) * -49.098);
+}
+
+.tile {
+  height: 100%;
+  width: auto;
+  max-width: none;
+  margin-right: calc(var(--show-marquee-row-height) * 0.29177);
+}
+
+/* The outlined row's tile is padded 2 units on every side (its stroke sits
+   outside the letters), so it is drawn 1.06649 rows tall and pulled back by
+   the padding (0.033246 rows) to keep the same grid and repeat. */
+.tileOutline {
+  height: calc(var(--show-marquee-row-height) * 1.06649);
+  width: auto;
+  max-width: none;
+  margin-block: calc(var(--show-marquee-row-height) * -0.033246);
+  margin-left: calc(var(--show-marquee-row-height) * -0.033246);
+  margin-right: calc(var(--show-marquee-row-height) * 0.258524);
+}
+
+/* The reel card. */
+.reel {
+  transition: transform var(--duration-show-reel-hover) var(--ease-show-you);
+}
+
+.follower {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-show-reel-follow) linear,
+    transform var(--duration-show-reel-follow) var(--ease-show-you);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .reel:not([data-playing]):hover {
+    transform: scale(var(--show-reel-hover-scale));
+  }
+
+  /* The PLAY label stands in for the pointer while it is over the card. */
+  .reel[data-pointer] .playButton {
+    cursor: none;
+  }
+
+  .reel[data-pointer] .follower {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel {
+    transition: none;
+  }
+
+  .follower {
+    display: none;
+  }
+}

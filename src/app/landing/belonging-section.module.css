@@ -1,0 +1,16 @@
+/* Sizes come from the belonging tokens in globals.css (DESIGN-SYSTEM.md,
+   "Belonging section"). */
+
+.stage {
+  height: var(--belonging-stage-height);
+}
+
+.ring {
+  width: var(--belonging-ring-width);
+  max-width: none;
+  height: auto;
+}
+
+.waveBand {
+  height: var(--belonging-wave-band);
+}

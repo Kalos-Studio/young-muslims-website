@@ -1,0 +1,53 @@
+/* The results panels' slide (DESIGN-SYSTEM.md, "NeighborNets map"): each
+   rises from below the viewport's foot; a closing one drops back. A panel
+   that replaces another rises just after it starts to drop (the stagger), so
+   the switch reads as a new panel. */
+.panel {
+  translate: 0 100%;
+}
+
+.panel[data-open] {
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .panel {
+    transition: translate var(--duration-neighbornets-map-panel)
+      var(--ease-neighbornets-map-lens);
+    will-change: translate;
+  }
+
+  .panel[data-open] {
+    transition-delay: var(--duration-neighbornets-map-panel-stagger);
+  }
+}
+
+/* The cards' row: the viewport's full width (the screen's edge cuts the
+   cards, so more read as continuing), with its start (and its snap) in line
+   with the panel's title: the title's inset (20 / 32 / 78px, the spacing
+   scale's 5 / 8 / 19.5), and from `xl` that inset inside the centred
+   max-w-360 column at any width. */
+.row {
+  padding-inline: calc(var(--spacing) * 5);
+  scroll-padding-inline: calc(var(--spacing) * 5);
+}
+
+@media (width >= 48rem) {
+  .row {
+    padding-inline: calc(var(--spacing) * 8);
+    scroll-padding-inline: calc(var(--spacing) * 8);
+  }
+}
+
+@media (width >= 80rem) {
+  .row {
+    padding-inline: max(
+      calc(var(--spacing) * 19.5),
+      calc((100% - var(--spacing) * 360) / 2 + var(--spacing) * 19.5)
+    );
+    scroll-padding-inline: max(
+      calc(var(--spacing) * 19.5),
+      calc((100% - var(--spacing) * 360) / 2 + var(--spacing) * 19.5)
+    );
+  }
+}

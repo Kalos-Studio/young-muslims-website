@@ -1,0 +1,83 @@
+/* Motion comes from the "Word on the street" tokens in globals.css
+   (DESIGN-SYSTEM.md, "Word on the street"). */
+
+/* The frame: Warm Snow (the section's own colour) with the card's blob cut
+   out of it. At rest the photo shows only through the blob; on hover the
+   frame scales up from the blob's centre to `--street-reveal-scale`, past
+   the point where the hole clears every corner of the box (the art clips
+   it), so the blob grows into the full square. The photo never moves; only
+   the frame's transform changes, on the compositor. */
+.frame {
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  mask-composite: exclude;
+  transition: transform var(--duration-street-hover) var(--ease-street-hover);
+  will-change: transform;
+}
+
+/* Each card's blob, cut out of a full rect (the gradient). */
+.maskMentalHealth {
+  mask-image:
+    linear-gradient(black, black),
+    url("../../../design-assets/figma/landing-2026/street/mask-mental-health.png");
+}
+
+.maskJudgementStigma {
+  mask-image:
+    linear-gradient(black, black),
+    url("../../../design-assets/figma/landing-2026/street/mask-judgement-stigma.png");
+}
+
+.maskRamadanGuide {
+  mask-image:
+    linear-gradient(black, black),
+    url("../../../design-assets/figma/landing-2026/street/mask-ramadan-guide.png");
+}
+
+/* The Obsidian overlay and "Read article": transparent at rest; only
+   opacity and transform change, on their own, quicker timing
+   (`--duration-street-label`) than the shape's growth. */
+.overlay,
+.label {
+  opacity: 0;
+  transition: opacity var(--duration-street-label) var(--ease-street-hover);
+}
+
+.label {
+  transform: translate3d(0, var(--street-label-rise), 0);
+  transition:
+    opacity var(--duration-street-label) var(--ease-street-hover),
+    transform var(--duration-street-label) var(--ease-street-hover);
+}
+
+/* Fine pointers only: touch has no hover. */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .overlay,
+  .card:hover .label {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .card:hover .frame {
+    transform: scale(var(--street-reveal-scale));
+  }
+}
+
+.card:focus-visible .overlay,
+.card:focus-visible .label {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.card:focus-visible .frame {
+  transform: scale(var(--street-reveal-scale));
+}
+
+/* Reduced motion: the square shows at once, with no growth, fade or rise. */
+@media (prefers-reduced-motion: reduce) {
+  .frame,
+  .overlay,
+  .label {
+    transition: none;
+  }
+}

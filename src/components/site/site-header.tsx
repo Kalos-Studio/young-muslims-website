@@ -1,94 +1,101 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 
-import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
-
 import { useFooterPageStage } from "./footer-page-stage";
-import { HeaderContrastController } from "./header-contrast-controller";
-import { Logo } from "./logo";
-import { NavLink } from "./nav-link";
-import { getNavigationItems } from "./nav-links";
-import { SideNav } from "./side-nav";
-
-const primaryLinks = getNavigationItems("header-primary");
-const [ctaLink] = getNavigationItems("header-cta");
+import styles from "./site-header.module.css";
+import { cn } from "@/lib/utils";
 
 /**
- * The site header. Permanent: these are the real routes and the real layout.
- * The logo sits left, primary links are centred, and the call to action sits
- * right immediately before the drawer trigger.
+ * The fixed site header shell. The bar itself (`SiteNavigation`) is
+ * server-rendered and passed in; this narrow client boundary owns only two
+ * behaviors:
  *
- * The three-column grid with an `auto` middle centres the primary navigation
- * against the viewport regardless of the unequal outer groups.
+ * 1. It follows the footer Easter egg's page translation (`pageY`), so the
+ *    header moves with the page like before.
+ * 2. It shows the gradient scrim once the page's hero is no longer behind it.
  *
- * The logo is the real asset, not a placeholder box. A grey rectangle here
- * would make the header depend on wireframe components, and then removing the
- * wireframe would mean rebuilding the header.
+ * Scrim trigger: each page marks its dark hero with `data-header-hero`. An
+ * IntersectionObserver watches that element, with the root's top edge pulled
+ * down by the header's own height. The scrim is off while any of the hero is
+ * still behind the header, and on once the hero has scrolled past it. Pages
+ * with no marked hero keep the scrim on, so the white navigation is always
+ * legible; a hero that streams in later is picked up when it appears. Lenis
+ * drives real window scrolling, so the observer stays in sync with it.
  *
- * WIREFRAME: desktop-only for now. When we do responsive, this is one of the
- * two places that needs real work: the left-hand links collapse into <SideNav />
- * below the `md` breakpoint.
+ * The scrim is a CSS gradient (Deep Obsidian at 65% easing out to clear, reaching below the bar so no edge shows; site-header.module.css),
+ * matching the Figma navigation's raster gradient, which measures about 67%.
+ * Its fade is disabled under reduced motion.
  */
-export function SiteHeader() {
+export function SiteHeader({ children }: { children: ReactNode }) {
   const { pageY } = useFooterPageStage();
+  const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
+  const [scrim, setScrim] = useState(false);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    let hero: HTMLElement | null = null;
+    let heroObserver: IntersectionObserver | undefined;
+
+    // The header is 80px on mobile and 97px from `md` up, so the observer is
+    // rebuilt whenever its height changes.
+    const observeHero = () => {
+      heroObserver?.disconnect();
+      if (!hero) return;
+      heroObserver = new IntersectionObserver(
+        ([entry]) => setScrim(!entry.isIntersecting),
+        { rootMargin: `-${Math.round(header.offsetHeight)}px 0px 0px 0px` },
+      );
+      heroObserver.observe(hero);
+    };
+
+    // Re-target whenever the marked hero changes. A hero can arrive after
+    // this effect runs or be replaced by React (Stories renders its hero
+    // inside a Suspense boundary that can re-create it on the client), and an
+    // observer left on a detached node would never report again.
+    const syncHero = () => {
+      const next = document.querySelector<HTMLElement>("[data-header-hero]");
+      if (next === hero) return;
+      hero = next;
+      if (!hero) setScrim(true);
+      observeHero();
+    };
+
+    const resizeObserver = new ResizeObserver(observeHero);
+    const heroWatcher = new MutationObserver(syncHero);
+    resizeObserver.observe(header);
+    heroWatcher.observe(document.body, { childList: true, subtree: true });
+    syncHero();
+    if (!hero) setScrim(true);
+
+    return () => {
+      heroWatcher.disconnect();
+      resizeObserver.disconnect();
+      heroObserver?.disconnect();
+    };
+  }, [pathname]);
+
   return (
     <motion.header
+      ref={headerRef}
       data-site-header
-      className="sticky top-0 z-40 border-b border-border bg-background/60 backdrop-blur-md"
+      data-scrim={scrim ? "" : undefined}
+      className="group fixed inset-x-0 top-0 z-40 text-brand-pure-white"
       style={{ y: pageY }}
     >
-      <HeaderContrastController />
-      <div
-        data-site-header-inner
-        className="mx-auto grid h-[123px] w-full max-w-[1440px] grid-cols-[1fr_auto] items-center gap-8 px-8 md:px-20 xl:grid-cols-[1fr_auto_1fr]"
-      >
-        <div className="flex items-center justify-start">
-          <Link
-            href="/"
-            aria-label="Young Muslims, home"
-            data-site-logo-link
-            className="rounded-xs transition-[color,opacity] duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          >
-            {/* aria-hidden because the link above already names the destination;
-                without it a screen reader announces the name twice. */}
-            <Logo className="h-5 w-auto" aria-hidden />
-          </Link>
-        </div>
-
-        <nav
-          data-primary-nav
-          aria-label="Primary"
-          className="hidden items-center justify-center gap-4 text-nav xl:flex"
-        >
-          {primaryLinks.map((link) => (
-            <NavLink key={link.id} item={link} className="ym-cta-trigger p-2.5">
-              <span className="ym-cta-roll">
-                <span className="ym-cta-roll__text" data-text={link.label}>
-                  {link.label}
-                </span>
-              </span>
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="flex shrink-0 items-center justify-end gap-6">
-          <nav
-            aria-label="Find a chapter"
-            className="hidden items-center text-nav md:flex"
-          >
-            <NavLink
-              item={ctaLink}
-              className="ym-cta-trigger inline-flex items-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:text-brand-pure-white focus-visible:ring-2 focus-visible:ring-brand-royal focus-visible:ring-offset-2"
-              data-site-cta
-            >
-              <AnimatedCtaLabel label={ctaLink.label} arrowSize={18} />
-            </NavLink>
-          </nav>
-          <SideNav />
-        </div>
-      </div>
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none opacity-0 transition-opacity duration-300 group-data-scrim:opacity-100 motion-reduce:transition-none",
+          styles.scrim,
+        )}
+      />
+      <div className="relative">{children}</div>
     </motion.header>
   );
 }

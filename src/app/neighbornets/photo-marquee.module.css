@@ -1,0 +1,41 @@
+/* The NeighborNets page's photo marquees ("What's a NeighborNet?" and the
+   NeighborNet branding rows; DESIGN-SYSTEM.md, "Photo marquees"): the parts
+   both share. Each section's module sizes its rows and tracks and gives each
+   track its loop (a CSS animation of `transform` by exactly one copy of the
+   row). */
+
+/* A row: the layer that trails the cursor (PhotoMarqueeMotion sets its
+   target; this transition eases it there), holding its looping track, so
+   the drift is an offset added to the loop. */
+.row {
+  position: relative;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .row {
+    transition: transform var(--duration-neighbornets-marquee-pointer)
+      var(--ease-neighbornets-marquee-pointer);
+    will-change: transform;
+  }
+}
+
+/* A track: copies of the row's photos side by side, from the row's centre
+   (each section places its start). */
+.track {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: flex;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .track {
+    will-change: transform;
+  }
+
+  /* Off screen, the loops wait (PhotoMarqueeMotion's observer). */
+  .paused .track {
+    animation-play-state: paused;
+  }
+}

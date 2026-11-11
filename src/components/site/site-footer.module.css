@@ -1,0 +1,102 @@
+/* Sizes and motion come from the site footer tokens in globals.css
+   (DESIGN-SYSTEM.md, "Site footer"). */
+
+/* --- The dark surface ------------------------------------------------- */
+
+/* One organic shape: the footer's dark ground, its wavy top edge the shape's
+   own edge (a vector band over the solid body), rising above the footer's
+   box by the wave's height. It is the clip for the shapes and tagline, so
+   the shapes rise into the wave and are cut by its curve, not a straight
+   line. Positioned absolutely, so the footer's box is unchanged. */
+.surface {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(-1 * var(--footer-wave-height));
+  bottom: 0;
+  overflow: hidden;
+  mask-image:
+    url("../../../design-assets/figma/landing-2026/footer/wave.svg"),
+    linear-gradient(black, black);
+  mask-size:
+    100% var(--footer-wave-height),
+    100% calc(100% - var(--footer-wave-height) + var(--footer-wave-seam));
+  mask-position:
+    top,
+    0 calc(var(--footer-wave-height) - var(--footer-wave-seam));
+  mask-repeat: no-repeat;
+}
+
+/* The footer's box inside the surface: the shapes and tagline are placed
+   against it, as before. */
+.box {
+  position: absolute;
+  inset-inline: 0;
+  top: var(--footer-wave-height);
+  bottom: 0;
+}
+
+/* --- The shapes -------------------------------------------------------- */
+
+/* Each side's pair moves as one layer (the script slides it in). */
+@media (prefers-reduced-motion: no-preference) {
+  .pair {
+    will-change: transform;
+  }
+}
+
+/* Every shape is placed in units of `--footer-shape-unit` (the desktop
+   frame's height, smaller on tablet and mobile): its Figma offset and size
+   over 525 (Figma 273:618, 1440 x 525), so it keeps its size at any width,
+   the blue pair anchored to the left edge and the green pair to the right.
+   On mobile and tablet each pair rests a little lower
+   (`--footer-shape-offset-*`), clear of the seam above. */
+.shape {
+  position: absolute;
+}
+
+.blue {
+  top: calc(
+    var(--footer-shape-unit) * -0.501 + var(--footer-shape-offset-blue)
+  );
+  left: calc(var(--footer-shape-unit) * -2.5141);
+  width: calc(var(--footer-shape-unit) * 3.2357);
+  height: calc(var(--footer-shape-unit) * 3.2622);
+}
+
+.blueLight {
+  top: calc(
+    var(--footer-shape-unit) * -0.3261 + var(--footer-shape-offset-blue)
+  );
+  left: calc(var(--footer-shape-unit) * -2.6838);
+  width: calc(var(--footer-shape-unit) * 2.8881);
+  height: calc(var(--footer-shape-unit) * 2.9125);
+}
+
+/* The green pair is turned (about each shape's centre), as in Figma. */
+.green {
+  top: calc(
+    var(--footer-shape-unit) * -1.3566 + var(--footer-shape-offset-green)
+  );
+  right: calc(var(--footer-shape-unit) * -2.6413);
+  width: calc(var(--footer-shape-unit) * 3.42);
+  height: calc(var(--footer-shape-unit) * 3.1874);
+  transform: rotate(var(--footer-shape-rotation));
+}
+
+.greenLight {
+  top: calc(
+    var(--footer-shape-unit) * -1.3768 + var(--footer-shape-offset-green)
+  );
+  right: calc(var(--footer-shape-unit) * -2.7497);
+  width: calc(var(--footer-shape-unit) * 3.0383);
+  height: calc(var(--footer-shape-unit) * 2.8317);
+  transform: rotate(var(--footer-shape-rotation));
+}
+
+/* --- The tagline marquee ----------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .marquee {
+    will-change: transform;
+  }
+}

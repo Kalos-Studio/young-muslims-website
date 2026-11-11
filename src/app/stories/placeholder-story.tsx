@@ -32,7 +32,7 @@ export function PlaceholderStory({ slot }: { slot: PortraitSlot }) {
   return (
     <main data-stories-page className={styles.page}>
       <article>
-        <header className={placeholder.hero} data-header-theme="light">
+        <header className={placeholder.hero}>
           <div className={styles.headingRow}>
             <Link href="/stories#stories-heading" className={styles.back}>
               <Image src={back} alt="" />
@@ -86,7 +86,6 @@ export function PlaceholderStory({ slot }: { slot: PortraitSlot }) {
         <section
           className={`${styles.body} ${placeholder.body}`}
           aria-label="Story preview"
-          data-header-theme="light"
         >
           <div
             aria-hidden="true"

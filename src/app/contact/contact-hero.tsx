@@ -6,7 +6,7 @@ export function ContactHero() {
   return (
     <section
       aria-labelledby="contact-title"
-      data-header-theme="dark"
+      data-header-hero
       className="relative isolate overflow-hidden bg-primary text-primary-foreground"
     >
       <Image

@@ -58,7 +58,6 @@ export function LeadershipSection() {
     <section
       aria-labelledby="leadership-heading"
       className="overflow-hidden bg-background py-20"
-      data-header-theme="light"
     >
       <div className="mx-auto max-w-3xl px-8 text-center">
         <p className="text-nav font-bold text-secondary">Our leadership</p>

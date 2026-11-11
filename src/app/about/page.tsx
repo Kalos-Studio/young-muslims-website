@@ -37,7 +37,6 @@ export default function AboutPage() {
 
       <section
         className="mx-auto max-w-7xl px-8 py-20 lg:px-20"
-        data-header-theme="light"
         aria-labelledby="movement-heading"
       >
         <div className="grid items-center gap-8 md:grid-cols-2">
@@ -112,16 +111,12 @@ export default function AboutPage() {
       </section>
 
       <div
-        data-header-theme="light"
         id="faq"
         className="mx-auto max-w-7xl scroll-mt-40 px-8 py-20 lg:px-20"
       >
         <FaqSection />
       </div>
-      <section
-        className="bg-accent py-20 text-accent-foreground"
-        data-header-theme="dark"
-      >
+      <section className="bg-accent py-20 text-accent-foreground">
         <div className="mx-auto max-w-7xl px-8 lg:px-20">
           <p className="text-nav font-bold">
             A national effort starts with people like you.

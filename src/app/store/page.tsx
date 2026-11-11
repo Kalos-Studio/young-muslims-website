@@ -20,7 +20,6 @@ export default function StorePage() {
       <Storefronts />
 
       <section
-        data-header-theme="dark"
         aria-labelledby="store-community-title"
         className="relative isolate flex min-h-220 items-start overflow-hidden px-8 pt-36 pb-60 text-primary-foreground md:-mt-40 md:min-h-160 md:items-center md:px-20 md:py-40"
       >

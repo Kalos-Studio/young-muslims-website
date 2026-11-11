@@ -4,13 +4,7 @@ import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
-import {
-  animate,
-  motion,
-  useInView,
-  useScroll,
-  useTransform,
-} from "motion/react";
+import { animate, useInView, useScroll } from "motion/react";
 import {
   useCallback,
   useEffect,
@@ -27,20 +21,48 @@ import footerPic4 from "../../../footer pic 4 1.png";
 import footerPic from "../../../footer pic.png";
 import footerLakeside from "../../../design-assets/figma/neighbornets/footer-lakeside.jpg";
 import mustafaPhotoAlt from "../../../design-assets/figma/stories/mustafa-photo-alt.jpeg";
-import footerFacebook from "../../../design-assets/figma/landing-2026/new-sections/footer-x.svg";
+import footerFacebook from "../../../design-assets/figma/landing-2026/new-sections/footer-facebook.svg";
 import footerInstagram from "../../../design-assets/figma/landing-2026/new-sections/footer-instagram.svg";
 import footerLogo from "../../../design-assets/figma/landing-2026/new-sections/footer-logo.svg";
-import footerX from "../../../design-assets/figma/landing-2026/new-sections/footer-facebook.svg";
+import footerX from "../../../design-assets/figma/landing-2026/new-sections/footer-x.svg";
 import footerYoutube from "../../../design-assets/figma/landing-2026/new-sections/footer-youtube.svg";
 import { getNavigationItems } from "./nav-links";
 import { useFooterPageStage } from "./footer-page-stage";
-import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
+import { FooterScrollLayers } from "./footer-scroll-layers";
+import { StandardButton } from "@/components/ui/standard-button";
 
 const FOOTER_LINKS = [
   getNavigationItems("footer-primary"),
   getNavigationItems("footer-secondary"),
 ] as const;
 const [contactLink] = getNavigationItems("footer-contact");
+
+/* The social profiles, in Figma's order; each opens in a new tab. */
+const SOCIAL_LINKS = [
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/youngmuslims",
+    icon: footerFacebook,
+  },
+  { label: "X", href: "https://twitter.com/youngmuslims", icon: footerX },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/youngmuslims",
+    icon: footerYoutube,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/young_muslims/",
+    icon: footerInstagram,
+  },
+] as const;
+
+/* PLACEHOLDER destinations: the privacy pages do not exist yet. Swap in the
+   real routes when they are built. */
+const LEGAL_LINKS = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Donor Privacy", href: "/donor-privacy" },
+] as const;
 
 const MONTAGE_IMAGES: readonly StaticImageData[] = [
   findNnPic,
@@ -57,9 +79,6 @@ const REVEAL_DURATION_MS = 560;
 const FLASH_DURATION_MS = 240;
 const FINAL_FRAME_HOLD_MS = 300;
 const RETURN_DURATION_MS = 680;
-const TAGLINE_COPY = "FOR THE YOUTH. BY THE YOUTH.";
-const TAGLINE_REPETITIONS = 5;
-const TAGLINE_TRAVEL_DISTANCE = 240;
 
 type FooterPhase = "idle" | "revealing" | "flashing" | "returning";
 
@@ -108,9 +127,18 @@ function FooterMontage({
 }
 
 /**
- * The shared closing footer. Its normal state follows the Figma layout; the
- * leading wave, directional tagline and bottom-edge montage are progressive
- * motion layers that leave the navigation usable without JavaScript or motion.
+ * The shared closing footer (Figma 273:618, tablet 280:843, mobile
+ * 298:1459). Its dark ground is one organic shape with a wavy top that
+ * rises above the footer's box (FooterScrollLayers, which also holds the
+ * scroll-linked shapes and tagline); with the bottom-edge montage, these are
+ * progressive layers that leave the navigation usable without JavaScript or
+ * motion.
+ *
+ * The Easter egg (the montage the page lifts to reveal at its foot) is
+ * load-bearing: its listeners, gating, timings and the page translation it
+ * shares with the header through FooterPageStage are deliberately left
+ * as they were. The visual layers only write transforms on their own
+ * elements, inside the clipped wrapper, and change no layout.
  */
 export function SiteFooter() {
   const footerRef = useRef<HTMLElement>(null);
@@ -127,7 +155,6 @@ export function SiteFooter() {
     getReducedMotion,
     () => false,
   );
-  const footerHasEntered = useInView(footerRef, { once: true, amount: 0.05 });
   const footerIsNearby = useInView(footerRef, {
     once: true,
     margin: "1000px 0px",
@@ -138,13 +165,6 @@ export function SiteFooter() {
     target: footerRef,
     offset: ["start end", "end end"],
   });
-  const taglineX = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    reduceMotion
-      ? [0, 0, 0]
-      : [-TAGLINE_TRAVEL_DISTANCE, 0, TAGLINE_TRAVEL_DISTANCE],
-  );
 
   const clearTimers = useCallback(() => {
     timersRef.current.forEach(clearTimeout);
@@ -339,106 +359,100 @@ export function SiteFooter() {
       ref={footerRef}
       data-footer-phase={phase}
       data-footer-ready={Boolean(availableFrames?.length)}
-      className="relative h-[794px] w-full text-brand-warm-snow xl:h-[525px]"
+      className="relative h-198.5 w-full text-brand-warm-snow md:h-131.25"
     >
-      <motion.div
-        aria-hidden="true"
-        initial={false}
-        animate={{
-          y: reduceMotion || footerHasEntered ? 0 : 84,
-          scaleY: reduceMotion || footerHasEntered ? 1 : 0.72,
-        }}
-        transition={{ type: "spring", stiffness: 62, damping: 18, mass: 0.95 }}
-        className="pointer-events-none absolute right-0 bottom-[calc(100%-1px)] left-0 h-[110px] origin-bottom text-brand-obsidian"
-      >
-        <svg
-          viewBox="0 0 1440 110"
-          preserveAspectRatio="none"
-          className="h-full w-full"
-        >
-          <path
-            d="M0 110V79C172 11 347 104 554 67C781 26 850 3 1051 37C1215 65 1325 49 1440 8V110H0Z"
-            fill="currentColor"
-          />
-        </svg>
-      </motion.div>
-
-      <div className="absolute inset-0 overflow-hidden bg-brand-obsidian">
-        <div className="absolute top-0 left-1/2 h-[794px] w-[360px] -translate-x-1/2 md:w-full xl:h-[525px] xl:w-[1440px]">
-          <div className="absolute top-0 left-8 flex w-[296px] flex-col items-stretch md:right-10 md:left-10 md:w-auto xl:top-[60px] xl:right-auto xl:left-[80px] xl:w-[1280px] xl:flex-row xl:items-start xl:justify-between">
-            <Image
-              src={footerLogo}
-              alt="Young Muslims"
-              className="mx-auto mt-0 w-[278px] xl:mx-0 xl:mt-0 xl:w-auto"
-            />
+      <FooterScrollLayers progress={scrollYProgress} />
+      <div className="absolute inset-0">
+        <div className="relative mx-auto flex h-full max-w-360 flex-col px-8 md:px-16 md:pt-10 xl:px-20 xl:pt-15">
+          <div className="flex flex-col items-center gap-16 md:flex-row md:items-start md:justify-between md:gap-0">
+            <div className="flex flex-col items-center md:items-start md:gap-12 xl:contents">
+              <Link
+                href="/"
+                aria-label="Young Muslims home"
+                className="block outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-warm-snow xl:order-1"
+              >
+                <Image
+                  src={footerLogo}
+                  alt=""
+                  className="block h-auto w-69.5"
+                />
+              </Link>
+              <div className="hidden md:block md:w-93.25 xl:order-3">
+                <ContactBlock />
+              </div>
+            </div>
 
             <nav
               aria-label="Footer navigation"
-              className="mt-[64px] flex gap-14 self-center text-nav font-semibold xl:mt-0 xl:self-auto"
+              className="flex w-full shrink-0 gap-14 text-nav font-semibold whitespace-nowrap md:w-auto xl:order-2"
             >
               {FOOTER_LINKS.map((column, index) => (
-                <div key={index} className="flex flex-col gap-6">
+                <ul key={index} className="flex flex-col gap-6">
                   {column.map((link) => (
-                    <Link
-                      key={link.id}
-                      href={link.href}
-                      className="hover:underline"
-                    >
-                      {link.label}
-                    </Link>
+                    <li key={link.id}>
+                      <Link
+                        href={link.href}
+                        className="ym-cta-trigger block outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-warm-snow"
+                      >
+                        <span className="ym-cta-roll">
+                          <span
+                            className="ym-cta-roll__text"
+                            data-text={link.label}
+                          >
+                            {link.label}
+                          </span>
+                        </span>
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ul>
               ))}
             </nav>
 
-            <div className="mx-auto mt-[64px] w-[296px] xl:mx-0 xl:mt-0 xl:w-[373px]">
-              <p className="text-nav font-semibold">
-                Want to learn more about Young Muslims, what we do, or how to
-                join/create a NeighborNet? Reach out to us via email.
-              </p>
-              <Link
-                href={contactLink.href}
-                aria-label={contactLink.label}
-                className="ym-cta-trigger mt-6 inline-flex w-full items-center justify-center gap-2 bg-brand-royal px-6 py-4 text-nav font-bold text-brand-pure-white hover:bg-brand-royal/80 focus-visible:ring-2 focus-visible:ring-brand-pure-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-obsidian focus-visible:outline-none xl:w-auto"
-              >
-                <AnimatedCtaLabel label={contactLink.label} />
-              </Link>
+            <div className="w-full md:hidden">
+              <ContactBlock />
             </div>
           </div>
 
-          <div
-            aria-hidden="true"
-            className="absolute top-[514px] left-1/2 -mt-6 w-screen -translate-x-1/2 overflow-hidden py-4 xl:top-[334px]"
-          >
-            <motion.div
-              className="-ml-[741px] flex w-max gap-8 font-display text-[32px] whitespace-nowrap text-brand-warm-snow/20 uppercase xl:-ml-[1995px] xl:text-marquee"
-              style={{ x: taglineX }}
-            >
-              {Array.from({ length: TAGLINE_REPETITIONS }).map((_, index) => (
-                <span key={index} className="shrink-0">
-                  {TAGLINE_COPY}
+          <div className="mt-auto mb-16 flex flex-col items-center gap-8 text-footer-legal font-bold md:mb-10 md:flex-row md:justify-between md:gap-0">
+            <div className="flex items-center gap-6">
+              <span>© Young Muslims 2026</span>
+              <a
+                href="https://kalos.so"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brothers-slate underline outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-warm-snow"
+              >
+                Made by Kalos Studio
+              </a>
+            </div>
+            <ul aria-label="Social media" className="flex items-center gap-4">
+              {SOCIAL_LINKS.map((social) => (
+                <li key={social.label}>
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${social.label} (opens in a new tab)`}
+                    className="block outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-warm-snow"
+                  >
+                    <Image src={social.icon} alt="" className="block size-8" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <div className="flex items-center gap-1">
+              {LEGAL_LINKS.map((legal, index) => (
+                <span key={legal.label} className="flex items-center gap-1">
+                  {index > 0 ? <span aria-hidden="true">•</span> : null}
+                  <a
+                    href={legal.href}
+                    className="outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-warm-snow"
+                  >
+                    {legal.label}
+                  </a>
                 </span>
               ))}
-            </motion.div>
-          </div>
-
-          <div className="absolute top-[610px] left-8 flex h-[120px] w-[296px] flex-col items-center justify-between text-[10px] font-bold tracking-[-0.02em] md:right-10 md:left-10 md:w-auto xl:top-[453px] xl:right-auto xl:left-[80px] xl:h-auto xl:w-[1280px] xl:flex-row">
-            <div className="flex w-full justify-between gap-6 xl:w-auto xl:justify-start">
-              <span>© Young Muslims 2026</span>
-              <span className="text-brothers-slate underline">
-                Made by Kalos Studio
-              </span>
-            </div>
-            <div className="flex gap-4" aria-label="Social media">
-              <Image src={footerFacebook} alt="Facebook" />
-              <Image src={footerX} alt="X" />
-              <Image src={footerYoutube} alt="YouTube" />
-              <Image src={footerInstagram} alt="Instagram" />
-            </div>
-            <div className="flex gap-2">
-              <span>Privacy Policy</span>
-              <span>•</span>
-              <span>Donor Privacy</span>
             </div>
           </div>
         </div>
@@ -461,5 +475,23 @@ export function SiteFooter() {
           montageHost,
         )}
     </footer>
+  );
+}
+
+/** The contact copy and "Contact us" (the dark StandardButton, to /contact). */
+function ContactBlock() {
+  return (
+    <div className="flex flex-col gap-6">
+      <p className="text-nav font-semibold">
+        Want to learn more about Young Muslims, what we do, or how to
+        join/create a NeighborNet? Reach out to us via email.
+      </p>
+      <StandardButton
+        href={contactLink.href}
+        label={contactLink.label}
+        tone="dark"
+        className="md:self-start"
+      />
+    </div>
   );
 }

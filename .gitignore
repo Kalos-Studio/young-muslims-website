@@ -40,6 +40,3 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Copied out of node_modules by scripts/copy-maplibre-worker.mjs on postinstall.
-/public/maplibre-gl-worker.mjs
-/public/maplibre-gl-shared.mjs

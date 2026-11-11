@@ -1,0 +1,236 @@
+id,latitude,longitude,city,state,postal_code,country,source
+brothers-austin-austin,30.271129,-97.743700,Austin,TX,78701,US,nominatim
+brothers-california-berkeley,37.870839,-122.272863,Berkeley,CA,94704,US,nominatim
+brothers-california-brighton,38.549351,-121.417175,Sacramento,CA,95826,US,nominatim
+brothers-california-corona,33.875295,-117.566444,Corona,CA,92879,US,nominatim
+brothers-california-la-mirada,33.906097,-118.010709,La Mirada,CA,90638,US,nominatim
+brothers-california-los-angeles,34.053691,-118.242766,Los Angeles,CA,90012,US,nominatim
+brothers-central-south-virginia-chesterfield,37.385998,-77.578509,Chesterfield,VA,23832,US,manual
+brothers-central-south-virginia-glen-allen,37.664879,-77.487124,Glen Allen,VA,23060,US,nominatim
+brothers-central-south-virginia-virginia-tech,37.221927,-80.427282,Blacksburg,VA,24060,US,nominatim
+brothers-chicago-bolingbrook,41.700330,-88.071771,Bolingbrook,IL,60440,US,nominatim
+brothers-chicago-icws,41.884751,-88.203961,West Chicago,IL,60185,US,nominatim
+brothers-chicago-ifn,42.327889,-87.913117,Libertyville,IL,60048,US,nominatim
+brothers-chicago-niles,42.038112,-87.770796,Morton Grove,IL,60053,US,nominatim
+brothers-chicago-plainfield,41.557076,-88.190503,Joliet,IL,60404,US,nominatim
+brothers-chicago-potter,42.153914,-88.136189,Barrington,IL,60010,US,nominatim
+brothers-chicago-westside,41.850030,-87.964508,Oakbrook Terrace,IL,60181,US,nominatim
+brothers-chicago-wheaton,41.864696,-88.110171,Wheaton,IL,60187,US,nominatim
+brothers-connecticut-berlin,41.621488,-72.745652,Berlin,CT,06037,US,nominatim
+brothers-connecticut-middletown,41.562318,-72.650906,Middletown,CT,06457,US,nominatim
+brothers-connecticut-new-britain,41.661188,-72.779559,New Britain,CT,06051,US,nominatim
+brothers-connecticut-new-haven,41.308214,-72.925052,New Haven,CT,06510,US,nominatim
+brothers-connecticut-waterbury,41.554114,-73.043561,Waterbury,CT,06702,US,nominatim
+brothers-connecticut-windsor-locks,41.931210,-72.631385,Windsor Locks,CT,06096,US,nominatim
+brothers-dallas-east-75,33.013676,-96.692510,Plano,TX,75075,US,nominatim
+brothers-dallas-east-east-plano,33.013676,-96.692510,Plano,TX,75075,US,nominatim
+brothers-dallas-east-frisco,33.150600,-96.823818,Frisco,TX,75034,US,nominatim
+brothers-dallas-east-prosper,33.237158,-96.797705,Prosper,TX,75078,US,nominatim
+brothers-dallas-east-richardson,32.948179,-96.729721,Richardson,TX,75081,US,nominatim
+brothers-dallas-west-carrollton,32.951547,-96.903424,Carrollton,TX,75006,US,nominatim
+brothers-dallas-west-colleyville,32.880960,-97.155012,Colleyville,TX,76034,US,nominatim
+brothers-dallas-west-euless,32.837073,-97.081954,Euless,TX,76040,US,nominatim
+brothers-dallas-west-irving,32.829518,-96.944218,Irving,TX,75061,US,nominatim
+brothers-dallas-west-southlake,32.941236,-97.134178,Southlake,TX,76092,US,nominatim
+brothers-dallas-west-valley-ranch,32.934155,-96.953195,Irving,TX,75057,US,nominatim
+brothers-florida-gainesville-fl,29.651968,-82.324985,Gainesville,FL,32601,US,nominatim
+brothers-florida-jacksonville,30.326225,-81.657918,Jacksonville,FL,32202,US,nominatim
+brothers-florida-lake-mary,28.756275,-81.322093,Lake Mary,FL,32795,US,nominatim
+brothers-florida-miami,25.774157,-80.193597,Miami,FL,33132,US,nominatim
+brothers-florida-pines,26.006194,-80.287209,Pembroke Pines,FL,33025,US,nominatim
+brothers-florida-pompano,26.237860,-80.124767,Pompano Beach,FL,33060,US,nominatim
+brothers-florida-soflo,26.191140,-80.293550,Sunrise,FL,33351,US,nominatim
+brothers-florida-st-johns,29.903228,-81.414547,St. Johns,FL,32085,US,manual
+brothers-florida-tampa,27.944985,-82.458311,Tampa,FL,33626,US,nominatim
+brothers-florida-west-palm-beach,26.715364,-80.053294,West Palm Beach,FL,33401,US,nominatim
+brothers-georgia-alpharetta,34.075596,-84.294596,Alpharetta,GA,30009,US,nominatim
+brothers-georgia-atlanta,33.754466,-84.389815,Atlanta,GA,30303,US,nominatim
+brothers-georgia-cumming,34.207320,-84.140193,Cumming,GA,30040,US,nominatim
+brothers-georgia-east-cobb,33.978709,-84.487020,Marietta,GA,30062,US,nominatim
+brothers-georgia-liburn,33.890104,-84.142972,Lilburn,GA,30047,US,nominatim
+brothers-georgia-roswell,34.023320,-84.360022,Roswell,GA,30075,US,nominatim
+brothers-georgia-stone-mountain,33.806217,-84.145751,Stone Mountain,GA,30087,US,manual
+brothers-georgia-suwanee,34.051490,-84.071300,Suwanee,GA,30024,US,nominatim
+brothers-houston-bear-creek,29.848485,-95.703357,Houston,TX,77084,US,manual
+brothers-houston-cinco-ranch,29.730212,-95.775100,Katy,TX,77494,US,nominatim
+brothers-houston-clear-lake,29.592542,-95.180214,Houston,TX,77034,US,nominatim
+brothers-houston-college-station,30.622258,-96.347468,College Station,TX,77840,US,nominatim
+brothers-houston-cypress,29.969112,-95.697169,Cypress,TX,77429,US,nominatim
+brothers-houston-masjid-maryam,29.593293,-95.684280,Sugar Land,TX,77479,US,nominatim
+brothers-houston-maskaty,29.785785,-95.824396,Katy,TX,77494,US,nominatim
+brothers-houston-pearland,29.563976,-95.286430,Pearland,TX,77581,US,nominatim
+brothers-houston-river-oaks,29.747940,-95.426509,Houston,TX,77019,US,nominatim
+brothers-houston-spring,30.070979,-95.401342,Spring,TX,77373,US,nominatim
+brothers-houston-synott,29.665286,-95.615765,Sugar Land,TX,77498,US,nominatim
+brothers-houston-ym-masjid-hamza,29.710300,-95.638800,Houston,TX,77083,US,manual
+brothers-indiana-fishers,39.955593,-86.013873,Fishers,IN,46038,US,nominatim
+brothers-kentucky-4th-st,38.208438,-85.764673,Louisville,KY,40208,US,nominatim
+brothers-kentucky-bowling-green,36.992920,-86.442868,Bowling Green,KY,42101,US,nominatim
+brothers-kentucky-lexington,38.046407,-84.497039,Lexington,KY,40507,US,nominatim
+brothers-maryland-annapolis,38.978640,-76.492786,Annapolis,MD,21401,US,nominatim
+brothers-maryland-baltimore,39.290882,-76.610759,Baltimore,MD,21202,US,nominatim
+brothers-maryland-gaithersburg,39.139919,-77.192921,Gaithersburg,MD,20877,US,nominatim
+brothers-maryland-lanham,38.965365,-76.841793,Lanham,MD,20706,US,nominatim
+brothers-maryland-salisbury,38.366027,-75.600996,Salisbury,MD,21801,US,nominatim
+brothers-maryland-silver-spring,38.999762,-77.024037,Silver Spring,MD,20910,US,nominatim
+brothers-maryland-whitemarsh,39.383655,-76.451127,Perry Hall,MD,21128,US,nominatim
+brothers-massachusetts-lowell,42.641444,-71.308533,Lowell,MA,01825,US,nominatim
+brothers-massachusetts-metrowest,42.269431,-71.612991,Westborough,MA,01581,US,nominatim
+brothers-massachusetts-pawtucket,41.886997,-71.357708,Pawtucket,RI,02861,US,nominatim
+brothers-massachusetts-quincy,42.250991,-71.003737,Quincy,MA,02169,US,nominatim
+brothers-massachusetts-sharon,42.123733,-71.178728,Sharon,MA,02067,US,nominatim
+brothers-massachusetts-worcester,42.262562,-71.801888,Worcester,MA,01608,US,nominatim
+brothers-minnesota-blaine,45.160799,-93.234949,Blaine,MN,55434,US,nominatim
+brothers-minnesota-minneapolis,44.977300,-93.265469,Minneapolis,MN,55415,US,nominatim
+brothers-nevada-las-vegas,36.167426,-115.148413,Las Vegas,NV,89101,US,nominatim
+brothers-nevada-metro-west,36.167426,-115.148413,Las Vegas,NV,89101,US,nominatim
+brothers-new-jersey-central-edison,40.500535,-74.398394,Edison,NJ,08817,US,nominatim
+brothers-new-jersey-central-old-bridge,40.399178,-74.340904,Old Bridge,NJ,08857,US,nominatim
+brothers-new-jersey-central-piscataway,40.546433,-74.466054,Piscataway,NJ,08854,US,nominatim
+brothers-new-jersey-central-woodbridge,40.554180,-74.286001,Woodbridge,NJ,07095,US,nominatim
+brothers-new-jersey-north-bayonne,40.668714,-74.114309,Bayonne,NJ,07002,US,nominatim
+brothers-new-jersey-north-jersey-city,40.721568,-74.047455,Jersey City,NJ,07302,US,nominatim
+brothers-new-jersey-north-morris-county,40.842718,-74.392147,Parsippany-Troy Hills,NJ,07054,US,nominatim
+brothers-new-jersey-north-newark,40.735657,-74.172367,Newark,NJ,07102,US,nominatim
+brothers-new-jersey-north-north-hudson,40.804267,-74.012084,North Bergen,NJ,07047,US,nominatim
+brothers-new-jersey-north-paramus,40.945291,-74.073590,Paramus,NJ,07652,US,nominatim
+brothers-new-jersey-north-teaneck,40.886016,-74.007257,Teaneck,NJ,07666,US,nominatim
+brothers-new-jersey-north-wayne,40.949172,-74.237680,Wayne,NJ,07470,US,nominatim
+brothers-new-jersey-south-571,40.281318,-74.570406,West Windsor,NJ,08512,US,nominatim
+brothers-new-jersey-south-blackwood,39.799232,-75.064170,Blackwood,NJ,08012,US,manual
+brothers-new-jersey-south-montyboro,40.507535,-74.646486,Hillsborough,NJ,08844,US,nominatim
+brothers-new-jersey-south-south-brunswick,40.381873,-74.531766,South Brunswick,NJ,08852,US,nominatim
+brothers-new-jersey-south-south-jersey,39.914023,-74.968922,Cherry Hill,NJ,08003,US,nominatim
+brothers-new-york-east-deer-park,40.762250,-73.322859,Deer Park,NY,11729,US,nominatim
+brothers-new-york-east-east-meadow,40.721775,-73.558291,East Meadow,NY,11554,US,nominatim
+brothers-new-york-east-flushing,40.765430,-73.817429,Queens,NY,11354,US,nominatim
+brothers-new-york-east-jamaica,40.698763,-73.808825,Queens,NY,11435,US,nominatim
+brothers-new-york-east-melville,40.783591,-73.407557,Melville,NY,11747,US,nominatim
+brothers-new-york-east-nyit,40.807959,-73.606269,Old Westbury,NY,11568,US,nominatim
+brothers-new-york-east-queens-village,40.726769,-73.741521,Queens,NY,11428,US,nominatim
+brothers-new-york-east-ronkonkoma,40.807522,-73.135992,Ronkonkoma,NY,11779,US,manual
+brothers-new-york-east-shelter-rock,40.766697,-73.670325,Roslyn,NY,11576,US,nominatim
+brothers-new-york-east-valley-stream,40.663136,-73.705696,Valley Stream,NY,11580,US,nominatim
+brothers-new-york-west-bronx,40.839878,-73.875632,The Bronx,NY,10460,US,nominatim
+brothers-new-york-west-brooklyn,40.633753,-73.964178,Brooklyn,NY,11230,US,nominatim
+brothers-new-york-west-rockland,41.150984,-73.989778,New City,NY,10956,US,nominatim
+brothers-new-york-west-stamford,41.053430,-73.538734,Stamford,CT,06902,US,nominatim
+brothers-new-york-west-westchester,40.918215,-73.786449,New Rochelle,NY,10801,US,nominatim
+brothers-new-york-west-white-plains,41.033986,-73.762910,White Plains,NY,10601,US,nominatim
+brothers-northern-virginia-burke,38.781244,-77.268888,Burke,VA,22015,US,nominatim
+brothers-northern-virginia-falls-church,38.882334,-77.171091,Falls Church,VA,22046,US,nominatim
+brothers-northern-virginia-gainesville-va,38.792741,-77.629202,Gainesville,VA,20109,US,nominatim
+brothers-ontario-canada-mississauga,43.588473,-79.643658,Mississauga,ON,L5B 3C9,CA,nominatim
+brothers-pennsylvania-devon,40.047360,-75.422951,Devon,PA,19333,US,manual
+brothers-pennsylvania-easton,40.691608,-75.209987,Easton,PA,18042,US,nominatim
+brothers-pennsylvania-khair,39.968730,-75.239245,Philadelphia,PA,19151,US,nominatim
+brothers-pennsylvania-masjid-al-nur,40.217728,-76.985195,Mechanicsburg,PA,17050,US,nominatim
+brothers-pennsylvania-upper-darby,39.943218,-75.301055,Upper Darby,PA,19026,US,nominatim
+brothers-pennsylvania-west-chester,39.959739,-75.604461,West Chester,PA,19382,US,nominatim
+brothers-pennsylvania-west-philly,39.960002,-75.224886,Philadelphia,PA,19139,US,nominatim
+brothers-pennsylvania-westport,41.301732,-77.840269,Westport,PA,,US,manual
+brothers-tennessee-nashville,36.162277,-86.774298,Nashville,TN,37201,US,nominatim
+sisters-arizona-east-valley,33.415200,-111.831500,Mesa,AZ,85201,US,nominatim
+sisters-california-berkeley,37.870839,-122.272863,Berkeley,CA,94704,US,nominatim
+sisters-california-los-angeles,34.053691,-118.242766,Los Angeles,CA,90012,US,nominatim
+sisters-california-sacramento,38.581061,-121.493895,Sacramento,CA,95814,US,nominatim
+sisters-connecticut-berlin,41.621488,-72.745652,Berlin,CT,06037,US,nominatim
+sisters-connecticut-middletown,41.562318,-72.650906,Middletown,CT,06457,US,nominatim
+sisters-connecticut-new-haven,41.308214,-72.925052,New Haven,CT,06510,US,nominatim
+sisters-connecticut-stamford,41.053430,-73.538734,Stamford,CT,06902,US,nominatim
+sisters-connecticut-windsor-locks,41.931210,-72.631385,Windsor Locks,CT,06096,US,nominatim
+sisters-florida-jacksonville,30.326225,-81.657918,Jacksonville,FL,32202,US,nominatim
+sisters-florida-orlando,28.542122,-81.379045,Orlando,FL,32801,US,nominatim
+sisters-florida-pompano-beach,26.237860,-80.124767,Pompano Beach,FL,33060,US,nominatim
+sisters-florida-soflo,26.191140,-80.293550,Sunrise,FL,33351,US,nominatim
+sisters-florida-tampa,27.944985,-82.458311,Tampa,FL,33626,US,nominatim
+sisters-georgia-alpharetta,34.075596,-84.294596,Alpharetta,GA,30009,US,nominatim
+sisters-georgia-augusta,33.470971,-81.974843,Augusta,GA,30901,US,nominatim
+sisters-georgia-douglasville,33.751497,-84.747714,Douglasville,GA,30134,US,nominatim
+sisters-georgia-duluth,34.002857,-84.144105,Duluth,GA,30096,US,nominatim
+sisters-georgia-forsyth,34.235309,-84.133564,Forsyth County,GA,30040,US,manual
+sisters-georgia-suwanee,34.051490,-84.071300,Suwanee,GA,30024,US,nominatim
+sisters-illinois-ampo,41.760600,-88.320100,Aurora,IL,60506,US,nominatim
+sisters-illinois-iccd,42.033400,-87.883400,Des Plaines,IL,60016,US,nominatim
+sisters-illinois-ifn,42.327889,-87.913117,Libertyville,IL,60048,US,nominatim
+sisters-illinois-plainfield,41.557076,-88.190503,Joliet,IL,60404,US,nominatim
+sisters-illinois-westside,41.850030,-87.964508,Oakbrook Terrace,IL,60181,US,nominatim
+sisters-indiana-illiana,41.494202,-87.521707,Dyer,IN,46311,US,nominatim
+sisters-indiana-north-indy,39.807820,-86.178043,Indianapolis,IN,46208,US,nominatim
+sisters-indiana-west-indy,39.768400,-86.200000,Indianapolis,IN,46222,US,nominatim
+sisters-iowa-des-moines,41.586865,-93.624949,Des Moines,IA,50309,US,nominatim
+sisters-kentucky-bowling-green,36.992920,-86.442868,Bowling Green,KY,42101,US,nominatim
+sisters-kentucky-lexington,38.046407,-84.497039,Lexington,KY,40507,US,nominatim
+sisters-louisiana-baton-rouge,30.449416,-91.186966,Baton Rouge,LA,70801,US,nominatim
+sisters-louisiana-mandeville,30.358231,-90.065748,Mandeville,LA,70448,US,nominatim
+sisters-louisiana-new-orleans,29.956142,-90.073393,New Orleans,LA,70170,US,nominatim
+sisters-maine-portland,43.657361,-70.258662,Portland,ME,04101,US,nominatim
+sisters-maryland-bel-air,39.535900,-76.348300,Bel Air,MD,21014,US,nominatim
+sisters-maryland-gaithersburg,39.139919,-77.192921,Gaithersburg,MD,20877,US,nominatim
+sisters-maryland-laurel,39.098432,-76.848509,Laurel,MD,20707,US,nominatim
+sisters-maryland-salisbury,38.366027,-75.600996,Salisbury,MD,21801,US,nominatim
+sisters-maryland-white-marsh,39.383655,-76.451127,Perry Hall,MD,21128,US,nominatim
+sisters-massachusetts-acton-boxborough,42.485093,-71.432840,Acton,MA,01720,US,nominatim
+sisters-massachusetts-andover,42.657170,-71.140878,Andover,MA,01810,US,nominatim
+sisters-massachusetts-boston,42.358834,-71.057830,Boston,MA,02109,US,nominatim
+sisters-massachusetts-sharon,42.123733,-71.178728,Sharon,MA,02067,US,nominatim
+sisters-massachusetts-westborough,42.269431,-71.612991,Westborough,MA,01581,US,nominatim
+sisters-massachusetts-worcester,42.262562,-71.801888,Worcester,MA,01608,US,nominatim
+sisters-minnesota-minneapolis,44.977300,-93.265469,Minneapolis,MN,55415,US,nominatim
+sisters-minnesota-rochester,44.023439,-92.463018,Rochester,MN,55903,US,nominatim
+sisters-nevada-las-vegas,36.167426,-115.148413,Las Vegas,NV,89101,US,nominatim
+sisters-new-jersey-571,40.281318,-74.570406,West Windsor,NJ,08512,US,nominatim
+sisters-new-jersey-basking-ridge,40.706409,-74.549273,Bernards,NJ,07920,US,nominatim
+sisters-new-jersey-bridgewater,40.559813,-74.551715,Bridgewater,NJ,08805,US,nominatim
+sisters-new-jersey-cherry-hill,39.934835,-75.030726,Cherry Hill,NJ,08002,US,nominatim
+sisters-new-jersey-east-brunswick,40.427884,-74.415984,East Brunswick,NJ,08816,US,nominatim
+sisters-new-jersey-edison,40.500535,-74.398394,Edison,NJ,08817,US,nominatim
+sisters-new-jersey-iselin,40.569335,-74.315112,Woodbridge,NJ,08830,US,nominatim
+sisters-new-jersey-jersey-city,40.721568,-74.047455,Jersey City,NJ,07302,US,nominatim
+sisters-new-jersey-morris-county,40.842718,-74.392147,Parsippany-Troy Hills,NJ,07054,US,nominatim
+sisters-new-jersey-old-bridge,40.399178,-74.340904,Old Bridge,NJ,08857,US,nominatim
+sisters-new-jersey-paramus,40.945291,-74.073590,Paramus,NJ,07652,US,nominatim
+sisters-new-jersey-piscataway,40.546433,-74.466054,Piscataway,NJ,08854,US,nominatim
+sisters-new-jersey-saddle-river,41.031764,-74.102087,Saddle River,NJ,07458,US,nominatim
+sisters-new-jersey-sayreville,40.463536,-74.361850,Sayreville,NJ,08872,US,nominatim
+sisters-new-jersey-teaneck,40.886016,-74.007257,Teaneck,NJ,07666,US,nominatim
+sisters-new-jersey-trenton,40.220307,-74.765900,Trenton,NJ,08608,US,nominatim
+sisters-new-york-brighton-beach,40.579644,-73.961110,Brooklyn,NY,11235,US,nominatim
+sisters-new-york-flushing,40.765430,-73.817429,Queens,NY,11354,US,nominatim
+sisters-new-york-jamaica,40.698763,-73.808825,Queens,NY,11435,US,nominatim
+sisters-new-york-kensington,40.646215,-73.970694,Brooklyn,NY,11218,US,nominatim
+sisters-new-york-new-hyde-park,40.735216,-73.688324,New Hyde Park,NY,11040,US,nominatim
+sisters-new-york-roslyn,40.799823,-73.650962,Roslyn,NY,11576,US,nominatim
+sisters-new-york-westbury,40.755656,-73.587627,Westbury,NY,11590,US,nominatim
+sisters-north-carolina-charlotte,35.227209,-80.843083,Charlotte,NC,28202,US,nominatim
+sisters-ohio-cincinnati,39.101281,-84.512741,Cincinnati,OH,45210,US,nominatim
+sisters-ohio-columbus,39.962260,-83.000707,Columbus,OH,43215,US,nominatim
+sisters-oklahoma-oklahoma-city,35.472989,-97.517054,Oklahoma City,OK,73106,US,nominatim
+sisters-pennsylvania-allentown,40.602255,-75.471611,Allentown,PA,18102,US,nominatim
+sisters-pennsylvania-delco,39.916778,-75.387693,Media,PA,19063,US,nominatim
+sisters-pennsylvania-devon,40.047360,-75.422951,Devon,PA,19333,US,manual
+sisters-pennsylvania-harrisburg,40.266311,-76.886112,Harrisburg,PA,17120,US,nominatim
+sisters-pennsylvania-philly,39.952724,-75.163526,Philadelphia,PA,19107,US,nominatim
+sisters-tennessee-franklin,35.925206,-86.868942,Franklin,TN,36711,US,nominatim
+sisters-texas-bear-creek,29.848485,-95.703357,Houston,TX,77084,US,manual
+sisters-texas-clear-lake,29.592542,-95.180214,Houston,TX,77034,US,nominatim
+sisters-texas-college-station,30.622258,-96.347468,College Station,TX,77840,US,nominatim
+sisters-texas-cypress,29.969112,-95.697169,Cypress,TX,77429,US,nominatim
+sisters-texas-dezavala,29.567159,-98.580874,San Antonio,TX,78249,US,nominatim
+sisters-texas-euless,32.837073,-97.081954,Euless,TX,76040,US,nominatim
+sisters-texas-frisco,33.150600,-96.823818,Frisco,TX,75034,US,nominatim
+sisters-texas-irving,32.829518,-96.944218,Irving,TX,75061,US,nominatim
+sisters-texas-klein,30.047720,-95.532441,Klein,TX,77388,US,nominatim
+sisters-texas-murphy,33.015121,-96.613048,Murphy,TX,75094,US,nominatim
+sisters-texas-richardson,32.948179,-96.729721,Richardson,TX,75081,US,nominatim
+sisters-texas-round-rock,30.508592,-97.678806,Round Rock,TX,78664,US,nominatim
+sisters-texas-sachse,32.976233,-96.595270,Sachse,TX,75048,US,nominatim
+sisters-texas-shadow-creek,29.569242,-95.411818,Pearland,TX,77584,US,nominatim
+sisters-texas-sugar-land,29.619679,-95.634946,Sugar Land,TX,77478,US,nominatim
+sisters-texas-valley-ranch,32.934155,-96.953195,Irving,TX,75057,US,nominatim
+sisters-virginia-alexandria,38.805110,-77.047023,Alexandria,VA,22314,US,nominatim
+sisters-virginia-gainesville,38.792741,-77.629202,Gainesville,VA,20109,US,nominatim
+sisters-virginia-loudoun,39.098459,-77.670501,Loudoun County,VA,20175,US,nominatim
+sisters-virginia-woodbridge,38.636447,-77.267634,Woodbridge,VA,22191,US,nominatim
+sisters-washington-dc-dc,38.895098,-77.036385,"Washington, DC",DC,20500,US,manual
+sisters-washington-redmond,47.669414,-122.123877,Redmond,WA,98052,US,nominatim

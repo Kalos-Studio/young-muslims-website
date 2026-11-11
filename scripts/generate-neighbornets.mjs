@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,12 +22,20 @@ const sisterOutputPath = resolve(
 );
 const ids = new Set();
 
-const brothers = loadLocations({
-  path: inputPath,
-  requiredColumns: ["neighbor_net", "subregion", "latitude", "longitude"],
-  branch: "brothers",
-  regionColumn: "subregion",
-});
+const brotherSourcePath = resolve(
+  projectRoot,
+  "data/brother-neighbornets-source.csv",
+);
+const placesPath = resolve(projectRoot, "data/neighbornet-places.csv");
+
+const brothers = withScrapedContacts(
+  loadLocations({
+    path: inputPath,
+    requiredColumns: ["neighbor_net", "subregion", "latitude", "longitude"],
+    branch: "brothers",
+    regionColumn: "subregion",
+  }),
+);
 const brotherAdditions = loadLocations({
   path: brotherAdditionsPath,
   requiredColumns: [
@@ -58,11 +66,19 @@ const sisters = loadLocations({
   stateColumn: "state",
 });
 
-await writeGeneratedFile(brotherOutputPath, "brotherLocations", [
-  ...brothers,
-  ...brotherAdditions,
-]);
-await writeGeneratedFile(sisterOutputPath, "sisterLocations", sisters);
+const places = loadPlaces();
+await writeGeneratedFile(
+  brotherOutputPath,
+  "brotherLocations",
+  [...brothers, ...brotherAdditions].map((location) =>
+    withPlace(location, places),
+  ),
+);
+await writeGeneratedFile(
+  sisterOutputPath,
+  "sisterLocations",
+  sisters.map((location) => withPlace(location, places)),
+);
 
 console.log(
   `Generated ${brothers.length + brotherAdditions.length} Brothers and ${sisters.length} Sisters NeighborNet locations.`,
@@ -144,6 +160,95 @@ function loadLocations({
         : {}),
     };
   });
+}
+
+/**
+ * The base Brothers list (data/neighbornets.csv) carries coordinates but no
+ * contacts; the scraped YM locations list (brother-neighbornets-source.csv)
+ * carries each net's published email and Instagram. Match by name and region,
+ * else by a name that appears once in the scrape (its regions are grouped
+ * differently, e.g. "Dallas" for "Dallas East"), and attach the contact.
+ */
+function withScrapedContacts(locations) {
+  const rows = parse(readFileSync(brotherSourcePath, "utf8"), {
+    columns: true,
+    skip_empty_lines: true,
+    trim: true,
+  });
+  const key = (value) =>
+    value
+      .normalize("NFKD")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+  let matched = 0;
+  const result = locations.map((location) => {
+    const candidates = rows.filter(
+      (row) => key(row.neighbor_net) === key(location.name),
+    );
+    const row =
+      candidates.find((r) => key(r.region) === key(location.region)) ??
+      (candidates.length === 1 ? candidates[0] : undefined);
+    if (!row || (!row.email && !row.instagram)) return location;
+    if (row.instagram && !/^@[a-z0-9._]+$/i.test(row.instagram)) {
+      throw new Error(`Invalid Instagram handle "${row.instagram}"`);
+    }
+    matched += 1;
+    return {
+      ...location,
+      contact: {
+        name: `${location.name} Brothers`,
+        role: "Chapter contact",
+        ...(row.email ? { email: row.email } : {}),
+        ...(row.instagram ? { instagram: row.instagram } : {}),
+      },
+    };
+  });
+  console.log(`Attached scraped contacts to ${matched} base Brothers nets.`);
+  return result;
+}
+
+/**
+ * Each net's place, reverse-geocoded from its coordinates once
+ * (scripts/reverse-geocode-neighbornets.mjs, committed to
+ * data/neighbornet-places.csv): keyed by ID.
+ */
+function loadPlaces() {
+  if (!existsSync(placesPath)) return new Map();
+  const rows = parse(readFileSync(placesPath, "utf8"), {
+    columns: true,
+    skip_empty_lines: true,
+    trim: true,
+  });
+  return new Map(rows.map((row) => [row.id, row]));
+}
+
+/**
+ * Adds the net's city and ZIP, its country when outside the US, and its state
+ * where the source list has none (a source state is kept; a disagreement is
+ * reported for review).
+ */
+function withPlace(location, places) {
+  const place = places.get(location.id);
+  if (!place) {
+    console.warn(`No place for ${location.id}; run the reverse geocoder.`);
+    return location;
+  }
+  if (location.state && place.state && location.state !== place.state) {
+    console.warn(
+      `${location.id}: source state ${location.state}, coordinates in ${place.state}`,
+    );
+  }
+  const { contact, ...rest } = location;
+  return {
+    ...rest,
+    ...(place.city ? { city: place.city } : {}),
+    ...(location.state || !place.state ? {} : { state: place.state }),
+    ...(place.postal_code ? { postalCode: place.postal_code } : {}),
+    ...(place.country && place.country !== "US"
+      ? { country: place.country }
+      : {}),
+    ...(contact ? { contact } : {}),
+  };
 }
 
 async function writeGeneratedFile(path, exportName, locations) {

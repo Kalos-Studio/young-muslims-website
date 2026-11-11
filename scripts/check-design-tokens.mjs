@@ -96,6 +96,54 @@ export function compareBaseline(findings, baseline) {
   });
 }
 
+/** The `--text-*` font sizes defined in `@theme` blocks (not their modifiers). */
+export function themeTypeSizes(css) {
+  const sizes = new Set();
+  postcss.parse(css).walkAtRules("theme", (rule) => {
+    rule.walkDecls(/^--text-/, (decl) => {
+      if (!decl.prop.slice("--text-".length).includes("--"))
+        sizes.add(decl.prop.slice("--text-".length));
+    });
+  });
+  return sizes;
+}
+
+/** The type roles `cn` registers as font sizes (TYPE_SIZE_TOKENS). */
+export function mergerTypeSizes(source) {
+  const list = source.match(/TYPE_SIZE_TOKENS = \[([\s\S]*?)\]/)?.[1] ?? "";
+  return new Set([...list.matchAll(/"([^"]+)"/g)].map((match) => match[1]));
+}
+
+/**
+ * Type roles missing from either side. A role missing from cn's list is
+ * merged as a text colour, so `cn("text-nav text-brand-obsidian")` would
+ * silently drop the size.
+ */
+export function compareTypeSizes(css, utils) {
+  const theme = themeTypeSizes(css);
+  const merger = mergerTypeSizes(utils);
+  return {
+    missingFromCn: [...theme].filter((size) => !merger.has(size)),
+    notInTheme: [...merger].filter((size) => !theme.has(size)),
+  };
+}
+
+function checkTypeSizes() {
+  const { missingFromCn, notInTheme } = compareTypeSizes(
+    fs.readFileSync(path.join(root, "src/app/globals.css"), "utf8"),
+    fs.readFileSync(path.join(root, "src/lib/utils.ts"), "utf8"),
+  );
+  for (const size of missingFromCn)
+    console.error(
+      `src/lib/utils.ts [type-size] text-${size} is a type role in globals.css but missing from TYPE_SIZE_TOKENS, so cn() would drop it next to a text colour.`,
+    );
+  for (const size of notInTheme)
+    console.error(
+      `src/lib/utils.ts [type-size] text-${size} is in TYPE_SIZE_TOKENS but is not a --text-* size in globals.css.`,
+    );
+  return missingFromCn.length + notInTheme.length;
+}
+
 function main() {
   const findings = [];
   function walk(dir) {
@@ -104,11 +152,7 @@ function main() {
     })) {
       const file = `${dir}/${entry.name}`;
       if (entry.isDirectory()) walk(file);
-      // Generated upstream component; matches the existing ESLint exclusion.
-      else if (
-        /\.(?:[jt]sx?|css)$/.test(file) &&
-        file !== "src/components/ui/map.tsx"
-      ) {
+      else if (/\.(?:[jt]sx?|css)$/.test(file)) {
         findings.push(
           ...scanSource(file, fs.readFileSync(path.join(root, file), "utf8")),
         );
@@ -139,10 +183,16 @@ function main() {
       `${finding.file}:${finding.line} [${finding.rule}] ${finding.value}`,
     );
   }
-  if (failures.length) {
-    console.error(
-      `\n${failures.length} new token violations. Reuse a theme token or define and document one centrally. See scripts/design-tokens.md.`,
-    );
+  const typeSizeProblems = checkTypeSizes();
+  if (failures.length || typeSizeProblems) {
+    if (failures.length)
+      console.error(
+        `\n${failures.length} new token violations. Reuse a theme token or define and document one centrally. See scripts/design-tokens.md.`,
+      );
+    if (typeSizeProblems)
+      console.error(
+        `\nTYPE_SIZE_TOKENS in src/lib/utils.ts is out of step with the --text-* sizes in globals.css.`,
+      );
     process.exitCode = 1;
   } else
     console.log(

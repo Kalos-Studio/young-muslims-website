@@ -98,7 +98,7 @@ export default function SupportPage() {
       className="overflow-clip bg-background text-foreground"
     >
       <section
-        data-header-theme="dark"
+        data-header-hero
         aria-labelledby="support-title"
         className="relative isolate overflow-hidden bg-background"
       >
@@ -150,11 +150,7 @@ export default function SupportPage() {
         </div>
       </section>
 
-      <section
-        data-header-theme="light"
-        aria-labelledby="why-title"
-        className="relative"
-      >
+      <section aria-labelledby="why-title" className="relative">
         <div className="relative z-10 mx-auto max-w-screen-2xl px-8 pt-32 pb-8 md:px-20 lg:pt-20 lg:pb-32">
           <div className="max-w-5xl">
             <h2
@@ -238,7 +234,6 @@ export default function SupportPage() {
       </section>
 
       <section
-        data-header-theme="light"
         aria-labelledby="legacy-title"
         className="relative isolate overflow-hidden pt-16 pb-80 lg:py-40"
       >
@@ -346,7 +341,6 @@ export default function SupportPage() {
       </section>
 
       <section
-        data-header-theme="light"
         aria-labelledby="impact-title"
         className="mx-auto max-w-screen-2xl px-8 pt-12 pb-20 md:px-20 lg:pt-20 lg:pb-40"
       >
@@ -414,7 +408,6 @@ export default function SupportPage() {
       </section>
 
       <section
-        data-header-theme="dark"
         aria-labelledby="support-cta-title"
         className="relative isolate mt-20 overflow-hidden bg-primary px-8 pt-40 pb-60 text-primary-foreground md:px-20 lg:mt-40 lg:py-60"
       >

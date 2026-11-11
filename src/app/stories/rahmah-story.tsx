@@ -39,7 +39,7 @@ export function RahmahStory() {
   return (
     <main data-stories-page className={styles.page}>
       <article>
-        <header className={styles.hero} data-header-theme="light">
+        <header className={styles.hero}>
           <div className={styles.heroPhoto}>
             <Image
               src={photo}
@@ -90,11 +90,7 @@ export function RahmahStory() {
             <figcaption>Rahmah K., YM Chicago</figcaption>
           </figure>
         </header>
-        <section
-          className={styles.body}
-          data-header-theme="light"
-          aria-label="Rahmah’s story"
-        >
+        <section className={styles.body} aria-label="Rahmah’s story">
           <div
             aria-hidden="true"
             className={styles.watermark}
