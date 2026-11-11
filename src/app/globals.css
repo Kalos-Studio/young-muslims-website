@@ -1279,6 +1279,16 @@
 }
 
 /*
+ * Stories alumni ("Or hear from the Young Muslims team", Figma 587:1538;
+ * DESIGN-SYSTEM.md, "Stories alumni"). The cards reuse the "Word on the
+ * street" cards' entrance and hover tokens; only their stagger is their
+ * own, the landing stats' (cards in view together come in one at a time).
+ */
+:root {
+  --duration-stories-alumni-stagger: var(--duration-everywhere-stat-stagger);
+}
+
+/*
  * Site footer tokens (components/site/site-footer.tsx; Figma 273:618,
  * tablet 280:843, mobile 298:1459). Documented in DESIGN-SYSTEM.md under
  * "Site footer". The Easter egg's own timings stay in site-footer.tsx.

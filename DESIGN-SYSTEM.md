@@ -936,7 +936,10 @@ hero's wave and before the closing CTA.
 The story pages, `/stories/[slug]` (Figma 413:69, tablet 414:1264, mobile
 414:1418), one per face in the Stories gallery, all on one template
 (`src/app/stories/story-page.tsx`), generated at build. The data is
-`story-pages.ts`, joined to `gallery-people.ts` by slug.
+`story-pages.ts`, joined to `gallery-people.ts` by slug. The same template
+serves the team's pages from the Stories alumni row (see "Stories alumni")
+as its **alumni variant** (`variant: "alumni"`): everything below except the
+three accordions, the attribution naming their role and NeighborNet.
 
 - **Content:** the six stories (Rahmah's from Figma, the other five as YM
   provided them) take their name, city, sister or brother and pull-quote
@@ -970,13 +973,21 @@ The story pages, `/stories/[slug]` (Figma 413:69, tablet 414:1264, mobile
   (cubic Béziers through 48 points), every band SVG with
   `preserveAspectRatio="none"` and no fixed size, so it stretches to any
   width crisp, with no letterboxing. The photo is pre-cropped to each frame
-  (art-directed), so the person sits where Figma's faces sit: left of the
-  quote on tablet and desktop, above it on mobile, the head clear of the
-  band's top edge (on mobile 55% down the hero, and lower still for three
-  close-up portraits). The focus is each story's own person (Layla in the
-  red patterned hijab, Bilal in the white thobe, Mustafa as his gallery
-  face, Maryam with the sisters, Yusuf), and each placeholder's gallery
-  face. It drifts with the
+  (art-directed) around its subject's head, measured in each source against
+  their gallery face so the page shows the very person the gallery does
+  (Mustafa the boy in the middle, Layla in the red patterned hijab, Maryam
+  in the beige hijab and glasses, Bilal in the white thobe, Yusuf, Muneeb,
+  each placeholder's gallery face). The head is sized to about 190 / 170 /
+  130px (desktop / tablet / mobile) where the source allows, never zoomed
+  past 1.1 / 1.2 / 1.4 source px per px (so it stays sharp), and set left
+  of the quote on tablet and desktop, above it on mobile, its top clear of
+  the band's top edge above it (whichever shape) and its chin above the
+  foot (on mobile, above the pull-quote). A close-up too tall for that
+  window is centred in it, its eyes in view. A photo with too little above
+  the head (Yusuf's, Muneeb's) gets a strip of its own top rows, blurred,
+  added above; it always falls under the Warm Snow. Every crop is lightly
+  sharpened at its final size, more if a small source is enlarged (with
+  Lanczos, to at least the frame's width) or the source is soft. It drifts with the
   scroll as the hero passes (`ScrollDrift`, `--story-hero-drift`: 6 / 7 /
   8rem; its layer is that much taller, half above and half below, so no
   edge ever shows; static under reduced motion). Over the band, the shade
@@ -1013,6 +1024,48 @@ The story pages, `/stories/[slug]` (Figma 413:69, tablet 414:1264, mobile
 | `--duration-story-accordion`                        | 300ms                                                             | An accordion opening or closing, and its chevron turning                        |
 | `--story-hero-drift`                                | 6rem / 7rem from md / 8rem from xl                                | The hero photo's parallax drift within its band (its layer is this much taller) |
 | `--story-watermark-drift`                           | 8rem / 10rem from md / 12rem from xl                              | The watermark's parallax drift as the story section passes                      |
+
+## Stories alumni
+
+The Stories page's "Or hear from the Young Muslims team" section, under the
+gallery (Figma 587:1538, tablet 593:1673, mobile 593:1733), built in
+`src/app/stories/alumni-section.tsx` (server) with `alumni.ts` (data).
+
+- **Content:** "Or hear from the Young Muslims team." (`text-mobile-section`,
+  `text-landing-section` from `md`, extra bold; Figma's tablet 36px has no
+  token and takes the 40px section size, as "Word on the street" does) and
+  "Learn a bit about where the people that run Young Muslims came from."
+  (medium; `text-body`, `text-article-title` from `md`, `text-landing-copy`
+  from `xl`), in `TextReveal`. Then a card per team member: the photo
+  (285 x 282; 133 x 131 on mobile), the NeighborNet on a Royal tag
+  (`text-article-meta` semibold, white), the name (`text-article-title`
+  bold) and role (`text-nav` medium, `text-caption`). Today the team is
+  Muneeb Syed alone; more are coming from YM (an entry each in `alumni.ts`
+  and its source in `scripts/alumni-assets.mjs`).
+- **Layout:** from tablet the cards are 285 wide, left-aligned and 40
+  apart, wrapping as they run out of room (a flex wrap, not a fixed grid):
+  a single card sits at the left inset exactly as in Figma (90 / 64, capped
+  at 1440) with no empty columns beside it, and more fill in beside it,
+  four to a row on desktop, two on tablet. Mobile stacks them, each photo
+  beside its text (24 apart).
+- **Photos:** each card's is its source centred to cover the box
+  (`scripts/alumni-assets.mjs`): Muneeb's is his Figma fill (vendored,
+  `muneeb-syed-source.png`, only 400px square). Their pages' hero crops
+  come from `scripts/story-page-assets.mjs`.
+- **Hover** (fine pointer, or keyboard focus): the "Word on the street"
+  cards' hover, their CSS module reused as is: the photo rests in one of
+  their three blobs (in turn along the row) and grows into the square under
+  the 32% Obsidian overlay as "View ↗" rises in. The Warm Snow frame is clipped 1px outside the photo, as the street cards' (see "Word on the street"), so no hairline of photo shows along the box's edge. No hover on touch.
+- **Click:** each whole card links to `/stories/<slug>`, the story page's
+  alumni variant, through the page transition (BlobReveal), its cover in
+  Royal (`data-transition-color`).
+- **Entrance:** each card's photo grows and fades in (the shared shape
+  motion, the street cards' tokens), one at a time
+  (`--duration-stories-alumni-stagger`). None under reduced motion.
+
+| Token                               | Value                                             | Use                                       |
+| ----------------------------------- | ------------------------------------------------- | ----------------------------------------- |
+| `--duration-stories-alumni-stagger` | `var(--duration-everywhere-stat-stagger)` (140ms) | The delay between cards entering together |
 
 ## Site footer
 
@@ -1645,7 +1698,13 @@ cards' entrance only) and `word-on-the-street-section.module.css`.
   `--street-reveal-scale`, past the 1.862 the widest blob needs to clear its
   box's corners; the box clips the frame, so the hole opens out to the
   square's edges. One compositor transform, no path morph and no mask
-  animation. The 32% Obsidian overlay (under the frame, so only the revealed
+  animation. The frame is clipped 1px outside the photo (a wrapper at
+  `-inset-px`), not at its edge: at a fractional position the photo's last
+  row of pixels is then wholly under the frame, where two anti-aliased edges
+  clipped on the same row would let a hairline of photo through (seen on
+  tablet); the frame's own clipped edge falls on Warm Snow. It has no
+  `will-change`, so it is drawn with the photo at rest and lifted onto its
+  own layer only while its transform transitions. The 32% Obsidian overlay (under the frame, so only the revealed
   photo darkens) fades in faster (`--duration-street-label`), and "Read article" (`text-landing-copy`
   Bold, white, Material `arrow_outward`) rises `--street-label-rise` into
   the middle, over `--duration-street-hover`. Un-hovering shrinks the frame

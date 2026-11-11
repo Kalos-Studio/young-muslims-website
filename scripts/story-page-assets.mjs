@@ -21,10 +21,10 @@
 //   stretches to any width without letterboxing.
 // - photos/<slug>-{desktop,tablet,mobile}.jpg: each person's photo cropped
 //   to each frame's hero box. Rahmah's is Figma's exact crop (the photo's
-//   box in each frame); the others are cropped so the person (a focal
-//   point in the source) sits where Rahmah's faces sit in each frame, left
-//   of the quote on desktop and tablet and above it on mobile, at the scale
-//   that covers the box. Each crop is the hero's height plus the photo's
+//   box in each frame); the others are framed on their subject's head
+//   (SUBJECT, FRAMING): sized for the frame within a sharpness floor, left
+//   of the quote on desktop and tablet and above it on mobile, clear of the
+//   band's edges, then sharpened (SOFT). Each crop is the hero's height plus the photo's
 //   parallax drift (`--story-hero-drift`), half above and half below, the
 //   size of the drifting layer, so the drift never shows an edge.
 // - cta-brothers-lift.jpg: the CTA's photo (413:129's fill), its top 68%
@@ -457,6 +457,17 @@ for (const [name, frame] of Object.entries(FRAMES)) {
       profile(top, "top", W, scaleOf(top) * swell, mirror),
       profile(foot, "foot", W, scaleOf(foot) * swell, false),
     );
+    // The lowest the top edge comes at each x, and the highest the foot
+    // does, over the three shapes: the window a head must sit in
+    // (whichever shape a page takes).
+    frame.bandTop ??= new Array(W).fill(0);
+    frame.bandFoot ??= new Array(W).fill(H);
+    topEdge.forEach((y, x) => {
+      frame.bandTop[x] = Math.max(frame.bandTop[x], y);
+    });
+    footEdge.forEach((y, x) => {
+      frame.bandFoot[x] = Math.min(frame.bandFoot[x], y);
+    });
     const upper = curve(topEdge, W, false);
     const lower = curve(footEdge, W, true);
     // Straight, flush sides: the band meets both edges of the frame.
@@ -493,66 +504,135 @@ for (const [name, frame] of Object.entries(FRAMES)) {
 }
 
 /*
- * Each person's focal point in their source (x, y as shares of it): the
- * centre of the person or group. Placeholders' come from their gallery
- * face's crop (faces.json); the others are measured (stories-assets.mjs).
+ * Each person's head in their (upright) source: the x and y of its centre
+ * and its height (hair or hijab top to chin), as shares of the source,
+ * measured on a 10% grid against their gallery face (faces.json), so the
+ * page shows the very person the gallery does. (Rahmah's is Figma's own
+ * crop.) Groups name the one person:
  */
-const FOCUS = {
-  // Each story's own person: Maryam with the sisters by the YM sign, Layla
-  // in the red patterned hijab and glasses (front left, as her gallery
-  // face), Bilal in the white thobe (left), Yusuf's face. (Mustafa's photo
-  // is his gallery face's, whose crop sets his, below.)
-  "maryam-t": [0.7, 0.44],
-  "layla-h": [0.34, 0.58],
-  "bilal-s": [0.36, 0.37],
-  "yusuf-a": [0.45, 0.47],
+const SUBJECT = {
+  // The stories: Mustafa is the boy in the middle (his gallery face), Layla
+  // in the red patterned hijab and glasses (front left), Maryam in the
+  // beige hijab and glasses (second from left), Bilal in the white thobe,
+  // Yusuf in the blue jumper, Muneeb at the microphone.
+  "mustafa-r": [0.44, 0.589, 0.13],
+  "layla-h": [0.335, 0.6, 0.18],
+  "maryam-t": [0.368, 0.459, 0.09],
+  "bilal-s": [0.335, 0.378, 0.27],
+  "yusuf-a": [0.445, 0.335, 0.33],
+  "muneeb-syed": [0.42, 0.408, 0.39],
+  // PLACEHOLDERS: each gallery face's person.
+  "community-ab441": [0.615, 0.435, 0.075],
+  "community-08a9b": [0.055, 0.675, 0.1],
+  "community-2e353": [0.505, 0.435, 0.035],
+  "community-c2981": [0.45, 0.355, 0.32],
+  "community-86dfe": [0.39, 0.516, 0.16],
+  "community-1d75b": [0.43, 0.542, 0.085],
+  "community-093fb": [0.8, 0.416, 0.04],
+  "community-b649d": [0.68, 0.663, 0.072],
+  "community-995d1": [0.41, 0.388, 0.052],
+  "community-8245b": [0.4, 0.467, 0.22],
+  "community-bfb31": [0.5, 0.385, 0.126],
+  "community-4b24a": [0.42, 0.341, 0.157],
+  "community-4ca3d": [0.545, 0.38, 0.49],
+  "community-41fca": [0.405, 0.446, 0.15],
+  "community-a4cd2": [0.39, 0.462, 0.32],
+  "community-b4dd1": [0.645, 0.414, 0.112],
+  "community-e10ab": [0.724, 0.395, 0.055],
 };
 const faces = JSON.parse(
   readFileSync("design-assets/figma/stories/gallery/faces.json", "utf8"),
 );
 /* Sources stored turned in Figma (the fill is rotated in its frame): turned
-   upright first (a quarter turn back), their focal point with them. */
-const TURNED = new Set();
-for (const face of faces) {
-  const [[a, b, tx], [c, d, ty]] = face.imageTransform;
-  const x = a * 0.5 + b * 0.5 + tx;
-  const y = c * 0.5 + d * 0.5 + ty;
-  const turned = a === 0 && b < 0 && c > 0;
-  if (turned) TURNED.add(`community-${face.name}`);
-  FOCUS[`community-${face.name}`] = turned ? [y, 1 - x] : [x, y];
-  // Mustafa's story photo is his gallery face's (79cf9).
-  if (face.name === "79cf9") FOCUS["mustafa-r"] = [x, y];
+   upright first (a quarter turn back). */
+const TURNED = new Set(
+  faces
+    .filter(({ imageTransform: [[a, b], [c]] }) => a === 0 && b < 0 && c > 0)
+    .map((face) => `community-${face.name}`),
+);
+
+/*
+ * Framing, per frame (frame px). The head is sized to `head` tall, never
+ * zoomed past `density` source px per frame px (so it stays sharp) and
+ * never less than covering the layer, and set at the frame's focus. It
+ * must sit in the window between the band's top edge above it (the lowest
+ * any shape's edge comes there, `bandTop`) and its foot (`bandFoot`; on
+ * mobile, the pull-quote, `quoteTop`), each `MARGIN` clear: a head too big
+ * to sit at the focus is moved down until its top clears, and one taller
+ * than the window (a close-up in the wide desktop frame) is centred in it,
+ * its eyes in view.
+ */
+const FRAMING = {
+  desktop: { head: 190, density: 1.1 },
+  tablet: { head: 170, density: 1.2 },
+  mobile: { head: 130, density: 1.4, quoteTop: 690 },
+};
+const MARGIN = 24;
+
+/*
+ * A photo with too little above the head to set it there (the crop's top
+ * can go no higher than the source's: Yusuf's and Muneeb's heads sit near
+ * the top of theirs) gets a strip added above: the photo's own top rows,
+ * drawn down and blurred. It falls under the Warm Snow above the band (the
+ * log flags any that would show).
+ */
+async function padTop(image, pad) {
+  const { width, height } = await sharp(image).metadata();
+  const strip = await sharp(image)
+    .extract({
+      left: 0,
+      top: 0,
+      width,
+      height: Math.max(1, Math.round(height / 200)),
+    })
+    .resize(width, pad, { fit: "fill" })
+    .blur(Math.max(1, width / 60))
+    .toBuffer();
+  return sharp(image)
+    .extend({ top: pad, background: "#000" })
+    .composite([{ input: strip, top: 0, left: 0 }])
+    .toBuffer();
 }
 
-/* Close-up portraits, whose heads fill the narrow mobile box once it is
-   covered: their face set lower there, so the head clears the top edge. */
-const MOBILE_FOCUS_Y = {
-  "yusuf-a": 0.62,
-  "community-4ca3d": 0.62,
-  "community-c2981": 0.6,
-};
-
-/* How far a crop may zoom past covering the box to place its focal point
-   (further on mobile, whose narrow box would leave a small subject tiny). */
-const MAX_ZOOM = { desktop: 1.6, tablet: 1.6, mobile: 2.2 };
+/*
+ * Sharpening, on the final size (as the browser shows it): a light
+ * unsharp mask on every crop; more on one enlarged from a small source
+ * (upscaled here with Lanczos, sharper than the browser's own scaling, to
+ * at least the frame's width), and more again on the sources that are soft
+ * in themselves (out of focus or compressed in the original).
+ */
+const SOFT = new Set([
+  "bilal-s",
+  "mustafa-r",
+  "muneeb-syed",
+  "community-8245b",
+  "community-08a9b",
+  "community-a4cd2",
+  "community-c2981",
+  "community-4b24a",
+]);
 
 const sourceFor = (slug) =>
   [".png", ".jpg"]
     .map((ext) => join(sources, `${slug}${ext}`))
     .find((file) => existsSync(file));
 
-for (const slug of ["rahmah-k", ...Object.keys(FOCUS)]) {
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+for (const slug of ["rahmah-k", ...Object.keys(SUBJECT)]) {
   const file = sourceFor(slug);
   if (!file) continue;
   const upright = await sharp(file)
     .rotate(TURNED.has(slug) ? 270 : 0)
     .toBuffer();
+  const [fx, fy, hh] = SUBJECT[slug] ?? [0.5, 0.5, 0.1];
   const { width: sw, height: sh } = await sharp(upright).metadata();
   for (const [name, frame] of Object.entries(FRAMES)) {
     // The drifting layer: the hero plus the drift, half above, half below.
     const { width: W, drift } = frame;
     const H = frame.height + drift;
     let region;
+    let source = upright;
     if (slug === "rahmah-k") {
       // Figma's crop: the frame's window onto the photo's box. (On mobile
       // the photo starts 25 below the frame's top, under the top blob: the
@@ -562,49 +642,82 @@ for (const slug of ["rahmah-k", ...Object.keys(FOCUS)]) {
       const width = Math.min(sw, Math.round(W * scale));
       const height = Math.min(sh, Math.round(H * scale));
       region = {
-        left: Math.max(0, Math.min(sw - width, Math.round(-p.left * scale))),
-        top: Math.max(
-          0,
-          Math.min(sh - height, Math.round((-p.top - drift / 2) * scale)),
-        ),
+        left: clamp(Math.round(-p.left * scale), 0, sw - width),
+        top: clamp(Math.round((-p.top - drift / 2) * scale), 0, sh - height),
         width,
         height,
       };
     } else {
-      // Cover the box, with the focal point at the frame's focus: zoomed in
-      // (up to MAX_ZOOM) as far as it takes for the crop to reach it.
-      const [fx, fy] = FOCUS[slug];
+      const framing = FRAMING[name];
+      const head = hh * sh;
       const tx = frame.focus[0];
-      const focusY =
-        (name === "mobile" && MOBILE_FOCUS_Y[slug]) || frame.focus[1];
-      // The focus is set in the hero; the layer starts half the drift above.
-      const ty = (drift / 2 + focusY * frame.height) / H;
-      const cover = Math.min(sw / W, sh / H);
-      const room = Math.min(
-        cover,
-        (fx * sw) / (tx * W),
-        ((1 - fx) * sw) / ((1 - tx) * W),
-        (fy * sh) / (ty * H),
-        ((1 - fy) * sh) / ((1 - ty) * H),
-      );
-      const unit = Math.max(cover / MAX_ZOOM[name], room);
+      // The window across the head's width (about four fifths of its
+      // height), at a given scale.
+      const window = (u) => {
+        const half = (0.4 * head) / u;
+        const from = Math.max(0, Math.round(tx * W - half));
+        const to = Math.min(W - 1, Math.round(tx * W + half));
+        const span = (edge) => edge.slice(from, to + 1);
+        return [
+          Math.max(...span(frame.bandTop)) + MARGIN,
+          Math.min(framing.quoteTop ?? H, ...span(frame.bandFoot)) - MARGIN,
+        ];
+      };
+      // Source px per frame px, the head's centre in the hero, and the
+      // strip added above (source px), settled over a few passes.
+      let pad = 0;
+      let unit;
+      let focusY;
+      for (let pass = 0; pass < 3; pass++) {
+        const cover = Math.min(sw / W, (sh + pad) / H);
+        unit = Math.min(cover, Math.max(framing.density, head / framing.head));
+        const [top, bottom] = window(unit);
+        const size = head / unit;
+        focusY =
+          size > bottom - top
+            ? (top + bottom) / 2
+            : Math.max(frame.focus[1] * frame.height, top + size / 2);
+        // The crop's top sits (drift / 2 + focusY) above the head's centre.
+        pad = Math.max(0, Math.ceil((drift / 2 + focusY) * unit - fy * sh));
+      }
+      if (pad) source = await padTop(upright, pad);
+      const ph = sh + pad;
       const width = Math.min(sw, Math.round(W * unit));
-      const height = Math.min(sh, Math.round(H * unit));
-      const clamp = (value, max) => Math.max(0, Math.min(max, value));
+      const height = Math.min(ph, Math.round(H * unit));
+      const ty = (drift / 2 + focusY) / H;
       region = {
-        left: Math.round(clamp(fx * sw - tx * width, sw - width)),
-        top: Math.round(clamp(fy * sh - ty * height, sh - height)),
+        left: Math.round(clamp(fx * sw - tx * width, 0, sw - width)),
+        top: Math.round(clamp(fy * sh + pad - ty * height, 0, ph - height)),
         width,
         height,
       };
+      if (pad) {
+        // Where the strip ends in the hero, against the band's top edge.
+        const end = (pad - region.top) / unit - drift / 2;
+        const shows = end > Math.min(...frame.bandTop);
+        console.log(
+          `${slug}-${name}: strip of ${pad}px above${shows ? " (SHOWS)" : ""}`,
+        );
+      }
     }
-    await sharp(upright)
+    const outWidth = Math.min(frame.out, Math.max(region.width, W));
+    const enlarged = outWidth / region.width;
+    const sigma =
+      (enlarged > 1 ? Math.min(1.6, 0.6 + 0.4 * enlarged) : 0.5) +
+      (SOFT.has(slug) ? 0.4 : 0);
+    await sharp(source)
       .extract(region)
-      .resize({ width: Math.min(frame.out, region.width) })
-      .jpeg({ quality: 78, mozjpeg: true })
+      .resize({ width: outWidth, kernel: "lanczos3" })
+      .sharpen({ sigma, m1: 1, m2: SOFT.has(slug) ? 3 : 2 })
+      .jpeg({ quality: 80, mozjpeg: true })
       .toFile(join(DIR, "photos", `${slug}-${name}.jpg`));
+    console.log(
+      `photos/${slug}-${name}.jpg`,
+      `${region.width}x${region.height}`,
+      `density ${(region.width / W).toFixed(2)}`,
+      enlarged > 1 ? `enlarged ${enlarged.toFixed(2)}x` : "",
+    );
   }
-  console.log(`photos/${slug}-*.jpg`);
 }
 
 // Figma frames the lifted brother at the top and the crowd's faces at the

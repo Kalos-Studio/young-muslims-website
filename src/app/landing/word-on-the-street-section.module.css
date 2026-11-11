@@ -12,8 +12,14 @@
   mask-repeat: no-repeat;
   mask-composite: exclude;
   transition: transform var(--duration-street-hover) var(--ease-street-hover);
-  will-change: transform;
 }
+
+/* The frame is clipped a pixel outside the photo (its wrapper in the
+   components), so at a fractional position the photo's last row of pixels
+   is wholly under it: clipped on the same row, the two anti-aliased edges
+   let a hairline of photo through (seen on tablet). It has no
+   `will-change` either, so at rest it is drawn with the photo; the browser
+   lifts it onto its own layer while its transform transitions. */
 
 /* Each card's blob, cut out of a full rect (the gradient). */
 .maskMentalHealth {

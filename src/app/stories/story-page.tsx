@@ -67,7 +67,7 @@ function HeroPhoto({ story }: { story: Story }) {
 /**
  * A story page (Figma 413:69, tablet 414:1264, mobile 414:1418;
  * DESIGN-SYSTEM.md, "Story pages"), the same template for every person in
- * the Stories gallery:
+ * the Stories gallery and for each team member in its alumni row:
  *
  * - **Hero:** on Warm Snow, "All Stories" (back to /stories) and the
  *   headline (Boldonse, its last word in Landing Cyan); below them the
@@ -77,6 +77,7 @@ function HeroPhoto({ story }: { story: Story }) {
  * - **Story:** the narrative and three accordions (how they started, the
  *   turning point, where they are now), over a faint watermark that drifts
  *   with the scroll: the sisters' "ym" roundel or the brothers' monogram.
+ *   The alumni variant (a team member's page, alumni.ts) has no accordions.
  * - The closing CTA with this page's photo; the site footer follows.
  */
 export function StoryPage({ story }: { story: Story }) {
@@ -128,7 +129,7 @@ export function StoryPage({ story }: { story: Story }) {
             {story.quote}
           </blockquote>
           <figcaption className="relative mt-5.5 text-nav font-extrabold md:mt-8 md:text-body xl:text-landing-copy">
-            — {story.name}, YM {story.city}
+            — {story.attribution}
           </figcaption>
         </figure>
       </section>
@@ -163,19 +164,21 @@ export function StoryPage({ story }: { story: Story }) {
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
-            <div className="mt-18 flex flex-col gap-10">
-              <StoryAccordion title={`How ${pronoun} started`}>
-                {story.started}
-              </StoryAccordion>
-              <div aria-hidden className="h-px bg-border" />
-              <StoryAccordion title="The turning point">
-                {story.turningPoint}
-              </StoryAccordion>
-              <div aria-hidden className="h-px bg-border" />
-              <StoryAccordion title={`Where ${pronoun} is now`}>
-                {story.now}
-              </StoryAccordion>
-            </div>
+            {story.variant === "story" && (
+              <div className="mt-18 flex flex-col gap-10">
+                <StoryAccordion title={`How ${pronoun} started`}>
+                  {story.started}
+                </StoryAccordion>
+                <div aria-hidden className="h-px bg-border" />
+                <StoryAccordion title="The turning point">
+                  {story.turningPoint}
+                </StoryAccordion>
+                <div aria-hidden className="h-px bg-border" />
+                <StoryAccordion title={`Where ${pronoun} is now`}>
+                  {story.now}
+                </StoryAccordion>
+              </div>
+            )}
           </div>
         </div>
       </section>

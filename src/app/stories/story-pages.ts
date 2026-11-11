@@ -1,6 +1,7 @@
 import type { StaticImageData } from "next/image";
 
 import { STORY_SNIPPETS } from "../landing/story-snippets";
+import { ALUMNI, type Alumnus } from "./alumni";
 import { GALLERY_PEOPLE, type GalleryPerson } from "./gallery-people";
 
 import bilalDesktop from "../../../design-assets/figma/stories/story-page/photos/bilal-s-desktop.jpg";
@@ -80,16 +81,11 @@ type HeroPhoto = {
   mobile: StaticImageData;
 };
 
-/**
- * A story page (/stories/[slug]; DESIGN-SYSTEM.md, "Story pages"), one per
- * gallery face, joined to it by slug.
- */
-export type StoryPage = {
+/** What every story page has, story or alumni. */
+type StoryPageBase = {
   slug: string;
   /** "Rahmah K." */
   name: string;
-  /** The YM city, shown as "YM {city}". */
-  city: string;
   /** Sister or brother: the watermark monogram and the pronouns. */
   gender: "sister" | "brother";
   /**
@@ -98,12 +94,10 @@ export type StoryPage = {
    */
   headline: [string, string];
   quote: string;
-  /** The three narrative paragraphs. */
-  narrative: [string, string, string];
-  /** The accordions: how they started, the turning point, where they are. */
-  started: string;
-  turningPoint: string;
-  now: string;
+  /** Under the pull-quote, after an em dash: "Rahmah K., YM Chicago". */
+  attribution: string;
+  /** The narrative's paragraphs. */
+  narrative: string[];
   photo: HeroPhoto;
   photoAlt: string;
   /**
@@ -113,12 +107,33 @@ export type StoryPage = {
    */
   band: 0 | 1 | 2 | 3;
   /**
-   * PLACEHOLDER: true for the 17 people whose story YM has not provided yet:
+   * PLACEHOLDER: true for the people whose story YM has not provided yet:
    * every word on their page is a stand-in, to swap for theirs. (Not
    * indexed.)
    */
   placeholder: boolean;
 };
+
+/**
+ * A story page (/stories/[slug]; DESIGN-SYSTEM.md, "Story pages"): a
+ * gallery face's story (`variant: "story"`, joined to the face by slug,
+ * with the three accordions), or a team member's from the alumni row
+ * (`variant: "alumni"`, alumni.ts; the same template without the
+ * accordions).
+ */
+export type StoryPage = StoryPageBase &
+  (
+    | {
+        variant: "story";
+        /** The YM city, shown as "YM {city}". */
+        city: string;
+        /** The accordions: how they started, the turning point, where they are. */
+        started: string;
+        turningPoint: string;
+        now: string;
+      }
+    | { variant: "alumni" }
+  );
 
 const PHOTOS: Record<string, HeroPhoto> = {
   "rahmah-k": {
@@ -239,7 +254,7 @@ const PHOTOS: Record<string, HeroPhoto> = {
 };
 
 type StoryContent = Pick<
-  StoryPage,
+  Extract<StoryPage, { variant: "story" }>,
   "headline" | "narrative" | "started" | "turningPoint" | "now"
 >;
 
@@ -385,9 +400,11 @@ function storyFor(person: GalleryPerson, index: number): StoryPage {
   const snippet = STORY_SNIPPETS.find((story) => story.slug === person.slug);
   if (snippet && STORIES[person.slug]) {
     return {
+      variant: "story",
       slug: person.slug,
       name: snippet.name,
       city: snippet.city,
+      attribution: `${snippet.name}, YM ${snippet.city}`,
       gender: snippet.theme === "sisters" ? "sister" : "brother",
       quote: snippet.quote,
       ...STORIES[person.slug],
@@ -399,10 +416,12 @@ function storyFor(person: GalleryPerson, index: number): StoryPage {
   }
   const gender = PLACEHOLDER_GENDERS[person.face] ?? "brother";
   return {
+    variant: "story",
     slug: person.slug,
     name: person.name,
     // PLACEHOLDER: their chapter.
     city: "Community",
+    attribution: `${person.name}, YM Community`,
     gender,
     ...placeholderContent(person.name, gender),
     photo: PHOTOS[person.slug],
@@ -412,8 +431,33 @@ function storyFor(person: GalleryPerson, index: number): StoryPage {
   };
 }
 
-/** Every story page, in the gallery's order (one per face). */
-export const STORY_PAGES: StoryPage[] = GALLERY_PEOPLE.map(storyFor);
+/** A team member's page: the alumni variant (no accordions). */
+function alumnusPage(alumnus: Alumnus, index: number): StoryPage {
+  return {
+    variant: "alumni",
+    slug: alumnus.slug,
+    name: alumnus.name,
+    gender: alumnus.gender,
+    headline: alumnus.headline,
+    quote: alumnus.quote,
+    attribution: `${alumnus.name}, ${alumnus.role}, ${alumnus.tag}`,
+    narrative: alumnus.narrative,
+    photo: alumnus.photo,
+    photoAlt: alumnus.photoAlt,
+    // The three site shapes in turn, in the row's order.
+    band: ((index % 3) + 1) as StoryPage["band"],
+    placeholder: alumnus.placeholder,
+  };
+}
+
+/**
+ * Every story page: the gallery's, in its order (one per face), then the
+ * team's (alumni.ts).
+ */
+export const STORY_PAGES: StoryPage[] = [
+  ...GALLERY_PEOPLE.map(storyFor),
+  ...ALUMNI.map(alumnusPage),
+];
 
 export function getStoryPage(slug: string) {
   return STORY_PAGES.find((page) => page.slug === slug);
