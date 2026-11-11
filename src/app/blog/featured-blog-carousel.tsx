@@ -137,6 +137,9 @@ export function FeaturedBlogCarousel({ slides }: { slides: BlogPost[] }) {
                 </p>
                 <Link
                   href={`/blog/${slide.id}`}
+                  aria-label={`Read ${slide.title} (opens in a new tab)`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group mt-6 inline-flex items-center gap-3 border border-background px-6 py-4 text-nav font-bold text-background transition-colors outline-none hover:bg-background hover:text-foreground focus-visible:ring-2 focus-visible:ring-background focus-visible:ring-offset-2 focus-visible:ring-offset-foreground motion-reduce:transition-none"
                 >
                   Read article
