@@ -833,6 +833,22 @@
   /* The card's hover growth and the PLAY label's follow: quick to respond,
      soft to settle. */
   --ease-show-you: cubic-bezier(0.22, 1, 0.36, 1);
+  /* The playing reel's frosted frame: where the landscape video leaves
+     bands (top and bottom; most on the portrait mobile card), the lettering
+     behind shows through gently blurred (still legible) under a translucent Twilight
+     tint. Without
+     backdrop-filter, the denser fallback tint alone covers it. */
+  --color-show-reel-glass: color-mix(
+    in srgb,
+    var(--color-landing-twilight) 40%,
+    transparent
+  );
+  --color-show-reel-glass-fallback: color-mix(
+    in srgb,
+    var(--color-landing-twilight) 90%,
+    transparent
+  );
+  --blur-show-reel: 0.1875rem;
 }
 
 :root {

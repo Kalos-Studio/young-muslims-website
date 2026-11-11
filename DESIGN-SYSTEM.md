@@ -476,6 +476,18 @@ generate:show-you-blob`; edit the script, not its output; reference renders `blo
   With a fine pointer it grows slightly on hover and a PLAY label follows the
   pointer (standing in for it). A click plays the reel in place, with sound
   and the browser's own controls; from then on the hover effects stop.
+  Playing, the card is a frosted-glass frame: the 16:9 reel is contained in
+  it, and where it leaves bands (about 127px above and below on mobile's
+  portrait card, 23px on tablet, 30px on desktop) the lettering behind shows
+  through gently blurred but still legible (`backdrop-blur-show-reel`, 3px;
+  20px and even 6px smeared the 39-60px lettering past reading) under a 40% Landing
+  Twilight tint (`bg-show-reel-glass`), never cut off at the card's edge.
+  Without `backdrop-filter` support the denser 90% tint
+  (`bg-show-reel-glass-fallback`) covers it instead. The blur only exists
+  while the reel plays (before that the photo covers the card), and only
+  re-renders as the lettering drifts with scroll; profiled at the display's
+  full frame rate (120fps here, no frame over 20ms) on mobile (4x CPU
+  throttle), tablet (2x) and desktop.
 - **Parallax**, from one scroll-linked value across the section's scroll,
   written straight to GPU-composited transforms (`translate3d` on HTML
   layers; no per-frame CSS transitions, since Lenis already smooths the
@@ -507,6 +519,8 @@ desktop from `xl`:
 | `--show-reel-hover-scale`                                                                        | 1.025                                       | The card's growth on hover, before it is played                                                                                                                                                                                                              |
 | `--duration-show-reel-hover`                                                                     | 450ms                                       | The card's hover growth                                                                                                                                                                                                                                      |
 | `--duration-show-reel-follow`                                                                    | 160ms                                       | How far the PLAY label trails the pointer                                                                                                                                                                                                                    |
+| `--color-show-reel-glass` / `--color-show-reel-glass-fallback`                                   | Landing Twilight at 40% / 90%               | The playing reel's frosted frame tint, and its denser stand-in where `backdrop-filter` is unsupported                                                                                                                                                        |
+| `--blur-show-reel`                                                                               | 0.1875rem                                   | The playing reel's frame blur (3px): softens the lettering behind its letterbox bands but keeps it legible                                                                                                                                                   |
 | `--aspect-show-reel` / `--aspect-show-reel-portrait`                                             | 833 / 529, 296 / 397                        | The card's shape: landscape (tablet, desktop) and portrait (mobile)                                                                                                                                                                                          |
 | `--show-blob-top-height` / `--show-blob-bottom-height`                                           | 37.5rem / 32.5rem                           | The drawn caps (600 and 520 Figma units, including the overlap), 1:1 up to 1440px wide                                                                                                                                                                       |
 | `--show-blob-overlap`                                                                            | 8.75rem                                     | How far each Obsidian cap reaches back into the section (140 units; 9.7222% of the width once scaled)                                                                                                                                                        |
