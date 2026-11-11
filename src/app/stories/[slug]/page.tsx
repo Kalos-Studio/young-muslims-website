@@ -1,46 +1,45 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getStoryBySlug } from "@/lib/stories";
-import { RahmahStory } from "../rahmah-story";
+
+import { GALLERY_PEOPLE, getGalleryPerson } from "../gallery-people";
 import { PlaceholderStory } from "../placeholder-story";
-import {
-  PORTRAIT_SLOTS,
-  getPortraitBySlug,
-  portraitSlug,
-} from "../portrait-slots";
+import { RahmahStory } from "../rahmah-story";
 
 type StoryPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+// Every face in the gallery has a page: Rahmah's story, and a placeholder
+// for the rest until their stories are built.
 export function generateStaticParams() {
-  return PORTRAIT_SLOTS.map((slot) => ({ slug: portraitSlug(slot) }));
+  return GALLERY_PEOPLE.map((person) => ({ slug: person.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: StoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  if (!getPortraitBySlug(slug)) return { title: "Story not found" };
-  const story = getStoryBySlug(slug);
+  const person = getGalleryPerson(slug);
+  if (!person) return { title: "Story not found" };
+  if (slug === "rahmah-k")
+    return {
+      title: "Rahmah K.: Coming in unsure. Leaving with confidence.",
+      description:
+        "Rahmah almost didn’t walk into her first NeighborNet. Three years later, she’s the one leading halaqas.",
+      alternates: { canonical: `/stories/${slug}` },
+    };
   return {
-    title:
-      slug === "rahmah-k"
-        ? "Rahmah K.: Coming in unsure. Leaving with confidence."
-        : `${story?.name ?? "Community story"}: Story coming soon`,
-    description:
-      slug === "rahmah-k"
-        ? story?.summary
-        : "This member’s Young Muslims story is coming soon.",
+    title: `${person.hasStory ? person.name : "Community story"}: Story coming soon`,
+    description: "This member’s Young Muslims story is coming soon.",
     alternates: { canonical: `/stories/${slug}` },
-    ...(slug !== "rahmah-k" ? { robots: { index: false, follow: true } } : {}),
+    robots: { index: false, follow: true },
   };
 }
 
 export default async function StoryPage({ params }: StoryPageProps) {
   const { slug } = await params;
-  const slot = getPortraitBySlug(slug);
-  if (!slot) notFound();
+  const person = getGalleryPerson(slug);
+  if (!person) notFound();
   if (slug === "rahmah-k") return <RahmahStory />;
-  return <PlaceholderStory slot={slot} />;
+  return <PlaceholderStory person={person} />;
 }

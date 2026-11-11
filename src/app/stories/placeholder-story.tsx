@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { getStoryBySlug } from "@/lib/stories";
-import type { PortraitSlot } from "./portrait-slots";
+import type { GalleryPerson } from "./gallery-people";
 import { StoriesCta } from "./stories-sections";
 import back from "../../../design-assets/figma/story-detail/back.svg";
 import chevron from "../../../design-assets/figma/story-detail/chevron.svg";
@@ -27,8 +26,7 @@ const CHAPTERS = [
   ],
 ];
 
-export function PlaceholderStory({ slot }: { slot: PortraitSlot }) {
-  const story = getStoryBySlug(slot.slug ?? null);
+export function PlaceholderStory({ person }: { person: GalleryPerson }) {
   return (
     <main data-stories-page className={styles.page}>
       <article>
@@ -46,23 +44,22 @@ export function PlaceholderStory({ slot }: { slot: PortraitSlot }) {
           <div className={placeholder.feature}>
             <div className={placeholder.portrait}>
               <Image
-                src={story?.portrait ?? slot.image}
+                src={person.image}
                 alt={
-                  story
-                    ? `Portrait of ${story.name}`
+                  person.hasStory
+                    ? `Portrait of ${person.name}`
                     : "Selected community portrait"
                 }
                 fill
                 priority
                 sizes="(max-width: 767px) 70vw, 360px"
                 className="object-contain"
-                style={{ rotate: `${story?.rotation ?? 0}deg` }}
               />
             </div>
             <div className={placeholder.intro}>
               <p className={placeholder.label}>Story coming soon</p>
               <h2 className="text-h2">
-                {story?.name ?? "A voice from our community"}
+                {person.hasStory ? person.name : "A voice from our community"}
               </h2>
               <p>
                 This space is reserved for this member’s story. The full story

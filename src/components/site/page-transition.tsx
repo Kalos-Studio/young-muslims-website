@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import {
   BRAND_COLORS,
+  brandColorNamed,
   type BrandColor,
   needsDarkText,
 } from "@/lib/brand-palette";
@@ -73,8 +74,8 @@ async function waitForDestination(budgetMs: number) {
   ]);
 }
 
-/** Whether a click on this anchor should play the page transition. */
-function transitionUrlFor(event: MouseEvent) {
+/** The link a click is on, if it should play the page transition. */
+function transitionLinkFor(event: MouseEvent) {
   if (
     event.defaultPrevented ||
     event.button !== 0 ||
@@ -94,9 +95,9 @@ function transitionUrlFor(event: MouseEvent) {
 
   const url = new URL(anchor.href, window.location.href);
   if (url.origin !== window.location.origin) return null;
-  // Same page (a #hash or a query change, e.g. the Stories panel): leave it.
+  // Same page (a #hash or a query change): leave it.
   if (url.pathname === window.location.pathname) return null;
-  return url;
+  return { url, anchor };
 }
 
 /**
@@ -105,19 +106,23 @@ function transitionUrlFor(event: MouseEvent) {
  * A capture-phase click listener on the document takes over internal link
  * clicks: it calls `preventDefault()`, which makes next/link skip its own
  * navigation while every other click handler (such as the menu closing
- * itself) still runs. A blob in a random brand colour, with the entry's
- * stacked YM composition centred in one solid contrasting colour (Obsidian or
- * Warm Snow, by luminance), sweeps in from a random direction using
+ * itself) still runs. A blob in a brand colour (random, or the link's own;
+ * see below), with the entry's stacked YM composition centred in one solid
+ * contrasting colour (Obsidian or Warm Snow, by luminance), sweeps in from a
+ * random direction using
  * BlobReveal. Once it covers the viewport the app navigates with
  * `router.push` inside a transition, holds while that transition is pending
  * and the destination's visible images load (capped by the max-hold token),
  * then the same blob continues across and off-screen, revealing the new page.
  *
  * Not intercepted: modified clicks, new-tab and download links, external
- * links, same-page links, links inside `[data-page-transition="off"]` (the
- * Stories portraits, which have their own transition), back/forward
- * navigation, clicks while the entry animation plays, and everything under
- * reduced motion, where links navigate directly.
+ * links, same-page links, links inside `[data-page-transition="off"]`,
+ * back/forward navigation, clicks while the entry animation plays, and
+ * everything under reduced motion, where links navigate directly.
+ *
+ * A link may name the cover's colour with `data-transition-color` (a
+ * `BrandColor` name): the Stories gallery's faces carry their hover pop's,
+ * so the page turns that colour. Otherwise it is random.
  *
  * Scroll: Lenis is stopped for the duration (cancelling momentum, so it
  * cannot fight Next's scroll-to-top) and restarted re-synced afterwards. The
@@ -137,8 +142,9 @@ export function PageTransition() {
   // Intercept internal link clicks.
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
-      const url = transitionUrlFor(event);
-      if (!url) return;
+      const link = transitionLinkFor(event);
+      if (!link) return;
+      const { url, anchor } = link;
       if (activeRef.current) {
         // A transition is already running; ignore further navigations.
         event.preventDefault();
@@ -154,7 +160,9 @@ export function PageTransition() {
       sawPending.current = false;
       stopSmoothScroll();
 
+      // A link can name its cover's colour (a Stories face, its hover pop's).
       const color =
+        brandColorNamed(anchor.dataset.transitionColor) ??
         COVER_COLORS[Math.floor(Math.random() * COVER_COLORS.length)];
       setPhase("entering");
       setActive({

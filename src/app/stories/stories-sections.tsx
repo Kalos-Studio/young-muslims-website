@@ -1,41 +1,9 @@
 import Image, { getImageProps, type StaticImageData } from "next/image";
 import Link from "next/link";
 
-import hero from "../../../design-assets/figma/stories-redesign/hero.jpg";
 import cta from "../../../design-assets/figma/stories-redesign/4e23d.webp";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 import styles from "./stories.module.css";
-
-export function StoriesHero() {
-  return (
-    <section
-      data-header-hero
-      className={styles.hero}
-      aria-labelledby="stories-title"
-    >
-      <div className={styles.heroMedia}>
-        <div className={styles.heroPhoto}>
-          <Image
-            src={hero}
-            alt="Young Muslim sisters gathered at a community event"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-[center_22%]"
-          />
-        </div>
-      </div>
-      <div className={styles.heroCopy}>
-        <h1 id="stories-title" className="font-display text-landing-display">
-          THIS IS YOUNG MUSLIMS
-        </h1>
-        <p className="mt-4 text-landing-hero-subtitle font-semibold">
-          Real brothers and sisters, real stories.
-        </p>
-      </div>
-    </section>
-  );
-}
 
 export function StoriesCta({
   mobilePhoto,

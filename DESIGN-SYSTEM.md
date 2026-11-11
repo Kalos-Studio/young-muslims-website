@@ -263,11 +263,24 @@ scrolls up over it. Pass the media (a video or image with
   the pale band and the photo at 0.9486 of it, turned 9.31deg), with its own
   band height and the same peek share (`--neighbornets-hero-wave-height`,
   `--neighbornets-hero-peek`).
+- `wave="stories"` swaps in `StoriesHeroWave`, the same build from the
+  Stories hero's blob (Figma 402:3972 / 402:4389, one path: the pale band
+  and the photo both full size, the photo 109 units higher, flipped
+  upright), with its own band height and the same peek share
+  (`--stories-hero-wave-height`: a 160-unit band, 4rem minimum;
+  `--stories-hero-peek`).
+- The Stories hero (`src/app/stories/stories-hero.tsx`; Figma 401:3520 /
+  414:316 / 414:791) is the NeighborNets hero's build: the sisters with the
+  YM letters, art-directed per breakpoint from the Figma image fill
+  (`scripts/stories-hero-assets.mjs`; desktop from the blob's placement,
+  tablet and mobile matched against the frames' renders), under the film
+  grain and a 25% Obsidian tint, with "THIS IS YOUNG MUSLIMS" and "Real
+  brothers and sisters, real stories." centred in the landing hero's type.
 - **Film grain:** `GrainFilter` (`src/components/site/grain-filter.tsx`) is
   the entry screen's grain as a shared SVG filter: static fractal noise laid
   over the source as source + 0.24 x (noise - 0.5), so it speckles without
   shifting the average colour. The entry screen's wordmark and monograms and
-  the NeighborNets hero photo (CSS `filter: url(#…)`) use it. It never
+  the NeighborNets and Stories hero photos (CSS `filter: url(#…)`) use it. It never
   animates, so reduced motion needs nothing.
 - At load the wave's top hump peeks above the fold, as in the 1440 x 1024
   frame.
@@ -743,7 +756,8 @@ mobile frames), built in `src/app/landing/people-stories-section.tsx`,
 - **Hover pop** (fine pointer, or keyboard focus): the headshot's own
   silhouette (`mask-*.png`, its alpha, built by `scripts/stories-assets.mjs`)
   sits behind it at `--stories-pop-size`, in a colour picked at random from
-  the brand palette less Warm Snow and white (never the colour that headshot
+  the brand palette less Warm Snow and white (`POP_COLORS` and
+  `pickPopColor` in brand-palette.ts, shared with the Stories gallery) (never the colour that headshot
   showed last), and slides out from `--stories-pop-from-scale`. Transform and
   opacity only; no other hover effect.
 - **Story overlay:** clicking opens that person's story over the page (not a
@@ -801,6 +815,113 @@ mobile frames), built in `src/app/landing/people-stories-section.tsx`,
 | `--stories-edge-height` / `--stories-edge-seam`                              | max(2.5rem, 4.5vw rounded) / 1px | The wavy edges' height, and their masks' overlap so no hairline shows                                                                                     |
 | `--stories-pair-height`                                                      | min(11vw, 14dvh), rounded        | Desktop's layered-edge frame (143px at 1440 x 1024, 101px at 1280 x 720)                                                                                  |
 | `--duration-stories-fade`                                                    | 400ms                            | The story's content fading in once covered, and out before the blob leaves                                                                                |
+
+## Stories gallery
+
+The Stories page's centrepiece (Figma 401:3786, tablet 414:754, mobile
+414:1225), built in `src/app/stories/stories-gallery.tsx` (the section),
+`stories-gallery-field.tsx` (the field), `gallery-lens.ts` (the lens, pure
+maths) and `gallery-people.ts` (the faces). "Pick someone. Get their story."
+(`text-mobile-section`, `text-landing-section` from `md`) and its line
+(`text-body`, `text-landing-copy` from `md`) in `TextReveal`, over a
+full-bleed band of the community's faces on Warm Snow, after the Stories
+hero's wave and before the closing CTA.
+
+- **The field:** an endless honeycomb of the 23 Figma faces (columns
+  `--stories-gallery-column` apart, rows `--stories-gallery-row`, odd
+  columns half a row lower; 238 and 232 units on desktop, a little tighter
+  than Figma's 250 and 245) seen through a fisheye lens fixed at the band's
+  centre. Across, a face `dx` from the centre is drawn at `R tanh(dx / R)`;
+  sizes fall as `sech²(r / R)` (its derivative, so neighbours never
+  overlap), less a little more round the centre
+  (`--stories-gallery-focus-boost`). Rows keep their spacing, and faces
+  shrink as they near the band's top and bottom
+  (`--stories-gallery-content`). R is `--stories-gallery-lens`, grown in
+  proportion where the band's half-width is more than
+  `--stories-gallery-reach`, so wide screens are filled to the edge.
+- **Per breakpoint:** desktop is Figma's field a little tighter: 11rem
+  faces, Figma's lens, three rows; 27 faces at 1440, the columns 231, 426,
+  570 and 664 from the centre at 1, 0.85, 0.65, 0.44 and 0.28 of a face.
+  Tablet and mobile deviate from their frames (approved) so the field reads
+  as one to drag: smaller faces (7.5rem, 6rem), a tighter lens (3.4 and 2.6
+  faces) and five rows, the outer faces small at or across the sides. Every
+  length is in faces, so each scales as a unit with its face size (the
+  phone's band is 538px). At rest: 31 faces at 768 (39 from 834), 17 on
+  phones from 360 to 430 (six of them across the sides up to 393), where
+  Figma shows 7.
+- **Focus (watchOS-style):** always the band's centre, on every device:
+  whatever is panned to the middle is full size, and faces shrink towards
+  the edges. The cursor never changes a face's size; dragging moves faces
+  through the centre.
+- **Endless loop:** cell (i, j) shows face `(i + 10 r) mod 23` of
+  `LATTICE_ORDER` (r its axial row), which spreads the faces as far apart as
+  the lattice allows: a face's nearest repeat is 4.6 columns away, so only
+  the band's small edge faces ever repeat. The order keeps Figma's faces
+  round its centre face (all six with a story among them); four edge cells
+  show another face. A fixed pool of face nodes is recycled: a cell takes a
+  free node as it comes into view and gives it back as it leaves, swapping
+  only its image (every face is fetched and decoded once the band is near).
+- **Pan:** a mouse drags the field any way; a horizontal wheel (a trackpad's
+  sideways swipe) pans it, and vertical wheels always scroll the page. A
+  press that moves less than `--stories-gallery-drag-threshold` stays a
+  click; a drag's click is dropped. Lenis is held off with
+  `data-lenis-prevent` only while a drag is under way. A release glides to a
+  stop (`--duration-stories-gallery-glide`).
+- **Touch: the band owns its gestures.** Any swipe that starts inside the
+  band pans the field, in any direction (`touch-action: none`); the page
+  scrolls from anywhere outside it (the hero, the heading, the margins and
+  the sections below leave ample room). A touch that moves less than
+  `--stories-gallery-drag-threshold` is a tap and opens the face.
+- **Drag hint (fine pointers):** "Drag to explore", the NeighborNets map's
+  hint chip (Obsidian, `text-nav` semibold in Warm Snow), below and right of
+  the cursor (`--stories-gallery-hint-offset`), following it. It fades in as
+  the cursor comes onto the band and out after
+  `--duration-stories-gallery-hint`, as the cursor leaves, or as a drag (or
+  a sideways wheel pan) starts; once the field has been panned it does not
+  return. It fades over `--duration-stories-gallery-hint-fade` (the map
+  hint's), and appears without fading under reduced motion.
+- **Hover pop:** the landing stories snippet's (`pickPopColor` in
+  brand-palette.ts, `--stories-pop-*`): each time the cursor reaches a face
+  its own silhouette (`<face>-mask.png`) slides out behind it in a random
+  brand colour, never that face's last. Inside the face's layer, so it
+  scales with the lens.
+- **Click:** each face links to `/stories/[slug]` through the page
+  transition, whose cover takes the face's pop colour
+  (`data-transition-color`; on touch the colour is picked as the face is
+  pressed). Under reduced motion the link navigates directly.
+- **Keyboard and assistive tech:** the pool's nodes are hidden from both;
+  the 23 people are a list of links ("Rahmah K.'s story") in the band.
+  Focusing one pans its nearest face to the middle
+  (`--duration-stories-gallery-pan`) and pops it.
+- **Performance:** each face is its own layer (`will-change: transform`),
+  rastered at full size and only ever scaled down (scale at most 1), so it
+  stays sharp with no repaint. One frame loop writes only transforms that
+  changed, runs only while something moves and the band is on screen, and
+  skips faces under `--stories-gallery-cull` or off the band.
+- **Reduced motion:** no glide or easing: drags and the keyboard move the
+  field directly, and the pop and hint appear without sliding or fading.
+- **Watermark:** Figma's two YM discs, fixed behind the field's middle.
+- **Faces:** `scripts/stories-gallery-assets.mjs` rebuilds each from its
+  Figma image fill, crop and blob path (`faces.json`) at 3x the full face
+  (528px), with its pop mask. Six faces have a story (`STORY_SNIPPETS`);
+  the other 17 are placeholders (`community-<face>`, "Community member n"),
+  flagged in `gallery-people.ts`, until YM provides their stories.
+
+| Token                                                  | Value                                              | Use                                                                                               |
+| ------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `--stories-gallery-face`                               | 6rem / 7.5rem from md / 11rem from xl              | A face at full size (at the centre); the field's unit                                             |
+| `--stories-gallery-column` / `--stories-gallery-row`   | 1.35 / 1.32 faces                                  | The lattice's spacing, unlensed (238 and 232 units on desktop; Figma's 250 and 245)               |
+| `--stories-gallery-lens` / `--stories-gallery-reach`   | 2.6 / 3.4 from md / 4.54545 from xl; 4.09091 faces | The lens radius (desktop's Figma's 800 units), and the half-width past which it grows (720 units) |
+| `--stories-gallery-lens-y`                             | 0.6                                                | How much vertical distance counts towards a face's size                                           |
+| `--stories-gallery-focus-boost`                        | 0.1                                                | How much smaller than the lens alone the centre's neighbours are                                  |
+| `--stories-gallery-band` / `--stories-gallery-content` | 5.6 / 5.4 from md / 4 from xl; 2.55 / 1.85 from xl | The band's height, and how far from its middle faces may be                                       |
+| `--stories-gallery-cull`                               | 0.06                                               | Faces smaller than this are not drawn                                                             |
+| `--duration-stories-gallery-glide`                     | 325ms                                              | A released drag's glide (its speed falls by e every this long)                                    |
+| `--duration-stories-gallery-pan`                       | 160ms                                              | The keyboard panning a face to the middle (time constant)                                         |
+| `--stories-gallery-drag-threshold`                     | 6px                                                | A press moving less than this stays a click                                                       |
+| `--duration-stories-gallery-hint`                      | 2000ms                                             | How long "Drag to explore" shows as the cursor comes onto the band                                |
+| `--stories-gallery-hint-offset`                        | 1.25rem                                            | The hint's distance below and right of the cursor                                                 |
+| `--duration-stories-gallery-hint-fade`                 | the map hint's (240ms)                             | The hint's fade in and out (standard button ease)                                                 |
 
 ## Site footer
 
@@ -1636,9 +1757,13 @@ gives at least 5.3:1 on every colour.
 Not intercepted: modified clicks, new-tab and download links, external
 links, same-page links (a `#hash` or a query change), back and forward
 navigation (the browser restores scroll natively), clicks while the entry
-animation plays, and links inside `[data-page-transition="off"]`, which the
-Stories portraits use to keep their own expanding-image transition. Under
+animation plays, and links inside `[data-page-transition="off"]`. Under
 reduced motion links navigate directly.
+
+A link can choose the cover's colour with `data-transition-color` (a
+`BrandColor` name from brand-palette.ts): the Stories gallery's faces carry
+their hover pop's colour, so the page turns the colour the face just showed.
+Without it the colour is random.
 
 During the transition smooth scrolling is stopped through
 `stopSmoothScroll()` / `startSmoothScroll()` (smooth-scroll-provider.tsx),

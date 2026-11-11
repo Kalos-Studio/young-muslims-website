@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 
 import {
-  BRAND_COLORS,
   type BrandColor,
   needsDarkText,
+  pickPopColor,
 } from "@/lib/brand-palette";
 import {
   armShapeEntrances,
@@ -18,14 +18,6 @@ import { cn } from "@/lib/utils";
 import styles from "./people-stories-section.module.css";
 import { StoryOverlay } from "./story-overlay";
 import { STORY_SNIPPETS, type StorySnippet } from "./story-snippets";
-
-/*
- * The hover and story colours: the brand palette less Warm Snow and white,
- * which would vanish against this Warm Snow section.
- */
-const POP_COLORS = BRAND_COLORS.filter(
-  (color) => color.name !== "warm-snow" && color.name !== "pure-white",
-);
 
 /*
  * Each headshot's place, size, silhouette mask, float phase and drift depth,
@@ -79,12 +71,6 @@ const LAYOUT = [
       "top-120.25 left-54 w-36 md:top-120.75 md:left-134.25 md:w-49.5 xl:top-156.75 xl:right-30.75 xl:left-auto xl:w-73.5",
   },
 ] as const;
-
-/** A random pop colour, never `last` (the one this headshot showed last). */
-function pickPopColor(last: BrandColor | undefined) {
-  const choices = POP_COLORS.filter((color) => color !== last);
-  return choices[Math.floor(Math.random() * choices.length)];
-}
 
 type Active = {
   story: StorySnippet;

@@ -117,3 +117,23 @@ export function needsDarkText(color: BrandColor) {
     tokenLuminance(color.token) > (Number.isNaN(threshold) ? 0.195 : threshold)
   );
 }
+
+/*
+ * The hover-pop colours (the landing stories snippet's and the Stories
+ * gallery's): the brand palette less Warm Snow and white, which would vanish
+ * against those Warm Snow sections.
+ */
+export const POP_COLORS = BRAND_COLORS.filter(
+  (color) => color.name !== "warm-snow" && color.name !== "pure-white",
+);
+
+/** A random pop colour, never `last` (the one that shape showed last). */
+export function pickPopColor(last: BrandColor | undefined) {
+  const choices = POP_COLORS.filter((color) => color !== last);
+  return choices[Math.floor(Math.random() * choices.length)];
+}
+
+/** The palette colour named `name` (a `BrandColor["name"]`), if any. */
+export function brandColorNamed(name: string | null | undefined) {
+  return BRAND_COLORS.find((color) => color.name === name);
+}
