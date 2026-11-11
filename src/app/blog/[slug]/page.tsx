@@ -123,6 +123,9 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
               <Link
                 key={otherPost.id}
                 href={`/blog/${otherPost.id}`}
+                aria-label={`Read ${otherPost.title} (opens in a new tab)`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group block min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
               >
                 <div className="relative aspect-square overflow-hidden bg-muted">
