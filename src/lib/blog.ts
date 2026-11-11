@@ -1,4 +1,5 @@
 import type { PortableTextBlock } from "@portabletext/react";
+import type { SanityImageObject } from "@sanity/image-url";
 
 export type ArticleBlock =
   | { type: "paragraph" | "heading"; text: string }
@@ -14,6 +15,7 @@ export type BlogPost = {
   category: "Resource" | "Article" | "Toolkit";
   image: string;
   heroImage?: string;
+  coverImage?: SanityImageObject;
   imageAlt?: string;
   content?: ArticleBlock[];
   body?: PortableTextBlock[];

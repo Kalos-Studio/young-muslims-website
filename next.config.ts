@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import { isSiteIndexable } from "./src/lib/seo";
+import { sanityProjectId, sanityDataset } from "./src/lib/sanity-config";
 
 const nextConfig: NextConfig = {
   images: {
@@ -7,7 +8,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "cdn.sanity.io",
-        pathname: "/images/mygi3vn8/production/**",
+        pathname: `/images/${sanityProjectId}/${sanityDataset}/**`,
       },
     ],
   },

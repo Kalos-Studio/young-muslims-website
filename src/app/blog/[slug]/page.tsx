@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { BlogCoverImage } from "../blog-cover-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isBlogPostIndexable } from "@/lib/blog";
@@ -42,8 +42,10 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
           data-header-hero
           className="relative h-96 overflow-hidden bg-foreground md:h-128"
         >
-          <Image
+          <BlogCoverImage
             src={post.heroImage ?? post.image}
+            coverImage={post.coverImage}
+            wide
             alt={post.imageAlt ?? ""}
             fill
             preload
@@ -129,8 +131,9 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
                 className="group block min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
               >
                 <div className="relative aspect-square overflow-hidden bg-muted">
-                  <Image
+                  <BlogCoverImage
                     src={otherPost.image}
+                    coverImage={otherPost.coverImage}
                     alt=""
                     fill
                     sizes="(min-width: 768px) 33vw, 100vw"

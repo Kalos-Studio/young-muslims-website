@@ -1,6 +1,7 @@
 import { cache } from "react";
 import type { PortableTextBlock } from "@portabletext/react";
 import { blogPosts, featuredPosts, type BlogPost } from "./blog";
+import { sanityProjectId, sanityDataset } from "./sanity-config";
 
 export type CmsBlogPost = BlogPost & {
   featured?: boolean;
@@ -14,6 +15,7 @@ type SanityPost = {
   publishedAt?: string;
   category: BlogPost["category"];
   image: string;
+  coverImage: NonNullable<BlogPost["coverImage"]>;
   imageAlt?: string;
   featured?: boolean;
   body: PortableTextBlock[];
@@ -23,12 +25,13 @@ type SanityPost = {
 const query = `*[_type == "blogPost" && defined(slug.current) && defined(coverImage.asset)]
   | order(publishedAt desc, _id asc) {
     "slug": slug.current, title, excerpt, author, publishedAt, category,
-    "image": coverImage.asset->url, "imageAlt": coverImage.alt, featured, body
+    "image": coverImage.asset->url, coverImage {asset, crop, hotspot},
+    "imageAlt": coverImage.alt, featured, body
   }`;
 
 export const getBlogContent = cache(async () => {
   const url = new URL(
-    "https://mygi3vn8.api.sanity.io/v2026-02-01/data/query/production",
+    `https://${sanityProjectId}.api.sanity.io/v2026-02-01/data/query/${sanityDataset}`,
   );
   url.searchParams.set("query", query);
   url.searchParams.set("perspective", "published");

@@ -92,7 +92,22 @@ once by `scripts/reverse-geocode-neighbornets.mjs` and are committed in
 - [ ] Fundraise Up. Embed the widget snippet, wire donate links, decide
       which pages get a donate CTA. No API keys or server work required.
 - [ ] Embedded form platform. Pick the vendor, then embed.
-- [ ] CMS. Between Sanity, Payload, and Contentful.
+- [x] Sanity CMS for blog publishing. Editors use [Young Muslims Studio](https://young-muslims-website.sanity.studio/). See [blog editing instructions](studio-young-muslims-website/BLOG-EDITING.md).
+
+### Sanity configuration
+
+The website reads `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET`
+from its environment. Studio uses `SANITY_STUDIO_PROJECT_ID` and
+`SANITY_STUDIO_DATASET` in its own folder. Both apps have tracked `.env` files
+containing public defaults only, so fresh checkouts and CI retain the current
+project configuration. Use ignored `.env.local` files or hosting settings to
+override them; never add secrets to the tracked files. Rebuild the relevant app
+after changing these values. The website's image allowlist uses the same settings
+as its content requests.
+
+Cover images preserve the editor's crop and hotspot. The website uses Sanity's
+image URL builder and adjusts the crop to the rendered card or banner dimensions.
+Run `bun test scripts/sanity-image.test.ts` to check image crop behavior.
 
 ### SEO
 

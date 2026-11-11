@@ -47,6 +47,7 @@ export const blogPost = defineType({
     defineField({
       name: 'coverImage',
       type: 'image',
+      options: {hotspot: true},
       fields: [
         defineField({
           name: 'alt',

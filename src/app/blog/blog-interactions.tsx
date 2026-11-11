@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { BlogCoverImage } from "./blog-cover-image";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import Link from "next/link";
@@ -75,8 +75,9 @@ function PostCard({ post }: { post: BlogPost }) {
         className="group block outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <figure className="relative h-96 overflow-hidden bg-muted md:aspect-square md:h-auto">
-          <Image
+          <BlogCoverImage
             src={post.image}
+            coverImage={post.coverImage}
             alt=""
             fill
             sizes="(min-width: 1280px) 25vw, (min-width: 768px) 45vw, 100vw"

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { BlogCoverImage } from "./blog-cover-image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -111,8 +111,10 @@ export function FeaturedBlogCarousel({ slides }: { slides: BlogPost[] }) {
             }}
             className={`relative col-start-1 row-start-1 flex min-h-128 w-full min-w-0 items-end ${active || incoming ? "visible" : "invisible"} ${transition?.started ? "transition-transform duration-300 ease-in-out motion-reduce:transition-none" : "transition-none"} ${position}`}
           >
-            <Image
+            <BlogCoverImage
               src={slide.heroImage ?? slide.image}
+              coverImage={slide.coverImage}
+              wide
               alt=""
               fill
               preload={index === 0}
