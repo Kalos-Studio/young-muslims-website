@@ -27,6 +27,12 @@ const TONES = {
     arrow: "bg-brand-warm-snow text-brand-obsidian",
     module: styles.dark,
   },
+  ink: {
+    button:
+      "text-brand-obsidian focus-visible:ring-brand-obsidian focus-visible:ring-offset-brand-warm-snow",
+    arrow: "",
+    module: styles.ink,
+  },
 } as const;
 
 type StandardButtonProps = Omit<
@@ -38,9 +44,16 @@ type StandardButtonProps = Omit<
   href: ComponentProps<typeof Link>["href"];
   /**
    * `light` (the default) for light backgrounds; `dark` for dark ones, such
-   * as photos under a dark overlay.
+   * as photos under a dark overlay; `ink` for an Obsidian fill on light
+   * backgrounds (the story pages' back button).
    */
   tone?: keyof typeof TONES;
+  /**
+   * `forward` (the default): the label, then the ↗ arrow on its square.
+   * `back`: a chevron-left before the label, on no square, rolling out to
+   * the left as the label rolls (a link back, such as "All Stories").
+   */
+  direction?: "forward" | "back";
 };
 
 /**
@@ -61,6 +74,11 @@ type StandardButtonProps = Omit<
  * Warm Snow fill rises and the text turns Obsidian. Same mechanics, timing
  * and reduced-motion behaviour.
  *
+ * `direction="back"` (with `tone="ink"` on the story pages) is a link back:
+ * a chevron-left before the label, Obsidian with an Obsidian underline that
+ * rises into an Obsidian fill as the text and chevron turn Warm Snow, the
+ * label rolling and the chevron rolling out to the left.
+ *
  * On mobile it spans its container's width (label and arrow centred), for a
  * bigger tap target and a clean stacked layout; from `md` it sizes to its
  * label. Pass `className` for placement (margins and the like); other link
@@ -70,10 +88,18 @@ export function StandardButton({
   label,
   href,
   tone = "light",
+  direction = "forward",
   className,
   ...props
 }: StandardButtonProps) {
   const colours = TONES[tone];
+  const labelRoll = (
+    <span className="ym-cta-roll">
+      <span className="ym-cta-roll__text" data-text={label}>
+        {label}
+      </span>
+    </span>
+  );
   return (
     <Link
       href={href}
@@ -86,14 +112,23 @@ export function StandardButton({
       )}
       {...props}
     >
-      <span className="ym-cta-roll">
-        <span className="ym-cta-roll__text" data-text={label}>
-          {label}
-        </span>
-      </span>
-      <span className={colours.arrow}>
-        <AnimatedArrow size={16} className="ym-cta-arrow--diagonal" />
-      </span>
+      {direction === "back" ? (
+        <>
+          <AnimatedArrow
+            size={24}
+            icon="chevron_left"
+            className="ym-cta-arrow--back"
+          />
+          {labelRoll}
+        </>
+      ) : (
+        <>
+          {labelRoll}
+          <span className={colours.arrow}>
+            <AnimatedArrow size={16} className="ym-cta-arrow--diagonal" />
+          </span>
+        </>
+      )}
     </Link>
   );
 }

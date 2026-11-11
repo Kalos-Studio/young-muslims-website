@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 
+import { ClosingCta } from "@/components/site/closing-cta";
+
+import ctaPhoto from "../../../design-assets/figma/stories/cta-celebrating.webp";
 import { StoriesGallery } from "./stories-gallery";
 import { StoriesHero } from "./stories-hero";
-import { StoriesCta } from "./stories-sections";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/stories" },
@@ -17,7 +19,10 @@ export default function StoriesPage() {
         {/* The page slides up over the pinned hero, so it is opaque. */}
         <div className="bg-brand-warm-snow">
           <StoriesGallery />
-          <StoriesCta />
+          <ClosingCta
+            image={ctaPhoto}
+            alt="Young Muslims celebrating together"
+          />
         </div>
       </StoriesHero>
     </main>

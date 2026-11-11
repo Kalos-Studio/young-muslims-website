@@ -1128,6 +1128,53 @@
 }
 
 /*
+ * Story page tokens (/stories/[slug]; Figma 413:69, tablet 414:1264, mobile
+ * 414:1418). Documented in DESIGN-SYSTEM.md under "Story pages". The hero's
+ * geometry (its heights, the quote's place) is in spacing utilities on the
+ * page; these are the values utilities cannot hold.
+ */
+:root {
+  /* The hero's shade: Figma's black at 42%, as Obsidian, over the photo
+     band: full from the band's right edge (its foot on mobile) to the first
+     stop, clear from the second (Figma's stops, measured on its photo, as
+     shares of the frame). */
+  --story-hero-shade: color-mix(
+    in srgb,
+    var(--color-brand-obsidian) 42%,
+    transparent
+  );
+  --story-hero-shade-from: 31.42%;
+  --story-hero-shade-to: 46.19%;
+  /* An accordion opening and closing (its height and its chevron's turn),
+     on the standard button's ease. */
+  --duration-story-accordion: 300ms;
+  /* Parallax (ScrollDrift): the hero photo drifts this far within its band
+     as the hero scrolls past (its layer is this much taller, half above and
+     half below, so no edge shows), and the watermark this far as the story
+     section passes. */
+  --story-hero-drift: 6rem;
+  --story-watermark-drift: 8rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --story-hero-shade-from: 47.07%;
+    --story-hero-shade-to: 67.12%;
+    --story-hero-drift: 7rem;
+    --story-watermark-drift: 10rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --story-hero-shade-from: 45.76%;
+    --story-hero-shade-to: 62.69%;
+    --story-hero-drift: 8rem;
+    --story-watermark-drift: 12rem;
+  }
+}
+
+/*
  * Stories gallery tokens (Figma 401:3786, tablet 414:754, mobile 414:1225).
  * Documented in DESIGN-SYSTEM.md under "Stories gallery". Lengths are in
  * faces (`--stories-gallery-face`). Desktop is Figma's field (176-unit
@@ -1811,6 +1858,14 @@
   transform: translateX(-120%);
 }
 
+/* Backward roll for a back chevron (‹), a "return": the chevron leaves to
+ * the left and its copy enters from the right. Timing, easing and
+ * reduced-motion handling come from the shared rules for `.ym-cta-arrow__icon`.
+ */
+.ym-cta-arrow--back .ym-cta-arrow__icon--next {
+  transform: translateX(120%);
+}
+
 /* Current-page dot for header links: a small Pure White dot centered in the
  * link's bottom padding. It is keyed to `aria-current`, so the visual and the
  * announced state always agree, and it is static with no layout cost.
@@ -1850,6 +1905,18 @@
   .ym-cta-trigger:focus-visible
     .ym-cta-arrow--horizontal
     .ym-cta-arrow__icon--next {
+    transform: translateX(0);
+  }
+
+  .ym-cta-trigger:hover .ym-cta-arrow--back .ym-cta-arrow__icon--current,
+  .ym-cta-trigger:focus-visible
+    .ym-cta-arrow--back
+    .ym-cta-arrow__icon--current {
+    transform: translateX(-120%);
+  }
+
+  .ym-cta-trigger:hover .ym-cta-arrow--back .ym-cta-arrow__icon--next,
+  .ym-cta-trigger:focus-visible .ym-cta-arrow--back .ym-cta-arrow__icon--next {
     transform: translateX(0);
   }
 }

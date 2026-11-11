@@ -344,6 +344,14 @@ CTAs and the end-of-page CTA sections, which keep their own styles. Pass
   Same mechanics, timing and reduced-motion behaviour as the default `light`
   tone. Used by the principles section's "Learn more" buttons, and by the
   stories snippet's "View the full story" on dark colours.
+- **Back link (`direction="back"`, with `tone="ink"`):** the story pages'
+  "All Stories". A chevron-left (`chevron_left`) before the label, on no
+  square; Obsidian text, chevron and 2px underline. Hover and focus: the
+  underline rises into an Obsidian fill (`tone="ink"`) as the text and
+  chevron turn Warm Snow, the label rolling and the chevron rolling out to
+  the left as its copy enters from the right (`.ym-cta-arrow--back`). Same
+  timing and reduced-motion behaviour; its own width (`className="w-auto"`)
+  at every size.
 - The hover is CSS only, so the component is a Server Component.
 
 | Token                                   | Value                            | Use                                                                     |
@@ -922,6 +930,89 @@ hero's wave and before the closing CTA.
 | `--duration-stories-gallery-hint`                      | 2000ms                                             | How long "Drag to explore" shows as the cursor comes onto the band                                |
 | `--stories-gallery-hint-offset`                        | 1.25rem                                            | The hint's distance below and right of the cursor                                                 |
 | `--duration-stories-gallery-hint-fade`                 | the map hint's (240ms)                             | The hint's fade in and out (standard button ease)                                                 |
+
+## Story pages
+
+The story pages, `/stories/[slug]` (Figma 413:69, tablet 414:1264, mobile
+414:1418), one per face in the Stories gallery, all on one template
+(`src/app/stories/story-page.tsx`), generated at build. The data is
+`story-pages.ts`, joined to `gallery-people.ts` by slug.
+
+- **Content:** the six stories (Rahmah's from Figma, the other five as YM
+  provided them) take their name, city, sister or brother and pull-quote
+  from `STORY_SNIPPETS`, so they agree with the landing's story overlay. The
+  other 17 are placeholders (`placeholder: true`), every word a stand-in to
+  swap, their sister or brother from their gallery face; their pages are not
+  indexed and the sitemap lists only the six.
+- **Hero:** on Warm Snow, "All Stories" (the standard button's back link, to
+  `/stories`) and the headline in Boldonse (`text-lead`, `text-mobile-display`
+  from `md`, `text-landing-section` with Figma's 77px lines from `xl`), its
+  last word in Landing Cyan, revealed with `TextReveal`. Desktop sets them in
+  a row (the headline 650 wide on the right), tablet and mobile stack them.
+  Below, the person's photo runs full-bleed, edge to edge, in a band
+  between a top and a foot edge: organic shapes parting to show the person
+  (`band-*.svg`, built by `scripts/story-page-assets.mjs`, as masks
+  stretched to the width like the closing CTA's shape). Four shapes, from
+  the site's own edges: 0 Figma's two Warm Snow blobs tilted 5.17deg
+  (Rahmah's); 1 the landing hero's wave (above, mirrored and turned over;
+  below, as it is), a double wave; 2 the closing CTA's photo window (its
+  top edge and wavy foot, deepened 2.6x), an arch; 3 the Stories hero's
+  wave above (mirrored, turned over) and the NeighborNets hero's below
+  (deepened 4x), a dome over a curved foot. Rahmah keeps 0; everyone
+  else takes 1, 2 and 3 in turn (gallery order). Each edge sits as high
+  (the top, never above a floor) and as low (the foot) as it can while the
+  top clears the back button and headline by 24 and the foot the
+  attribution by 40, in every frame. The sides are straight and flush: each
+  edge eases out to the band's full height toward the sides (weighted
+  |2x/W - 1|^3, none in the middle), so no shape curls into a corner and the
+  photo meets both edges of the viewport. Each edge is traced from its
+  source to a fraction of a unit and written as a smooth vector curve
+  (cubic Béziers through 48 points), every band SVG with
+  `preserveAspectRatio="none"` and no fixed size, so it stretches to any
+  width crisp, with no letterboxing. The photo is pre-cropped to each frame
+  (art-directed), so the person sits where Figma's faces sit: left of the
+  quote on tablet and desktop, above it on mobile, the head clear of the
+  band's top edge (on mobile 55% down the hero, and lower still for three
+  close-up portraits). The focus is each story's own person (Layla in the
+  red patterned hijab, Bilal in the white thobe, Mustafa as his gallery
+  face, Maryam with the sisters, Yusuf), and each placeholder's gallery
+  face. It drifts with the
+  scroll as the hero passes (`ScrollDrift`, `--story-hero-drift`: 6 / 7 /
+  8rem; its layer is that much taller, half above and half below, so no
+  edge ever shows; static under reduced motion). Over the band, the shade
+  (`--story-hero-shade`, Figma's 42% black as Obsidian, from the right on
+  tablet and desktop, from the foot on mobile), the white quote mark (6%),
+  the pull-quote (`text-article-title` / `text-landing-copy` /
+  `text-mobile-display`, bold) and the attribution ("— Name, YM City",
+  extra bold, `text-nav` / `text-body` /
+  `text-landing-copy`), placed as in each frame. The hero is 958 / 1024 / 981
+  tall; it loads with the page (no entrance).
+- **Story:** the three-paragraph narrative (medium; `text-body`,
+  `text-article-title` from `md`, `text-landing-copy` from `xl`), on the right
+  on desktop (610 wide), then three accordions: "How she / he started", "The
+  turning point", "Where she / he is now", divided by 1px `border` rules
+  (Figma's #c3c3c3, the nearest semantic rule colour). Behind, a faint
+  watermark (4%): the sisters' Jade "ym" roundel or the brothers' Royal
+  monogram, the all-about section's marks, drifting with the scroll as the
+  section passes (`ScrollDrift`, `--story-watermark-drift`: 8 / 10 / 12rem;
+  static under reduced motion).
+- **Accordions** (`story-accordion.tsx`, the page's only client code): open
+  at first, as in Figma. The title is a button (`aria-expanded`,
+  `aria-controls`; Enter and Space) that closes and reopens it: the body's
+  row eases between nothing and its height and the chevron
+  (`keyboard_arrow_down`, turned up when open) turns, over
+  `--duration-story-accordion`; a closed body is `inert`. Under reduced
+  motion they open and close at once.
+- **Closing CTA:** the standard `ClosingCta` with this page's photo (the
+  brothers lifting a brother, 413:129, pre-cropped to Figma's framing).
+
+| Token                                               | Value                                                             | Use                                                                             |
+| --------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `--story-hero-shade`                                | Obsidian at 42%                                                   | The hero's shade under the pull-quote                                           |
+| `--story-hero-shade-from` / `--story-hero-shade-to` | 31.42% / 46.19%; 47.07% / 67.12% from md; 45.76% / 62.69% from xl | The shade full to the first stop, clear from the second (Figma's)               |
+| `--duration-story-accordion`                        | 300ms                                                             | An accordion opening or closing, and its chevron turning                        |
+| `--story-hero-drift`                                | 6rem / 7rem from md / 8rem from xl                                | The hero photo's parallax drift within its band (its layer is this much taller) |
+| `--story-watermark-drift`                           | 8rem / 10rem from md / 12rem from xl                              | The watermark's parallax drift as the story section passes                      |
 
 ## Site footer
 

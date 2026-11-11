@@ -74,3 +74,10 @@
 .dark:focus-visible {
   color: var(--color-brand-obsidian);
 }
+
+/* The ink tone (the story pages' "All Stories" back button): Obsidian text,
+   chevron and underline on Warm Snow, rising into an Obsidian fill as the
+   text and chevron turn Warm Snow. */
+.ink::before {
+  background-color: var(--color-brand-obsidian);
+}

@@ -7,9 +7,11 @@ import arrowBack from "../../../design-assets/icons/material-symbols-outlined/ar
 import arrowOutward from "../../../design-assets/icons/material-symbols-outlined/arrow_outward.svg";
 import arrowForward from "../../../design-assets/icons/material-symbols-outlined/arrow_forward.svg";
 import call from "../../../design-assets/icons/material-symbols-outlined/call.svg";
+import chevronLeft from "../../../design-assets/icons/material-symbols-outlined/chevron_left.svg";
 import close from "../../../design-assets/icons/material-symbols-outlined/close.svg";
 import expandMore from "../../../design-assets/icons/material-symbols-outlined/expand_more.svg";
 import fullscreen from "../../../design-assets/icons/material-symbols-outlined/fullscreen.svg";
+import keyboardArrowDown from "../../../design-assets/icons/material-symbols-outlined/keyboard_arrow_down.svg";
 import mail from "../../../design-assets/icons/material-symbols-outlined/mail.svg";
 import menu from "../../../design-assets/icons/material-symbols-outlined/menu.svg";
 import myLocation from "../../../design-assets/icons/material-symbols-outlined/my_location.svg";
@@ -28,9 +30,11 @@ const MATERIAL_ICONS = {
   arrow_forward: arrowForward,
   arrow_outward: arrowOutward,
   call,
+  chevron_left: chevronLeft,
   close,
   expand_more: expandMore,
   fullscreen,
+  keyboard_arrow_down: keyboardArrowDown,
   mail,
   menu,
   my_location: myLocation,
