@@ -101,15 +101,21 @@ dependencies, owners, acceptance criteria, and tests before and after deployment
 SEO work starts during development. Public indexing remains disabled until the
 launch requirements in that tracker are satisfied.
 
-Production indexing is now enabled in `netlify.toml` for all eight inventoried
-pages. It requires `NODE_ENV=production`, `CONTEXT=production`, and
-`SITE_INDEXABLE=true` together. Local development, branch deploys, and previews
-remain non-indexable, even if they inherit the opt-in. Change the production
-opt-in to `false` and rebuild to disable indexing intentionally.
+Production indexing is enabled in `netlify.toml`. It requires
+`NODE_ENV=production`, `CONTEXT=production`, and `SITE_INDEXABLE=true` together
+at build time. The answer is baked into the build (see `src/lib/seo.ts`) because
+Netlify does not pass these variables to on-demand pages when they are served.
+Local development, branch deploys, and previews remain non-indexable, even if
+they inherit the opt-in. Change the production opt-in to `false` and rebuild to
+disable indexing intentionally.
 
-Each page has its own canonical URL. `src/lib/seo.ts` lists the sitemap paths;
-update it when adding pages. Production publishes all eight URLs at `/sitemap.xml`
-and advertises it in `/robots.txt`. Other builds publish an empty sitemap and a
+Each page has its own canonical URL. The sitemap (`src/app/sitemap.ts`) lists
+the top-level pages in `indexablePaths` in `src/lib/seo.ts` (update it when
+adding a page), finished stories in `INDEXABLE_STORY_SLUGS` in
+`src/lib/stories.ts`, and blog posts with a full article body
+(`isBlogPostIndexable` in `src/lib/blog.ts`). Placeholder stories and
+excerpt-only posts render `noindex, follow`. Production advertises the sitemap
+in `/robots.txt`. Other builds publish an empty sitemap and a
 `noindex, nofollow` response header. Crawling stays allowed so crawlers can read
 the non-indexing directives.
 
@@ -120,10 +126,14 @@ between modes; prerendered metadata reflects the build environment. Validate
 Netlify's actual headers and alternate host behavior after deploying; configuring
 indexability does not submit the site to search engines or guarantee indexing.
 
-After building, run `node scripts/check-indexing.mjs production` or
-`node scripts/check-indexing.mjs preview` for the matching mode. This checks
-generated HTML for all eight pages, canonical URLs, sitemap contents, robots,
-and the configured response-header manifest.
+After building, run `bun run test:seo` with the same `CONTEXT` and
+`SITE_INDEXABLE` values used for the build. It starts the built site on a free
+port without those variables, as Netlify serves on-demand pages, and checks every
+page in the build's route manifest (dynamic routes through their prerendered
+paths; a dynamic route without any fails the check): status, canonical URL, robots meta and
+header, unique titles and descriptions, that the sitemap lists exactly the
+indexable pages, robots.txt, the 404 response, and homepage structured data.
+GitHub Actions runs it for production and preview builds (`.github/workflows/seo.yml`).
 
 ### Branding and sharing
 

@@ -5,14 +5,17 @@ dependencies, and verification. It records planned work, not completed
 implementation or a guarantee of search rankings.
 
 Implementation update: production indexing controls, per-page canonicals, and
-robots/sitemap routes are now implemented for all eight pages. Production is
+robots/sitemap routes are implemented. As of 2026-11-04 the production sitemap
+lists 10 pages: the nine in `indexablePaths` plus the finished story
+`/stories/rahmah-k`. See SEO-14 and [SEO-ROUTE-INVENTORY.md](SEO-ROUTE-INVENTORY.md). Production is
 opted in through `netlify.toml`; previews remain non-indexable. SEO-12/13/14 still
 require applicable deployed-host checks before full sign-off. Baseline observations
 below describe the earlier state, not the updated code. The owner's request to
 implement indexing authorizes the production opt-in for the next deployment.
 
-Local validation: lint and type checking passed. Production and preview Webpack
-builds passed `scripts/check-indexing.mjs` for all eight generated pages,
+Local validation (2026-10-02, superseded by SEO-20 below): lint and type checking
+passed. Production and preview Webpack builds passed the original
+`scripts/check-indexing.mjs` for the eight pages then inventoried,
 canonicals, sitemap, robots, and header configuration. The preview test deliberately
 set `SITE_INDEXABLE=true` to verify context isolation. The default Turbopack build
 hit an environment port restriction; Webpack was used for verification without
@@ -178,11 +181,20 @@ APIs, read the relevant installed documentation under `node_modules/next/dist/do
       preview content must be private.
       **Depends on:** SEO-12, SEO-13. **Done when:** generated files match the inventory
       and there are no conflicting versions in `public/` and `src/app/`.
+      **Progress (2026-11-04):** the sitemap now lists only pages that allow
+      indexing: the nine top-level pages, stories that are not placeholders
+      (`STORY_PAGES` in `src/app/stories/story-pages.ts`), and blog posts with a full article body
+      (`isBlogPostIndexable` in `src/lib/blog.ts`). Placeholder stories and
+      excerpt-only posts render with `noindex, follow` until their content lands.
 - [ ] **SEO-15 | Launch | Development / content:** Add truthful `Organization`
       (or applicable subtype) and `WebSite` JSON-LD on the appropriate pages. Use
       verified names, logo URLs, canonical origin, and official social profiles.
       **Depends on:** SEO-10, SEO-12. **Done when:** markup is valid, agrees with visible
       content, and all referenced URLs resolve. Rich-result display is not guaranteed.
+      **Progress (2026-11-04):** minimal `Organization` and `WebSite` markup (name,
+      "YM", canonical URL) renders on the homepage from `siteJsonLd` in `src/lib/seo.ts`.
+      Still needed: a hosted logo URL, verified official social profiles (`sameAs`),
+      and a Rich Results Test run against the deployed page.
 - [ ] **SEO-16 | Growth, or Launch when corresponding content ships | Development:**
       Add `Article`, `BreadcrumbList`, and eligible `Event` markup to matching detail
       pages. Do not mark a generic program description as a dated event. Keep event
@@ -206,12 +218,27 @@ APIs, read the relevant installed documentation under `node_modules/next/dist/do
       missing/retired URLs without replacements. Ensure published content returns
       `200`, redirects return `301`/`308`, and missing pages do not masquerade as `200`.
       **Depends on:** SEO-09, SEO-22. **Done when:** the status-code test set passes.
+      **Progress (2026-11-04):** unknown URLs return `404` with `noindex`, checked by
+      `bun run test:seo`. `410` handling depends on the redirect map (SEO-22).
 - [ ] **SEO-20 | Launch | Development:** Add focused automated checks for accidental
       production `noindex`, indexable previews, canonical mistakes, sitemap exclusions,
       broken internal links, and redirect mappings. Test actual rendered output and
       responses, not only the configuration values that generate them.
       **Depends on:** SEO-12 through SEO-19, SEO-22. **Done when:** checks run repeatably
       and deliberate regressions cause meaningful failures.
+      **Progress (2026-11-04):** `bun run test:seo` (`scripts/check-indexing.mjs`)
+      starts the built site without the deploy variables (as Netlify serves
+      on-demand pages) and checks every page in the build's route manifest.
+      Dynamic routes are checked through their prerendered paths; a dynamic route
+      without any fails the check rather than being skipped. It checks status, canonical,
+      robots meta, the `X-Robots-Tag` header, unique titles and descriptions, an
+      exact sitemap-to-indexable-page match, robots.txt, the 404 response, and the
+      homepage structured data. `.github/workflows/seo.yml` runs it for production
+      and preview builds on every push and pull request. Verified to fail on the
+      previous sitemap, on a route group, a catch-all route, and on `/stories`
+      reading its indexing setting at request time (fixed by baking the setting
+      into the build). Not yet covered: internal broken links and redirect mappings.
+      After the first production deploy, confirm `/stories` serves `index, follow`.
 - [ ] **SEO-21 | Growth | Development / content:** Put required metadata, stable
       slugs, authorship, alt text, publication status, and update ownership into CMS
       models/templates. Ensure publishing updates pages and sitemap caches. Document
@@ -385,12 +412,15 @@ Add rows for work as it starts. Link test evidence to a build/commit and deploye
 URL where applicable. A task checkbox records verified completion; this table
 records ownership, progress, and reasons work is blocked or deferred.
 
-| Task ID | Owner      | Status               | Target date | Evidence / result / blocker                                                                                                                         |
-| ------- | ---------- | -------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| SEO-01  | Unassigned | In progress          | TBD         | [Eight routes inventoried](SEO-ROUTE-INVENTORY.md); all approved for production indexing. Audience/geography and content owners remain unconfirmed. |
-| SEO-02  | Unassigned | Not started          | TBD         | Confirm domain, hosting, and search-tool access.                                                                                                    |
-| SEO-03  | Unassigned | In progress          | TBD         | [14 supplied URLs mapped](SEO-LEGACY-URL-INVENTORY.md). Completeness checks, live verification, and search baseline remain outstanding.             |
-| SEO-13  | Unassigned | Verification pending | TBD         | Owner reports existing controls beyond wireframe stage. Reconcile release/hosting settings with local root metadata before making changes.          |
+| Task ID | Owner      | Status               | Target date | Evidence / result / blocker                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ------- | ---------- | -------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SEO-01  | Unassigned | In progress          | TBD         | [Eight routes inventoried](SEO-ROUTE-INVENTORY.md); all approved for production indexing. Audience/geography and content owners remain unconfirmed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| SEO-02  | Unassigned | Not started          | TBD         | Confirm domain, hosting, and search-tool access.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| SEO-03  | Unassigned | In progress          | TBD         | [14 supplied URLs mapped](SEO-LEGACY-URL-INVENTORY.md). Completeness checks, live verification, and search baseline remain outstanding.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| SEO-13  | Unassigned | Verification pending | TBD         | Owner reports existing controls beyond wireframe stage. Reconcile release/hosting settings with local root metadata before making changes.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| SEO-14  | Unassigned | In progress          | TBD         | Sitemap limited to indexable pages; verified by `bun run test:seo` on 2026-11-04.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| SEO-20  | Unassigned | In progress          | TBD         | SEO check added to CI (`.github/workflows/seo.yml`). Broken-link and redirect checks remain.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Stories | Unassigned | Deferred             | TBD         | **Follow-up for a future session.** The Stories redesign (PR #28) shipped without an SEO pass because its content is not final (17 of 23 stories are placeholders; some photos are low-res; old slugs such as `/stories/a-place-to-be-known` now 404). Once YM supplies the real stories, do an SEO pass on `/stories`, `/stories/[slug]` and the alumni pages: titles and descriptions, which stories are indexable (`placeholder` in `src/app/stories/story-pages.ts`), the sitemap, image alt text, story JSON-LD, redirects for removed slugs, and `bun run test:seo` in both modes. Update SEO-ROUTE-INVENTORY.md to match. |
 
 ## Reference guidance
 
