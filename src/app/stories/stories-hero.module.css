@@ -1,0 +1,6 @@
+/* The hero photo's film grain: the shared filter (GrainFilter, defined in
+   the hero as #stories-hero-grain). The noise is static, so it needs no
+   reduced-motion handling. */
+.grain {
+  filter: url(#stories-hero-grain);
+}

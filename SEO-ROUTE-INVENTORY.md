@@ -20,11 +20,11 @@ are proposals based on the current pages, not validated keyword research.
 The site now has more routes than the eight below. Indexing decisions are made
 in code and enforced by `bun run test:seo`:
 
-| Route             | Source                                          | Production indexing                                                                                                                                                               |
-| ----------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/contact`        | [Contact](src/app/contact/page.tsx)             | Index; listed in `indexablePaths`. Title "Contact"; description "Connect with Young Muslims. Find your local chapter, start a NeighborNet, or learn more about getting involved." |
-| `/stories/[slug]` | [Story detail](src/app/stories/[slug]/page.tsx) | Index only finished stories in `INDEXABLE_STORY_SLUGS` (currently `rahmah-k`). Placeholder portraits are `noindex, follow` and stay out of the sitemap.                           |
-| `/blog/[slug]`    | [Blog article](src/app/blog/[slug]/page.tsx)    | Index only posts with a full article body (`isBlogPostIndexable`). All 8 current posts are excerpt-only, so all are `noindex, follow` until their content is migrated.            |
+| Route             | Source                                          | Production indexing                                                                                                                                                                                                                                                       |
+| ----------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/contact`        | [Contact](src/app/contact/page.tsx)             | Index; listed in `indexablePaths`. Title "Contact"; description "Connect with Young Muslims. Find your local chapter, start a NeighborNet, or learn more about getting involved."                                                                                         |
+| `/stories/[slug]` | [Story detail](src/app/stories/[slug]/page.tsx) | Index only stories that are not placeholders (`placeholder` in `src/app/stories/story-pages.ts`). Placeholder portraits are `noindex, follow` and stay out of the sitemap. Full SEO pass deferred until the real content lands (see the Stories row in SEO-CHECKLIST.md). |
+| `/blog/[slug]`    | [Blog article](src/app/blog/[slug]/page.tsx)    | Index only posts with a full article body (`isBlogPostIndexable`). All 8 current posts are excerpt-only, so all are `noindex, follow` until their content is migrated.                                                                                                    |
 
 ## Page inventory
 

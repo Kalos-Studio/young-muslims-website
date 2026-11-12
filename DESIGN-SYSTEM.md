@@ -263,11 +263,24 @@ scrolls up over it. Pass the media (a video or image with
   the pale band and the photo at 0.9486 of it, turned 9.31deg), with its own
   band height and the same peek share (`--neighbornets-hero-wave-height`,
   `--neighbornets-hero-peek`).
+- `wave="stories"` swaps in `StoriesHeroWave`, the same build from the
+  Stories hero's blob (Figma 402:3972 / 402:4389, one path: the pale band
+  and the photo both full size, the photo 109 units higher, flipped
+  upright), with its own band height and the same peek share
+  (`--stories-hero-wave-height`: a 160-unit band, 4rem minimum;
+  `--stories-hero-peek`).
+- The Stories hero (`src/app/stories/stories-hero.tsx`; Figma 401:3520 /
+  414:316 / 414:791) is the NeighborNets hero's build: the sisters with the
+  YM letters, art-directed per breakpoint from the Figma image fill
+  (`scripts/stories-hero-assets.mjs`; desktop from the blob's placement,
+  tablet and mobile matched against the frames' renders), under the film
+  grain and a 25% Obsidian tint, with "THIS IS YOUNG MUSLIMS" and "Real
+  brothers and sisters, real stories." centred in the landing hero's type.
 - **Film grain:** `GrainFilter` (`src/components/site/grain-filter.tsx`) is
   the entry screen's grain as a shared SVG filter: static fractal noise laid
   over the source as source + 0.24 x (noise - 0.5), so it speckles without
   shifting the average colour. The entry screen's wordmark and monograms and
-  the NeighborNets hero photo (CSS `filter: url(#…)`) use it. It never
+  the NeighborNets and Stories hero photos (CSS `filter: url(#…)`) use it. It never
   animates, so reduced motion needs nothing.
 - At load the wave's top hump peeks above the fold, as in the 1440 x 1024
   frame.
@@ -331,6 +344,14 @@ CTAs and the end-of-page CTA sections, which keep their own styles. Pass
   Same mechanics, timing and reduced-motion behaviour as the default `light`
   tone. Used by the principles section's "Learn more" buttons, and by the
   stories snippet's "View the full story" on dark colours.
+- **Back link (`direction="back"`, with `tone="ink"`):** the story pages'
+  "All Stories". A chevron-left (`chevron_left`) before the label, on no
+  square; Obsidian text, chevron and 2px underline. Hover and focus: the
+  underline rises into an Obsidian fill (`tone="ink"`) as the text and
+  chevron turn Warm Snow, the label rolling and the chevron rolling out to
+  the left as its copy enters from the right (`.ym-cta-arrow--back`). Same
+  timing and reduced-motion behaviour; its own width (`className="w-auto"`)
+  at every size.
 - The hover is CSS only, so the component is a Server Component.
 
 | Token                                   | Value                            | Use                                                                     |
@@ -455,6 +476,18 @@ generate:show-you-blob`; edit the script, not its output; reference renders `blo
   With a fine pointer it grows slightly on hover and a PLAY label follows the
   pointer (standing in for it). A click plays the reel in place, with sound
   and the browser's own controls; from then on the hover effects stop.
+  Playing, the card is a frosted-glass frame: the 16:9 reel is contained in
+  it, and where it leaves bands (about 127px above and below on mobile's
+  portrait card, 23px on tablet, 30px on desktop) the lettering behind shows
+  through gently blurred but still legible (`backdrop-blur-show-reel`, 3px;
+  20px and even 6px smeared the 39-60px lettering past reading) under a 40% Landing
+  Twilight tint (`bg-show-reel-glass`), never cut off at the card's edge.
+  Without `backdrop-filter` support the denser 90% tint
+  (`bg-show-reel-glass-fallback`) covers it instead. The blur only exists
+  while the reel plays (before that the photo covers the card), and only
+  re-renders as the lettering drifts with scroll; profiled at the display's
+  full frame rate (120fps here, no frame over 20ms) on mobile (4x CPU
+  throttle), tablet (2x) and desktop.
 - **Parallax**, from one scroll-linked value across the section's scroll,
   written straight to GPU-composited transforms (`translate3d` on HTML
   layers; no per-frame CSS transitions, since Lenis already smooths the
@@ -486,6 +519,8 @@ desktop from `xl`:
 | `--show-reel-hover-scale`                                                                        | 1.025                                       | The card's growth on hover, before it is played                                                                                                                                                                                                              |
 | `--duration-show-reel-hover`                                                                     | 450ms                                       | The card's hover growth                                                                                                                                                                                                                                      |
 | `--duration-show-reel-follow`                                                                    | 160ms                                       | How far the PLAY label trails the pointer                                                                                                                                                                                                                    |
+| `--color-show-reel-glass` / `--color-show-reel-glass-fallback`                                   | Landing Twilight at 40% / 90%               | The playing reel's frosted frame tint, and its denser stand-in where `backdrop-filter` is unsupported                                                                                                                                                        |
+| `--blur-show-reel`                                                                               | 0.1875rem                                   | The playing reel's frame blur (3px): softens the lettering behind its letterbox bands but keeps it legible                                                                                                                                                   |
 | `--aspect-show-reel` / `--aspect-show-reel-portrait`                                             | 833 / 529, 296 / 397                        | The card's shape: landscape (tablet, desktop) and portrait (mobile)                                                                                                                                                                                          |
 | `--show-blob-top-height` / `--show-blob-bottom-height`                                           | 37.5rem / 32.5rem                           | The drawn caps (600 and 520 Figma units, including the overlap), 1:1 up to 1440px wide                                                                                                                                                                       |
 | `--show-blob-overlap`                                                                            | 8.75rem                                     | How far each Obsidian cap reaches back into the section (140 units; 9.7222% of the width once scaled)                                                                                                                                                        |
@@ -743,7 +778,8 @@ mobile frames), built in `src/app/landing/people-stories-section.tsx`,
 - **Hover pop** (fine pointer, or keyboard focus): the headshot's own
   silhouette (`mask-*.png`, its alpha, built by `scripts/stories-assets.mjs`)
   sits behind it at `--stories-pop-size`, in a colour picked at random from
-  the brand palette less Warm Snow and white (never the colour that headshot
+  the brand palette less Warm Snow and white (`POP_COLORS` and
+  `pickPopColor` in brand-palette.ts, shared with the Stories gallery) (never the colour that headshot
   showed last), and slides out from `--stories-pop-from-scale`. Transform and
   opacity only; no other hover effect.
 - **Story overlay:** clicking opens that person's story over the page (not a
@@ -801,6 +837,249 @@ mobile frames), built in `src/app/landing/people-stories-section.tsx`,
 | `--stories-edge-height` / `--stories-edge-seam`                              | max(2.5rem, 4.5vw rounded) / 1px | The wavy edges' height, and their masks' overlap so no hairline shows                                                                                     |
 | `--stories-pair-height`                                                      | min(11vw, 14dvh), rounded        | Desktop's layered-edge frame (143px at 1440 x 1024, 101px at 1280 x 720)                                                                                  |
 | `--duration-stories-fade`                                                    | 400ms                            | The story's content fading in once covered, and out before the blob leaves                                                                                |
+
+## Stories gallery
+
+The Stories page's centrepiece (Figma 401:3786, tablet 414:754, mobile
+414:1225), built in `src/app/stories/stories-gallery.tsx` (the section),
+`stories-gallery-field.tsx` (the field), `gallery-lens.ts` (the lens, pure
+maths) and `gallery-people.ts` (the faces). "Pick someone. Get their story."
+(`text-mobile-section`, `text-landing-section` from `md`) and its line
+(`text-body`, `text-landing-copy` from `md`) in `TextReveal`, over a
+full-bleed band of the community's faces on Warm Snow, after the Stories
+hero's wave and before the closing CTA.
+
+- **The field:** an endless honeycomb of the 23 Figma faces (columns
+  `--stories-gallery-column` apart, rows `--stories-gallery-row`, odd
+  columns half a row lower; 238 and 232 units on desktop, a little tighter
+  than Figma's 250 and 245) seen through a fisheye lens fixed at the band's
+  centre. Across, a face `dx` from the centre is drawn at `R tanh(dx / R)`;
+  sizes fall as `sech²(r / R)` (its derivative, so neighbours never
+  overlap), less a little more round the centre
+  (`--stories-gallery-focus-boost`). Rows keep their spacing, and faces
+  shrink as they near the band's top and bottom
+  (`--stories-gallery-content`). R is `--stories-gallery-lens`, grown in
+  proportion where the band's half-width is more than
+  `--stories-gallery-reach`, so wide screens are filled to the edge.
+- **Per breakpoint:** desktop is Figma's field a little tighter: 11rem
+  faces, Figma's lens, three rows; 27 faces at 1440, the columns 231, 426,
+  570 and 664 from the centre at 1, 0.85, 0.65, 0.44 and 0.28 of a face.
+  Tablet and mobile deviate from their frames (approved) so the field reads
+  as one to drag: smaller faces (7.5rem, 6rem), a tighter lens (3.4 and 2.6
+  faces) and five rows, the outer faces small at or across the sides. Every
+  length is in faces, so each scales as a unit with its face size (the
+  phone's band is 538px). At rest: 31 faces at 768 (39 from 834), 17 on
+  phones from 360 to 430 (six of them across the sides up to 393), where
+  Figma shows 7.
+- **Focus (watchOS-style):** always the band's centre, on every device:
+  whatever is panned to the middle is full size, and faces shrink towards
+  the edges. The cursor never changes a face's size; dragging moves faces
+  through the centre.
+- **Endless loop:** cell (i, j) shows face `(i + 10 r) mod 23` of
+  `LATTICE_ORDER` (r its axial row), which spreads the faces as far apart as
+  the lattice allows: a face's nearest repeat is 4.6 columns away, so only
+  the band's small edge faces ever repeat. The order keeps Figma's faces
+  round its centre face (all six with a story among them); four edge cells
+  show another face. A fixed pool of face nodes is recycled: a cell takes a
+  free node as it comes into view and gives it back as it leaves, swapping
+  only its image (every face is fetched and decoded once the band is near).
+- **Pan:** a mouse drags the field any way; a horizontal wheel (a trackpad's
+  sideways swipe) pans it, and vertical wheels always scroll the page. A
+  press that moves less than `--stories-gallery-drag-threshold` stays a
+  click; a drag's click is dropped. Lenis is held off with
+  `data-lenis-prevent` only while a drag is under way. A release glides to a
+  stop (`--duration-stories-gallery-glide`).
+- **Touch: the band owns its gestures.** Any swipe that starts inside the
+  band pans the field, in any direction (`touch-action: none`); the page
+  scrolls from anywhere outside it (the hero, the heading, the margins and
+  the sections below leave ample room). A touch that moves less than
+  `--stories-gallery-drag-threshold` is a tap and opens the face.
+- **Drag hint (fine pointers):** "Drag to explore", the NeighborNets map's
+  hint chip (Obsidian, `text-nav` semibold in Warm Snow), below and right of
+  the cursor (`--stories-gallery-hint-offset`), following it. It fades in as
+  the cursor comes onto the band and out after
+  `--duration-stories-gallery-hint`, as the cursor leaves, or as a drag (or
+  a sideways wheel pan) starts; once the field has been panned it does not
+  return. It fades over `--duration-stories-gallery-hint-fade` (the map
+  hint's), and appears without fading under reduced motion.
+- **Hover pop:** the landing stories snippet's (`pickPopColor` in
+  brand-palette.ts, `--stories-pop-*`): each time the cursor reaches a face
+  its own silhouette (`<face>-mask.png`) slides out behind it in a random
+  brand colour, never that face's last. Inside the face's layer, so it
+  scales with the lens.
+- **Click:** each face links to `/stories/[slug]` through the page
+  transition, whose cover takes the face's pop colour
+  (`data-transition-color`; on touch the colour is picked as the face is
+  pressed). Under reduced motion the link navigates directly.
+- **Keyboard and assistive tech:** the pool's nodes are hidden from both;
+  the 23 people are a list of links ("Rahmah K.'s story") in the band.
+  Focusing one pans its nearest face to the middle
+  (`--duration-stories-gallery-pan`) and pops it.
+- **Performance:** each face is its own layer (`will-change: transform`),
+  rastered at full size and only ever scaled down (scale at most 1), so it
+  stays sharp with no repaint. One frame loop writes only transforms that
+  changed, runs only while something moves and the band is on screen, and
+  skips faces under `--stories-gallery-cull` or off the band.
+- **Reduced motion:** no glide or easing: drags and the keyboard move the
+  field directly, and the pop and hint appear without sliding or fading.
+- **Watermark:** Figma's two YM discs, fixed behind the field's middle.
+- **Faces:** `scripts/stories-gallery-assets.mjs` rebuilds each from its
+  Figma image fill, crop and blob path (`faces.json`) at 3x the full face
+  (528px), with its pop mask. Six faces have a story (`STORY_SNIPPETS`);
+  the other 17 are placeholders (`community-<face>`, "Community member n"),
+  flagged in `gallery-people.ts`, until YM provides their stories.
+
+| Token                                                  | Value                                              | Use                                                                                               |
+| ------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `--stories-gallery-face`                               | 6rem / 7.5rem from md / 11rem from xl              | A face at full size (at the centre); the field's unit                                             |
+| `--stories-gallery-column` / `--stories-gallery-row`   | 1.35 / 1.32 faces                                  | The lattice's spacing, unlensed (238 and 232 units on desktop; Figma's 250 and 245)               |
+| `--stories-gallery-lens` / `--stories-gallery-reach`   | 2.6 / 3.4 from md / 4.54545 from xl; 4.09091 faces | The lens radius (desktop's Figma's 800 units), and the half-width past which it grows (720 units) |
+| `--stories-gallery-lens-y`                             | 0.6                                                | How much vertical distance counts towards a face's size                                           |
+| `--stories-gallery-focus-boost`                        | 0.1                                                | How much smaller than the lens alone the centre's neighbours are                                  |
+| `--stories-gallery-band` / `--stories-gallery-content` | 5.6 / 5.4 from md / 4 from xl; 2.55 / 1.85 from xl | The band's height, and how far from its middle faces may be                                       |
+| `--stories-gallery-cull`                               | 0.06                                               | Faces smaller than this are not drawn                                                             |
+| `--duration-stories-gallery-glide`                     | 325ms                                              | A released drag's glide (its speed falls by e every this long)                                    |
+| `--duration-stories-gallery-pan`                       | 160ms                                              | The keyboard panning a face to the middle (time constant)                                         |
+| `--stories-gallery-drag-threshold`                     | 6px                                                | A press moving less than this stays a click                                                       |
+| `--duration-stories-gallery-hint`                      | 2000ms                                             | How long "Drag to explore" shows as the cursor comes onto the band                                |
+| `--stories-gallery-hint-offset`                        | 1.25rem                                            | The hint's distance below and right of the cursor                                                 |
+| `--duration-stories-gallery-hint-fade`                 | the map hint's (240ms)                             | The hint's fade in and out (standard button ease)                                                 |
+
+## Story pages
+
+The story pages, `/stories/[slug]` (Figma 413:69, tablet 414:1264, mobile
+414:1418), one per face in the Stories gallery, all on one template
+(`src/app/stories/story-page.tsx`), generated at build. The data is
+`story-pages.ts`, joined to `gallery-people.ts` by slug. The same template
+serves the team's pages from the Stories alumni row (see "Stories alumni")
+as its **alumni variant** (`variant: "alumni"`): everything below except the
+three accordions, the attribution naming their role and NeighborNet.
+
+- **Content:** the six stories (Rahmah's from Figma, the other five as YM
+  provided them) take their name, city, sister or brother and pull-quote
+  from `STORY_SNIPPETS`, so they agree with the landing's story overlay. The
+  other 17 are placeholders (`placeholder: true`), every word a stand-in to
+  swap, their sister or brother from their gallery face; their pages are not
+  indexed and the sitemap lists only the six.
+- **Hero:** on Warm Snow, "All Stories" (the standard button's back link, to
+  `/stories`) and the headline in Boldonse (`text-lead`, `text-mobile-display`
+  from `md`, `text-landing-section` with Figma's 77px lines from `xl`), its
+  last word in Landing Cyan, revealed with `TextReveal`. Desktop sets them in
+  a row (the headline 650 wide on the right), tablet and mobile stack them.
+  Below, the person's photo runs full-bleed, edge to edge, in a band
+  between a top and a foot edge: organic shapes parting to show the person
+  (`band-*.svg`, built by `scripts/story-page-assets.mjs`, as masks
+  stretched to the width like the closing CTA's shape). Four shapes, from
+  the site's own edges: 0 Figma's two Warm Snow blobs tilted 5.17deg
+  (Rahmah's); 1 the landing hero's wave (above, mirrored and turned over;
+  below, as it is), a double wave; 2 the closing CTA's photo window (its
+  top edge and wavy foot, deepened 2.6x), an arch; 3 the Stories hero's
+  wave above (mirrored, turned over) and the NeighborNets hero's below
+  (deepened 4x), a dome over a curved foot. Rahmah keeps 0; everyone
+  else takes 1, 2 and 3 in turn (gallery order). Each edge sits as high
+  (the top, never above a floor) and as low (the foot) as it can while the
+  top clears the back button and headline by 24 and the foot the
+  attribution by 40, in every frame. The sides are straight and flush: each
+  edge eases out to the band's full height toward the sides (weighted
+  |2x/W - 1|^3, none in the middle), so no shape curls into a corner and the
+  photo meets both edges of the viewport. Each edge is traced from its
+  source to a fraction of a unit and written as a smooth vector curve
+  (cubic Béziers through 48 points), every band SVG with
+  `preserveAspectRatio="none"` and no fixed size, so it stretches to any
+  width crisp, with no letterboxing. The photo is pre-cropped to each frame
+  (art-directed) around its subject's head, measured in each source against
+  their gallery face so the page shows the very person the gallery does
+  (Mustafa the boy in the middle, Layla in the red patterned hijab, Maryam
+  in the beige hijab and glasses, Bilal in the white thobe, Yusuf, Muneeb,
+  each placeholder's gallery face). The head is sized to about 190 / 170 /
+  130px (desktop / tablet / mobile) where the source allows, never zoomed
+  past 1.1 / 1.2 / 1.4 source px per px (so it stays sharp), and set left
+  of the quote on tablet and desktop, above it on mobile, its top clear of
+  the band's top edge above it (whichever shape) and its chin above the
+  foot (on mobile, above the pull-quote). A close-up too tall for that
+  window is centred in it, its eyes in view. A photo with too little above
+  the head (Yusuf's, Muneeb's) gets a strip of its own top rows, blurred,
+  added above; it always falls under the Warm Snow. Every crop is lightly
+  sharpened at its final size, more if a small source is enlarged (with
+  Lanczos, to at least the frame's width) or the source is soft. It drifts with the
+  scroll as the hero passes (`ScrollDrift`, `--story-hero-drift`: 6 / 7 /
+  8rem; its layer is that much taller, half above and half below, so no
+  edge ever shows; static under reduced motion). Over the band, the shade
+  (`--story-hero-shade`, Figma's 42% black as Obsidian, from the right on
+  tablet and desktop, from the foot on mobile), the white quote mark (6%),
+  the pull-quote (`text-article-title` / `text-landing-copy` /
+  `text-mobile-display`, bold) and the attribution ("— Name, YM City",
+  extra bold, `text-nav` / `text-body` /
+  `text-landing-copy`), placed as in each frame. The hero is 958 / 1024 / 981
+  tall; it loads with the page (no entrance).
+- **Story:** the three-paragraph narrative (medium; `text-body`,
+  `text-article-title` from `md`, `text-landing-copy` from `xl`), on the right
+  on desktop (610 wide), then three accordions: "How she / he started", "The
+  turning point", "Where she / he is now", divided by 1px `border` rules
+  (Figma's #c3c3c3, the nearest semantic rule colour). Behind, a faint
+  watermark (4%): the sisters' Jade "ym" roundel or the brothers' Royal
+  monogram, the all-about section's marks, drifting with the scroll as the
+  section passes (`ScrollDrift`, `--story-watermark-drift`: 8 / 10 / 12rem;
+  static under reduced motion).
+- **Accordions** (`story-accordion.tsx`, the page's only client code): open
+  at first, as in Figma. The title is a button (`aria-expanded`,
+  `aria-controls`; Enter and Space) that closes and reopens it: the body's
+  row eases between nothing and its height and the chevron
+  (`keyboard_arrow_down`, turned up when open) turns, over
+  `--duration-story-accordion`; a closed body is `inert`. Under reduced
+  motion they open and close at once.
+- **Closing CTA:** the standard `ClosingCta` with this page's photo (the
+  brothers lifting a brother, 413:129, pre-cropped to Figma's framing).
+
+| Token                                               | Value                                                             | Use                                                                             |
+| --------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `--story-hero-shade`                                | Obsidian at 42%                                                   | The hero's shade under the pull-quote                                           |
+| `--story-hero-shade-from` / `--story-hero-shade-to` | 31.42% / 46.19%; 47.07% / 67.12% from md; 45.76% / 62.69% from xl | The shade full to the first stop, clear from the second (Figma's)               |
+| `--duration-story-accordion`                        | 300ms                                                             | An accordion opening or closing, and its chevron turning                        |
+| `--story-hero-drift`                                | 6rem / 7rem from md / 8rem from xl                                | The hero photo's parallax drift within its band (its layer is this much taller) |
+| `--story-watermark-drift`                           | 8rem / 10rem from md / 12rem from xl                              | The watermark's parallax drift as the story section passes                      |
+
+## Stories alumni
+
+The Stories page's "Or hear from the Young Muslims team" section, under the
+gallery (Figma 587:1538, tablet 593:1673, mobile 593:1733), built in
+`src/app/stories/alumni-section.tsx` (server) with `alumni.ts` (data).
+
+- **Content:** "Or hear from the Young Muslims team." (`text-mobile-section`,
+  `text-landing-section` from `md`, extra bold; Figma's tablet 36px has no
+  token and takes the 40px section size, as "Word on the street" does) and
+  "Learn a bit about where the people that run Young Muslims came from."
+  (medium; `text-body`, `text-article-title` from `md`, `text-landing-copy`
+  from `xl`), in `TextReveal`. Then a card per team member: the photo
+  (285 x 282; 133 x 131 on mobile), the NeighborNet on a Royal tag
+  (`text-article-meta` semibold, white), the name (`text-article-title`
+  bold) and role (`text-nav` medium, `text-caption`). Today the team is
+  Muneeb Syed alone; more are coming from YM (an entry each in `alumni.ts`
+  and its source in `scripts/alumni-assets.mjs`).
+- **Layout:** from tablet the cards are 285 wide, left-aligned and 40
+  apart, wrapping as they run out of room (a flex wrap, not a fixed grid):
+  a single card sits at the left inset exactly as in Figma (90 / 64, capped
+  at 1440) with no empty columns beside it, and more fill in beside it,
+  four to a row on desktop, two on tablet. Mobile stacks them, each photo
+  beside its text (24 apart).
+- **Photos:** each card's is its source centred to cover the box
+  (`scripts/alumni-assets.mjs`): Muneeb's is his Figma fill (vendored,
+  `muneeb-syed-source.png`, only 400px square). Their pages' hero crops
+  come from `scripts/story-page-assets.mjs`.
+- **Hover** (fine pointer, or keyboard focus): the "Word on the street"
+  cards' hover, their CSS module reused as is: the photo rests in one of
+  their three blobs (in turn along the row) and grows into the square under
+  the 32% Obsidian overlay as "View ↗" rises in. The Warm Snow frame is clipped 1px outside the photo, as the street cards' (see "Word on the street"), so no hairline of photo shows along the box's edge. No hover on touch.
+- **Click:** each whole card links to `/stories/<slug>`, the story page's
+  alumni variant, through the page transition (BlobReveal), its cover in
+  Royal (`data-transition-color`).
+- **Entrance:** each card's photo grows and fades in (the shared shape
+  motion, the street cards' tokens), one at a time
+  (`--duration-stories-alumni-stagger`). None under reduced motion.
+
+| Token                               | Value                                             | Use                                       |
+| ----------------------------------- | ------------------------------------------------- | ----------------------------------------- |
+| `--duration-stories-alumni-stagger` | `var(--duration-everywhere-stat-stagger)` (140ms) | The delay between cards entering together |
 
 ## Site footer
 
@@ -1433,7 +1712,13 @@ cards' entrance only) and `word-on-the-street-section.module.css`.
   `--street-reveal-scale`, past the 1.862 the widest blob needs to clear its
   box's corners; the box clips the frame, so the hole opens out to the
   square's edges. One compositor transform, no path morph and no mask
-  animation. The 32% Obsidian overlay (under the frame, so only the revealed
+  animation. The frame is clipped 1px outside the photo (a wrapper at
+  `-inset-px`), not at its edge: at a fractional position the photo's last
+  row of pixels is then wholly under the frame, where two anti-aliased edges
+  clipped on the same row would let a hairline of photo through (seen on
+  tablet); the frame's own clipped edge falls on Warm Snow. It has no
+  `will-change`, so it is drawn with the photo at rest and lifted onto its
+  own layer only while its transform transitions. The 32% Obsidian overlay (under the frame, so only the revealed
   photo darkens) fades in faster (`--duration-street-label`), and "Read article" (`text-landing-copy`
   Bold, white, Material `arrow_outward`) rises `--street-label-rise` into
   the middle, over `--duration-street-hover`. Un-hovering shrinks the frame
@@ -1636,9 +1921,13 @@ gives at least 5.3:1 on every colour.
 Not intercepted: modified clicks, new-tab and download links, external
 links, same-page links (a `#hash` or a query change), back and forward
 navigation (the browser restores scroll natively), clicks while the entry
-animation plays, and links inside `[data-page-transition="off"]`, which the
-Stories portraits use to keep their own expanding-image transition. Under
+animation plays, and links inside `[data-page-transition="off"]`. Under
 reduced motion links navigate directly.
+
+A link can choose the cover's colour with `data-transition-color` (a
+`BrandColor` name from brand-palette.ts): the Stories gallery's faces carry
+their hover pop's colour, so the page turns the colour the face just showed.
+Without it the colour is random.
 
 During the transition smooth scrolling is stopped through
 `stopSmoothScroll()` / `startSmoothScroll()` (smooth-scroll-provider.tsx),

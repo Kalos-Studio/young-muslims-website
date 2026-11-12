@@ -5,7 +5,7 @@ import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 import { cn } from "@/lib/utils";
 
 import styles from "./closing-cta.module.css";
-import { ClosingCtaDrift } from "./closing-cta-drift";
+import { ScrollDrift } from "./scroll-drift";
 
 const BUTTON =
   "ym-cta-trigger relative flex h-15.25 w-full items-center gap-3 px-7.5 text-cta font-bold outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-warm-snow md:w-78";
@@ -24,7 +24,7 @@ const BUTTON =
  * where it hands off from the section above) holds the full-bleed photo
  * under a 40% Obsidian overlay; its wavy foot is an Obsidian cap over the
  * photo, running into the footer. The photo drifts within the shape and the
- * foot drifts too, each on its own layer (ClosingCtaDrift). On it, the mission line and two box buttons:
+ * foot drifts too, each on its own layer (ScrollDrift). On it, the mission line and two box buttons:
  * "Get involved" (filled, to /contact) and "Support us" (outlined, to
  * /support), each with the label roll and the diagonal arrow launch; "Support
  * us" also fills with Warm Snow on hover. Desktop sets the line left and
@@ -50,7 +50,7 @@ export function ClosingCta({
         className="absolute inset-x-0 bottom-0 h-81.75 bg-brand-obsidian xl:h-92.75"
       />
       <div className={cn("absolute inset-0 overflow-hidden", styles.shape)}>
-        <ClosingCtaDrift
+        <ScrollDrift
           token="--closing-cta-drift"
           fallback={160}
           className={styles.photo}
@@ -71,7 +71,7 @@ export function ClosingCta({
               )}
             />
           </div>
-        </ClosingCtaDrift>
+        </ScrollDrift>
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-brand-obsidian/40"
@@ -79,7 +79,7 @@ export function ClosingCta({
       </div>
       {/* The shape's wavy foot: an Obsidian cap over the photo, drifting
           with the scroll (it runs past the section's foot, which clips it). */}
-      <ClosingCtaDrift
+      <ScrollDrift
         token="--closing-cta-foot-drift"
         fallback={64}
         className={cn("bg-brand-obsidian", styles.foot)}

@@ -27,3 +27,15 @@
   height: var(--neighbornets-hero-wave-height);
   overflow: visible;
 }
+
+/* The Stories hero's wave and peek (its own blob; see StoriesHeroWave). */
+.followingStories {
+  margin-top: calc(-1 * var(--stories-hero-peek));
+}
+
+.waveStories {
+  display: block;
+  width: 100%;
+  height: var(--stories-hero-wave-height);
+  overflow: visible;
+}

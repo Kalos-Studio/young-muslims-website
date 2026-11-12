@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { HeroWave, NeighborNetsHeroWave } from "./hero-wave";
+import { HeroWave, NeighborNetsHeroWave, StoriesHeroWave } from "./hero-wave";
 import { StickyHeroCover } from "./sticky-hero-cover";
 import styles from "./sticky-hero.module.css";
 
@@ -47,10 +47,10 @@ export function StickyHero({
   /** Content centred over the media, such as the page title. */
   overlay?: ReactNode;
   /**
-   * The bottom wave: the landing hero's blob (default) or the NeighborNets
-   * hero's, each with its own band height and peek.
+   * The bottom wave: the landing hero's blob (default), the NeighborNets
+   * hero's or the Stories hero's, each with its own band height and peek.
    */
-  wave?: "landing" | "neighbornets";
+  wave?: "landing" | "neighbornets" | "stories";
   /** The rest of the page. */
   children: ReactNode;
 }) {
@@ -77,9 +77,16 @@ export function StickyHero({
         className={cn(
           styles.following,
           wave === "neighbornets" && styles.followingNeighborNets,
+          wave === "stories" && styles.followingStories,
         )}
       >
-        {wave === "neighbornets" ? <NeighborNetsHeroWave /> : <HeroWave />}
+        {wave === "neighbornets" ? (
+          <NeighborNetsHeroWave />
+        ) : wave === "stories" ? (
+          <StoriesHeroWave />
+        ) : (
+          <HeroWave />
+        )}
         <StickyHeroCover />
         {children}
       </div>

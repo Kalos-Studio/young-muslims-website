@@ -11,7 +11,6 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteNavigation } from "@/components/site/site-navigation";
 import { SmoothScrollProvider } from "@/components/site/smooth-scroll-provider";
-import { StoryPageTransition } from "@/components/site/story-page-transition";
 import { PageTransition } from "@/components/site/page-transition";
 // WIREFRAME: the import below is prototype scaffolding. See WIREFRAME.md.
 import { AnnotationToolbar } from "@/components/wireframe/annotation-toolbar";
@@ -70,7 +69,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             </FooterPageStage>
           </EntryAnimation>
         </SmoothScrollProvider>
-        <StoryPageTransition />
         <PageTransition />
         {/* WIREFRAME: this comes out with the wireframe; the header and footer
             above it stay. */}

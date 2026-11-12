@@ -1,0 +1,129 @@
+/* The story pages (DESIGN-SYSTEM.md, "Story pages"). Geometry is in the
+   page's spacing utilities; the story page tokens are in globals.css. */
+
+/* The hero's photo band: the person's full-bleed photo between a top and a
+   foot edge, organic shapes parting to show it, in one of four shapes
+   (scripts/story-page-assets.mjs; story-pages.ts), each frame's silhouette
+   as a mask stretched to the width (as the closing CTA's shape). The band
+   runs edge to edge. */
+.band {
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}
+
+.band0 {
+  mask-image: url("../../../design-assets/figma/stories/story-page/band-mobile-0.svg");
+}
+
+.band1 {
+  mask-image: url("../../../design-assets/figma/stories/story-page/band-mobile-1.svg");
+}
+
+.band2 {
+  mask-image: url("../../../design-assets/figma/stories/story-page/band-mobile-2.svg");
+}
+
+.band3 {
+  mask-image: url("../../../design-assets/figma/stories/story-page/band-mobile-3.svg");
+}
+
+@media (width >= 48rem) {
+  .band0 {
+    mask-image: url("../../../design-assets/figma/stories/story-page/band-tablet-0.svg");
+  }
+
+  .band1 {
+    mask-image: url("../../../design-assets/figma/stories/story-page/band-tablet-1.svg");
+  }
+
+  .band2 {
+    mask-image: url("../../../design-assets/figma/stories/story-page/band-tablet-2.svg");
+  }
+
+  .band3 {
+    mask-image: url("../../../design-assets/figma/stories/story-page/band-tablet-3.svg");
+  }
+}
+
+@media (width >= 80rem) {
+  .band0 {
+    mask-image: url("../../../design-assets/figma/stories/story-page/band-desktop-0.svg");
+  }
+
+  .band1 {
+    mask-image: url("../../../design-assets/figma/stories/story-page/band-desktop-1.svg");
+  }
+
+  .band2 {
+    mask-image: url("../../../design-assets/figma/stories/story-page/band-desktop-2.svg");
+  }
+
+  .band3 {
+    mask-image: url("../../../design-assets/figma/stories/story-page/band-desktop-3.svg");
+  }
+}
+
+/* The hero photo's drifting layer (ScrollDrift): the hero plus the drift,
+   half above and half below, so as it drifts within the fixed band no edge
+   ever shows. */
+.photo {
+  position: absolute;
+  inset: calc(-0.5 * var(--story-hero-drift)) 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .photo,
+  .watermark {
+    will-change: transform;
+  }
+}
+
+/* The shade over the photo, under the pull-quote: up from the foot on
+   mobile, in from the right from tablet. */
+.shade {
+  background-image: linear-gradient(
+    to top,
+    var(--story-hero-shade) var(--story-hero-shade-from),
+    transparent var(--story-hero-shade-to)
+  );
+}
+
+@media (width >= 48rem) {
+  .shade {
+    background-image: linear-gradient(
+      to left,
+      var(--story-hero-shade) var(--story-hero-shade-from),
+      transparent var(--story-hero-shade-to)
+    );
+  }
+}
+
+/* An accordion's body: its row of the grid opens from nothing to its
+   content's height as the chevron turns, on the accordion's timing; under
+   reduced motion it opens and closes at once. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-story-accordion)
+    var(--ease-standard-button);
+}
+
+.panel[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.chevron {
+  transition: transform var(--duration-story-accordion)
+    var(--ease-standard-button);
+}
+
+[aria-expanded="true"] .chevron {
+  transform: scaleY(-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .chevron {
+    transition: none;
+  }
+}

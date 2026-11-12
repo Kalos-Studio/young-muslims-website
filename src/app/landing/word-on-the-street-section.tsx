@@ -41,7 +41,7 @@ function ArticleCard({ article }: { article: StreetArticle }) {
           styles.card,
         )}
       >
-        <div data-street="art" className="relative overflow-hidden">
+        <div data-street="art" className="relative">
           <Image
             src={article.photo}
             alt=""
@@ -56,15 +56,24 @@ function ArticleCard({ article }: { article: StreetArticle }) {
             )}
           />
           {/* Warm Snow with the blob cut out: the photo shows through the
-              hole, and scaling the frame grows the hole into the square. */}
+              hole, and scaling the frame grows the hole into the square.
+              The frame is clipped a pixel outside the photo, not at its
+              edge: at a fractional position the photo's last row of pixels
+              is then wholly under the frame (two edges clipped on the same
+              row let a hairline of photo through), and the frame's own
+              clipped edge falls on Warm Snow. */}
           <div
             aria-hidden="true"
-            className={cn(
-              "absolute inset-0 bg-brand-warm-snow",
-              styles.frame,
-              MASKS[article.slug],
-            )}
-          />
+            className="absolute -inset-px overflow-hidden"
+          >
+            <div
+              className={cn(
+                "absolute inset-0 bg-brand-warm-snow",
+                styles.frame,
+                MASKS[article.slug],
+              )}
+            />
+          </div>
           <span
             aria-hidden="true"
             className={cn(

@@ -1,0 +1,225 @@
+/* The Stories gallery (DESIGN-SYSTEM.md, "Stories gallery"). Sizes are the
+   gallery's tokens in globals.css, in faces (`--stories-gallery-face`, a
+   face at full size); the field moves each face with a transform
+   (stories-gallery-field.tsx). */
+
+/* The band the field shows in: full-bleed, `--stories-gallery-band` faces
+   tall. It owns every touch that starts in it (any swipe pans the field;
+   the page scrolls from outside it), and a mouse drag pans it too. */
+.band {
+  position: relative;
+  height: calc(var(--stories-gallery-face) * var(--stories-gallery-band));
+  overflow: clip;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.band[data-dragging] {
+  cursor: grabbing;
+}
+
+/* The YM watermark: Figma's two discs, fixed behind the field's middle
+   (188 units each, their centres 108.6 either side of the centre and 22
+   below it, in 176-unit faces). */
+.watermark {
+  position: absolute;
+  top: calc(50% + var(--stories-gallery-face) * 0.125);
+  width: calc(var(--stories-gallery-face) * 1.06818);
+  height: auto;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+.watermarkLeft {
+  left: calc(50% - var(--stories-gallery-face) * 0.61733);
+}
+
+.watermarkRight {
+  left: calc(50% + var(--stories-gallery-face) * 0.61733);
+}
+
+/* The drag hint ("Drag to explore"), by the cursor (its `translate`, set
+   by the field). It fades in and out (`data-show`), as the NeighborNets
+   map's zoom hint does: UI chrome over the field. It takes no pointer
+   input. */
+.hint {
+  opacity: 0;
+  transition: opacity var(--duration-stories-gallery-hint-fade)
+    var(--ease-standard-button);
+}
+
+.hint[data-show] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hint {
+    transition: none;
+  }
+}
+
+/* A face: a full-size square at the band's top left, placed and scaled by
+   its transform (on its own layer, rastered at full size and only ever
+   scaled down, so it stays sharp). Hidden until the field places it. */
+.face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--stories-gallery-face);
+  height: var(--stories-gallery-face);
+  margin: calc(var(--stories-gallery-face) / -2) 0 0
+    calc(var(--stories-gallery-face) / -2);
+  visibility: hidden;
+  outline: none;
+  cursor: pointer;
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.face:hover {
+  z-index: 1;
+}
+
+.photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* The hover pop (the landing stories snippet's): the face's own silhouette
+   (its mask class below), `--stories-pop-size` of the face, behind it in a
+   random brand colour; it slides out from `--stories-pop-from-scale` on
+   hover (fine pointers) and with the keyboard's focus. */
+.pop {
+  position: absolute;
+  inset: calc((100% - var(--stories-pop-size)) / 2);
+  opacity: 0;
+  transform: scale(var(--stories-pop-from-scale));
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  pointer-events: none;
+  transition:
+    transform var(--duration-stories-pop) var(--ease-stories),
+    opacity var(--duration-stories-pop) var(--ease-stories);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .band:not([data-dragging]) .face:hover .pop {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.face[data-focused] {
+  z-index: 1;
+}
+
+.face[data-focused] .pop {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop {
+    transition: none;
+  }
+}
+
+.mask08a9b {
+  mask-image: url("../../../design-assets/figma/stories/gallery/08a9b-mask.png");
+}
+
+.mask093fb {
+  mask-image: url("../../../design-assets/figma/stories/gallery/093fb-mask.png");
+}
+
+.mask1d75b {
+  mask-image: url("../../../design-assets/figma/stories/gallery/1d75b-mask.png");
+}
+
+.mask2b3b4 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/2b3b4-mask.png");
+}
+
+.mask2e353 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/2e353-mask.png");
+}
+
+.mask41fca {
+  mask-image: url("../../../design-assets/figma/stories/gallery/41fca-mask.png");
+}
+
+.mask4b24a {
+  mask-image: url("../../../design-assets/figma/stories/gallery/4b24a-mask.png");
+}
+
+.mask4ca3d {
+  mask-image: url("../../../design-assets/figma/stories/gallery/4ca3d-mask.png");
+}
+
+.mask57a72 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/57a72-mask.png");
+}
+
+.mask79cf9 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/79cf9-mask.png");
+}
+
+.mask8245b {
+  mask-image: url("../../../design-assets/figma/stories/gallery/8245b-mask.png");
+}
+
+.mask86dfe {
+  mask-image: url("../../../design-assets/figma/stories/gallery/86dfe-mask.png");
+}
+
+.mask995d1 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/995d1-mask.png");
+}
+
+.maska4cd2 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/a4cd2-mask.png");
+}
+
+.maska7a53 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/a7a53-mask.png");
+}
+
+.maskab441 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/ab441-mask.png");
+}
+
+.maskb4dd1 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/b4dd1-mask.png");
+}
+
+.maskb649d {
+  mask-image: url("../../../design-assets/figma/stories/gallery/b649d-mask.png");
+}
+
+.maskb91c1 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/b91c1-mask.png");
+}
+
+.maskbfb31 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/bfb31-mask.png");
+}
+
+.maskc2981 {
+  mask-image: url("../../../design-assets/figma/stories/gallery/c2981-mask.png");
+}
+
+.maskd893b {
+  mask-image: url("../../../design-assets/figma/stories/gallery/d893b-mask.png");
+}
+
+.maske10ab {
+  mask-image: url("../../../design-assets/figma/stories/gallery/e10ab-mask.png");
+}
