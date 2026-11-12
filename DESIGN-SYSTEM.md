@@ -269,6 +269,25 @@ scrolls up over it. Pass the media (a video or image with
   upright), with its own band height and the same peek share
   (`--stories-hero-wave-height`: a 160-unit band, 4rem minimum;
   `--stories-hero-peek`).
+- `wave="about"` swaps in `AboutHeroWave`, the same build from the About
+  hero's blob (Figma 509:510 / 507:7, one path, vendored as
+  `design-assets/figma/about/hero/shape.svg`: the pale band at full size and
+  the photo at 0.957 of it, both turned 11.43deg), with its own band height
+  and the same peek share (`--about-hero-wave-height`: a 150-unit band,
+  3.75rem minimum; `--about-hero-peek`). Figma fills its pale band
+  `#F3F0EE`, which has no token; it uses `landing-pale`, as every hero wave
+  does.
+- The About hero (`src/app/about/about-hero.tsx`; Figma 507:3 / 595:1782 /
+  596:2493) is the Stories hero's build: the group with the YM flags,
+  art-directed per breakpoint from the Figma image fill
+  (`scripts/about-hero-assets.mjs`; each frame's crop matched against its
+  render, with Figma's brightening of the fill applied, and rendered at the
+  resolution its screens need: 2880 / 1536 / 1200 wide, Lanczos-enlarged
+  1.40x / 1.26x / 1.83x from the 2051 / 1219 / 656 source pixels each frame
+  shows, lightly sharpened, so the browser never stretches it), under the film
+  grain and a 25% Obsidian tint, with "ROOTED LOCALLY. GROWING TOGETHER."
+  (two lines from tablet; wrapping on phones, as in Figma) and its subline
+  centred in the landing hero's type.
 - The Stories hero (`src/app/stories/stories-hero.tsx`; Figma 401:3520 /
   414:316 / 414:791) is the NeighborNets hero's build: the sisters with the
   YM letters, art-directed per breakpoint from the Figma image fill
@@ -280,7 +299,7 @@ scrolls up over it. Pass the media (a video or image with
   the entry screen's grain as a shared SVG filter: static fractal noise laid
   over the source as source + 0.24 x (noise - 0.5), so it speckles without
   shifting the average colour. The entry screen's wordmark and monograms and
-  the NeighborNets and Stories hero photos (CSS `filter: url(#…)`) use it. It never
+  the NeighborNets, Stories and About hero photos (CSS `filter: url(#…)`) use it. It never
   animates, so reduced motion needs nothing.
 - At load the wave's top hump peeks above the fold, as in the 1440 x 1024
   frame.
@@ -527,6 +546,46 @@ desktop from `xl`:
 
 The video files and how they are encoded are in
 `design-assets/video-source/README.md`.
+
+## About generation
+
+The About page's "A generation to believe in" section, under the hero
+(Figma 507:33, tablet 595:1963, mobile 596:2628), built in
+`src/app/about/generation-section.tsx` (server) and
+`generation-drift.tsx` (client: the motion only).
+
+- **Surface:** Warm Snow, the first section after the About hero's wave.
+- **Text:** "A generation to believe in." (Figtree ExtraBold,
+  `text-mobile-section` / `text-landing-section`) and its subline (Figtree
+  Medium, `text-body` / `text-article-title` / `text-landing-copy`, 544
+  wide), centred, obsidian, in `TextReveal`. Content caps at 1440.
+- **Blob photos:** two rows of four group photos, each in its own organic
+  shape (Figma's vectors and image fills, rebuilt at 3x by
+  `scripts/about-generation-assets.mjs` into
+  `design-assets/figma/about/generation/`, since Figma's exports clip the
+  shapes that bleed off the frame), under the film grain (`GrainFilter`,
+  Figma's 24% noise). A row is one `--generation-row-height` tall, its
+  photos half a row apart, repeated three times so it never shows an end,
+  and bleeds off both sides; its Figma copy sits at the Figma places when
+  the section is centred. `509:592`'s source is only 800 x 550: its blob is
+  enlarged about 1.6x at 3x and would gain from a larger original.
+- **Scroll-linked drift** (the show-you lettering's mechanic): one value
+  across the section's scroll, written straight to `translate3d`, no CSS
+  transitions (Lenis already smooths the scroll), so the rows move only
+  while the page scrolls. The top row drifts left as the page scrolls down,
+  the bottom row right, `--generation-drift` (1.5) row heights in all: 238 /
+  363 / 444px, half either side of rest. Each photo also grows in once as
+  it enters view (the shared shape motion, as the landing's blog cards).
+- **Rhythm** (top / row to text / text to row / bottom): mobile 73 / 73 / 73
+  / 95, tablet 129 / 129 / 129 / 110, desktop 90 / 90 / 90 / 116.
+- **Reduced motion:** no drift (rows at their Figma places), no entrance.
+
+| Token                                                                                    | Value                                                      | Use                                                                                                       |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `--generation-row-height`                                                                | 9.91205 / 15.11784 / 18.5rem                               | One row (158.59 / 241.89 / 296 Figma units); photo widths, gap and starts scale with it                   |
+| `--generation-top-start` / `--generation-bottom-start`                                   | -9.4637 / -9.5509 / -8.9155 and -8.6542 / -9.132 / -8.4966 | Each row's start in row heights from the section's centre: its first Figma photo, one repeat further left |
+| `--generation-drift`                                                                     | 1.5                                                        | Each row's scroll-linked travel in row heights (half either side of rest)                                 |
+| `--duration-generation-blob` / `--generation-blob-from-scale` / `--ease-generation-blob` | the street card's 900ms / 0.92 / `--ease-street`           | The photos' entrance                                                                                      |
 
 ## All about section
 

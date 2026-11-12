@@ -39,3 +39,15 @@
   height: var(--stories-hero-wave-height);
   overflow: visible;
 }
+
+/* The About hero's wave and peek (its own blob; see AboutHeroWave). */
+.followingAbout {
+  margin-top: calc(-1 * var(--about-hero-peek));
+}
+
+.waveAbout {
+  display: block;
+  width: 100%;
+  height: var(--about-hero-wave-height);
+  overflow: visible;
+}

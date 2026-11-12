@@ -607,6 +607,11 @@
     calc(var(--stories-hero-wave-height) * 0.1557),
     1px
   );
+  /* The About hero's wave (its own blob, Figma 507:3): a 150-unit band
+     (of 1440), with a 3.75rem minimum (the landing's 6rem in proportion),
+     peeking above the fold by the same share as the others. */
+  --about-hero-wave-height: max(3.75rem, round(calc(100vw * 0.104167), 1px));
+  --about-hero-peek: round(calc(var(--about-hero-wave-height) * 0.1557), 1px);
   /* The NeighborNets map (Figma 301:2121, 374:621, 401:1582). Its state
      borders stay 1.75px at every width and zoom (non-scaling stroke). */
   --neighbornets-map-outline-width: 1.75px;
@@ -891,6 +896,51 @@
 @media (width >= 80rem) {
   :root {
     --show-marquee-row-height: 3.7599rem;
+  }
+}
+
+/*
+ * About "A generation to believe in" tokens (Figma 507:33, tablet 595:1963,
+ * mobile 596:2628). Documented in DESIGN-SYSTEM.md under "About
+ * generation". Mobile values first; tablet from `md`, desktop from `xl`.
+ */
+:root {
+  /* One row of blob photos (296, 241.89 and 158.59 Figma units in the three
+     frames). The photos' widths, the gap between them (half a row) and the
+     rows' starting places are fixed multiples of it, so a row scales as
+     one. */
+  --generation-row-height: 9.91205rem;
+  /* Where each row starts, in row heights from the section's centre: its
+     first photo's Figma place, one repeat (5.98311 rows on top, 6.18243
+     below) further left, so the drift never shows an end. */
+  --generation-top-start: -9.463721;
+  --generation-bottom-start: -8.654172;
+  /* Scroll-linked drift across the section's scroll (from its top entering
+     the viewport to its bottom leaving): each row travels this many row
+     heights in all, half either side of its Figma place (reached when the
+     section is centred); the top row left as the page scrolls down, the
+     bottom row right. 238 / 363 / 444px. */
+  --generation-drift: 1.5;
+  /* The photos' entrance: the shared shape motion, as the landing's
+     blog cards. */
+  --duration-generation-blob: var(--duration-street-card);
+  --generation-blob-from-scale: var(--street-card-from-scale);
+  --ease-generation-blob: var(--ease-street);
+}
+
+@media (width >= 48rem) {
+  :root {
+    --generation-row-height: 15.11784rem;
+    --generation-top-start: -9.550923;
+    --generation-bottom-start: -9.132;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --generation-row-height: 18.5rem;
+    --generation-top-start: -8.915541;
+    --generation-bottom-start: -8.496622;
   }
 }
 

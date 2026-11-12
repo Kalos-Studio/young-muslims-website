@@ -1,0 +1,36 @@
+/* Sizes and motion come from the About generation tokens in globals.css
+   (DESIGN-SYSTEM.md, "About generation"). */
+
+/* A row: four blob photos repeated, half a row apart, one row high. It
+   starts --generation-*-start row heights from the section's centre, so
+   its Figma photos sit at their Figma places, and is moved by the
+   compositor only (translate3d, written by GenerationDrift). */
+.row {
+  display: flex;
+  gap: calc(var(--generation-row-height) * 0.5);
+  width: max-content;
+  height: var(--generation-row-height);
+  will-change: transform;
+}
+
+.rowTop {
+  margin-left: calc(
+    50% + var(--generation-row-height) * var(--generation-top-start)
+  );
+}
+
+.rowBottom {
+  margin-left: calc(
+    50% + var(--generation-row-height) * var(--generation-bottom-start)
+  );
+}
+
+/* Each photo is one row high, its width its own shape's. The film grain
+   (#generation-grain, the shared GrainFilter) stands in for Figma's noise;
+   it is static, so reduced motion needs nothing. */
+.blob {
+  height: 100%;
+  width: auto;
+  max-width: none;
+  filter: url(#generation-grain);
+}

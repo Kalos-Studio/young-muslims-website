@@ -206,3 +206,70 @@ export function StoriesHeroWave({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/**
+ * The About hero's blob (Figma 509:510 and 507:7; vendored as
+ * design-assets/figma/about/hero/shape.svg): one path, 3840.75 x 2006.1,
+ * the pale band at full size and the photo at 0.957 of it, both turned
+ * 11.43deg (the landing hero's turn, but a different blob), so it has its
+ * own wave.
+ */
+const ABOUT_HERO_BLOB =
+  "M3840.6 1157.54C2796.59 1867.57 2395.39 1691.78 1612.63 1906.57C867.104 2089.32 -3.19301 2075.64 0.00880837 1386.23C20.8206 -403.146 3868.25 -439.586 3840.6 1157.54Z";
+/*
+ * Placements in Figma page coordinates (the BG frame sits 47.76 above the
+ * page top, as on the other heroes): each copy centred on its rotated box's
+ * centre, then turned.
+ */
+const ABOUT_PALE_BLOB =
+  "translate(1209.524 279.088) rotate(11.43) translate(-1920.375 -1003.05)";
+const ABOUT_PHOTO_BLOB =
+  "translate(1218.06 236.84) rotate(11.43) scale(0.957026) translate(-1920.375 -1003.05)";
+
+/**
+ * The About hero's bottom wave band, built as HeroWave is: clear above the
+ * photo blob's edge (the hero shows through), the Landing Pale band down to
+ * the pale blob's edge, and Warm Snow below. The edges span Figma page y
+ * 969-1111, so the band is y 965-1115 at full width, scaled with
+ * `--about-hero-wave-height`.
+ */
+export function AboutHeroWave({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 965 1440 150"
+      preserveAspectRatio="none"
+      className={cn(styles.waveAbout, className)}
+    >
+      <defs>
+        <mask
+          id="about-hero-wave-photo"
+          maskUnits="userSpaceOnUse"
+          x="0"
+          y="965"
+          width="1440"
+          height="156"
+        >
+          <rect x="0" y="965" width="1440" height="156" fill="white" />
+          <path d={ABOUT_HERO_BLOB} transform={ABOUT_PHOTO_BLOB} fill="black" />
+        </mask>
+      </defs>
+      <g mask="url(#about-hero-wave-photo)">
+        {/* Runs a few units past the band so no hairline of the hero can
+            show where the band meets the section below. */}
+        <rect
+          x="0"
+          y="965"
+          width="1440"
+          height="156"
+          className="fill-brand-warm-snow"
+        />
+        <path
+          d={ABOUT_HERO_BLOB}
+          transform={ABOUT_PALE_BLOB}
+          className="fill-landing-pale"
+        />
+      </g>
+    </svg>
+  );
+}
