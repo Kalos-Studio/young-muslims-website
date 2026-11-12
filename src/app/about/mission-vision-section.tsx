@@ -27,14 +27,16 @@ const ROWS = [
  * TextReveal, the button whole (the site's StandardButton).
  *
  * Content caps at 1440 (inset 136 on desktop, so the columns are Figma's
- * 568). The next section's pale background shape rises into the foot of
- * this one, so it does not clip and keeps Figma's space at its foot.
+ * 568). The next section's pale background shape ("Built by the youth")
+ * rises into the foot of this one, behind it: so this section is
+ * transparent (the page's Warm Snow shows through), sits above that shape
+ * (`z-10`), does not clip, and keeps Figma's space at its foot.
  */
 export function MissionVisionSection() {
   return (
     <section
       aria-label="Our mission and vision"
-      className="bg-brand-warm-snow text-brand-obsidian"
+      className="relative z-10 text-brand-obsidian"
     >
       <div className="mx-auto flex max-w-360 flex-col gap-20 px-8 pt-11.5 pb-25.75 md:gap-30.75 md:px-16 md:pt-22.75 md:pb-22.75 xl:gap-33.25 xl:px-34 xl:pb-32">
         {ROWS.map((row) => (

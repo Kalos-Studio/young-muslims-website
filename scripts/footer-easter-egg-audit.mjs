@@ -224,10 +224,13 @@ try {
       `window.scrollTo(0,document.documentElement.scrollHeight)`,
     );
     step.phase = "wait for footer ready";
+    // Re-issue the scroll to the bottom on every poll: on a cold load,
+    // Lenis's startup can re-sync the scroll to the top after the first
+    // one, so a single scroll can miss (a harness race, not a site bug).
     await waitUntil(
       client,
       sessionId,
-      `document.querySelector('footer')?.dataset.footerReady === 'true'`,
+      `(window.scrollTo(0, document.documentElement.scrollHeight), document.querySelector('footer')?.dataset.footerReady === 'true')`,
     );
     for (const input of ["wheel", "touch", "keyboard"]) {
       Object.assign(step, { input, phase: "trigger" });
@@ -242,11 +245,15 @@ try {
           window.scrollTo(0, document.documentElement.scrollHeight);
           window.dispatchEvent(new WheelEvent('wheel', { deltaY: 80 }));
         } else if (${JSON.stringify(input)} === 'touch') {
+          // Complete touch lists (touches, targetTouches, changedTouches)
+          // with coordinates, as a real touch has: Lenis reads
+          // targetTouches[0], and threw on the bare synthetic events.
           const touch = y => new Touch({ identifier: 1, target: document.body, clientX: 150, clientY: y });
-          window.dispatchEvent(new TouchEvent('touchstart', { touches: [touch(600)] }));
+          const lists = point => ({ touches: [point], targetTouches: [point], changedTouches: [point] });
+          window.dispatchEvent(new TouchEvent('touchstart', lists(touch(600))));
           window.scrollTo(0, document.documentElement.scrollHeight);
-          window.dispatchEvent(new TouchEvent('touchmove', { touches: [touch(500)] }));
-          window.dispatchEvent(new TouchEvent('touchend'));
+          window.dispatchEvent(new TouchEvent('touchmove', lists(touch(500))));
+          window.dispatchEvent(new TouchEvent('touchend', { touches: [], targetTouches: [], changedTouches: [touch(500)] }));
         } else {
           window.scrollTo(0, document.documentElement.scrollHeight);
           window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
@@ -337,11 +344,16 @@ try {
   chrome.kill();
   await new Promise((resolve) => chrome.once("exit", resolve));
   // Deleting the temporary profile can race Chrome's helper processes,
-  // still writing into it after the main process exits (ENOTEMPTY): that is
-  // a cleanup failure after the checks, not a footer failure. Report it as
-  // such (still failing the run, as before).
+  // still writing into it after the main process exits (ENOTEMPTY), so the
+  // delete retries. If it still fails, that is a cleanup failure after the
+  // checks, not a footer failure: report it as such.
   try {
-    await rm(profile, { recursive: true, force: true });
+    await rm(profile, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 100,
+    });
   } catch (error) {
     console.error(
       `CLEANUP FAIL ${process.exitCode ? "(after a failed check)" : "(all checks passed)"}: could not delete the temporary Chrome profile ${profile}: ${error.code ?? ""} ${error.message}`,

@@ -7,6 +7,8 @@ import { LocalToNational } from "./local-to-national";
 import { AboutHero } from "./about-hero";
 import { GenerationSection } from "./generation-section";
 import { MissionVisionSection } from "./mission-vision-section";
+import { YouthSection } from "./youth-section";
+import { LeadershipSection } from "./leadership-section";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/about" },
@@ -24,6 +26,10 @@ export default function AboutPage() {
           <GenerationSection />
 
           <MissionVisionSection />
+
+          <YouthSection />
+
+          <LeadershipSection />
 
           <VisionMissionHistory />
 

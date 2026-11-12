@@ -1,0 +1,30 @@
+/* Sizes and motion come from the About youth tokens in globals.css
+   (DESIGN-SYSTEM.md, "About built by the youth"). */
+
+/* The pale background shape: Figma's box, from the section's (on desktop
+   the centred column's) top left; its top reaches up into Mission &
+   Vision. YouthMotion moves it with the scroll, on the compositor. */
+.shape {
+  position: absolute;
+  top: var(--youth-shape-top);
+  left: var(--youth-shape-left);
+  width: var(--youth-shape-width);
+  max-width: none;
+  height: auto;
+}
+
+/* With a fine pointer, each face's pointer layer trails the cursor: the
+   script sets its target, and this compositor transition eases it there
+   (the Everywhere section's shapes'). */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .pointer {
+    transition: transform var(--duration-youth-pointer) var(--ease-youth-face);
+    will-change: transform;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shape {
+    will-change: transform;
+  }
+}

@@ -945,6 +945,69 @@
 }
 
 /*
+ * About "Built by the youth" tokens (Figma 529:233, tablet 595:1993, mobile
+ * 596:2662). Documented in DESIGN-SYSTEM.md under "About built by the
+ * youth". Mobile values first; tablet from `md`, desktop from `xl`.
+ */
+:root {
+  /* The pale background shape (534:315; 2210 x 1724 on desktop, 1738.26 x
+     1356 on tablet and phones, the same shape): its box from the section's
+     top left (desktop: from the centred 1440 column), reaching 180 / 444
+     above the section, into Mission & Vision. */
+  --youth-shape-left: -22.9588rem;
+  --youth-shape-top: -11.25rem;
+  --youth-shape-width: 108.64124rem;
+  /* Scroll-linked: across the section's scroll (its top entering the
+     viewport to its bottom leaving) the shape rises this far from its Figma
+     place, its top edge reaching further up into Mission & Vision. */
+  --youth-shape-drift: 4rem;
+  /* The faces' entrance and cursor drift: the Everywhere section's shapes'
+     (the shared shape motion), the faces entering one after another. */
+  --duration-youth-face: var(--duration-everywhere-shape);
+  --youth-face-from-scale: var(--everywhere-shape-from-scale);
+  --ease-youth-face: var(--ease-everywhere-enter);
+  --duration-youth-face-stagger: var(--duration-everywhere-stat-stagger);
+  --youth-pointer-drift: var(--everywhere-pointer-drift);
+  --duration-youth-pointer: var(--duration-everywhere-pointer);
+}
+
+@media (width >= 48rem) {
+  :root {
+    --youth-shape-drift: 6rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --youth-shape-left: -14.75rem;
+    --youth-shape-top: -27.75rem;
+    --youth-shape-width: 138.125rem;
+    --youth-shape-drift: 7.5rem;
+  }
+}
+
+/*
+ * About leadership tokens (Figma 530:273, tablet 595:2007). Documented in
+ * DESIGN-SYSTEM.md under "About leadership".
+ */
+:root {
+  /* The pinned panel's photo swaps: a slower, gentler BlobReveal sweep than
+     the global default (850ms reveal / 750ms cover), both ways. */
+  --duration-leadership-reveal: 1400ms;
+  --ease-leadership-reveal: cubic-bezier(0.45, 0, 0.25, 1);
+  /* The hold after the last photo: the last group's block is a viewport
+     plus this tall, its text pinned at the centre with the panel, so the
+     final photo and its text stay together for this much scroll before the
+     section releases. */
+  /* Where a photo's swap fires: the moment its group's text first enters
+     the viewport from the bottom. Positive moves the trigger line below the
+     bottom edge (earlier); negative, up into the viewport (later). */
+  --leadership-trigger-offset: 0px;
+  --leadership-hold: 75dvh;
+  --leadership-last-height: calc(100dvh + var(--leadership-hold));
+}
+
+/*
  * "All about" cards section tokens (Figma 58:120, 279:262 and 295:1165).
  * Documented in DESIGN-SYSTEM.md under "All about section". Scroll-linked
  * travel across the section's scroll (from its top entering the viewport to

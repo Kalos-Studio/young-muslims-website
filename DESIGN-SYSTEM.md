@@ -608,8 +608,124 @@ The About page's mission and vision (Figma 507:402, tablet 595:1977, mobile
   Figma's button (51 vs 49).
 - **Motion:** each row is a `TextReveal`, its button revealed whole. Nothing
   else moves.
-- **Foot:** the next section's pale shape rises into this section's foot, so
-  the section does not clip.
+- **Foot:** the next section's pale shape ("Built by the youth") rises
+  behind this section's foot: the section is transparent and stacked above
+  it (`relative z-10`), and does not clip.
+
+## About built by the youth
+
+The About page's "Built by the youth. Run by the youth." section (Figma
+529:233, tablet 595:1993, mobile 596:2662), under Mission & Vision, built in
+`src/app/about/youth-section.tsx` (server) and `youth-motion.tsx` (client:
+the motion only).
+
+- **Background shape:** Figma's large pale organic shape (534:315, vendored
+  as `design-assets/figma/about/youth/shape.svg`), drawn inline in Landing
+  Pale. Figma fills it `#F9F3ED`, which has no token; Landing Pale
+  (`#F7F3F0`) is the site's pale shape colour. Its box (from the section's
+  top left; on desktop the centred 1440 column's) is
+  `--youth-shape-left` / `-top` / `-width`; its top reaches 180 (tablet,
+  phones) / 444 (desktop) up behind Mission & Vision, which is transparent
+  and stacked above it (`relative z-10`). It bleeds off both sides; the
+  section clips sideways only.
+- **Copy:** the heading (Figtree ExtraBold, `text-mobile-section` /
+  `text-landing-section`) and the three verbatim paragraphs (Figtree Medium,
+  `text-body` / `text-article-title` / `text-landing-copy`, a line apart),
+  centred in 784 / 640 / 296, in `TextReveal`.
+- **Faces:** eight portraits in organic shapes on desktop (six on tablet and
+  phones: the two beside the text drop, as in Figma), from Figma's own 3x
+  exports cut out by each shape's path (`scripts/about-youth-assets.mjs`,
+  into `design-assets/figma/about/youth/`). Placed at Figma's boxes from the
+  nearer side; the lower ones from the section's foot, so they keep their
+  distance from the text however it wraps.
+- **Motion** (all compositor transforms):
+  - The shape rises `--youth-shape-drift` (64 / 96 / 120px) across the
+    section's scroll, from its Figma place, its top edge reaching further
+    into Mission & Vision; scroll-linked (the show-you mechanic), so it
+    stops when the scroll stops. It only rises, so its foot never drops
+    out of the section.
+  - Each face grows in from `--youth-face-from-scale` as it fades in, one
+    `--duration-youth-face-stagger` after the last (the shared shape
+    entrance), and, with a fine pointer, its pointer layer trails the
+    cursor by `--youth-pointer-drift` x its depth (0.7-1.2), eased by
+    `--duration-youth-pointer` (the shared cursor drift, as the Everywhere
+    section's shapes). Nothing follows a touch.
+- **Rhythm:** text top / foot 350 / 404 (phones), 422 / 476 (tablet), 380 /
+  586 (desktop), Figma's own; the faces sit in that space.
+- **Reduced motion:** the shape at its Figma place, the faces simply present,
+  the text instant.
+
+| Token                                                                     | Value                                                                  | Use                                                 |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------- |
+| `--youth-shape-left` / `--youth-shape-top` / `--youth-shape-width`        | -22.9588 / -11.25 / 108.64124rem; desktop -14.75 / -27.75 / 138.125rem | The shape's box                                     |
+| `--youth-shape-drift`                                                     | 4 / 6 / 7.5rem                                                         | How far the shape rises across the section's scroll |
+| `--duration-youth-face` / `--youth-face-from-scale` / `--ease-youth-face` | the Everywhere shapes' 900ms / 0.92 / `--ease-everywhere-enter`        | The faces' entrance                                 |
+| `--duration-youth-face-stagger`                                           | the Everywhere stats' 140ms                                            | Between faces entering together                     |
+| `--youth-pointer-drift` / `--duration-youth-pointer`                      | the Everywhere shapes' 0.875rem / 700ms                                | The faces' cursor drift and its easing              |
+
+## About leadership
+
+The About page's leadership section (Figma 530:273, tablet 595:2007, mobile
+596:2674), under "Built by the youth", built in
+`src/app/about/leadership-section.tsx` (server) and `leadership-panel.tsx`
+(client: the swaps only).
+
+- **Content:** three groups of YM's copy, verbatim, each a heading (Figtree
+  Bold, `text-lead` / `text-card-title` / `text-mobile-display`: 24 / 28 / 32) and a paragraph 16 below (Figtree Medium, `text-body` /
+  `text-article-title` / `text-landing-copy`), Obsidian, in `TextReveal`.
+  Each has a photo: the brothers by the lake, the sisters in YMC vests, the
+  brothers with the award.
+- **Tablet and desktop:** two halves. The left is a full-height (`h-dvh`)
+  panel, `position: sticky` (not fixed: the footer's Easter egg transforms
+  the page), pinned while the section scrolls by. The right holds the three
+  groups, a viewport tall each, the text centred in it (inset 80 from the
+  middle on desktop, 458 wide; 58 and 262 on tablet). The last group's
+  block is `--leadership-hold` (75dvh) taller, its text in a viewport-tall
+  box pinned at the top, so once the last photo arrives it and its text
+  hold together for that much scroll before the section releases: 3.75
+  viewports of scroll in all (3375px on a 900px screen).
+- **The swap:** the panel stacks the photos, each in a `BlobReveal` layer
+  run in reverse (uncovered to covering, `origin="top"`, so it rises from
+  the bottom as the page scrolls up). The moment a group's text first
+  enters the viewport from the bottom (its top edge crossing the bottom
+  edge, moved by `--leadership-trigger-offset`, 0), its photo sweeps in
+  over the last behind an organic edge; scrolling back, once that text has
+  left below the bottom edge again, it sweeps out, uncovering the one
+  before. The triggers come a viewport apart (each group's text is centred
+  in its viewport-tall block), photo 1 while the section is still coming
+  in (the panel is pinned from the section's top). Both ways run at this
+  section's slower, gentler pace (`--duration-leadership-reveal`, 1400ms,
+  and `--ease-leadership-reveal`, set on the panel's layers only; the
+  global BlobReveal timing is unchanged), and every sweep takes a random
+  curated shape, never the same as the sweep before it. Watched by one
+  IntersectionObserver over the viewport (a group counts once its text is
+  in view or above it, and photos follow the groups in order), so nothing
+  runs per scroll frame; only the masks animate. With the earliest
+  trigger, the last photo stays pinned with its text for 1231px on a 900px
+  desktop (its arrival to the section's release, including the
+  `--leadership-hold`).
+- **Phones:** Figma's stacked banners: each photo full width (360 x 483 in
+  the frame), its text 40 below, the next photo 64 below that; nothing pins
+  or swaps.
+- **Photos:** art-directed per frame from the Figma fills
+  (`scripts/about-leadership-assets.mjs`, into
+  `design-assets/figma/about/leadership/`), rendered at the size the
+  screens need (desktop 1440 x 2048, tablet 768 x 2048, mobile 1080 x 1449)
+  with Lanczos and light sharpening, under the film grain (Figma's noise).
+  The lake photo's original is 1080 x 1620 and the frames show a small part
+  of it: enlarged 2.85x (desktop), 1.91x (tablet), 2.11x (mobile); a larger
+  original would make it crisp. The award photo is enlarged 1.33x / 1.26x;
+  the YMC photo is never enlarged.
+- **Reduced motion:** `BlobReveal` completes instantly, so the photos swap
+  at the same points without the sweep; text appears instantly; phones are
+  static as always.
+
+| Token                                            | Value                            | Use                                                                                                                                    |
+| ------------------------------------------------ | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `--duration-leadership-reveal`                   | 1400ms                           | The panel's photo sweeps, in and out (BlobReveal's default: 850 / 750ms)                                                               |
+| `--ease-leadership-reveal`                       | `cubic-bezier(0.45, 0, 0.25, 1)` | Their easing: a softer start and finish than `--ease-blob-reveal`                                                                      |
+| `--leadership-trigger-offset`                    | 0px                              | Where a swap fires: the group's text's top edge at the viewport's bottom edge; positive fires earlier (below the edge), negative later |
+| `--leadership-hold` / `--leadership-last-height` | 75dvh / 100dvh + the hold        | The hold after the last photo, and the last group's block height (tablet and desktop)                                                  |
 
 ## All about section
 
