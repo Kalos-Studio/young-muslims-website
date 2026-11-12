@@ -4,7 +4,7 @@ import { ClosingCta } from "@/components/site/closing-cta";
 
 import ymatxRailing from "../../../design-assets/figma/landing-2026/cta/ymatx-railing.jpg";
 import { BlogInteractions } from "./blog-interactions";
-import { blogPosts, featuredPosts } from "@/lib/blog";
+import { getBlogContent } from "@/lib/sanity-blog";
 import { FeaturedBlogCarousel } from "./featured-blog-carousel";
 
 export const metadata: Metadata = {
@@ -14,15 +14,16 @@ export const metadata: Metadata = {
     "Reflections, recaps, and what’s happening across the NeighborNets.",
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const { posts, featured } = await getBlogContent();
   return (
     <main data-blog-page className="w-full">
       <h1 className="sr-only">Young Muslims Blog</h1>
 
-      <FeaturedBlogCarousel slides={featuredPosts} />
+      <FeaturedBlogCarousel slides={featured} />
 
       <div className="mx-auto w-full max-w-7xl px-8 pt-8 pb-20 md:px-20">
-        <BlogInteractions posts={blogPosts} />
+        <BlogInteractions posts={posts} />
       </div>
 
       <ClosingCta

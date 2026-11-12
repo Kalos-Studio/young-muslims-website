@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { BlogCoverImage } from "./blog-cover-image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -111,8 +111,10 @@ export function FeaturedBlogCarousel({ slides }: { slides: BlogPost[] }) {
             }}
             className={`relative col-start-1 row-start-1 flex min-h-128 w-full min-w-0 items-end ${active || incoming ? "visible" : "invisible"} ${transition?.started ? "transition-transform duration-300 ease-in-out motion-reduce:transition-none" : "transition-none"} ${position}`}
           >
-            <Image
+            <BlogCoverImage
               src={slide.heroImage ?? slide.image}
+              coverImage={slide.coverImage}
+              wide
               alt=""
               fill
               preload={index === 0}
@@ -137,6 +139,9 @@ export function FeaturedBlogCarousel({ slides }: { slides: BlogPost[] }) {
                 </p>
                 <Link
                   href={`/blog/${slide.id}`}
+                  aria-label={`Read ${slide.title} (opens in a new tab)`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group mt-6 inline-flex items-center gap-3 border border-background px-6 py-4 text-nav font-bold text-background transition-colors outline-none hover:bg-background hover:text-foreground focus-visible:ring-2 focus-visible:ring-background focus-visible:ring-offset-2 focus-visible:ring-offset-foreground motion-reduce:transition-none"
                 >
                   Read article

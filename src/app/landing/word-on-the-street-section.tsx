@@ -19,7 +19,7 @@ const MASKS: Record<StreetArticle["slug"], string> = {
 const SIZES = "(width >= 80rem) 378px, (width >= 48rem) 50vw, 100vw";
 
 /**
- * One article: the whole card is a link to the report's PDF (new tab). The
+ * One article: the whole card is a link to its blog page (new tab). The
  * photo rests in its organic blob; on hover (fine pointer) or keyboard focus
  * the blob grows into the full square. The photo never moves: over it sits
  * a Warm Snow frame with the blob cut out, and the frame scales up from the
@@ -35,7 +35,7 @@ function ArticleCard({ article }: { article: StreetArticle }) {
         href={article.href}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`${article.title} (PDF, opens in a new tab)`}
+        aria-label={`${article.title} (opens in a new tab)`}
         className={cn(
           "block outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-royal",
           styles.card,

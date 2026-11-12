@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { BlogCoverImage } from "./blog-cover-image";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import Link from "next/link";
@@ -69,12 +69,15 @@ function PostCard({ post }: { post: BlogPost }) {
     <article id={`post-${post.id}`} className="flex min-w-0 flex-col gap-5">
       <Link
         href={`/blog/${post.id}`}
-        aria-label={`Read ${post.title}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Read ${post.title} (opens in a new tab)`}
         className="group block outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <figure className="relative h-96 overflow-hidden bg-muted md:aspect-square md:h-auto">
-          <Image
+          <BlogCoverImage
             src={post.image}
+            coverImage={post.coverImage}
             alt=""
             fill
             sizes="(min-width: 1280px) 25vw, (min-width: 768px) 45vw, 100vw"
@@ -97,6 +100,9 @@ function PostCard({ post }: { post: BlogPost }) {
         <h3 className="text-body leading-snug font-semibold text-foreground">
           <Link
             href={`/blog/${post.id}`}
+            aria-label={`${post.title} (opens in a new tab)`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="transition-colors hover:text-secondary focus-visible:outline-2 focus-visible:outline-ring"
           >
             {post.title}

@@ -76,6 +76,31 @@ const check = (label, fn) => {
 try {
   await waitForServer();
 
+  // CMS article pages are rendered on demand. Discover their concrete URLs
+  // from the public listing in both production and preview, not from sitemap
+  // membership (which would miss accidentally omitted/noindex articles).
+  if (unchecked.includes("/blog/[slug]")) {
+    const listing = await fetch(`${base}/blog`);
+    assert.equal(
+      listing.status,
+      200,
+      "Blog listing must load for SEO discovery",
+    );
+    const $blog = load(await listing.text());
+    const articlePaths = [
+      ...new Set(
+        $blog('a[href^="/blog/"]')
+          .toArray()
+          .map((el) => $blog(el).attr("href"))
+          .filter((href) => /^\/blog\/[^/?#]+$/.test(href)),
+      ),
+    ];
+    if (articlePaths.length) {
+      pages.push(...articlePaths);
+      unchecked.splice(unchecked.indexOf("/blog/[slug]"), 1);
+    }
+  }
+
   for (const route of unchecked)
     failures.push(
       `${route}: dynamic route has no prerendered pages to check; add generateStaticParams or extend this script`,

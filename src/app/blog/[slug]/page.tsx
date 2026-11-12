@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { BlogCoverImage } from "../blog-cover-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { blogPosts, getBlogPost, isBlogPostIndexable } from "@/lib/blog";
+import { isBlogPostIndexable } from "@/lib/blog";
+import { getBlogContent } from "@/lib/sanity-blog";
+import { ArticleBody } from "../article-body";
 
 type BlogArticleProps = { params: Promise<{ slug: string }> };
-
-export function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.id }));
-}
 
 export async function generateMetadata({
   params,
 }: BlogArticleProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const { posts } = await getBlogContent();
+  const post = posts.find((item) => item.id === slug);
   if (!post) notFound();
   return {
     title: post.title,
@@ -28,14 +27,13 @@ export async function generateMetadata({
 
 export default async function BlogArticlePage({ params }: BlogArticleProps) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const { posts } = await getBlogContent();
+  const post = posts.find((item) => item.id === slug);
   if (!post) notFound();
   const content = post.content ?? [
     { type: "paragraph" as const, text: post.excerpt },
   ];
-  const otherPosts = blogPosts
-    .filter((item) => item.id !== post.id)
-    .slice(0, 3);
+  const otherPosts = posts.filter((item) => item.id !== post.id).slice(0, 3);
 
   return (
     <main data-blog-page className="bg-background text-foreground">
@@ -44,9 +42,11 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
           data-header-hero
           className="relative h-96 overflow-hidden bg-foreground md:h-128"
         >
-          <Image
+          <BlogCoverImage
             src={post.heroImage ?? post.image}
-            alt=""
+            coverImage={post.coverImage}
+            wide
+            alt={post.imageAlt ?? ""}
             fill
             preload
             sizes="100vw"
@@ -84,26 +84,30 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
               )}
             </header>
             <div className="space-y-6 pt-8 text-body leading-relaxed">
-              {content.map((block, index) => {
-                if (block.type === "heading")
-                  return (
-                    <h2
-                      key={index}
-                      className="pt-6 text-card-title font-semibold"
-                    >
-                      {block.text}
-                    </h2>
-                  );
-                if (block.type === "list")
-                  return (
-                    <ul key={index} className="list-disc space-y-3 pl-6">
-                      {block.items.map((item, itemIndex) => (
-                        <li key={itemIndex}>{item}</li>
-                      ))}
-                    </ul>
-                  );
-                return <p key={index}>{block.text}</p>;
-              })}
+              {post.body ? (
+                <ArticleBody body={post.body} />
+              ) : (
+                content.map((block, index) => {
+                  if (block.type === "heading")
+                    return (
+                      <h2
+                        key={index}
+                        className="pt-6 text-card-title font-semibold"
+                      >
+                        {block.text}
+                      </h2>
+                    );
+                  if (block.type === "list")
+                    return (
+                      <ul key={index} className="list-disc space-y-3 pl-6">
+                        {block.items.map((item, itemIndex) => (
+                          <li key={itemIndex}>{item}</li>
+                        ))}
+                      </ul>
+                    );
+                  return <p key={index}>{block.text}</p>;
+                })
+              )}
             </div>
           </div>
         </div>
@@ -121,11 +125,15 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
               <Link
                 key={otherPost.id}
                 href={`/blog/${otherPost.id}`}
+                aria-label={`Read ${otherPost.title} (opens in a new tab)`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group block min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
               >
                 <div className="relative aspect-square overflow-hidden bg-muted">
-                  <Image
+                  <BlogCoverImage
                     src={otherPost.image}
+                    coverImage={otherPost.coverImage}
                     alt=""
                     fill
                     sizes="(min-width: 768px) 33vw, 100vw"
