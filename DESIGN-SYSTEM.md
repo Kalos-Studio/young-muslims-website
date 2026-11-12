@@ -727,6 +727,58 @@ The About page's leadership section (Figma 530:273, tablet 595:2007, mobile
 | `--leadership-trigger-offset`                    | 0px                              | Where a swap fires: the group's text's top edge at the viewport's bottom edge; positive fires earlier (below the edge), negative later |
 | `--leadership-hold` / `--leadership-last-height` | 75dvh / 100dvh + the hold        | The hold after the last photo, and the last group's block height (tablet and desktop)                                                  |
 
+## About stats
+
+The About page's stats (Figma 534:2641, tablet 595:2037, mobile 596:2700),
+under the leadership section, built in `src/app/about/stats-section.tsx`
+(server) and `stats-entrance.tsx` (client: the metrics' entrance), with the
+shared `ScrollDrift` for the photo.
+
+- **Photo:** full bleed at every size: the brothers lifting one of their
+  own, art-directed per frame from the Figma fill
+  (`scripts/about-stats-assets.mjs`, into
+  `design-assets/figma/about/stats/`), with Figma's treatment baked in
+  (black and white, contrast -0.2: grey x 0.842 + 2.4, fitted against its
+  render), under the film grain and the 48% Obsidian scrim
+  (`bg-about-stats-scrim`). The original is 1080 x 720, so the crops are
+  enlarged 3.1-4.4x; the treatment and scrim hide most of it, but a larger
+  original would make it crisp.
+- **Parallax:** the photo layer is `--about-stats-drift` (96px) taller
+  than the section, half above and half below, and drifts from half of it
+  up (the section's top entering the viewport) to half down (its foot
+  leaving), scroll-linked on the compositor (`ScrollDrift`, as the closing
+  CTA's photo); the crops are cut at that taller shape, so nothing zooms
+  and no edge ever shows. Static under reduced motion.
+- **Copy:** "Three decades. One movement." (Figtree ExtraBold,
+  `text-mobile-section` / `text-landing-section`, Warm Snow, in
+  `TextReveal`; 250 / 300 / 328 wide: tablet's 36px has no token, so its
+  40px gets a wider measure to keep Figma's two lines) over four metrics,
+  verbatim: 200+ NeighborNets, 26 States, 10,000+ Youth served, 30+ Years.
+  Each number is Boldonse (`text-landing-stat` / `text-stat`: 48 / 54), its
+  "+" the Material Symbols `add` at 60px, the label Figtree SemiBold
+  (`text-article-title` / `text-landing-copy` / `text-landing-stat-label`).
+  One left-aligned column from 32 / 410 / 936 of the frame; the stepped
+  look is the numbers' widths, as in Figma.
+- **Metrics' entrance:** as the first comes into view, each grows from
+  `--about-stat-from-scale` (0.92) and slides in `--about-stat-shift`
+  (24px) from the right as it fades in, over `--duration-about-stat`
+  (700ms, `--ease-about-stat`), one `--duration-about-stat-stagger`
+  (180ms) after the last, top to bottom (the Everywhere stats' staggered
+  pattern). Once; opacity and transform only.
+- **Rhythm** (top / heading to metrics / between / foot), Figma's own:
+  117 / 58 / 53 / 96 (phones), 117 / 84 / 51 / 120 (tablet), 117 / 74 /
+  40 / 85 (desktop).
+- **Reduced motion:** the photo still, the metrics and heading simply
+  present.
+
+| Token                                            | Value                                                   | Use                                                        |
+| ------------------------------------------------ | ------------------------------------------------------- | ---------------------------------------------------------- |
+| `--color-about-stats-scrim`                      | Obsidian at 48%                                         | The scrim over the photo                                   |
+| `--about-stats-drift`                            | 6rem                                                    | The photo's scroll-linked drift (and its layer's overhang) |
+| `--duration-about-stat` / `--ease-about-stat`    | the Everywhere stats' 700ms / `--ease-everywhere-enter` | Each metric's entrance                                     |
+| `--duration-about-stat-stagger`                  | 180ms                                                   | Between metrics                                            |
+| `--about-stat-from-scale` / `--about-stat-shift` | 0.92 (the shared shape entrance's) / 1.5rem             | Where each metric grows and slides in from                 |
+
 ## All about section
 
 The landing page's "This is what we're all about" section (Figma 58:120,

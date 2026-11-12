@@ -9,6 +9,7 @@ import { GenerationSection } from "./generation-section";
 import { MissionVisionSection } from "./mission-vision-section";
 import { YouthSection } from "./youth-section";
 import { LeadershipSection } from "./leadership-section";
+import { StatsSection } from "./stats-section";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/about" },
@@ -30,6 +31,8 @@ export default function AboutPage() {
           <YouthSection />
 
           <LeadershipSection />
+
+          <StatsSection />
 
           <VisionMissionHistory />
 

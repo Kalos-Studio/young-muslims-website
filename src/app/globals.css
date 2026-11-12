@@ -1008,6 +1008,37 @@
 }
 
 /*
+ * About stats tokens (Figma 534:2641, tablet 595:2037, mobile 596:2700).
+ * Documented in DESIGN-SYSTEM.md under "About stats".
+ */
+@theme {
+  /* The scrim over the black-and-white photo: Obsidian at Figma's 48%,
+     for the Warm Snow type. */
+  --color-about-stats-scrim: color-mix(
+    in srgb,
+    var(--color-brand-obsidian) 48%,
+    transparent
+  );
+}
+
+:root {
+  /* The photo's scroll-linked drift: from half this above its place (the
+     section's top entering the viewport) to half below (its foot leaving).
+     The photo layer is this much taller than the section, half above and
+     half below, so no edge ever shows. */
+  --about-stats-drift: 6rem;
+  /* The metrics' entrance, one after another, top to bottom: each grows
+     from --about-stat-from-scale and slides in --about-stat-shift from the
+     right as it fades in (the Everywhere stats' staggered entrance, with
+     the shared shape entrance's growth). */
+  --duration-about-stat: var(--duration-everywhere-stat);
+  --duration-about-stat-stagger: 180ms;
+  --about-stat-from-scale: var(--everywhere-shape-from-scale);
+  --about-stat-shift: 1.5rem;
+  --ease-about-stat: var(--ease-everywhere-enter);
+}
+
+/*
  * "All about" cards section tokens (Figma 58:120, 279:262 and 295:1165).
  * Documented in DESIGN-SYSTEM.md under "All about section". Scroll-linked
  * travel across the section's scroll (from its top entering the viewport to
