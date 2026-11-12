@@ -6,6 +6,7 @@ import { VisionMissionHistory } from "./vision-mission-history";
 import { LocalToNational } from "./local-to-national";
 import { AboutHero } from "./about-hero";
 import { GenerationSection } from "./generation-section";
+import { MissionVisionSection } from "./mission-vision-section";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/about" },
@@ -21,6 +22,8 @@ export default function AboutPage() {
         {/* The page slides up over the pinned hero, so it is opaque. */}
         <div className="bg-background">
           <GenerationSection />
+
+          <MissionVisionSection />
 
           <VisionMissionHistory />
 

@@ -587,6 +587,30 @@ The About page's "A generation to believe in" section, under the hero
 | `--generation-drift`                                                                     | 1.5                                                        | Each row's scroll-linked travel in row heights (half either side of rest)                                 |
 | `--duration-generation-blob` / `--generation-blob-from-scale` / `--ease-generation-blob` | the street card's 900ms / 0.92 / `--ease-street`           | The photos' entrance                                                                                      |
 
+## About mission and vision
+
+The About page's mission and vision (Figma 507:402, tablet 595:1977, mobile
+596:2646), under "A generation to believe in", built in
+`src/app/about/mission-vision-section.tsx` (server).
+
+- **Content:** YM's official mission and vision, verbatim. Each row: its
+  label ("Our mission" / "Our vision", Figtree Bold, `text-lead` /
+  `text-card-title` / `text-mobile-display`: Figma's 24 / 28 / 32) on the
+  left; the statement (Figtree Medium, `text-body` / `text-article-title` /
+  `text-landing-copy`) and its `StandardButton` ("Support us" → /support,
+  "Our stories" → /stories) 32 below it on the right. Obsidian on Warm Snow.
+- **Layout:** two equal columns 32 apart from tablet (Figma's 568 + 568 on
+  desktop, inset 136; 304 + 304 on tablet, inset 64); stacked on phones,
+  the label 32 above the statement, the button full width. Content caps at 1440. Rows 80 / 123 / 133 apart; top 46 / 91 / 91, foot 103 / 91 / 128,
+  Figma's own.
+- **Buttons:** the site's `StandardButton` (light), not Figma's flat Royal
+  block: it is the standard in-page CTA everywhere. It is 2px taller than
+  Figma's button (51 vs 49).
+- **Motion:** each row is a `TextReveal`, its button revealed whole. Nothing
+  else moves.
+- **Foot:** the next section's pale shape rises into this section's foot, so
+  the section does not clip.
+
 ## All about section
 
 The landing page's "This is what we're all about" section (Figma 58:120,
