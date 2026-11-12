@@ -69,6 +69,8 @@ export function ShowYouReel() {
       data-playing={playing ? "" : undefined}
       className={cn(
         "relative isolate aspect-show-reel-portrait w-full overflow-hidden rounded-media bg-brand-obsidian md:aspect-show-reel",
+        // Playing: frosted glass behind the video's letterbox bands.
+        "data-playing:bg-show-reel-glass-fallback data-playing:backdrop-blur-show-reel supports-backdrop-filter:data-playing:bg-show-reel-glass",
         styles.reel,
       )}
     >
@@ -80,7 +82,7 @@ export function ShowYouReel() {
           playsInline
           preload="auto"
           poster="/videos/young-muslims-highlight-reel-poster.webp"
-          className="absolute inset-0 size-full bg-brand-obsidian object-contain"
+          className="absolute inset-0 size-full object-contain"
           aria-label="Young Muslims highlight reel"
         >
           <source

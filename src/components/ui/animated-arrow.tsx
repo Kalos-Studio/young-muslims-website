@@ -1,9 +1,11 @@
 import type { HTMLAttributes } from "react";
 
-import { MaterialIcon } from "./material-icon";
+import { MaterialIcon, type MaterialIconName } from "./material-icon";
 
 type AnimatedArrowProps = Omit<HTMLAttributes<HTMLSpanElement>, "children"> & {
   size?: number;
+  /** The glyph (the ↗ arrow by default; `chevron_left` for a back link). */
+  icon?: MaterialIconName;
 };
 
 type AnimatedCtaLabelProps = {
@@ -23,6 +25,7 @@ type AnimatedCtaLabelProps = {
  */
 export function AnimatedArrow({
   size = 24,
+  icon = "north_east",
   className,
   style,
   ...props
@@ -35,12 +38,12 @@ export function AnimatedArrow({
       {...props}
     >
       <MaterialIcon
-        name="north_east"
+        name={icon}
         size={size}
         className="ym-cta-arrow__icon ym-cta-arrow__icon--current"
       />
       <MaterialIcon
-        name="north_east"
+        name={icon}
         size={size}
         className="ym-cta-arrow__icon ym-cta-arrow__icon--next"
       />

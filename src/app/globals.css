@@ -599,6 +599,14 @@
     calc(var(--neighbornets-hero-wave-height) * 0.1557),
     1px
   );
+  /* The Stories hero's wave (its own blob, Figma 401:3520): a 160-unit band
+     (of 1440), with a 4rem minimum (the landing's 6rem in proportion),
+     peeking above the fold by the same share as the others. */
+  --stories-hero-wave-height: max(4rem, round(calc(100vw * 0.111111), 1px));
+  --stories-hero-peek: round(
+    calc(var(--stories-hero-wave-height) * 0.1557),
+    1px
+  );
   /* The NeighborNets map (Figma 301:2121, 374:621, 401:1582). Its state
      borders stay 1.75px at every width and zoom (non-scaling stroke). */
   --neighbornets-map-outline-width: 1.75px;
@@ -825,6 +833,22 @@
   /* The card's hover growth and the PLAY label's follow: quick to respond,
      soft to settle. */
   --ease-show-you: cubic-bezier(0.22, 1, 0.36, 1);
+  /* The playing reel's frosted frame: where the landscape video leaves
+     bands (top and bottom; most on the portrait mobile card), the lettering
+     behind shows through gently blurred (still legible) under a translucent Twilight
+     tint. Without
+     backdrop-filter, the denser fallback tint alone covers it. */
+  --color-show-reel-glass: color-mix(
+    in srgb,
+    var(--color-landing-twilight) 40%,
+    transparent
+  );
+  --color-show-reel-glass-fallback: color-mix(
+    in srgb,
+    var(--color-landing-twilight) 90%,
+    transparent
+  );
+  --blur-show-reel: 0.1875rem;
 }
 
 :root {
@@ -1120,6 +1144,124 @@
 }
 
 /*
+ * Story page tokens (/stories/[slug]; Figma 413:69, tablet 414:1264, mobile
+ * 414:1418). Documented in DESIGN-SYSTEM.md under "Story pages". The hero's
+ * geometry (its heights, the quote's place) is in spacing utilities on the
+ * page; these are the values utilities cannot hold.
+ */
+:root {
+  /* The hero's shade: Figma's black at 42%, as Obsidian, over the photo
+     band: full from the band's right edge (its foot on mobile) to the first
+     stop, clear from the second (Figma's stops, measured on its photo, as
+     shares of the frame). */
+  --story-hero-shade: color-mix(
+    in srgb,
+    var(--color-brand-obsidian) 42%,
+    transparent
+  );
+  --story-hero-shade-from: 31.42%;
+  --story-hero-shade-to: 46.19%;
+  /* An accordion opening and closing (its height and its chevron's turn),
+     on the standard button's ease. */
+  --duration-story-accordion: 300ms;
+  /* Parallax (ScrollDrift): the hero photo drifts this far within its band
+     as the hero scrolls past (its layer is this much taller, half above and
+     half below, so no edge shows), and the watermark this far as the story
+     section passes. */
+  --story-hero-drift: 6rem;
+  --story-watermark-drift: 8rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --story-hero-shade-from: 47.07%;
+    --story-hero-shade-to: 67.12%;
+    --story-hero-drift: 7rem;
+    --story-watermark-drift: 10rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --story-hero-shade-from: 45.76%;
+    --story-hero-shade-to: 62.69%;
+    --story-hero-drift: 8rem;
+    --story-watermark-drift: 12rem;
+  }
+}
+
+/*
+ * Stories gallery tokens (Figma 401:3786, tablet 414:754, mobile 414:1225).
+ * Documented in DESIGN-SYSTEM.md under "Stories gallery". Lengths are in
+ * faces (`--stories-gallery-face`). Desktop is Figma's field (176-unit
+ * faces, its centre column's, 170 to 177) a little tighter; tablet and
+ * mobile deviate from their frames (approved): smaller faces and a tighter
+ * lens, so many more faces show and the field reads as one to drag.
+ */
+:root {
+  /* A face at full size (the one at the centre). Every gallery length is in
+     faces, so the phone's whole field (band included) scales with it. */
+  --stories-gallery-face: 6rem;
+  /* The lattice, unlensed: columns 1.35 faces apart and rows 1.32 (238 and
+     232 units on desktop; a little tighter than Figma's 250 and 245), odd
+     columns half a row lower. */
+  --stories-gallery-column: 1.35;
+  --stories-gallery-row: 1.32;
+  /* The lens, fixed at the band's centre: across, a face dx from the centre
+     is drawn at R tanh(dx / R), R the lens, growing in proportion where the
+     band's half-width is more than the reach (720 units), so wide screens
+     are filled to the edge. Sizes fall as sech²(r / R) with r the distance
+     from the centre, vertical distance counting 0.6, and the centre's
+     neighbours 10% smaller still (the boost), which lifts the middle face
+     as Figma does. Desktop's lens is Figma's (800 units); phones' and
+     tablets' are tighter, so faces shrink within the screen and more fit,
+     the outer ones running off its edges. */
+  --stories-gallery-lens: 2.6;
+  --stories-gallery-reach: 4.09091;
+  --stories-gallery-lens-y: 0.6;
+  --stories-gallery-focus-boost: 0.1;
+  /* The band's height, and how far from its middle faces may be (they
+     shrink as they near its top and bottom; at rest no sliver of a further
+     row shows): phones and tablets five rows, desktop three, each with room
+     for a pop. Faces under 6% are not drawn. */
+  --stories-gallery-band: 5.6;
+  --stories-gallery-content: 2.55;
+  --stories-gallery-cull: 0.06;
+  /* Motion: a released drag glides to a stop, its speed falling by e every
+     glide time; the keyboard pans a face to the middle with the pan time
+     constant. A press that moves less than the threshold stays a click (a
+     tap). */
+  --duration-stories-gallery-glide: 325ms;
+  --duration-stories-gallery-pan: 160ms;
+  --stories-gallery-drag-threshold: 6px;
+  /* Desktop's "Drag to explore" hint: shown this long as the cursor comes
+     onto the band (until the first drag), this far below and right of the
+     cursor, fading as the map's zoom hint does. */
+  --duration-stories-gallery-hint: 2000ms;
+  --stories-gallery-hint-offset: 1.25rem;
+  --duration-stories-gallery-hint-fade: var(
+    --duration-neighbornets-map-zoom-hint-fade
+  );
+}
+
+@media (width >= 48rem) {
+  :root {
+    --stories-gallery-face: 7.5rem;
+    --stories-gallery-lens: 3.4;
+    --stories-gallery-band: 5.4;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --stories-gallery-face: 11rem;
+    --stories-gallery-lens: 4.54545;
+    --stories-gallery-band: 4;
+    --stories-gallery-content: 1.85;
+  }
+}
+
+/*
  * Landing "Word on the street" tokens (Figma 270:289, tablet 280:735, mobile
  * 297:1394, hover 270:511). Documented in DESIGN-SYSTEM.md under "Word on
  * the street".
@@ -1150,6 +1292,16 @@
      the label is readable while the blob is still swelling. */
   --duration-street-label: 320ms;
   --street-label-rise: 0.5rem;
+}
+
+/*
+ * Stories alumni ("Or hear from the Young Muslims team", Figma 587:1538;
+ * DESIGN-SYSTEM.md, "Stories alumni"). The cards reuse the "Word on the
+ * street" cards' entrance and hover tokens; only their stagger is their
+ * own, the landing stats' (cards in view together come in one at a time).
+ */
+:root {
+  --duration-stories-alumni-stagger: var(--duration-everywhere-stat-stagger);
 }
 
 /*
@@ -1732,6 +1884,14 @@
   transform: translateX(-120%);
 }
 
+/* Backward roll for a back chevron (‹), a "return": the chevron leaves to
+ * the left and its copy enters from the right. Timing, easing and
+ * reduced-motion handling come from the shared rules for `.ym-cta-arrow__icon`.
+ */
+.ym-cta-arrow--back .ym-cta-arrow__icon--next {
+  transform: translateX(120%);
+}
+
 /* Current-page dot for header links: a small Pure White dot centered in the
  * link's bottom padding. It is keyed to `aria-current`, so the visual and the
  * announced state always agree, and it is static with no layout cost.
@@ -1771,6 +1931,18 @@
   .ym-cta-trigger:focus-visible
     .ym-cta-arrow--horizontal
     .ym-cta-arrow__icon--next {
+    transform: translateX(0);
+  }
+
+  .ym-cta-trigger:hover .ym-cta-arrow--back .ym-cta-arrow__icon--current,
+  .ym-cta-trigger:focus-visible
+    .ym-cta-arrow--back
+    .ym-cta-arrow__icon--current {
+    transform: translateX(-120%);
+  }
+
+  .ym-cta-trigger:hover .ym-cta-arrow--back .ym-cta-arrow__icon--next,
+  .ym-cta-trigger:focus-visible .ym-cta-arrow--back .ym-cta-arrow__icon--next {
     transform: translateX(0);
   }
 }

@@ -137,3 +137,72 @@ export function NeighborNetsHeroWave({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/**
+ * The Stories hero's blob (Figma 402:3972 and 402:4389; vendored as
+ * design-assets/figma/stories/hero/shape.svg): one path, 4236 x 1993, the
+ * pale band and the photo both at full size, the photo 109 units higher,
+ * both flipped upright (Figma's 180deg turn with a mirror). A third blob,
+ * so it has its own wave.
+ */
+const STORIES_HERO_BLOB =
+  "M3768.55 1636.89C3625.15 1750.89 3457.41 1847.63 3277.19 1917.13C3122.13 1976.96 2935.77 2010.45 2760.66 1983.66C2589.65 1957.61 2449.11 1878.29 2285.25 1836.76C1729.66 1696.42 695.787 2086.5 78.6158 1359.62C-306.17 551.775 740.381 -135.816 2804.85 22.9846C3417.72 70.1634 4219 371.543 4235.57 821.751C4246.21 1108.25 4057.19 1407.39 3768.76 1636.89H3768.55Z";
+/*
+ * Placements in Figma page coordinates (the BG frame sits 47.76 above the
+ * page top, as on the other heroes): each copy's box 1508 left of the page,
+ * flipped vertically about its own height.
+ */
+const STORIES_PALE_BLOB = "translate(-1508 1168.04) scale(1 -1)";
+const STORIES_PHOTO_BLOB = "translate(-1508 1058.94) scale(1 -1)";
+
+/**
+ * The Stories hero's bottom wave band, built as HeroWave is: clear above
+ * the photo blob's edge (the hero shows through), the Landing Pale band down
+ * to the pale blob's edge, and Warm Snow below. The edges span Figma page y
+ * 1015-1168, so the band is y 1011-1171 at full width, scaled with
+ * `--stories-hero-wave-height`.
+ */
+export function StoriesHeroWave({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 1011 1440 160"
+      preserveAspectRatio="none"
+      className={cn(styles.waveStories, className)}
+    >
+      <defs>
+        <mask
+          id="stories-hero-wave-photo"
+          maskUnits="userSpaceOnUse"
+          x="0"
+          y="1011"
+          width="1440"
+          height="166"
+        >
+          <rect x="0" y="1011" width="1440" height="166" fill="white" />
+          <path
+            d={STORIES_HERO_BLOB}
+            transform={STORIES_PHOTO_BLOB}
+            fill="black"
+          />
+        </mask>
+      </defs>
+      <g mask="url(#stories-hero-wave-photo)">
+        {/* Runs a few units past the band so no hairline of the hero can
+            show where the band meets the section below. */}
+        <rect
+          x="0"
+          y="1011"
+          width="1440"
+          height="166"
+          className="fill-brand-warm-snow"
+        />
+        <path
+          d={STORIES_HERO_BLOB}
+          transform={STORIES_PALE_BLOB}
+          className="fill-landing-pale"
+        />
+      </g>
+    </svg>
+  );
+}

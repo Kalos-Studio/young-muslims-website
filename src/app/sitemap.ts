@@ -2,7 +2,8 @@ import type { MetadataRoute } from "next";
 import { getBlogContent } from "@/lib/sanity-blog";
 import { isBlogPostIndexable } from "@/lib/blog";
 import { indexablePaths, isSiteIndexable, SITE_ORIGIN } from "@/lib/seo";
-import { INDEXABLE_STORY_SLUGS } from "@/lib/stories";
+
+import { STORY_PAGES } from "./stories/story-pages";
 
 // List only pages that search engines may index. Placeholder stories and
 // excerpt-only posts declare noindex, so listing them would send mixed signals.
@@ -12,11 +13,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { posts } = await getBlogContent();
   const paths = [
     ...indexablePaths,
-    ...INDEXABLE_STORY_SLUGS.map((slug) => `/stories/${slug}`),
+    ...STORY_PAGES.filter((story) => !story.placeholder).map(
+      (story) => `/stories/${story.slug}`,
+    ),
     ...posts.filter(isBlogPostIndexable).map((post) => `/blog/${post.id}`),
   ];
 
-  return isSiteIndexable
-    ? paths.map((path) => ({ url: new URL(path, SITE_ORIGIN).href }))
-    : [];
+  return paths.map((path) => ({ url: new URL(path, SITE_ORIGIN).href }));
 }
