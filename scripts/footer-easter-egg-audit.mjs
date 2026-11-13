@@ -160,6 +160,60 @@ function record(message) {
   if (browserLog.length > 40) browserLog.splice(0, browserLog.length - 40);
 }
 
+/* How long a trigger gets to start the flash before it is sent again. */
+const TRIGGER_RETRY_MS = 1500;
+
+/**
+ * Runs `action` (re-scrolling to the bottom and re-sending the input), then
+ * waits up to TRIGGER_RETRY_MS for `expression`, again and again, until it
+ * holds or `timeout` passes; then fails as waitUntil does, with the page's
+ * state.
+ */
+async function retryUntil(
+  client,
+  sessionId,
+  action,
+  expression,
+  timeout = 30000,
+) {
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline) {
+    await evaluate(client, sessionId, action);
+    const until = Math.min(deadline, Date.now() + TRIGGER_RETRY_MS);
+    while (Date.now() < until) {
+      if (await evaluate(client, sessionId, expression)) return;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+  await waitUntil(client, sessionId, expression, 1);
+}
+
+/** Scrolls to the page's foot and sends one `input` there. */
+function triggerScript(input) {
+  return `(async () => {
+    window.scrollTo(0, document.documentElement.scrollHeight - innerHeight - 100);
+    await new Promise(resolve => setTimeout(resolve, 50));
+    if (${JSON.stringify(input)} === 'wheel') {
+      window.dispatchEvent(new WheelEvent('wheel', { deltaY: 120 }));
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      window.dispatchEvent(new WheelEvent('wheel', { deltaY: 80 }));
+    } else if (${JSON.stringify(input)} === 'touch') {
+      // Complete touch lists (touches, targetTouches, changedTouches) with
+      // coordinates, as a real touch has: Lenis reads targetTouches[0], and
+      // threw on the bare synthetic events.
+      const touch = y => new Touch({ identifier: 1, target: document.body, clientX: 150, clientY: y });
+      const lists = point => ({ touches: [point], targetTouches: [point], changedTouches: [point] });
+      window.dispatchEvent(new TouchEvent('touchstart', lists(touch(600))));
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      window.dispatchEvent(new TouchEvent('touchmove', lists(touch(500))));
+      window.dispatchEvent(new TouchEvent('touchend', { touches: [], targetTouches: [], changedTouches: [touch(500)] }));
+    } else {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    }
+  })()`;
+}
+
 const profile = await mkdtemp(join(tmpdir(), "ym-footer-audit-"));
 const chrome = spawn(
   CHROME,
@@ -234,36 +288,17 @@ try {
     );
     for (const input of ["wheel", "touch", "keyboard"]) {
       Object.assign(step, { input, phase: "trigger" });
-      await evaluate(
-        client,
-        sessionId,
-        `(async () => {
-        window.scrollTo(0, document.documentElement.scrollHeight - innerHeight - 100);
-        await new Promise(resolve => setTimeout(resolve, 50));
-        if (${JSON.stringify(input)} === 'wheel') {
-          window.dispatchEvent(new WheelEvent('wheel', { deltaY: 120 }));
-          window.scrollTo(0, document.documentElement.scrollHeight);
-          window.dispatchEvent(new WheelEvent('wheel', { deltaY: 80 }));
-        } else if (${JSON.stringify(input)} === 'touch') {
-          // Complete touch lists (touches, targetTouches, changedTouches)
-          // with coordinates, as a real touch has: Lenis reads
-          // targetTouches[0], and threw on the bare synthetic events.
-          const touch = y => new Touch({ identifier: 1, target: document.body, clientX: 150, clientY: y });
-          const lists = point => ({ touches: [point], targetTouches: [point], changedTouches: [point] });
-          window.dispatchEvent(new TouchEvent('touchstart', lists(touch(600))));
-          window.scrollTo(0, document.documentElement.scrollHeight);
-          window.dispatchEvent(new TouchEvent('touchmove', lists(touch(500))));
-          window.dispatchEvent(new TouchEvent('touchend', { touches: [], targetTouches: [], changedTouches: [touch(500)] }));
-        } else {
-          window.scrollTo(0, document.documentElement.scrollHeight);
-          window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
-        }
-      })()`,
-      );
+      // Scroll to the bottom and send the input, then wait for the flash;
+      // if it has not started within TRIGGER_RETRY_MS, do both again, until
+      // the usual timeout. On a cold load, Lenis's startup can re-sync the
+      // scroll to the top at any point, which would leave a single trigger
+      // short of the bottom (a harness race, not a site bug). Every step
+      // that needs the page's foot re-scrolls this way.
       step.phase = "wait for flashing";
-      await waitUntil(
+      await retryUntil(
         client,
         sessionId,
+        triggerScript(input),
         `document.querySelector('footer')?.dataset.footerPhase === 'flashing'`,
       );
       step.phase = "wait for montage reveal";

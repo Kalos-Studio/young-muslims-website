@@ -93,18 +93,24 @@ function groupLines(words: HTMLElement[]) {
  * Timing comes from the `--duration-text-reveal`, `--duration-text-reveal-
  * stagger`, `--text-reveal-rise` and `--ease-text-reveal` tokens. Scrolling
  * is native (Lenis drives the window scroll), so in-view detection stays in
- * step with smooth scrolling. Under reduced motion, and before JavaScript
+ * step with smooth scrolling. `startAtEdge` starts the reveal as the text's
+ * top enters the viewport rather than 15% up from its foot: for text that
+ * should follow straight on from a scroll sequence above it (the About
+ * page's Shura header, after the "Two sides" release). Under reduced motion, and before JavaScript
  * runs, the text is simply shown in place.
  */
 export function TextReveal({
   as: Component = "div",
   className,
   id,
+  startAtEdge = false,
   children,
 }: {
   as?: ElementType;
   className?: string;
   id?: string;
+  /** Start as the text's top enters the viewport (see above). */
+  startAtEdge?: boolean;
   children: ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -142,14 +148,15 @@ export function TextReveal({
           );
         });
       },
-      // Start once the text's top is 15% up from the bottom of the viewport.
+      // Start once the text's top is 15% up from the bottom of the viewport
+      // (or, with `startAtEdge`, as it enters).
       // The area above the viewport counts as in view too, so text that a
       // jump (a link to a later section, a dragged scrollbar) skips past is
       // still revealed rather than left hidden.
-      { margin: "100000px 0px -15% 0px" },
+      { margin: `100000px 0px ${startAtEdge ? "0%" : "-15%"} 0px` },
     );
     return () => stopWatching();
-  }, []);
+  }, [startAtEdge]);
 
   return (
     <Component ref={ref} id={id} className={className}>

@@ -779,6 +779,259 @@ shared `ScrollDrift` for the photo.
 | `--duration-about-stat-stagger`                  | 180ms                                                   | Between metrics                                            |
 | `--about-stat-from-scale` / `--about-stat-shift` | 0.92 (the shared shape entrance's) / 1.5rem             | Where each metric grows and slides in from                 |
 
+## About history
+
+The About page's "How it started." timeline (Figma 535:2724, tablet 596:2074,
+mobile 596:2730), under the stats, built in
+`src/app/about/history-section.tsx` (server) and `history-line.tsx` (client:
+the line and the choreography), with the shared `ScrollDrift` for the
+background years.
+
+- **Content:** "How it started." (Figtree ExtraBold, `text-mobile-section` /
+  `text-landing-section`), the grey 1995 (Figma's vector, vendored with its
+  `#81818B` fill as `design-assets/figma/about/history/1995.svg`) over its big
+  background year (Obsidian at 4%, `1995-watermark.svg`), the founding
+  paragraph; a line (2 x 72, `bg-about-history-track` with an Obsidian fill);
+  2026 as four photo digits (Figma's 2x exports, the numeral cut out of each
+  photo, `digit-*.webp`) over its big background year (Royal at 4%,
+  `2026-watermark.svg`), and its paragraph with "Read the 2025 annual report"
+  (`StandardButton`, the PDF, a new tab; full width on phones). Paragraphs
+  Figtree Medium, `text-body` / `text-article-title` / `text-landing-copy`.
+- **Layout:** desktop, the heading at the left of the 1995 (inset 80), the
+  1995 and its paragraph from 550 (810 wide), the line under that column's
+  middle, the digits and their paragraph from 378 (982 wide); tablet and
+  phones stack, the 1995, line and digits centred at every width (no
+  left/right mismatch as the window narrows). Tablet keeps Figma's sizes
+  (1995 526 wide, digits 306 tall). Phones: the 2026 digits span the
+  viewport edge to edge (each digit growing by its Figma width, 197 / 338 /
+  197 / 212, its height following), and the 1995 is 33/40 of that (Figma's
+  810 : 982), centred, so the two keep their relation at every phone width
+  (264 / 297 / 322px wide on 320 / 360 / 390 screens).
+  Each background year is 7/4 of its year's width, placed by fractions of
+  that year's box (Figma's offsets: 1995's -2/5 top, -3/8 left, -1/3 on
+  desktop; 2026's -7/16, -3/8, -3/7 on desktop), so it scales with it; the
+  section clips sideways. Figma's vertical rhythm at each frame.
+- **Choreography** (`data-history`, all opacity or transform):
+  1. the 1995 fades in (`--duration-about-history-fade`, 700ms) as it comes
+     into view;
+  2. once that has finished, its background year fades in (700ms);
+  3. the line's fill follows the scroll (scaleY): empty as the track's top
+     reaches `--about-history-line-start` (90%) down the viewport, full as its
+     foot reaches `--about-history-line-end` (50%), about 425px of scroll; it
+     empties again on the way up;
+  4. the first time it is full, the 2026 digits fade in one by one, 2, 0, 2,
+     6 (`--duration-about-history-digit`, 600ms, each
+     `--duration-about-history-digit-stagger`, 300ms, after the last);
+  5. once the last digit has finished, the 2026 background year fades in
+     (700ms).
+
+  Each fade runs once; the line alone follows the scroll both ways. Both
+  background years drift with the scroll (`--about-history-drift`: 48 / 64
+  / 80px).
+
+- **Reduced motion:** nothing is created: the years, the line (full) and the
+  digits show as rendered; no drift. The DOM is the same.
+
+| Token                                         | Value                     | Use                                                        |
+| --------------------------------------------- | ------------------------- | ---------------------------------------------------------- |
+| `--color-about-history-track`                 | `#b6b6ba`                 | The line's track (Figma 542:48)                            |
+| `--duration-about-history-fade`               | 700ms                     | The 1995 and each background year's fade                   |
+| `--duration-about-history-digit` / `-stagger` | 600ms / 300ms             | Each 2026 digit's fade, and between them                   |
+| `--ease-about-history`                        | `--ease-everywhere-enter` | The fades                                                  |
+| `--about-history-line-start` / `-end`         | 90% / 50%                 | Where the line's fill starts and completes in the viewport |
+| `--about-history-drift`                       | 3 / 4 / 5rem              | The background years' scroll-linked drift                  |
+
+## About two sides
+
+The About page's "Two sides. One mission." section (Figma 536:2755, tablet
+596:2101, mobile 596:2757; hover 542:75 / 542:180), under "How it started.",
+built in `src/app/about/two-sides-section.tsx` (server; the hover is CSS,
+`two-sides-section.module.css`) and `two-sides-scrub.tsx` (client: the
+scrub). Being built in stages: the default state, the hover reveal, the pin
+and the desktop and tablet scroll sequence are in; the phones' vertical
+sequence and the Shura handoff follow.
+
+- **Assets** (`scripts/about-two-sides-assets.mjs`, into
+  `design-assets/figma/about/two-sides/`): each logo split into its letters
+  and its monogram (the "O", its own vector in Figma), both on the logo's
+  485 x 261 canvas so they stack exactly; the BROTHERS / SISTERS wordmarks;
+  the standalone monograms (Sisters vector, Brothers a 2400px raster, for
+  the scroll sequence); the hover photos cover-cropped at 3x.
+- **Default:** the Brothers (Royal) and Sisters (Jade) logos side by side
+  from tablet (485 wide, 118 apart on desktop; 285, 70 apart on tablet),
+  stacked on phones (285, 60 apart); "Two sides. One mission."
+  (`text-mobile-section` / `text-landing-section`) and the paragraph
+  (`text-body` / `text-article-title` / `text-landing-copy`), centred, 784
+  wide, in `TextReveal`. Figma's rhythm (top / gap / foot): 51 / 60 / 75,
+  143 / 88 / 132, 108 / 157 / 154.
+- **Hover reveal** (fine pointer, motion allowed): hovering a logo dims it
+  to `--two-sides-hover-dim` (Figma's 4%), its wordmark rises in from
+  `--two-sides-wordmark-from-scale`, and its four photos come out of the
+  wordmark: each starts at `--two-sides-photo-from-scale`, 60% of the way
+  back to the wordmark's centre, and moves to its Figma corner,
+  `--duration-two-sides-photo-stagger` after the last, all over
+  `--duration-two-sides-hover` (`--ease-two-sides-hover`); leaving
+  reverses it. The reveal is laid out in the logo's 485 x 261 Figma frame
+  and scaled with the logo (`scale-59` below `xl`). Opacity, scale and
+  translate only. The photos carry the film grain. Decorative
+  (`aria-hidden`); each logo is labelled.
+- **Pinned sequence** (motion allowed; taller than 30rem from tablet,
+  46rem on phones, where the stacked logos and copy need the room): the
+  section is a `--two-sides-stage-height` (100svh) stage, `position: sticky`
+  (never fixed: the footer's Easter egg transforms the page), over
+  `--two-sides-runway` (220svh) of scroll, its content centred below the
+  header's `--two-sides-stage-clearance`. One progress value (0 as the
+  section's top meets the viewport's top, 1 as its foot meets the
+  viewport's foot) is cut into phases: until `--two-sides-hold-end` (0.1364)
+  the default state holds; to `--two-sides-fade-end` (0.3409) the heading,
+  paragraph and both logos' letters fade out, the monograms staying in
+  place.
+- **Monograms**: each
+  monogram's rig (`data-two-sides="rig"`: its in-wordmark art,
+  `{side}-mark.svg`, under its standalone logo) takes over from it in its
+  exact place at `--two-sides-fade-end`, then is moved and scaled (one
+  `translate3d` + `scale` from its top left) through Figma's scroll flow:
+  to frame 3 (the standalone logos side by side, centred, 335 / 72 apart in
+  a 485 logo) by `--two-sides-grow-end` (0.6591), on to frame 4 (840 / 181
+  apart) at `--two-sides-zoom-frame-at` (0.8523), and out of frame, Brothers
+  left and Sisters right at 960, by `--two-sides-zoom-end` (1), the end
+  of the runway: the stage releases as they leave, with no empty hold (the
+  runway was 250svh with a 30svh hold; every phase keeps its scroll
+  distance), so the Shura section follows straight on. The rigs pass through those frames on
+  one continuous curve (a monotone cubic through each circle's centre and
+  its size on a log scale), not an ease per phase: they start from rest,
+  never stop between frames (except where the motion turns round, at frame
+  3, smoothly), never overshoot and never change speed abruptly at a phase
+  boundary. The fades and the crossfade ease in and out (smoothstep), with
+  no step in rate either. The scrub reads the window scroll that Lenis
+  drives, so it stays in step with the smoothing. The frames' sizes are tokens in logo
+  widths; positions come from the stage and logos, measured on load and
+  resize. Each rig is laid out at its largest (`--two-sides-rig-size`, the
+  exit size: 565 / 960px) and only scaled down, so it stays sharp at every
+  step (checked against a re-rasterized copy at 2x and 3x).
+- **Phones** (under 48rem; pinned only when taller than 46rem): the same
+  phases, curve and crossfade, run down instead of across (Figma 597:3610,
+  on the phone's 285 logo): the stacked monograms grow to frame 3, the
+  standalone logos stacked and centred on the stage, 180 square and 94
+  apart; on to frame 4, 573 and 299 apart; then Brothers leaves off the
+  top and Sisters off the foot at 656 (the phone rig's laid-out size), the
+  vertical twin of the desktop's left and right exit. The phone values are
+  the same ratio tokens, redefined below 48rem. Short phones (46rem tall
+  or less) keep the static fallback.
+- **The crossfade:** over `--two-sides-crossfade-start` to `-end` (0.5625 to
+  0.5966, about 70px of scroll on desktop), late in the grow, the standalone
+  logo fades in on top of the in-wordmark art, which stays solid under it
+  (no washed-out half-and-half) and drops away once covered. The two are
+  aligned on their circles: every art fills its box edge to edge (the
+  Brothers standalone, a 2400px raster with a transparent margin round its
+  disc in Figma, is trimmed to the disc: 1727px), so each pair shares one
+  box, centred and the same size, and the Brothers and Sisters circles show
+  the same diameter at every phase. The Brothers arts differ in
+  design (a solid disc with a white YM, against a disc split white and
+  Royal), so their crossfade shows a brief overlap; the short window keeps
+  it to a few frames.
+- Opacity and transform only, written only when they change.
+- **Hover cut-off:** the scrub sets the stage's `data-phase` ("default"
+  through the hold, "collapsing" after), only when the phase changes; the
+  reveal applies only in "default", so a reveal under the pointer when the
+  collapse starts reverses on its own.
+- **Static fallback** (reduced motion, short screens): no pin, runway or
+  scrub; the section is Figma's default frame and scrolls normally, with no
+  hover reveal (no `data-phase`). The layout switch is CSS (keep its query
+  in step with `PINNED_QUERY` in the scrub); the script drives nothing.
+- **Touch:** no reveal; the logos stay as they are.
+
+| Token                                                                                             | Value                                   | Use                                                                                   |
+| ------------------------------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------- |
+| `--two-sides-hover-dim`                                                                           | 0.04                                    | The hovered logo's opacity                                                            |
+| `--duration-two-sides-hover` / `--ease-two-sides-hover`                                           | 600ms / `--ease-everywhere-enter`       | The reveal                                                                            |
+| `--duration-two-sides-photo-stagger`                                                              | 70ms                                    | Between photos                                                                        |
+| `--two-sides-wordmark-from-scale` / `--two-sides-photo-from-scale`                                | 0.94 / 0.4                              | Where the wordmark and photos grow from                                               |
+| `--two-sides-stage-height` / `--two-sides-runway` / `--two-sides-section-height`                  | 100svh / 220svh / their sum             | The pinned stage and its scroll runway                                                |
+| `--two-sides-hold-end` / `--two-sides-fade-end`                                                   | 0.1364 / 0.3409                         | The phases: the default hold (hover window), then the copy and letters’ fade          |
+| `--two-sides-stage-clearance`                                                                     | 5rem                                    | The header’s room above the stage’s centred content                                   |
+| `--two-sides-grow-end` / `--two-sides-zoom-frame-at` / `--two-sides-zoom-end`                     | 0.6591 / 0.8523 / 1                     | The monograms reach frame 3, frame 4, and leave the frame                             |
+| `--two-sides-crossfade-start` / `-end`                                                            | 0.5625 / 0.5966                         | The in-wordmark art to standalone crossfade                                           |
+| `--two-sides-standalone-size` / `-gap`, `--two-sides-zoom-size` / `-gap`, `--two-sides-exit-size` | 0.6907 / 0.1488, 1.732 / 0.373, 1.9794  | The scroll flow’s frames, in logo widths (Figma’s 335 / 72, 840 / 181, 960 of 485)    |
+| the same, under 48rem                                                                             | 0.631 / 0.3295, 2.0084 / 1.0489, 2.2998 | The phone flow’s frames (Figma’s 180 / 94, 573 / 299, 656 of 285)                     |
+| `--two-sides-rig-size`                                                                            | 41rem / 35.25rem / 60rem                | Each rig’s laid-out size (its largest; only ever scaled down): phone, tablet, desktop |
+
+## About Shura
+
+The About page's "The Young Muslims team." section (Figma 542:174, tablet
+596:2123, mobile 596:2778), the National Shura, built in
+`src/app/about/shura-section.tsx` with its members in `shura.ts` and their
+photos from `scripts/about-shura-assets.mjs`. It follows "Two sides. One
+mission." on Warm Snow.
+
+- **Header:** "The Young Muslims team." (`text-mobile-section` /
+  `text-landing-section`, ExtraBold; the tablet frame's 36px has no token,
+  so tablet uses the desktop role; phones break after "The", as Figma), the
+  paragraph (`text-body` / `text-article-title` / `text-landing-copy`,
+  Medium) and a "Contact us" `StandardButton` to `/contact` (full width on
+  phones), centred, 784 wide at most, in one `TextReveal`.
+- **Cards:** 23 members, real and verbatim from Figma, in its reading
+  order. Each is a 285 x 282 photo (130 square on phones, beside the text,
+  16 apart) and the shared `TeamCardText` (`src/components/site/`, also the
+  Stories alumni cards'): tag, name and role, the tag here in 24% Obsidian
+  (`bg-brand-obsidian/24`, white text). A tag that is only "-" (Duaa Ali's)
+  is not rendered. Cards are not links.
+- **Grid:** four columns on desktop, two on tablet, 285 wide and 46 apart,
+  centred; rows 83 (desktop) and 89 (tablet) apart; every second column 49
+  lower, by a translate, so the rows keep their pitch. Phones: one per row,
+  34 apart.
+- **Photos:** Figma's fills are 400 square, so the cards' photos are 400 x
+  396 (cover-cropped, never upscaled; a little under 2x). Muneeb's is the
+  Stories alumni card's. Photos and placeholder blocks carry Figma's 24%
+  noise, the site's `GrainFilter` (`#shura-grain`).
+- **Missing photos (PLACEHOLDER, swappable):** nine members have none yet;
+  their cards show Figma's branded block, Royal for brothers and Jade for
+  sisters (`photo: { placeholder }` in `shura.ts`). Replace it with the
+  vendored photo when YM sends one.
+- **Motion:** the header rises in word by word as it enters view
+  (`TextReveal`), and the cards use the shared card entrance (the Stories
+  alumni row's: each photo grows from `--street-card-from-scale` as it
+  fades in, one at a time by `--duration-about-shura-stagger`). Arriving
+  into the "Two sides" section's empty, releasing stage, this is the
+  handoff from the exiting monograms: sequential, with no shared layers.
+  Reduced motion: everything is simply there.
+- **Column parallax** (tablet and desktop, motion allowed;
+  `shura-columns-drift.tsx`): each column of cards drifts up at its own
+  scroll-linked rate, clearly, for depth: over the section's whole pass
+  through the viewport it travels `--about-shura-column-drift-1` to `-4`
+  (192 / 384 / 256 / 480px on desktop; tablet's two columns 192 / 416px,
+  its section being twice as tall). The cards sit in Figma's place as the
+  section's top reaches the viewport's top (the first row first seen
+  whole), a little low as they arrive from the handoff and rising past
+  their place as the grid scrolls on. A `transform` (translate3d) per
+  card, on top of the 49px `translate` offset; written only when a
+  column's value changes. Phones (one column, nothing to drift against)
+  and reduced motion: still.
+- **The overlap with "Two sides"** (pinned layouts only): the section is
+  pulled up `--about-shura-overlap` (35svh) over the end of the "Two
+  sides" runway. The "Two sides" sticky stage is layered above it
+  (`z-index: 1`; sticky already makes the stage its own stacking context,
+  so the rigs' order is settled by the stage against this section), so the
+  monograms finish leaving on top while the team's Warm Snow and header
+  come up beneath them. The stage has no background and lets pointers
+  through (its content takes them only in the default phase, for the hover
+  reveal), so it never hides or blocks the Shura header under it. The
+  header rises in as it enters (`TextReveal`'s `startAtEdge`), so the team
+  arrives while the monograms leave, with no empty screen between. The
+  static fallback has no pin and no overlap.
+- **Rhythm** (top / button to cards / foot): 37 / 71 / 81 (phones), 40 /
+  91 / 76 (tablet), 48 / 58 / 112 (desktop, the foot measured from the
+  last row's untranslated cards). The top is tighter than Figma's frame
+  (76 / 132), and its `TextReveal` starts as the header enters the viewport
+  (`startAtEdge`) rather than 15% up, so the header rises in as the "Two
+  sides" monograms leave.
+
+| Token                                 | Value                                                | Use                                                             |
+| ------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
+| `--duration-about-shura-stagger`      | `--duration-everywhere-stat-stagger`                 | Between cards in a row                                          |
+| `--about-shura-column-drift-1` … `-4` | 12rem / 24rem / 16rem / 30rem (tablet 12rem / 26rem) | Each column's parallax travel                                   |
+| `--about-shura-overlap`               | 35svh                                                | How far the section slides up over the pinned "Two sides" stage |
+
 ## All about section
 
 The landing page's "This is what we're all about" section (Figma 58:120,

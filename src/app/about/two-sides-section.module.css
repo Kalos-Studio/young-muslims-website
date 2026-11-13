@@ -1,0 +1,152 @@
+/* The "Two sides" section (DESIGN-SYSTEM.md, "About two sides"; tokens in
+   globals.css).
+
+   Two layouts from one DOM. Static (the default): the section scrolls
+   normally, as Figma's frame. Pinned (the media query below; keep it in
+   step with PINNED_QUERY in two-sides-scrub.tsx): the section is a
+   one-viewport stage plus --two-sides-runway; the stage sticks to the
+   viewport (sticky, never fixed: the footer's Easter egg transforms the
+   page) while the runway scrolls past, and two-sides-scrub.tsx scrubs it.
+   Reduced motion and short screens (30rem tall or less; phones 46rem or
+   less, where the stacked logos and copy would not fit the stage) keep the
+   static layout, and nothing is driven.
+
+   The hover reveal: with a fine pointer, and only while the pinned stage
+   is in its default phase (data-phase, set by the scrub), hovering a side
+   dims its logo, brings its wordmark in over it and its four photos out of
+   the wordmark to the corners, staggered; leaving, or the stage leaving the
+   default phase, reverses it. Only opacity, scale and translate change, on
+   promoted layers. Elsewhere (touch, the static layout) nothing reveals. */
+
+@media (prefers-reduced-motion: no-preference) and (height > 30rem) and (width >= 48rem),
+  (prefers-reduced-motion: no-preference) and (height > 46rem) {
+  .section {
+    height: var(--two-sides-section-height);
+  }
+
+  .stage {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: var(--two-sides-stage-height);
+    padding-top: var(--two-sides-stage-clearance);
+    overflow: clip;
+    /* Above the Shura section, which is pulled up over the end of this
+       runway (shura-section.module.css): the monograms finish leaving on
+       top while the team comes up beneath them. Sticky makes the stage its
+       own stacking context, so the rigs' order is settled here, against
+       the Shura section (both in the page's flow; the footer's Easter egg
+       transform wraps them both, so their order holds). The stage has no
+       background and lets pointers through, so it never hides or blocks
+       the Shura header beneath it; its content takes them only in the
+       default phase, for the hover reveal. */
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .stage:not([data-phase="collapsing"]) .inner {
+    pointer-events: auto;
+  }
+
+  /* The stage centres the content; Figma's frame padding is for the static
+     layout. */
+  .stage .inner {
+    width: 100%;
+    padding-block: 0;
+  }
+
+  .fade {
+    will-change: opacity;
+  }
+}
+
+.reveal {
+  transition-property: opacity, scale, translate;
+  transition-duration: var(--duration-two-sides-hover);
+  transition-timing-function: var(--ease-two-sides-hover);
+}
+
+.logo {
+  transition-property: opacity;
+  transition-duration: var(--duration-two-sides-hover);
+  transition-timing-function: var(--ease-two-sides-hover);
+}
+
+.wordmark {
+  opacity: 0;
+  scale: var(--two-sides-wordmark-from-scale);
+}
+
+.photo {
+  opacity: 0;
+  scale: var(--two-sides-photo-from-scale);
+  filter: url(#two-sides-grain);
+}
+
+/* Each photo one stagger after the last, in and out. */
+.photo:nth-of-type(2) {
+  transition-delay: var(--duration-two-sides-photo-stagger);
+}
+
+.photo:nth-of-type(3) {
+  transition-delay: calc(2 * var(--duration-two-sides-photo-stagger));
+}
+
+.photo:nth-of-type(4) {
+  transition-delay: calc(3 * var(--duration-two-sides-photo-stagger));
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .wordmark,
+  .photo {
+    will-change: opacity, scale, translate;
+  }
+
+  .stage[data-phase="default"] .side:hover .logo {
+    opacity: var(--two-sides-hover-dim);
+  }
+
+  .stage[data-phase="default"] .side:hover .wordmark,
+  .stage[data-phase="default"] .side:hover .photo {
+    opacity: 1;
+    scale: 1;
+    translate: 0 0;
+  }
+}
+
+/* The scroll sequence's rigs (pinned; keep the query in step with the
+   pinned layout's above): one per side,
+   the standalone logo under the in-wordmark art, laid out at
+   --two-sides-rig-size from the stage's top left and moved and scaled from
+   there by the scrub (translate3d + scale, from the top left). Hidden
+   until the grow begins. */
+.rig {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) and (height > 30rem) and (width >= 48rem),
+  (prefers-reduced-motion: no-preference) and (height > 46rem) {
+  .rig {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: var(--two-sides-rig-size);
+    aspect-ratio: 1;
+    opacity: 0;
+    transform-origin: 0 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
+  .rigStandalone {
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .rigMark {
+    will-change: opacity;
+  }
+}

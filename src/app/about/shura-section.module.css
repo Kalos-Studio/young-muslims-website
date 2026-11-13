@@ -1,0 +1,29 @@
+/* The Shura section, after "Two sides. One mission."
+
+   The overlap: while the "Two sides" section pins (the same query as
+   two-sides-section.module.css's pinned layout; keep them in step), this
+   section is pulled up --about-shura-overlap over the end of its runway.
+   The sticky stage is layered above it (z-index 1,
+   two-sides-section.module.css), so the monograms finish leaving on top
+   while this section's Warm Snow and header come up beneath them, the
+   header rising in (startAtEdge) as it enters. Static fallback: no pin, no overlap. */
+@media (prefers-reduced-motion: no-preference) and (height > 30rem) and (width >= 48rem),
+  (prefers-reduced-motion: no-preference) and (height > 46rem) {
+  .section {
+    margin-top: calc(-1 * var(--about-shura-overlap));
+  }
+}
+
+/* The Shura cards' photos and placeholder blocks carry Figma's film grain
+   (a 24% monotone noise), the site's GrainFilter (shura-section.tsx). */
+.grain {
+  filter: url(#shura-grain);
+}
+
+/* The column parallax (shura-columns-drift.tsx) moves each card: promoted
+   while it can. */
+@media (prefers-reduced-motion: no-preference) and (width >= 48rem) {
+  .card {
+    will-change: transform;
+  }
+}

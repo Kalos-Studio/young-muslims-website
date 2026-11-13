@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { EditorialLink, EditorialPhoto } from "@/components/site/editorial";
-import service from "../../../design-assets/figma/landing-2026/card-impact-source.jpeg";
-import { FaqSection } from "./faq-section";
-import { VisionMissionHistory } from "./vision-mission-history";
-import { LocalToNational } from "./local-to-national";
 import { AboutHero } from "./about-hero";
 import { GenerationSection } from "./generation-section";
 import { MissionVisionSection } from "./mission-vision-section";
 import { YouthSection } from "./youth-section";
 import { LeadershipSection } from "./leadership-section";
 import { StatsSection } from "./stats-section";
+import { HistorySection } from "./history-section";
+import { TwoSidesSection } from "./two-sides-section";
+import { ShuraSection } from "./shura-section";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/about" },
@@ -34,110 +32,11 @@ export default function AboutPage() {
 
           <StatsSection />
 
-          <VisionMissionHistory />
+          <HistorySection />
 
-          <LocalToNational />
+          <TwoSidesSection />
 
-          <section
-            className="mx-auto max-w-7xl px-8 py-20 lg:px-20"
-            aria-labelledby="movement-heading"
-          >
-            <div className="grid items-center gap-8 md:grid-cols-2">
-              <div>
-                <p className="text-nav font-bold text-secondary">
-                  Faith in action
-                </p>
-                <h2
-                  id="movement-heading"
-                  className="mt-6 text-mobile-section font-extrabold text-accent md:text-section"
-                >
-                  Part of a<br />
-                  bigger movement.
-                </h2>
-                <p className="mt-6 text-lead font-medium">
-                  Our growth carries a responsibility: to serve, speak up, and
-                  contribute to the world around us as Muslims.
-                </p>
-                <p className="mt-6 text-body">
-                  YM is part of a broader Islamic movement in North America.
-                  Developing young Muslims means helping them live their faith
-                  individually and carry its responsibilities collectively, in
-                  their neighborhoods and beyond.
-                </p>
-              </div>
-              <EditorialPhoto
-                src={service}
-                alt="Young Muslims participating in community service"
-                className="aspect-square"
-              />
-            </div>
-            <div className="mt-20 grid gap-8 lg:grid-cols-3">
-              <article className="border-t border-border pt-8">
-                <h3 className="text-card-title font-semibold">
-                  Service close to home
-                </h3>
-                <p className="mt-4 text-body">
-                  Local chapters work with charities on food distribution, food
-                  pantries, and neighborhood cleanups. Partnerships with relief
-                  organizations connect members to wider humanitarian efforts.
-                </p>
-              </article>
-              <article className="border-t border-border pt-8">
-                <h3 className="text-card-title font-semibold">
-                  Advocacy with a wider voice
-                </h3>
-                <p className="mt-4 text-body">
-                  Learning to care about an issue locally can lead to speaking
-                  up together nationally. YM&apos;s 2025 annual report records
-                  70 members joining Palestine Advocacy Day and training in
-                  Washington, D.C., through its work with American Muslims for
-                  Palestine.
-                </p>
-                <a
-                  href="https://ymsite.com/wp-content/uploads/2026/02/YM-Annual-Report-2025-FINAL.pdf"
-                  className="mt-6 inline-block text-nav font-bold text-secondary underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
-                >
-                  Read the 2025 annual report (PDF)
-                </a>
-              </article>
-              <article className="border-t border-border pt-8">
-                <h3 className="text-card-title font-semibold">
-                  Islamic work that continues
-                </h3>
-                <p className="mt-4 text-body">
-                  The aim reaches beyond a member&apos;s time in YM: young
-                  Muslims prepared to carry their faith into community life
-                  through personal practice and collective contribution to
-                  society.
-                </p>
-              </article>
-            </div>
-            <div className="mt-8">
-              <EditorialLink href="/support">Support the work</EditorialLink>
-            </div>
-          </section>
-
-          <div
-            id="faq"
-            className="mx-auto max-w-7xl scroll-mt-40 px-8 py-20 lg:px-20"
-          >
-            <FaqSection />
-          </div>
-          <section className="bg-accent py-20 text-accent-foreground">
-            <div className="mx-auto max-w-7xl px-8 lg:px-20">
-              <p className="text-nav font-bold">
-                A national effort starts with people like you.
-              </p>
-              <h2 className="mt-6 max-w-3xl text-mobile-section font-extrabold md:text-section">
-                Start locally. Be part of something bigger.
-              </h2>
-              <div className="mt-8">
-                <EditorialLink href="/neighbornets">
-                  Find a chapter near you
-                </EditorialLink>
-              </div>
-            </div>
-          </section>
+          <ShuraSection />
         </div>
       </AboutHero>
     </main>
