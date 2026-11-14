@@ -1,0 +1,36 @@
+/* The Store split's hover (store-split.tsx; DESIGN-SYSTEM.md, "Store split").
+   CSS only: the page needs no client JavaScript for it. */
+
+/* Each half's photo. Touch screens can't hover, so they show it in colour,
+   at rest (the hover frames' state). */
+.media {
+  transform-origin: center;
+}
+
+/* A fine pointer: black and white at rest. Hovering anywhere on a half (or
+   focusing its button) fades its photo to colour and, together, grows it
+   a little within the half, which clips it; leaving fades and settles it
+   back. Filter and transform only, on a layer of its own. */
+@media (hover: hover) and (pointer: fine) {
+  .media {
+    filter: grayscale(1);
+    will-change: transform, filter;
+    transition:
+      filter var(--duration-store-split-hover) var(--ease-store-split-hover),
+      transform var(--duration-store-split-hover) var(--ease-store-split-hover);
+  }
+
+  .half:hover .media,
+  .half:has(:focus-visible) .media {
+    filter: grayscale(0);
+    transform: scale(var(--store-split-hover-scale));
+  }
+}
+
+/* Reduced motion: the photo still fades to colour, but doesn't grow. */
+@media (prefers-reduced-motion: reduce) {
+  .half:hover .media,
+  .half:has(:focus-visible) .media {
+    transform: none;
+  }
+}

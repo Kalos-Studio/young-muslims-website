@@ -4,13 +4,13 @@ import { ClosingCta } from "@/components/site/closing-cta";
 import { ScrollDrift } from "@/components/site/scroll-drift";
 import { TextReveal } from "@/components/site/text-reveal";
 import { StandardButton } from "@/components/ui/standard-button";
+import { Accordion } from "@/components/site/accordion";
 import { cn } from "@/lib/utils";
 
 import markBrother from "../../../design-assets/figma/landing-2026/all-about/mark-monogram.svg";
 import markSister from "../../../design-assets/figma/landing-2026/all-about/mark-ym.svg";
 import ctaPhoto from "../../../design-assets/figma/stories/story-page/cta-brothers-lift.jpg";
 import quoteMark from "../../../design-assets/figma/stories/story-page/quote-mark.svg";
-import { StoryAccordion } from "./story-accordion";
 import type { StoryPage as Story } from "./story-pages";
 import styles from "./story-page.module.css";
 
@@ -166,17 +166,17 @@ export function StoryPage({ story }: { story: Story }) {
             </div>
             {story.variant === "story" && (
               <div className="mt-18 flex flex-col gap-10">
-                <StoryAccordion title={`How ${pronoun} started`}>
-                  {story.started}
-                </StoryAccordion>
+                <Accordion title={`How ${pronoun} started`}>
+                  <p>{story.started}</p>
+                </Accordion>
                 <div aria-hidden className="h-px bg-border" />
-                <StoryAccordion title="The turning point">
-                  {story.turningPoint}
-                </StoryAccordion>
+                <Accordion title="The turning point">
+                  <p>{story.turningPoint}</p>
+                </Accordion>
                 <div aria-hidden className="h-px bg-border" />
-                <StoryAccordion title={`Where ${pronoun} is now`}>
-                  {story.now}
-                </StoryAccordion>
+                <Accordion title={`Where ${pronoun} is now`}>
+                  <p>{story.now}</p>
+                </Accordion>
               </div>
             )}
           </div>

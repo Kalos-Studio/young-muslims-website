@@ -102,7 +102,12 @@ export function ShuraSection() {
     >
       <GrainFilter id="shura-grain" />
       <ShuraColumnsDrift />
-      <div className="mx-auto max-w-360 px-8 pt-9.25 pb-20.25 md:px-16 md:pt-10 md:pb-19 xl:pt-12 xl:pb-28">
+      <div
+        className={cn(
+          "mx-auto max-w-360 px-8 pt-9.25 pb-20.25 md:px-16 md:pt-10 md:pb-19 xl:pt-12 xl:pb-28",
+          styles.inner,
+        )}
+      >
         <TextReveal startAtEdge className="mx-auto max-w-196 text-center">
           <h2
             id="shura-heading"

@@ -1,28 +1,31 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useState, type ReactNode } from "react";
 
 import { MaterialIcon } from "@/components/ui/material-icon";
-import { cn } from "@/lib/utils";
 
-import styles from "./story-page.module.css";
+import styles from "./accordion.module.css";
 
 /**
- * One of a story page's accordions (Figma 413:280): its title in bold with
- * a chevron, its text below. Open at first (as in Figma); its title is a
- * button (`aria-expanded`, `aria-controls`; Enter and Space) that closes and
- * reopens it, the body's height easing and the chevron turning
+ * A disclosure: its title in bold with a chevron, its body below (Figma
+ * 413:280, the story pages; 608:3743, the About FAQ). The title is a button
+ * (`aria-expanded`, `aria-controls`; Enter and Space) that opens and closes
+ * the body, its height easing and the chevron turning
  * (`--duration-story-accordion`), instantly under reduced motion. A closed
- * body is hidden from assistive tech and the tab order (`inert`).
+ * body is hidden from assistive tech and the tab order (`inert`). Open at
+ * first unless `defaultOpen` is false. Type size and colour come from the
+ * parent; the body is medium weight, 24px under the title.
  */
-export function StoryAccordion({
+export function Accordion({
   title,
+  defaultOpen = true,
   children,
 }: {
   title: string;
-  children: string;
+  defaultOpen?: boolean;
+  children: ReactNode;
 }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(defaultOpen);
   const id = useId();
   return (
     <div>
@@ -47,7 +50,7 @@ export function StoryAccordion({
         className={styles.panel}
       >
         <div className="overflow-hidden">
-          <p className={cn("pt-6 font-medium")}>{children}</p>
+          <div className="pt-6 font-medium">{children}</div>
         </div>
       </div>
     </div>

@@ -81,3 +81,17 @@
 .ink::before {
   background-color: var(--color-brand-obsidian);
 }
+
+/* StandardButtonStatic: only the resting underline (Royal, or Warm Snow on
+   the dark tone), never the fill. */
+.static::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--standard-button-underline);
+  background-color: var(--color-brand-royal);
+}
+
+.staticDark::before {
+  background-color: var(--color-brand-warm-snow);
+}

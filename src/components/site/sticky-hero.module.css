@@ -51,3 +51,24 @@
   height: var(--about-hero-wave-height);
   overflow: visible;
 }
+
+/* No wave (`wave="none"`): the content after the hero brings its own wavy
+   top, transparent above its edge, and follows the hero flush. */
+.followingFlush {
+  margin-top: 0;
+}
+
+/* `holdThroughFooter`: the root runs on under the footer (a block the
+   footer's height after the content, pulled back out with a negative
+   margin, so the layout is unchanged), so the hero stays pinned while the
+   footer scrolls up over it too. A block, not padding: sticky positioning
+   is bounded by the root's content box. */
+.holdThroughFooter {
+  margin-bottom: calc(-1 * var(--site-footer-height));
+}
+
+.holdThroughFooter::after {
+  content: "";
+  display: block;
+  height: var(--site-footer-height);
+}

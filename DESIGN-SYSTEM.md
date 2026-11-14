@@ -46,6 +46,7 @@ the rest Figtree; line height is `normal` unless noted.
 | Role                    | Tailwind utility             | Size | Line height | Tracking | Used by                                                 |
 | ----------------------- | ---------------------------- | ---: | ----------: | -------: | ------------------------------------------------------- |
 | Mobile display          | `text-mobile-display`        | 32px |      normal |      -2% | Boldonse heroes and figures on mobile                   |
+| Tablet display          | `text-tablet-display`        | 40px |      normal |      -2% | The Store split's BROTHERS / SISTERS on tablet          |
 | Mobile section heading  | `text-mobile-section`        | 30px |         1.2 |      -2% | Figtree ExtraBold section headings on mobile            |
 | Landing display         | `text-landing-display`       | 48px |      normal |      -2% | The landing and Stories heroes' Boldonse display lines  |
 | Landing section heading | `text-landing-section`       | 40px |         1.2 |      -2% | Landing section headings from tablet                    |
@@ -305,6 +306,17 @@ scrolls up over it. Pass the media (a video or image with
   frame.
 - Sticky rather than fixed: the footer Easter egg transforms the page
   wrapper, which would carry a fixed hero with it.
+- `wave="none"`: no hero wave and no peek, for content after the hero that
+  brings its own wavy top, clear above it (the Store page's closing CTA,
+  `ClosingCta overHero`). Its cover sentinel goes after that content, not
+  before it: the content is clear above its wavy edge, so the hero still
+  shows there after the content's top has passed, and hiding it then would
+  flash the page's Warm Snow through.
+- `holdThroughFooter`: for content after the hero shorter than the
+  viewport (the Store page), the hero's root runs on under the footer (a
+  block `--site-footer-height` tall, the footer's box, pulled back with a
+  negative margin, so the layout is unchanged), so the hero stays pinned
+  while the footer scrolls up too, instead of being released part-shown.
 - Once the page has scrolled past the hero's wave the hero is fully covered,
   so `StickyHeroCover` hides it and pauses its videos until it comes back:
   pinned for the whole page, it would otherwise keep decoding and compositing
@@ -363,6 +375,10 @@ CTAs and the end-of-page CTA sections, which keep their own styles. Pass
   Same mechanics, timing and reduced-motion behaviour as the default `light`
   tone. Used by the principles section's "Learn more" buttons, and by the
   stories snippet's "View the full story" on dark colours.
+- **Static (`StandardButtonStatic`):** for something not yet available
+  (the Store page's "Coming soon"): the label and its resting underline in
+  the tone's colours, as text (`<p>`), no arrow; never focusable, clickable,
+  filled or rolled. `srLabel` gives screen readers the whole statement.
 - **Back link (`direction="back"`, with `tone="ink"`):** the story pages'
   "All Stories". A chevron-left (`chevron_left`) before the label, on no
   square; Obsidian text, chevron and 2px underline. Hover and focus: the
@@ -1021,7 +1037,10 @@ mission." on Warm Snow.
   static fallback has no pin and no overlap.
 - **Rhythm** (top / button to cards / foot): 37 / 71 / 81 (phones), 40 /
   91 / 76 (tablet), 48 / 58 / 112 (desktop, the foot measured from the
-  last row's untranslated cards). The top is tighter than Figma's frame
+  last row's untranslated cards; while the column parallax runs the foot
+  is 0, since by the time the partners come up the parallax has lifted
+  the last row about 125px, which with the 112 foot left a 320px gap: now
+  about 200 on desktop and tablet, near the static 192). The top is tighter than Figma's frame
   (76 / 132), and its `TextReveal` starts as the header enters the viewport
   (`startAtEdge`) rather than 15% up, so the header rises in as the "Two
   sides" monograms leave.
@@ -1031,6 +1050,107 @@ mission." on Warm Snow.
 | `--duration-about-shura-stagger`      | `--duration-everywhere-stat-stagger`                 | Between cards in a row                                          |
 | `--about-shura-column-drift-1` … `-4` | 12rem / 24rem / 16rem / 30rem (tablet 12rem / 26rem) | Each column's parallax travel                                   |
 | `--about-shura-overlap`               | 35svh                                                | How far the section slides up over the pinned "Two sides" stage |
+
+## About partners
+
+The About page's partners section, after the Shura (Figma 544:653, tablet
+596:2430, mobile 596:3377), built in `src/app/about/partners-section.tsx`
+with its loop in `partners-section.module.css` and `partners-marquee.tsx`,
+and its logos from `scripts/about-partners-assets.mjs`. Warm Snow.
+
+- **Top row:** "Our Partners are what drive our movement forward."
+  (`text-mobile-section` / `text-landing-section`, ExtraBold; tablet's
+  36px has no token, so tablet uses the desktop role) on the left; the
+  subline (`text-body` / `text-article-title` / `text-landing-copy`,
+  Medium) and a "Contact us" `StandardButton` to `/contact`, 32 below it,
+  on the right. Two equal columns 32 apart from tablet (capped at 1440,
+  80 / 64 / 32 side insets); stacked on phones, 16 apart, the button full
+  width. One `TextReveal`.
+- **Logos:** the 13 partners in Figma's order (ICNA, AMP, ICNA Council for
+  Social Justice, The Family & Youth Institute, Helping Hand, US Council of
+  Muslim Organizations, Yaqeen, Qalam, Oaktree Institute, Muslim Alliance
+  for Black Lives, MSA National, Khalil Center, ICNA Relief), each at its
+  Figma height (widths from its proportions), centred on one row, 80 apart.
+  Tablet and phones scale the row as their frames do (0.7326 / 0.5233:
+  gaps 59 / 42). Rasters are Figma's image fills cropped to its boxes, up
+  to 3x (lossless WebP; a few sources are only 2.2–2.8x); AMP's is Figma's
+  vector, white on an Obsidian box. The first copy's logos carry the
+  partners' names as alt text; the second copy is hidden from assistive
+  tech.
+- **Loop:** the row bleeds full width and drifts left forever, on its own
+  (not scroll-linked): its track holds two identical copies (each ending
+  in its gap) and moves by one copy, half its width, every
+  `--duration-about-partners-loop` (90s: about 54px a second on desktop,
+  40 on tablet, 28 on phones), so the seam never shows. A CSS animation of
+  `transform` (the NeighborNets photo marquees' mechanic), paused while the
+  row is off screen (an observer's `data-paused`). Reduced motion: the row
+  rests at Figma's place, first logo at the left edge.
+- **Rhythm** (top / text to logos / foot): 56 / 75 / 79 (phones), 59 /
+  100 / 75 (tablet), 80 / 107 / 128 (desktop).
+
+| Token                            | Value | Use                                 |
+| -------------------------------- | ----- | ----------------------------------- |
+| `--duration-about-partners-loop` | 90s   | One loop of the logo row (one copy) |
+
+## About FAQ
+
+The About page's last section, after the partners (Figma 608:3743; no
+tablet or phone frames), built in `src/app/about/faq-section.tsx` on the
+shared `Accordion`. `id="faq"` (the Contact page links to `/about#faq`),
+with a scroll margin of the header's height (80 / 97px). Warm Snow,
+capped at 1440, 80 / 64 / 32 side insets.
+
+- **Left:** "Frequently asked questions." (`text-mobile-section` /
+  `text-landing-section`, ExtraBold), the line "Have a question about a
+  topic not listed here?" 16 below (`text-body` / `text-article-title` /
+  `text-landing-copy`, Medium) and a "Contact us" `StandardButton` to
+  `/contact` 32 below that (full width on phones), in one `TextReveal`.
+  Behind it, Figma's pale organic shape (608:3874, the youth section's
+  shape, mirrored, 1601 x 1249, 149 below the heading's top and reaching
+  743 left of it; vendored as `design-assets/figma/about/faq/shape.svg`).
+  Figma fills it #F9F3ED, which has no token, so it uses Landing Pale like
+  the youth shape. The section clips it.
+- **Shape parallax:** the shape belongs to the section, not the pinned
+  copy: it starts at its Figma place and drifts with the section's scroll
+  (`ScrollDrift`, `--about-faq-shape-drift`: 4 / 6 / 8rem, from half above
+  its place as it enters to half below as it leaves, lagging the scroll
+  slightly), so the copy pins over a background that keeps moving. Static
+  under reduced motion.
+- **Sticky:** from tablet the left column is `position: sticky` (never
+  fixed: the footer's Easter egg transforms the page) at `top-36` (144px,
+  47 below the 97px header), so the heading, line and button, with the
+  shape, stay beside the questions while the reader scrolls through open
+  answers, and are released as the list ends (the grid's bottom). Phones
+  stack the two, header first, 48 apart, nothing pinned.
+- **Right:** seven accordions, all closed at first (questions and answers
+  verbatim from Figma), 40 apart with 1px `bg-border` dividers between.
+  Questions Bold and answers Medium, both `text-body` / `text-article-title`
+  / `text-landing-copy` (Figma's 20px on desktop), each answer 24 below its
+  question, paragraphs a blank line apart (20 / 22 / 24). The expansion
+  address is a `mailto:` link, ExtraBold and underlined. The accordion's
+  behaviour is the story pages' (button with `aria-expanded` /
+  `aria-controls`, Enter and Space, eased height and chevron over
+  `--duration-story-accordion`, closed bodies `inert`; instant under
+  reduced motion).
+- **Rhythm:** top 80 (56 on phones), foot 80. The closing CTA follows,
+  its wavy Warm Snow top handing off from the FAQ.
+- **Closing CTA:** the shared `ClosingCta` with this page's photo, the
+  three sisters at a fall festival (507:449, tablet 595:1855, mobile
+  596:2566). Figma's fill is 1080 x 719 (its largest), drawn about 1.45x
+  with the sky cut so their faces sit in the frame's top third, above the
+  mission line; `scripts/about-cta-assets.mjs` crops it the same way (the
+  top 170 and right 80 off: 1000 x 549; `imageFocus` centre). The small
+  source is art-directed (`artDirection`) for sharpness: desktop the whole
+  framed photo, tablet and mobile its centred 668 / 400 wide strip (all
+  their frames show), so the framing is the same at every width; each is
+  enlarged with Lanczos and light sharpening, as the hero's crops are, to
+  3200 / 2560 / 2304 wide (2x, 2x and 3x the width cover-fit draws it at).
+  The source still caps the detail (a phone shows about 200 of its pixels
+  across): a higher-resolution original from YM is the only full fix.
+
+| Token                     | Value                              | Use                                                    |
+| ------------------------- | ---------------------------------- | ------------------------------------------------------ |
+| `--about-faq-shape-drift` | 4rem / 6rem from md / 8rem from xl | The pale shape's parallax travel as the section passes |
 
 ## All about section
 
@@ -1525,8 +1645,9 @@ three accordions, the attribution naming their role and NeighborNet.
   monogram, the all-about section's marks, drifting with the scroll as the
   section passes (`ScrollDrift`, `--story-watermark-drift`: 8 / 10 / 12rem;
   static under reduced motion).
-- **Accordions** (`story-accordion.tsx`, the page's only client code): open
-  at first, as in Figma. The title is a button (`aria-expanded`,
+- **Accordions** (the shared `Accordion`, `components/site/accordion.tsx`,
+  the page's only client code; the About FAQ uses it too): open at first,
+  as in Figma. The title is a button (`aria-expanded`,
   `aria-controls`; Enter and Space) that closes and reopens it: the body's
   row eases between nothing and its height and the chevron
   (`keyboard_arrow_down`, turned up when open) turns, over
@@ -1584,6 +1705,63 @@ gallery (Figma 587:1538, tablet 593:1673, mobile 593:1733), built in
 | Token                               | Value                                             | Use                                       |
 | ----------------------------------- | ------------------------------------------------- | ----------------------------------------- |
 | `--duration-stories-alumni-stagger` | `var(--duration-everywhere-stat-stagger)` (140ms) | The delay between cards entering together |
+
+## Store split
+
+`src/app/store/store-split.tsx` and `store-split.module.css`: the Store page's
+hero (Figma 456:3296 desktop, 456:3556 tablet, 456:3698 mobile; hover
+456:3515, 456:3807, 456:3876), then the closing CTA (456:3355, tablet
+456:3611, mobile 456:3753) and the shared footer.
+
+- **A sticky hero:** the split is `StickyHero`'s pinned panel, exactly the
+  viewport's height (`100dvh`) on every device, with no minimum, under the
+  overlaid site header ("Store" as the current page; the scrim follows
+  StickyHero's marker). The closing CTA scrolls up over it. It has no wave of
+  its own (`wave="none"`): the CTA's wavy top is the hand-off, its section
+  clear above the wave (`ClosingCta overHero`), so the split shows there and
+  the wave rises over it. The CTA is shorter than the viewport, so the split
+  stays pinned while the footer follows too (`holdThroughFooter`).
+- **Layout:** side by side from `md`; stacked on phones, Brothers above,
+  each half half the viewport.
+- **Each half:** its photo covering it (centred), an Obsidian shade rising
+  from the foot (40% up to 44% of the way, then clearing:
+  `bg-linear-to-t from-brand-obsidian/40 from-44% to-transparent`), then,
+  centred, the name in Boldonse Pure White (`text-mobile-display` 32 /
+  `text-tablet-display` 40 from `md` / `text-display` 56 from `xl`) and its
+  button 20px below (16 from `xl`).
+- **Buttons:** the dark standard button. Brothers: `StandardButton
+tone="dark"` "Enter", to https://www.ymsite.com/ in a new tab. Sisters:
+  their store isn't open, so `StandardButtonStatic tone="dark"` "Coming
+  soon": the same label and Warm Snow underline as text (not a link or a
+  control: it can't be focused or clicked), no arrow, no fill on hover;
+  screen readers hear "The sisters' store is coming soon".
+- **Hover (a fine pointer):** at rest both photos are black and white (a CSS
+  `grayscale` filter on the colour originals, so one photo serves both
+  states). Hovering anywhere on a half, or focusing its button, fades its
+  photo to colour and, together, grows it `--store-split-hover-scale` within
+  the half, which clips it, over `--duration-store-split-hover`; leaving
+  reverses both. Filter and transform only, on a promoted layer.
+- **Touch:** no hover, so the photos show in colour (the hover frames'
+  state), at their resting size.
+- **Reduced motion:** the photo still fades to colour, but doesn't grow.
+- **Photos:** `scripts/store-assets.mjs` vendors Figma's colour fills to
+  `design-assets/figma/store/`: the brothers' at 3200 wide (from 4096; about
+  2x as drawn), the sisters' at its full 1365 x 2048, the largest Figma has.
+- **Closing CTA photo:** the sisters on the boardwalk by the lake, Figma's
+  fill (1200 x 1600, the largest it has), art-directed
+  (`scripts/store-cta-assets.mjs`): each frame's framing matched against the
+  fill, cropped to what the CTA's photo layer shows there (tablet widened
+  and mobile the whole fill, so wider screens keep the whole group), and
+  rendered 2880 / 2560 / 2400 wide (2x a 1440 desktop and a 1279 tablet, 3x
+  a phone) with Lanczos and light sharpening. The fill caps the detail (the
+  group spans about 880 of its pixels; desktop enlarges it about 1.2x): a
+  larger original from YM is the only full fix.
+
+| Token                          | Value                          | Use                                                   |
+| ------------------------------ | ------------------------------ | ----------------------------------------------------- |
+| `--store-split-hover-scale`    | 1.084                          | A hovered half's photo's growth (Figma: 1878 vs 1732) |
+| `--duration-store-split-hover` | 600ms                          | The photo's fade to colour and its growth, in and out |
+| `--ease-store-split-hover`     | `cubic-bezier(0.4, 0, 0.2, 1)` | Their easing: an even fade                            |
 
 ## Site footer
 
@@ -2140,7 +2318,13 @@ and `closing-cta.module.css`. Shared by every page, each with its own photo.
   the photo is drawn larger and the subject rides higher; desktop anchors the
   subject with `--closing-cta-low-focus-desktop`, so it stays the same
   distance below the top at any width and is never cropped on ultra-wide
-  screens). The mission line ("Seeking the pleasure of Allah (SWT) by
+  screens). `artDirection={{ tablet, mobile }}` (optional) adds tablet and
+  mobile crops, `image` then the desktop one, in a `<picture>`; each is
+  asked for at the width cover-fit draws it (the layer's height, 883 / 1054,
+  times its aspect, or the screen's width if wider), not just the screen's,
+  so dense screens get the whole crop (the About and Store pages).
+  `overHero` leaves the section clear above the shape's wavy top, for a CTA
+  that follows a pinned hero directly (the Store page). The mission line ("Seeking the pleasure of Allah (SWT) by
   empowering Muslim youth.") is the same everywhere and is not a prop. The
   landing page and the blog pass the YMATX railing photo
   (`landing-2026/cta/ymatx-railing.jpg`). The NeighborNets page passes the

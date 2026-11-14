@@ -324,6 +324,12 @@
   --text-mobile-display--line-height: normal;
   --text-mobile-display--letter-spacing: -0.02em;
 
+  /* The Store split's Boldonse BROTHERS / SISTERS on tablet (Figma
+     456:3556, 40px), between Mobile display and Display. */
+  --text-tablet-display: 2.5rem;
+  --text-tablet-display--line-height: normal;
+  --text-tablet-display--letter-spacing: -0.02em;
+
   --text-mobile-section: 1.875rem;
   --text-mobile-section--line-height: 1.2;
   --text-mobile-section--letter-spacing: -0.02em;
@@ -1592,6 +1598,39 @@
   --about-shura-overlap: 35svh;
 }
 
+/*
+ * About partners (Figma 544:653; DESIGN-SYSTEM.md, "About partners"): the
+ * logo row's loop, one copy of the row (4,869px on desktop, scaled with the
+ * row on tablet and phones) a loop: about 54px a second on desktop, 40 on
+ * tablet and 28 on phones.
+ */
+:root {
+  --duration-about-partners-loop: 90s;
+}
+
+/*
+ * About FAQ (Figma 608:3743; DESIGN-SYSTEM.md, "About FAQ"): the pale shape
+ * behind the pinned copy drifts this far in all (half above its Figma
+ * place to half below) as it scrolls through the viewport (ScrollDrift),
+ * lagging the scroll slightly; the copy pins over it. Subtle, like the
+ * youth shape's.
+ */
+:root {
+  --about-faq-shape-drift: 4rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --about-faq-shape-drift: 6rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --about-faq-shape-drift: 8rem;
+  }
+}
+
 /* Tablet's section is about twice as tall, so its two columns travel
    further for the same rate. */
 @media (48rem <= width < 80rem) {
@@ -1611,6 +1650,9 @@
      Figma offsets and sizes are multiples of it, so they keep their size
      at any width, anchored to the footer's left and right edges). */
   --footer-frame-height: 32.8125rem;
+  /* The footer's box height (its h-198.5 / md:h-131.25 in site-footer.tsx;
+     keep them in step), for StickyHero's `holdThroughFooter`. */
+  --site-footer-height: 49.625rem;
   /* The footer's organic top edge: the wave band its dark surface rises
      into above the footer's box (the box itself keeps its height: the
      Easter egg reads it), and the mask's seam so no hairline shows where the
@@ -1639,6 +1681,7 @@
 
 @media (width >= 48rem) {
   :root {
+    --site-footer-height: var(--footer-frame-height);
     --footer-shape-unit: 15rem;
     --footer-shape-drift: 4.5rem;
     --footer-shape-offset-blue: 1.5rem;
@@ -2531,3 +2574,18 @@
   --wf-rule: oklch(0.87 0 0);
 }
 /* WIREFRAME:end -------------------------------------------------------------- */
+
+/*
+ * Store split tokens (app/store/store-split.tsx; Figma 456:3296, hover
+ * 456:3515). Documented in DESIGN-SYSTEM.md under "Store split".
+ */
+:root {
+  /* A hovered half's photo grows by this within its half (Figma's hover
+     frame: 1878 against 1732 wide), as it turns from black and white to
+     colour. */
+  --store-split-hover-scale: 1.084;
+  /* The photo's colour fading in (and its growth, together), in and out:
+     a smooth, even fade. */
+  --duration-store-split-hover: 600ms;
+  --ease-store-split-hover: cubic-bezier(0.4, 0, 0.2, 1);
+}

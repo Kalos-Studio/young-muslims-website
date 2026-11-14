@@ -23,6 +23,7 @@ export const TYPE_SIZE_TOKENS = [
   "footer-tagline-mobile",
   "footer-legal",
   "mobile-display",
+  "tablet-display",
   "mobile-section",
   "landing-display",
   "landing-section",

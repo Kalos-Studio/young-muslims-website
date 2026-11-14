@@ -21,9 +21,17 @@
 }
 
 /* The column parallax (shura-columns-drift.tsx) moves each card: promoted
-   while it can. */
+   while it can. By the time the partners come up, it has lifted the last
+   row well above its place (about 125px on desktop and tablet), which
+   added to the bottom padding left a wide gap; so while it runs the grid
+   has no bottom padding, and the lift itself spaces the grid from the
+   partners (about the static layout's gap). */
 @media (prefers-reduced-motion: no-preference) and (width >= 48rem) {
   .card {
     will-change: transform;
+  }
+
+  .inner {
+    padding-bottom: 0;
   }
 }
