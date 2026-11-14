@@ -14,9 +14,9 @@ import { REDUCED_MOTION } from "@/lib/shape-motion";
  * half of it down, its foot leaving; written straight to translate3d on
  * this one layer (composited). A photo drifting inside a fixed shape is
  * sized half its drift larger above and below, so no edge ever shows.
- * Used by the closing CTA (its photo and wavy foot) and the story pages
- * (the hero photo and the watermark). Under reduced motion it stays at its
- * place.
+ * Used by the closing CTA (its photo and wavy foot), the story pages (the
+ * hero photo and the watermark) and the About FAQ (its background shape).
+ * Under reduced motion it stays at its place.
  */
 export function ScrollDrift({
   token,

@@ -1,0 +1,29 @@
+/* An accordion's body: its row of the grid opens from nothing to its
+   content's height as the chevron turns, on the accordion's timing; under
+   reduced motion it opens and closes at once. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-story-accordion)
+    var(--ease-standard-button);
+}
+
+.panel[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.chevron {
+  transition: transform var(--duration-story-accordion)
+    var(--ease-standard-button);
+}
+
+[aria-expanded="true"] .chevron {
+  transform: scaleY(-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .chevron {
+    transition: none;
+  }
+}

@@ -1,0 +1,25 @@
+/* The About partners' logo marquee (DESIGN-SYSTEM.md, "About partners";
+   partners-marquee.tsx): the track holds two identical copies of the row,
+   each ending in its gap, and moves left by one copy (half its width) a
+   loop, forever, so the second copy lands exactly where the first began.
+   Paused while off screen (data-paused); under reduced motion it rests. */
+@media (prefers-reduced-motion: no-preference) {
+  .track {
+    animation: partners-loop var(--duration-about-partners-loop) linear infinite;
+    will-change: transform;
+  }
+
+  [data-paused] > .track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes partners-loop {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}

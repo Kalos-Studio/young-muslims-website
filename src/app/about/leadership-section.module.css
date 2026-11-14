@@ -1,0 +1,26 @@
+/* The leadership photos' film grain: the shared filter (GrainFilter,
+   defined in the section as #leadership-grain), standing in for Figma's
+   noise. The noise is static, so it needs no reduced-motion handling. */
+.grain {
+  filter: url(#leadership-grain);
+}
+
+/* The panel's swaps run slower and gentler than BlobReveal's default
+   (--duration-leadership-reveal, --ease-leadership-reveal), both sweeping in
+   and out. Reduced motion still makes them instant (globals.css). */
+@media (prefers-reduced-motion: no-preference) {
+  .panel :global(.ym-blob-reveal)[data-blob-state] {
+    transition-duration: var(--duration-leadership-reveal);
+    transition-timing-function: var(--ease-leadership-reveal);
+  }
+}
+
+/* From tablet, the last group's block holds: a viewport plus
+   --leadership-hold tall, its text in a viewport-tall box pinned at the top
+   (`md:sticky md:top-0 md:h-dvh`, so centred), staying with the pinned
+   photo for the hold. */
+@media (width >= 48rem) {
+  .last {
+    height: var(--leadership-last-height);
+  }
+}

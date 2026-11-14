@@ -1,0 +1,6 @@
+/* The background years drift with the scroll (ScrollDrift moves them). */
+@media (prefers-reduced-motion: no-preference) {
+  .drift {
+    will-change: transform;
+  }
+}

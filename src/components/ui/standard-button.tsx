@@ -9,6 +9,10 @@ import styles from "./standard-button.module.css";
 const BASE_CLASSES =
   "ym-cta-trigger relative isolate inline-flex w-full items-center justify-center gap-2.5 px-6 md:w-auto pt-4 pb-4.5 text-nav font-bold outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
 
+/* The same box, for the static (not yet available) look. */
+const STATIC_CLASSES =
+  "relative isolate inline-flex w-full cursor-default items-center justify-center gap-2.5 px-6 md:w-auto pt-4 pb-4.5 text-nav font-bold";
+
 /*
  * The two tones. Each sets the resting text, the focus ring, and the arrow's
  * square, which matches the fill so it merges into it on hover. The fill
@@ -130,5 +134,46 @@ export function StandardButton({
         </>
       )}
     </Link>
+  );
+}
+
+/**
+ * The standard button's look for something not yet available (the Store
+ * page's sisters' store, "Coming soon"): the label and its underline in
+ * the tone's colours, at rest, with no arrow (an arrow promises somewhere
+ * to go). It is text, not a control: it can't be focused or clicked, and it
+ * doesn't fill or roll on hover. `srLabel` gives screen readers the whole
+ * statement when the visible label alone needs context.
+ */
+export function StandardButtonStatic({
+  label,
+  srLabel,
+  tone = "light",
+  className,
+}: {
+  label: string;
+  srLabel?: string;
+  tone?: "light" | "dark";
+  className?: string;
+}) {
+  return (
+    <p
+      className={cn(
+        STATIC_CLASSES,
+        tone === "dark" ? "text-brand-warm-snow" : "text-brand-obsidian",
+        styles.static,
+        tone === "dark" && styles.staticDark,
+        className,
+      )}
+    >
+      {srLabel ? (
+        <>
+          <span className="sr-only">{srLabel}</span>
+          <span aria-hidden>{label}</span>
+        </>
+      ) : (
+        label
+      )}
+    </p>
   );
 }

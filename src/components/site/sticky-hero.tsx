@@ -2,7 +2,12 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { HeroWave, NeighborNetsHeroWave, StoriesHeroWave } from "./hero-wave";
+import {
+  AboutHeroWave,
+  HeroWave,
+  NeighborNetsHeroWave,
+  StoriesHeroWave,
+} from "./hero-wave";
 import { StickyHeroCover } from "./sticky-hero-cover";
 import styles from "./sticky-hero.module.css";
 
@@ -38,6 +43,7 @@ export function StickyHero({
   media,
   overlay,
   wave = "landing",
+  holdThroughFooter = false,
   children,
 }: {
   /** Accessible name for the hero region. */
@@ -48,14 +54,30 @@ export function StickyHero({
   overlay?: ReactNode;
   /**
    * The bottom wave: the landing hero's blob (default), the NeighborNets
-   * hero's or the Stories hero's, each with its own band height and peek.
+   * hero's, the Stories hero's or the About hero's, each with its own band
+   * height and peek; or `"none"`, when the content after the hero brings its
+   * own wavy top (the Store page's closing CTA): it follows the hero
+   * directly, with nothing peeking at load.
    */
-  wave?: "landing" | "neighbornets" | "stories";
+  wave?: "landing" | "neighbornets" | "stories" | "about" | "none";
+  /**
+   * Keep the hero pinned while the footer scrolls up too, for a page whose
+   * content after the hero is shorter than the viewport (the Store page):
+   * otherwise the hero is released, part of it still showing, as soon as
+   * that content ends.
+   */
+  holdThroughFooter?: boolean;
   /** The rest of the page. */
   children: ReactNode;
 }) {
   return (
-    <div data-sticky-hero-root className="relative isolate">
+    <div
+      data-sticky-hero-root
+      className={cn(
+        "relative isolate",
+        holdThroughFooter && styles.holdThroughFooter,
+      )}
+    >
       <div
         data-header-hero
         aria-hidden
@@ -78,17 +100,27 @@ export function StickyHero({
           styles.following,
           wave === "neighbornets" && styles.followingNeighborNets,
           wave === "stories" && styles.followingStories,
+          wave === "about" && styles.followingAbout,
+          wave === "none" && styles.followingFlush,
         )}
       >
-        {wave === "neighbornets" ? (
+        {wave === "none" ? null : wave === "neighbornets" ? (
           <NeighborNetsHeroWave />
         ) : wave === "stories" ? (
           <StoriesHeroWave />
+        ) : wave === "about" ? (
+          <AboutHeroWave />
         ) : (
           <HeroWave />
         )}
-        <StickyHeroCover />
+        {/* The cover sentinel goes after the hero's wave, where the content
+            is opaque. With no wave, the content's own top is clear above its
+            wavy edge (ClosingCta's overHero), so the hero still shows there
+            after that top has passed: the sentinel goes after the content,
+            so the hero is hidden only once it has all scrolled past. */}
+        {wave === "none" ? null : <StickyHeroCover />}
         {children}
+        {wave === "none" ? <StickyHeroCover /> : null}
       </div>
     </div>
   );

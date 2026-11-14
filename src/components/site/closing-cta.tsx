@@ -1,4 +1,4 @@
-import Image, { type StaticImageData } from "next/image";
+import Image, { getImageProps, type StaticImageData } from "next/image";
 import Link from "next/link";
 
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
@@ -6,6 +6,70 @@ import { cn } from "@/lib/utils";
 
 import styles from "./closing-cta.module.css";
 import { ScrollDrift } from "./scroll-drift";
+
+/*
+ * The photo layer's height in each frame (CSS px): the section (h-180.75
+ * from `xl`, h-223.5 below) plus `--closing-cta-drift` (10rem). Cover-fit
+ * draws the photo at least this tall, so at least this height times its
+ * aspect wide: the width the browser needs for an art-directed crop.
+ */
+const LAYER_HEIGHT = { desktop: 883, tablet: 1054, mobile: 1054 };
+
+/* The drawn width of a cover-fit photo in its layer, for `sizes`. */
+function coverSizes(image: StaticImageData, layerHeight: number) {
+  return `max(100vw, ${Math.ceil((layerHeight * image.width) / image.height)}px)`;
+}
+
+/**
+ * An art-directed photo: each frame's crop (a page's asset script renders
+ * them), desktop from `xl`, tablet from `md`, mobile below, each asked for at
+ * the width cover-fit draws it (not just the screen's), so dense screens get
+ * the full crop.
+ */
+function ArtDirectedPhoto({
+  image,
+  artDirection,
+  alt,
+  className,
+}: {
+  image: StaticImageData;
+  artDirection: { tablet: StaticImageData; mobile: StaticImageData };
+  alt: string;
+  className?: string;
+}) {
+  const sizes = {
+    desktop: coverSizes(image, LAYER_HEIGHT.desktop),
+    tablet: coverSizes(artDirection.tablet, LAYER_HEIGHT.tablet),
+    mobile: coverSizes(artDirection.mobile, LAYER_HEIGHT.mobile),
+  };
+  const {
+    props: { srcSet: desktop },
+  } = getImageProps({ alt, fill: true, sizes: sizes.desktop, src: image });
+  const {
+    props: { srcSet: tablet },
+  } = getImageProps({
+    alt,
+    fill: true,
+    sizes: sizes.tablet,
+    src: artDirection.tablet,
+  });
+  const {
+    props: { srcSet: mobile, ...img },
+  } = getImageProps({
+    alt,
+    fill: true,
+    sizes: sizes.mobile,
+    src: artDirection.mobile,
+  });
+  return (
+    <picture>
+      <source media="(width >= 80rem)" srcSet={desktop} sizes={sizes.desktop} />
+      <source media="(width >= 48rem)" srcSet={tablet} sizes={sizes.tablet} />
+      <source srcSet={mobile} sizes={sizes.mobile} />
+      <img {...img} alt={alt} className={className} />
+    </picture>
+  );
+}
 
 const BUTTON =
   "ym-cta-trigger relative flex h-15.25 w-full items-center gap-3 px-7.5 text-cta font-bold outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-warm-snow md:w-78";
@@ -17,6 +81,12 @@ const BUTTON =
  * - `image` / `alt`: the page's photo (a static import) and its alt text.
  * - `imageFocus`: how to frame the photo: `"center"` (the default) or
  *   `"low"`, for a tall photo whose subject sits low in it (CSS module).
+ * - `overHero`: for a page whose CTA follows a pinned hero directly (the
+ *   Store page's): the section is clear above the shape's wavy top, so the
+ *   hero shows there and the wave rises over it as the page scrolls.
+ * - `artDirection`: optional tablet and mobile crops (`image` is then the
+ *   desktop crop), each the strip of the photo its frames show, rendered
+ *   for dense screens; the About page's (scripts/about-cta-assets.mjs).
  *
  * The mission line is the same everywhere, so it is not a prop.
  *
@@ -35,15 +105,26 @@ export function ClosingCta({
   image,
   alt,
   imageFocus = "center",
+  artDirection,
+  overHero = false,
 }: {
   image: StaticImageData;
   alt: string;
   imageFocus?: "center" | "low";
+  artDirection?: { tablet: StaticImageData; mobile: StaticImageData };
+  overHero?: boolean;
 }) {
+  const imageClassName = cn(
+    "object-cover",
+    imageFocus === "low" && styles.focusLow,
+  );
   return (
     <section
       aria-labelledby="closing-cta-heading"
-      className="relative h-223.5 overflow-clip bg-brand-warm-snow xl:h-180.75"
+      className={cn(
+        "relative h-223.5 overflow-clip xl:h-180.75",
+        !overHero && "bg-brand-warm-snow",
+      )}
     >
       <div
         aria-hidden="true"
@@ -60,16 +141,22 @@ export function ClosingCta({
               imageFocus === "low" ? styles.focusLowBox : "absolute inset-0"
             }
           >
-            <Image
-              src={image}
-              alt={alt}
-              fill
-              sizes="100vw"
-              className={cn(
-                "object-cover",
-                imageFocus === "low" && styles.focusLow,
-              )}
-            />
+            {artDirection ? (
+              <ArtDirectedPhoto
+                image={image}
+                artDirection={artDirection}
+                alt={alt}
+                className={imageClassName}
+              />
+            ) : (
+              <Image
+                src={image}
+                alt={alt}
+                fill
+                sizes="100vw"
+                className={imageClassName}
+              />
+            )}
           </div>
         </ScrollDrift>
         <div

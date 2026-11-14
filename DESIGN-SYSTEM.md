@@ -46,6 +46,7 @@ the rest Figtree; line height is `normal` unless noted.
 | Role                    | Tailwind utility             | Size | Line height | Tracking | Used by                                                 |
 | ----------------------- | ---------------------------- | ---: | ----------: | -------: | ------------------------------------------------------- |
 | Mobile display          | `text-mobile-display`        | 32px |      normal |      -2% | Boldonse heroes and figures on mobile                   |
+| Tablet display          | `text-tablet-display`        | 40px |      normal |      -2% | The Store split's BROTHERS / SISTERS on tablet          |
 | Mobile section heading  | `text-mobile-section`        | 30px |         1.2 |      -2% | Figtree ExtraBold section headings on mobile            |
 | Landing display         | `text-landing-display`       | 48px |      normal |      -2% | The landing and Stories heroes' Boldonse display lines  |
 | Landing section heading | `text-landing-section`       | 40px |         1.2 |      -2% | Landing section headings from tablet                    |
@@ -269,6 +270,25 @@ scrolls up over it. Pass the media (a video or image with
   upright), with its own band height and the same peek share
   (`--stories-hero-wave-height`: a 160-unit band, 4rem minimum;
   `--stories-hero-peek`).
+- `wave="about"` swaps in `AboutHeroWave`, the same build from the About
+  hero's blob (Figma 509:510 / 507:7, one path, vendored as
+  `design-assets/figma/about/hero/shape.svg`: the pale band at full size and
+  the photo at 0.957 of it, both turned 11.43deg), with its own band height
+  and the same peek share (`--about-hero-wave-height`: a 150-unit band,
+  3.75rem minimum; `--about-hero-peek`). Figma fills its pale band
+  `#F3F0EE`, which has no token; it uses `landing-pale`, as every hero wave
+  does.
+- The About hero (`src/app/about/about-hero.tsx`; Figma 507:3 / 595:1782 /
+  596:2493) is the Stories hero's build: the group with the YM flags,
+  art-directed per breakpoint from the Figma image fill
+  (`scripts/about-hero-assets.mjs`; each frame's crop matched against its
+  render, with Figma's brightening of the fill applied, and rendered at the
+  resolution its screens need: 2880 / 1536 / 1200 wide, Lanczos-enlarged
+  1.40x / 1.26x / 1.83x from the 2051 / 1219 / 656 source pixels each frame
+  shows, lightly sharpened, so the browser never stretches it), under the film
+  grain and a 25% Obsidian tint, with "ROOTED LOCALLY. GROWING TOGETHER."
+  (two lines from tablet; wrapping on phones, as in Figma) and its subline
+  centred in the landing hero's type.
 - The Stories hero (`src/app/stories/stories-hero.tsx`; Figma 401:3520 /
   414:316 / 414:791) is the NeighborNets hero's build: the sisters with the
   YM letters, art-directed per breakpoint from the Figma image fill
@@ -280,12 +300,23 @@ scrolls up over it. Pass the media (a video or image with
   the entry screen's grain as a shared SVG filter: static fractal noise laid
   over the source as source + 0.24 x (noise - 0.5), so it speckles without
   shifting the average colour. The entry screen's wordmark and monograms and
-  the NeighborNets and Stories hero photos (CSS `filter: url(#…)`) use it. It never
+  the NeighborNets, Stories and About hero photos (CSS `filter: url(#…)`) use it. It never
   animates, so reduced motion needs nothing.
 - At load the wave's top hump peeks above the fold, as in the 1440 x 1024
   frame.
 - Sticky rather than fixed: the footer Easter egg transforms the page
   wrapper, which would carry a fixed hero with it.
+- `wave="none"`: no hero wave and no peek, for content after the hero that
+  brings its own wavy top, clear above it (the Store page's closing CTA,
+  `ClosingCta overHero`). Its cover sentinel goes after that content, not
+  before it: the content is clear above its wavy edge, so the hero still
+  shows there after the content's top has passed, and hiding it then would
+  flash the page's Warm Snow through.
+- `holdThroughFooter`: for content after the hero shorter than the
+  viewport (the Store page), the hero's root runs on under the footer (a
+  block `--site-footer-height` tall, the footer's box, pulled back with a
+  negative margin, so the layout is unchanged), so the hero stays pinned
+  while the footer scrolls up too, instead of being released part-shown.
 - Once the page has scrolled past the hero's wave the hero is fully covered,
   so `StickyHeroCover` hides it and pauses its videos until it comes back:
   pinned for the whole page, it would otherwise keep decoding and compositing
@@ -344,6 +375,10 @@ CTAs and the end-of-page CTA sections, which keep their own styles. Pass
   Same mechanics, timing and reduced-motion behaviour as the default `light`
   tone. Used by the principles section's "Learn more" buttons, and by the
   stories snippet's "View the full story" on dark colours.
+- **Static (`StandardButtonStatic`):** for something not yet available
+  (the Store page's "Coming soon"): the label and its resting underline in
+  the tone's colours, as text (`<p>`), no arrow; never focusable, clickable,
+  filled or rolled. `srLabel` gives screen readers the whole statement.
 - **Back link (`direction="back"`, with `tone="ink"`):** the story pages'
   "All Stories". A chevron-left (`chevron_left`) before the label, on no
   square; Obsidian text, chevron and 2px underline. Hover and focus: the
@@ -527,6 +562,595 @@ desktop from `xl`:
 
 The video files and how they are encoded are in
 `design-assets/video-source/README.md`.
+
+## About generation
+
+The About page's "A generation to believe in" section, under the hero
+(Figma 507:33, tablet 595:1963, mobile 596:2628), built in
+`src/app/about/generation-section.tsx` (server) and
+`generation-drift.tsx` (client: the motion only).
+
+- **Surface:** Warm Snow, the first section after the About hero's wave.
+- **Text:** "A generation to believe in." (Figtree ExtraBold,
+  `text-mobile-section` / `text-landing-section`) and its subline (Figtree
+  Medium, `text-body` / `text-article-title` / `text-landing-copy`, 544
+  wide), centred, obsidian, in `TextReveal`. Content caps at 1440.
+- **Blob photos:** two rows of four group photos, each in its own organic
+  shape (Figma's vectors and image fills, rebuilt at 3x by
+  `scripts/about-generation-assets.mjs` into
+  `design-assets/figma/about/generation/`, since Figma's exports clip the
+  shapes that bleed off the frame), under the film grain (`GrainFilter`,
+  Figma's 24% noise). A row is one `--generation-row-height` tall, its
+  photos half a row apart, repeated three times so it never shows an end,
+  and bleeds off both sides; its Figma copy sits at the Figma places when
+  the section is centred. `509:592`'s source is only 800 x 550: its blob is
+  enlarged about 1.6x at 3x and would gain from a larger original.
+- **Scroll-linked drift** (the show-you lettering's mechanic): one value
+  across the section's scroll, written straight to `translate3d`, no CSS
+  transitions (Lenis already smooths the scroll), so the rows move only
+  while the page scrolls. The top row drifts left as the page scrolls down,
+  the bottom row right, `--generation-drift` (1.5) row heights in all: 238 /
+  363 / 444px, half either side of rest. Each photo also grows in once as
+  it enters view (the shared shape motion, as the landing's blog cards).
+- **Rhythm** (top / row to text / text to row / bottom): mobile 73 / 73 / 73
+  / 95, tablet 129 / 129 / 129 / 110, desktop 90 / 90 / 90 / 116.
+- **Reduced motion:** no drift (rows at their Figma places), no entrance.
+
+| Token                                                                                    | Value                                                      | Use                                                                                                       |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `--generation-row-height`                                                                | 9.91205 / 15.11784 / 18.5rem                               | One row (158.59 / 241.89 / 296 Figma units); photo widths, gap and starts scale with it                   |
+| `--generation-top-start` / `--generation-bottom-start`                                   | -9.4637 / -9.5509 / -8.9155 and -8.6542 / -9.132 / -8.4966 | Each row's start in row heights from the section's centre: its first Figma photo, one repeat further left |
+| `--generation-drift`                                                                     | 1.5                                                        | Each row's scroll-linked travel in row heights (half either side of rest)                                 |
+| `--duration-generation-blob` / `--generation-blob-from-scale` / `--ease-generation-blob` | the street card's 900ms / 0.92 / `--ease-street`           | The photos' entrance                                                                                      |
+
+## About mission and vision
+
+The About page's mission and vision (Figma 507:402, tablet 595:1977, mobile
+596:2646), under "A generation to believe in", built in
+`src/app/about/mission-vision-section.tsx` (server).
+
+- **Content:** YM's official mission and vision, verbatim. Each row: its
+  label ("Our mission" / "Our vision", Figtree Bold, `text-lead` /
+  `text-card-title` / `text-mobile-display`: Figma's 24 / 28 / 32) on the
+  left; the statement (Figtree Medium, `text-body` / `text-article-title` /
+  `text-landing-copy`) and its `StandardButton` ("Support us" → /support,
+  "Our stories" → /stories) 32 below it on the right. Obsidian on Warm Snow.
+- **Layout:** two equal columns 32 apart from tablet (Figma's 568 + 568 on
+  desktop, inset 136; 304 + 304 on tablet, inset 64); stacked on phones,
+  the label 32 above the statement, the button full width. Content caps at 1440. Rows 80 / 123 / 133 apart; top 46 / 91 / 91, foot 103 / 91 / 128,
+  Figma's own.
+- **Buttons:** the site's `StandardButton` (light), not Figma's flat Royal
+  block: it is the standard in-page CTA everywhere. It is 2px taller than
+  Figma's button (51 vs 49).
+- **Motion:** each row is a `TextReveal`, its button revealed whole. Nothing
+  else moves.
+- **Foot:** the next section's pale shape ("Built by the youth") rises
+  behind this section's foot: the section is transparent and stacked above
+  it (`relative z-10`), and does not clip.
+
+## About built by the youth
+
+The About page's "Built by the youth. Run by the youth." section (Figma
+529:233, tablet 595:1993, mobile 596:2662), under Mission & Vision, built in
+`src/app/about/youth-section.tsx` (server) and `youth-motion.tsx` (client:
+the motion only).
+
+- **Background shape:** Figma's large pale organic shape (534:315, vendored
+  as `design-assets/figma/about/youth/shape.svg`), drawn inline in Landing
+  Pale. Figma fills it `#F9F3ED`, which has no token; Landing Pale
+  (`#F7F3F0`) is the site's pale shape colour. Its box (from the section's
+  top left; on desktop the centred 1440 column's) is
+  `--youth-shape-left` / `-top` / `-width`; its top reaches 180 (tablet,
+  phones) / 444 (desktop) up behind Mission & Vision, which is transparent
+  and stacked above it (`relative z-10`). It bleeds off both sides; the
+  section clips sideways only.
+- **Copy:** the heading (Figtree ExtraBold, `text-mobile-section` /
+  `text-landing-section`) and the three verbatim paragraphs (Figtree Medium,
+  `text-body` / `text-article-title` / `text-landing-copy`, a line apart),
+  centred in 784 / 640 / 296, in `TextReveal`.
+- **Faces:** eight portraits in organic shapes on desktop (six on tablet and
+  phones: the two beside the text drop, as in Figma), from Figma's own 3x
+  exports cut out by each shape's path (`scripts/about-youth-assets.mjs`,
+  into `design-assets/figma/about/youth/`). Placed at Figma's boxes from the
+  nearer side; the lower ones from the section's foot, so they keep their
+  distance from the text however it wraps.
+- **Motion** (all compositor transforms):
+  - The shape rises `--youth-shape-drift` (64 / 96 / 120px) across the
+    section's scroll, from its Figma place, its top edge reaching further
+    into Mission & Vision; scroll-linked (the show-you mechanic), so it
+    stops when the scroll stops. It only rises, so its foot never drops
+    out of the section.
+  - Each face grows in from `--youth-face-from-scale` as it fades in, one
+    `--duration-youth-face-stagger` after the last (the shared shape
+    entrance), and, with a fine pointer, its pointer layer trails the
+    cursor by `--youth-pointer-drift` x its depth (0.7-1.2), eased by
+    `--duration-youth-pointer` (the shared cursor drift, as the Everywhere
+    section's shapes). Nothing follows a touch.
+- **Rhythm:** text top / foot 350 / 404 (phones), 422 / 476 (tablet), 380 /
+  586 (desktop), Figma's own; the faces sit in that space.
+- **Reduced motion:** the shape at its Figma place, the faces simply present,
+  the text instant.
+
+| Token                                                                     | Value                                                                  | Use                                                 |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------- |
+| `--youth-shape-left` / `--youth-shape-top` / `--youth-shape-width`        | -22.9588 / -11.25 / 108.64124rem; desktop -14.75 / -27.75 / 138.125rem | The shape's box                                     |
+| `--youth-shape-drift`                                                     | 4 / 6 / 7.5rem                                                         | How far the shape rises across the section's scroll |
+| `--duration-youth-face` / `--youth-face-from-scale` / `--ease-youth-face` | the Everywhere shapes' 900ms / 0.92 / `--ease-everywhere-enter`        | The faces' entrance                                 |
+| `--duration-youth-face-stagger`                                           | the Everywhere stats' 140ms                                            | Between faces entering together                     |
+| `--youth-pointer-drift` / `--duration-youth-pointer`                      | the Everywhere shapes' 0.875rem / 700ms                                | The faces' cursor drift and its easing              |
+
+## About leadership
+
+The About page's leadership section (Figma 530:273, tablet 595:2007, mobile
+596:2674), under "Built by the youth", built in
+`src/app/about/leadership-section.tsx` (server) and `leadership-panel.tsx`
+(client: the swaps only).
+
+- **Content:** three groups of YM's copy, verbatim, each a heading (Figtree
+  Bold, `text-lead` / `text-card-title` / `text-mobile-display`: 24 / 28 / 32) and a paragraph 16 below (Figtree Medium, `text-body` /
+  `text-article-title` / `text-landing-copy`), Obsidian, in `TextReveal`.
+  Each has a photo: the brothers by the lake, the sisters in YMC vests, the
+  brothers with the award.
+- **Tablet and desktop:** two halves. The left is a full-height (`h-dvh`)
+  panel, `position: sticky` (not fixed: the footer's Easter egg transforms
+  the page), pinned while the section scrolls by. The right holds the three
+  groups, a viewport tall each, the text centred in it (inset 80 from the
+  middle on desktop, 458 wide; 58 and 262 on tablet). The last group's
+  block is `--leadership-hold` (75dvh) taller, its text in a viewport-tall
+  box pinned at the top, so once the last photo arrives it and its text
+  hold together for that much scroll before the section releases: 3.75
+  viewports of scroll in all (3375px on a 900px screen).
+- **The swap:** the panel stacks the photos, each in a `BlobReveal` layer
+  run in reverse (uncovered to covering, `origin="top"`, so it rises from
+  the bottom as the page scrolls up). The moment a group's text first
+  enters the viewport from the bottom (its top edge crossing the bottom
+  edge, moved by `--leadership-trigger-offset`, 0), its photo sweeps in
+  over the last behind an organic edge; scrolling back, once that text has
+  left below the bottom edge again, it sweeps out, uncovering the one
+  before. The triggers come a viewport apart (each group's text is centred
+  in its viewport-tall block), photo 1 while the section is still coming
+  in (the panel is pinned from the section's top). Both ways run at this
+  section's slower, gentler pace (`--duration-leadership-reveal`, 1400ms,
+  and `--ease-leadership-reveal`, set on the panel's layers only; the
+  global BlobReveal timing is unchanged), and every sweep takes a random
+  curated shape, never the same as the sweep before it. Watched by one
+  IntersectionObserver over the viewport (a group counts once its text is
+  in view or above it, and photos follow the groups in order), so nothing
+  runs per scroll frame; only the masks animate. With the earliest
+  trigger, the last photo stays pinned with its text for 1231px on a 900px
+  desktop (its arrival to the section's release, including the
+  `--leadership-hold`).
+- **Phones:** Figma's stacked banners: each photo full width (360 x 483 in
+  the frame), its text 40 below, the next photo 64 below that; nothing pins
+  or swaps.
+- **Photos:** art-directed per frame from the Figma fills
+  (`scripts/about-leadership-assets.mjs`, into
+  `design-assets/figma/about/leadership/`), rendered at the size the
+  screens need (desktop 1440 x 2048, tablet 768 x 2048, mobile 1080 x 1449)
+  with Lanczos and light sharpening, under the film grain (Figma's noise).
+  The lake photo's original is 1080 x 1620 and the frames show a small part
+  of it: enlarged 2.85x (desktop), 1.91x (tablet), 2.11x (mobile); a larger
+  original would make it crisp. The award photo is enlarged 1.33x / 1.26x;
+  the YMC photo is never enlarged.
+- **Reduced motion:** `BlobReveal` completes instantly, so the photos swap
+  at the same points without the sweep; text appears instantly; phones are
+  static as always.
+
+| Token                                            | Value                            | Use                                                                                                                                    |
+| ------------------------------------------------ | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `--duration-leadership-reveal`                   | 1400ms                           | The panel's photo sweeps, in and out (BlobReveal's default: 850 / 750ms)                                                               |
+| `--ease-leadership-reveal`                       | `cubic-bezier(0.45, 0, 0.25, 1)` | Their easing: a softer start and finish than `--ease-blob-reveal`                                                                      |
+| `--leadership-trigger-offset`                    | 0px                              | Where a swap fires: the group's text's top edge at the viewport's bottom edge; positive fires earlier (below the edge), negative later |
+| `--leadership-hold` / `--leadership-last-height` | 75dvh / 100dvh + the hold        | The hold after the last photo, and the last group's block height (tablet and desktop)                                                  |
+
+## About stats
+
+The About page's stats (Figma 534:2641, tablet 595:2037, mobile 596:2700),
+under the leadership section, built in `src/app/about/stats-section.tsx`
+(server) and `stats-entrance.tsx` (client: the metrics' entrance), with the
+shared `ScrollDrift` for the photo.
+
+- **Photo:** full bleed at every size: the brothers lifting one of their
+  own, art-directed per frame from the Figma fill
+  (`scripts/about-stats-assets.mjs`, into
+  `design-assets/figma/about/stats/`), with Figma's treatment baked in
+  (black and white, contrast -0.2: grey x 0.842 + 2.4, fitted against its
+  render), under the film grain and the 48% Obsidian scrim
+  (`bg-about-stats-scrim`). The original is 1080 x 720, so the crops are
+  enlarged 3.1-4.4x; the treatment and scrim hide most of it, but a larger
+  original would make it crisp.
+- **Parallax:** the photo layer is `--about-stats-drift` (96px) taller
+  than the section, half above and half below, and drifts from half of it
+  up (the section's top entering the viewport) to half down (its foot
+  leaving), scroll-linked on the compositor (`ScrollDrift`, as the closing
+  CTA's photo); the crops are cut at that taller shape, so nothing zooms
+  and no edge ever shows. Static under reduced motion.
+- **Copy:** "Three decades. One movement." (Figtree ExtraBold,
+  `text-mobile-section` / `text-landing-section`, Warm Snow, in
+  `TextReveal`; 250 / 300 / 328 wide: tablet's 36px has no token, so its
+  40px gets a wider measure to keep Figma's two lines) over four metrics,
+  verbatim: 200+ NeighborNets, 26 States, 10,000+ Youth served, 30+ Years.
+  Each number is Boldonse (`text-landing-stat` / `text-stat`: 48 / 54), its
+  "+" the Material Symbols `add` at 60px, the label Figtree SemiBold
+  (`text-article-title` / `text-landing-copy` / `text-landing-stat-label`).
+  One left-aligned column from 32 / 410 / 936 of the frame; the stepped
+  look is the numbers' widths, as in Figma.
+- **Metrics' entrance:** as the first comes into view, each grows from
+  `--about-stat-from-scale` (0.92) and slides in `--about-stat-shift`
+  (24px) from the right as it fades in, over `--duration-about-stat`
+  (700ms, `--ease-about-stat`), one `--duration-about-stat-stagger`
+  (180ms) after the last, top to bottom (the Everywhere stats' staggered
+  pattern). Once; opacity and transform only.
+- **Rhythm** (top / heading to metrics / between / foot), Figma's own:
+  117 / 58 / 53 / 96 (phones), 117 / 84 / 51 / 120 (tablet), 117 / 74 /
+  40 / 85 (desktop).
+- **Reduced motion:** the photo still, the metrics and heading simply
+  present.
+
+| Token                                            | Value                                                   | Use                                                        |
+| ------------------------------------------------ | ------------------------------------------------------- | ---------------------------------------------------------- |
+| `--color-about-stats-scrim`                      | Obsidian at 48%                                         | The scrim over the photo                                   |
+| `--about-stats-drift`                            | 6rem                                                    | The photo's scroll-linked drift (and its layer's overhang) |
+| `--duration-about-stat` / `--ease-about-stat`    | the Everywhere stats' 700ms / `--ease-everywhere-enter` | Each metric's entrance                                     |
+| `--duration-about-stat-stagger`                  | 180ms                                                   | Between metrics                                            |
+| `--about-stat-from-scale` / `--about-stat-shift` | 0.92 (the shared shape entrance's) / 1.5rem             | Where each metric grows and slides in from                 |
+
+## About history
+
+The About page's "How it started." timeline (Figma 535:2724, tablet 596:2074,
+mobile 596:2730), under the stats, built in
+`src/app/about/history-section.tsx` (server) and `history-line.tsx` (client:
+the line and the choreography), with the shared `ScrollDrift` for the
+background years.
+
+- **Content:** "How it started." (Figtree ExtraBold, `text-mobile-section` /
+  `text-landing-section`), the grey 1995 (Figma's vector, vendored with its
+  `#81818B` fill as `design-assets/figma/about/history/1995.svg`) over its big
+  background year (Obsidian at 4%, `1995-watermark.svg`), the founding
+  paragraph; a line (2 x 72, `bg-about-history-track` with an Obsidian fill);
+  2026 as four photo digits (Figma's 2x exports, the numeral cut out of each
+  photo, `digit-*.webp`) over its big background year (Royal at 4%,
+  `2026-watermark.svg`), and its paragraph with "Read the 2025 annual report"
+  (`StandardButton`, the PDF, a new tab; full width on phones). Paragraphs
+  Figtree Medium, `text-body` / `text-article-title` / `text-landing-copy`.
+- **Layout:** desktop, the heading at the left of the 1995 (inset 80), the
+  1995 and its paragraph from 550 (810 wide), the line under that column's
+  middle, the digits and their paragraph from 378 (982 wide); tablet and
+  phones stack, the 1995, line and digits centred at every width (no
+  left/right mismatch as the window narrows). Tablet keeps Figma's sizes
+  (1995 526 wide, digits 306 tall). Phones: the 2026 digits span the
+  viewport edge to edge (each digit growing by its Figma width, 197 / 338 /
+  197 / 212, its height following), and the 1995 is 33/40 of that (Figma's
+  810 : 982), centred, so the two keep their relation at every phone width
+  (264 / 297 / 322px wide on 320 / 360 / 390 screens).
+  Each background year is 7/4 of its year's width, placed by fractions of
+  that year's box (Figma's offsets: 1995's -2/5 top, -3/8 left, -1/3 on
+  desktop; 2026's -7/16, -3/8, -3/7 on desktop), so it scales with it; the
+  section clips sideways. Figma's vertical rhythm at each frame.
+- **Choreography** (`data-history`, all opacity or transform):
+  1. the 1995 fades in (`--duration-about-history-fade`, 700ms) as it comes
+     into view;
+  2. once that has finished, its background year fades in (700ms);
+  3. the line's fill follows the scroll (scaleY): empty as the track's top
+     reaches `--about-history-line-start` (90%) down the viewport, full as its
+     foot reaches `--about-history-line-end` (50%), about 425px of scroll; it
+     empties again on the way up;
+  4. the first time it is full, the 2026 digits fade in one by one, 2, 0, 2,
+     6 (`--duration-about-history-digit`, 600ms, each
+     `--duration-about-history-digit-stagger`, 300ms, after the last);
+  5. once the last digit has finished, the 2026 background year fades in
+     (700ms).
+
+  Each fade runs once; the line alone follows the scroll both ways. Both
+  background years drift with the scroll (`--about-history-drift`: 48 / 64
+  / 80px).
+
+- **Reduced motion:** nothing is created: the years, the line (full) and the
+  digits show as rendered; no drift. The DOM is the same.
+
+| Token                                         | Value                     | Use                                                        |
+| --------------------------------------------- | ------------------------- | ---------------------------------------------------------- |
+| `--color-about-history-track`                 | `#b6b6ba`                 | The line's track (Figma 542:48)                            |
+| `--duration-about-history-fade`               | 700ms                     | The 1995 and each background year's fade                   |
+| `--duration-about-history-digit` / `-stagger` | 600ms / 300ms             | Each 2026 digit's fade, and between them                   |
+| `--ease-about-history`                        | `--ease-everywhere-enter` | The fades                                                  |
+| `--about-history-line-start` / `-end`         | 90% / 50%                 | Where the line's fill starts and completes in the viewport |
+| `--about-history-drift`                       | 3 / 4 / 5rem              | The background years' scroll-linked drift                  |
+
+## About two sides
+
+The About page's "Two sides. One mission." section (Figma 536:2755, tablet
+596:2101, mobile 596:2757; hover 542:75 / 542:180), under "How it started.",
+built in `src/app/about/two-sides-section.tsx` (server; the hover is CSS,
+`two-sides-section.module.css`) and `two-sides-scrub.tsx` (client: the
+scrub). Being built in stages: the default state, the hover reveal, the pin
+and the desktop and tablet scroll sequence are in; the phones' vertical
+sequence and the Shura handoff follow.
+
+- **Assets** (`scripts/about-two-sides-assets.mjs`, into
+  `design-assets/figma/about/two-sides/`): each logo split into its letters
+  and its monogram (the "O", its own vector in Figma), both on the logo's
+  485 x 261 canvas so they stack exactly; the BROTHERS / SISTERS wordmarks;
+  the standalone monograms (Sisters vector, Brothers a 2400px raster, for
+  the scroll sequence); the hover photos cover-cropped at 3x.
+- **Default:** the Brothers (Royal) and Sisters (Jade) logos side by side
+  from tablet (485 wide, 118 apart on desktop; 285, 70 apart on tablet),
+  stacked on phones (285, 60 apart); "Two sides. One mission."
+  (`text-mobile-section` / `text-landing-section`) and the paragraph
+  (`text-body` / `text-article-title` / `text-landing-copy`), centred, 784
+  wide, in `TextReveal`. Figma's rhythm (top / gap / foot): 51 / 60 / 75,
+  143 / 88 / 132, 108 / 157 / 154.
+- **Hover reveal** (fine pointer, motion allowed): hovering a logo dims it
+  to `--two-sides-hover-dim` (Figma's 4%), its wordmark rises in from
+  `--two-sides-wordmark-from-scale`, and its four photos come out of the
+  wordmark: each starts at `--two-sides-photo-from-scale`, 60% of the way
+  back to the wordmark's centre, and moves to its Figma corner,
+  `--duration-two-sides-photo-stagger` after the last, all over
+  `--duration-two-sides-hover` (`--ease-two-sides-hover`); leaving
+  reverses it. The reveal is laid out in the logo's 485 x 261 Figma frame
+  and scaled with the logo (`scale-59` below `xl`). Opacity, scale and
+  translate only. The photos carry the film grain. Decorative
+  (`aria-hidden`); each logo is labelled.
+- **Pinned sequence** (motion allowed; taller than 30rem from tablet,
+  46rem on phones, where the stacked logos and copy need the room): the
+  section is a `--two-sides-stage-height` (100svh) stage, `position: sticky`
+  (never fixed: the footer's Easter egg transforms the page), over
+  `--two-sides-runway` (220svh) of scroll, its content centred below the
+  header's `--two-sides-stage-clearance`. One progress value (0 as the
+  section's top meets the viewport's top, 1 as its foot meets the
+  viewport's foot) is cut into phases: until `--two-sides-hold-end` (0.1364)
+  the default state holds; to `--two-sides-fade-end` (0.3409) the heading,
+  paragraph and both logos' letters fade out, the monograms staying in
+  place.
+- **Monograms**: each
+  monogram's rig (`data-two-sides="rig"`: its in-wordmark art,
+  `{side}-mark.svg`, under its standalone logo) takes over from it in its
+  exact place at `--two-sides-fade-end`, then is moved and scaled (one
+  `translate3d` + `scale` from its top left) through Figma's scroll flow:
+  to frame 3 (the standalone logos side by side, centred, 335 / 72 apart in
+  a 485 logo) by `--two-sides-grow-end` (0.6591), on to frame 4 (840 / 181
+  apart) at `--two-sides-zoom-frame-at` (0.8523), and out of frame, Brothers
+  left and Sisters right at 960, by `--two-sides-zoom-end` (1), the end
+  of the runway: the stage releases as they leave, with no empty hold (the
+  runway was 250svh with a 30svh hold; every phase keeps its scroll
+  distance), so the Shura section follows straight on. The rigs pass through those frames on
+  one continuous curve (a monotone cubic through each circle's centre and
+  its size on a log scale), not an ease per phase: they start from rest,
+  never stop between frames (except where the motion turns round, at frame
+  3, smoothly), never overshoot and never change speed abruptly at a phase
+  boundary. The fades and the crossfade ease in and out (smoothstep), with
+  no step in rate either. The scrub reads the window scroll that Lenis
+  drives, so it stays in step with the smoothing. The frames' sizes are tokens in logo
+  widths; positions come from the stage and logos, measured on load and
+  resize. Each rig is laid out at its largest (`--two-sides-rig-size`, the
+  exit size: 565 / 960px) and only scaled down, so it stays sharp at every
+  step (checked against a re-rasterized copy at 2x and 3x).
+- **Phones** (under 48rem; pinned only when taller than 46rem): the same
+  phases, curve and crossfade, run down instead of across (Figma 597:3610,
+  on the phone's 285 logo): the stacked monograms grow to frame 3, the
+  standalone logos stacked and centred on the stage, 180 square and 94
+  apart; on to frame 4, 573 and 299 apart; then Brothers leaves off the
+  top and Sisters off the foot at 656 (the phone rig's laid-out size), the
+  vertical twin of the desktop's left and right exit. The phone values are
+  the same ratio tokens, redefined below 48rem. Short phones (46rem tall
+  or less) keep the static fallback.
+- **The crossfade:** over `--two-sides-crossfade-start` to `-end` (0.5625 to
+  0.5966, about 70px of scroll on desktop), late in the grow, the standalone
+  logo fades in on top of the in-wordmark art, which stays solid under it
+  (no washed-out half-and-half) and drops away once covered. The two are
+  aligned on their circles: every art fills its box edge to edge (the
+  Brothers standalone, a 2400px raster with a transparent margin round its
+  disc in Figma, is trimmed to the disc: 1727px), so each pair shares one
+  box, centred and the same size, and the Brothers and Sisters circles show
+  the same diameter at every phase. The Brothers arts differ in
+  design (a solid disc with a white YM, against a disc split white and
+  Royal), so their crossfade shows a brief overlap; the short window keeps
+  it to a few frames.
+- Opacity and transform only, written only when they change.
+- **Hover cut-off:** the scrub sets the stage's `data-phase` ("default"
+  through the hold, "collapsing" after), only when the phase changes; the
+  reveal applies only in "default", so a reveal under the pointer when the
+  collapse starts reverses on its own.
+- **Static fallback** (reduced motion, short screens): no pin, runway or
+  scrub; the section is Figma's default frame and scrolls normally, with no
+  hover reveal (no `data-phase`). The layout switch is CSS (keep its query
+  in step with `PINNED_QUERY` in the scrub); the script drives nothing.
+- **Touch:** no reveal; the logos stay as they are.
+
+| Token                                                                                             | Value                                   | Use                                                                                   |
+| ------------------------------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------- |
+| `--two-sides-hover-dim`                                                                           | 0.04                                    | The hovered logo's opacity                                                            |
+| `--duration-two-sides-hover` / `--ease-two-sides-hover`                                           | 600ms / `--ease-everywhere-enter`       | The reveal                                                                            |
+| `--duration-two-sides-photo-stagger`                                                              | 70ms                                    | Between photos                                                                        |
+| `--two-sides-wordmark-from-scale` / `--two-sides-photo-from-scale`                                | 0.94 / 0.4                              | Where the wordmark and photos grow from                                               |
+| `--two-sides-stage-height` / `--two-sides-runway` / `--two-sides-section-height`                  | 100svh / 220svh / their sum             | The pinned stage and its scroll runway                                                |
+| `--two-sides-hold-end` / `--two-sides-fade-end`                                                   | 0.1364 / 0.3409                         | The phases: the default hold (hover window), then the copy and letters’ fade          |
+| `--two-sides-stage-clearance`                                                                     | 5rem                                    | The header’s room above the stage’s centred content                                   |
+| `--two-sides-grow-end` / `--two-sides-zoom-frame-at` / `--two-sides-zoom-end`                     | 0.6591 / 0.8523 / 1                     | The monograms reach frame 3, frame 4, and leave the frame                             |
+| `--two-sides-crossfade-start` / `-end`                                                            | 0.5625 / 0.5966                         | The in-wordmark art to standalone crossfade                                           |
+| `--two-sides-standalone-size` / `-gap`, `--two-sides-zoom-size` / `-gap`, `--two-sides-exit-size` | 0.6907 / 0.1488, 1.732 / 0.373, 1.9794  | The scroll flow’s frames, in logo widths (Figma’s 335 / 72, 840 / 181, 960 of 485)    |
+| the same, under 48rem                                                                             | 0.631 / 0.3295, 2.0084 / 1.0489, 2.2998 | The phone flow’s frames (Figma’s 180 / 94, 573 / 299, 656 of 285)                     |
+| `--two-sides-rig-size`                                                                            | 41rem / 35.25rem / 60rem                | Each rig’s laid-out size (its largest; only ever scaled down): phone, tablet, desktop |
+
+## About Shura
+
+The About page's "The Young Muslims team." section (Figma 542:174, tablet
+596:2123, mobile 596:2778), the National Shura, built in
+`src/app/about/shura-section.tsx` with its members in `shura.ts` and their
+photos from `scripts/about-shura-assets.mjs`. It follows "Two sides. One
+mission." on Warm Snow.
+
+- **Header:** "The Young Muslims team." (`text-mobile-section` /
+  `text-landing-section`, ExtraBold; the tablet frame's 36px has no token,
+  so tablet uses the desktop role; phones break after "The", as Figma), the
+  paragraph (`text-body` / `text-article-title` / `text-landing-copy`,
+  Medium) and a "Contact us" `StandardButton` to `/contact` (full width on
+  phones), centred, 784 wide at most, in one `TextReveal`.
+- **Cards:** 23 members, real and verbatim from Figma, in its reading
+  order. Each is a 285 x 282 photo (130 square on phones, beside the text,
+  16 apart) and the shared `TeamCardText` (`src/components/site/`, also the
+  Stories alumni cards'): tag, name and role, the tag here in 24% Obsidian
+  (`bg-brand-obsidian/24`, white text). A tag that is only "-" (Duaa Ali's)
+  is not rendered. Cards are not links.
+- **Grid:** four columns on desktop, two on tablet, 285 wide and 46 apart,
+  centred; rows 83 (desktop) and 89 (tablet) apart; every second column 49
+  lower, by a translate, so the rows keep their pitch. Phones: one per row,
+  34 apart.
+- **Photos:** Figma's fills are 400 square, so the cards' photos are 400 x
+  396 (cover-cropped, never upscaled; a little under 2x). Muneeb's is the
+  Stories alumni card's. Photos and placeholder blocks carry Figma's 24%
+  noise, the site's `GrainFilter` (`#shura-grain`).
+- **Missing photos (PLACEHOLDER, swappable):** nine members have none yet;
+  their cards show Figma's branded block, Royal for brothers and Jade for
+  sisters (`photo: { placeholder }` in `shura.ts`). Replace it with the
+  vendored photo when YM sends one.
+- **Motion:** the header rises in word by word as it enters view
+  (`TextReveal`), and the cards use the shared card entrance (the Stories
+  alumni row's: each photo grows from `--street-card-from-scale` as it
+  fades in, one at a time by `--duration-about-shura-stagger`). Arriving
+  into the "Two sides" section's empty, releasing stage, this is the
+  handoff from the exiting monograms: sequential, with no shared layers.
+  Reduced motion: everything is simply there.
+- **Column parallax** (tablet and desktop, motion allowed;
+  `shura-columns-drift.tsx`): each column of cards drifts up at its own
+  scroll-linked rate, clearly, for depth: over the section's whole pass
+  through the viewport it travels `--about-shura-column-drift-1` to `-4`
+  (192 / 384 / 256 / 480px on desktop; tablet's two columns 192 / 416px,
+  its section being twice as tall). The cards sit in Figma's place as the
+  section's top reaches the viewport's top (the first row first seen
+  whole), a little low as they arrive from the handoff and rising past
+  their place as the grid scrolls on. A `transform` (translate3d) per
+  card, on top of the 49px `translate` offset; written only when a
+  column's value changes. Phones (one column, nothing to drift against)
+  and reduced motion: still.
+- **The overlap with "Two sides"** (pinned layouts only): the section is
+  pulled up `--about-shura-overlap` (35svh) over the end of the "Two
+  sides" runway. The "Two sides" sticky stage is layered above it
+  (`z-index: 1`; sticky already makes the stage its own stacking context,
+  so the rigs' order is settled by the stage against this section), so the
+  monograms finish leaving on top while the team's Warm Snow and header
+  come up beneath them. The stage has no background and lets pointers
+  through (its content takes them only in the default phase, for the hover
+  reveal), so it never hides or blocks the Shura header under it. The
+  header rises in as it enters (`TextReveal`'s `startAtEdge`), so the team
+  arrives while the monograms leave, with no empty screen between. The
+  static fallback has no pin and no overlap.
+- **Rhythm** (top / button to cards / foot): 37 / 71 / 81 (phones), 40 /
+  91 / 76 (tablet), 48 / 58 / 112 (desktop, the foot measured from the
+  last row's untranslated cards; while the column parallax runs the foot
+  is 0, since by the time the partners come up the parallax has lifted
+  the last row about 125px, which with the 112 foot left a 320px gap: now
+  about 200 on desktop and tablet, near the static 192). The top is tighter than Figma's frame
+  (76 / 132), and its `TextReveal` starts as the header enters the viewport
+  (`startAtEdge`) rather than 15% up, so the header rises in as the "Two
+  sides" monograms leave.
+
+| Token                                 | Value                                                | Use                                                             |
+| ------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
+| `--duration-about-shura-stagger`      | `--duration-everywhere-stat-stagger`                 | Between cards in a row                                          |
+| `--about-shura-column-drift-1` … `-4` | 12rem / 24rem / 16rem / 30rem (tablet 12rem / 26rem) | Each column's parallax travel                                   |
+| `--about-shura-overlap`               | 35svh                                                | How far the section slides up over the pinned "Two sides" stage |
+
+## About partners
+
+The About page's partners section, after the Shura (Figma 544:653, tablet
+596:2430, mobile 596:3377), built in `src/app/about/partners-section.tsx`
+with its loop in `partners-section.module.css` and `partners-marquee.tsx`,
+and its logos from `scripts/about-partners-assets.mjs`. Warm Snow.
+
+- **Top row:** "Our Partners are what drive our movement forward."
+  (`text-mobile-section` / `text-landing-section`, ExtraBold; tablet's
+  36px has no token, so tablet uses the desktop role) on the left; the
+  subline (`text-body` / `text-article-title` / `text-landing-copy`,
+  Medium) and a "Contact us" `StandardButton` to `/contact`, 32 below it,
+  on the right. Two equal columns 32 apart from tablet (capped at 1440,
+  80 / 64 / 32 side insets); stacked on phones, 16 apart, the button full
+  width. One `TextReveal`.
+- **Logos:** the 13 partners in Figma's order (ICNA, AMP, ICNA Council for
+  Social Justice, The Family & Youth Institute, Helping Hand, US Council of
+  Muslim Organizations, Yaqeen, Qalam, Oaktree Institute, Muslim Alliance
+  for Black Lives, MSA National, Khalil Center, ICNA Relief), each at its
+  Figma height (widths from its proportions), centred on one row, 80 apart.
+  Tablet and phones scale the row as their frames do (0.7326 / 0.5233:
+  gaps 59 / 42). Rasters are Figma's image fills cropped to its boxes, up
+  to 3x (lossless WebP; a few sources are only 2.2–2.8x); AMP's is Figma's
+  vector, white on an Obsidian box. The first copy's logos carry the
+  partners' names as alt text; the second copy is hidden from assistive
+  tech.
+- **Loop:** the row bleeds full width and drifts left forever, on its own
+  (not scroll-linked): its track holds two identical copies (each ending
+  in its gap) and moves by one copy, half its width, every
+  `--duration-about-partners-loop` (90s: about 54px a second on desktop,
+  40 on tablet, 28 on phones), so the seam never shows. A CSS animation of
+  `transform` (the NeighborNets photo marquees' mechanic), paused while the
+  row is off screen (an observer's `data-paused`). Reduced motion: the row
+  rests at Figma's place, first logo at the left edge.
+- **Rhythm** (top / text to logos / foot): 56 / 75 / 79 (phones), 59 /
+  100 / 75 (tablet), 80 / 107 / 128 (desktop).
+
+| Token                            | Value | Use                                 |
+| -------------------------------- | ----- | ----------------------------------- |
+| `--duration-about-partners-loop` | 90s   | One loop of the logo row (one copy) |
+
+## About FAQ
+
+The About page's last section, after the partners (Figma 608:3743; no
+tablet or phone frames), built in `src/app/about/faq-section.tsx` on the
+shared `Accordion`. `id="faq"` (the Contact page links to `/about#faq`),
+with a scroll margin of the header's height (80 / 97px). Warm Snow,
+capped at 1440, 80 / 64 / 32 side insets.
+
+- **Left:** "Frequently asked questions." (`text-mobile-section` /
+  `text-landing-section`, ExtraBold), the line "Have a question about a
+  topic not listed here?" 16 below (`text-body` / `text-article-title` /
+  `text-landing-copy`, Medium) and a "Contact us" `StandardButton` to
+  `/contact` 32 below that (full width on phones), in one `TextReveal`.
+  Behind it, Figma's pale organic shape (608:3874, the youth section's
+  shape, mirrored, 1601 x 1249, 149 below the heading's top and reaching
+  743 left of it; vendored as `design-assets/figma/about/faq/shape.svg`).
+  Figma fills it #F9F3ED, which has no token, so it uses Landing Pale like
+  the youth shape. The section clips it.
+- **Shape parallax:** the shape belongs to the section, not the pinned
+  copy: it starts at its Figma place and drifts with the section's scroll
+  (`ScrollDrift`, `--about-faq-shape-drift`: 4 / 6 / 8rem, from half above
+  its place as it enters to half below as it leaves, lagging the scroll
+  slightly), so the copy pins over a background that keeps moving. Static
+  under reduced motion.
+- **Sticky:** from tablet the left column is `position: sticky` (never
+  fixed: the footer's Easter egg transforms the page) at `top-36` (144px,
+  47 below the 97px header), so the heading, line and button, with the
+  shape, stay beside the questions while the reader scrolls through open
+  answers, and are released as the list ends (the grid's bottom). Phones
+  stack the two, header first, 48 apart, nothing pinned.
+- **Right:** seven accordions, all closed at first (questions and answers
+  verbatim from Figma), 40 apart with 1px `bg-border` dividers between.
+  Questions Bold and answers Medium, both `text-body` / `text-article-title`
+  / `text-landing-copy` (Figma's 20px on desktop), each answer 24 below its
+  question, paragraphs a blank line apart (20 / 22 / 24). The expansion
+  address is a `mailto:` link, ExtraBold and underlined. The accordion's
+  behaviour is the story pages' (button with `aria-expanded` /
+  `aria-controls`, Enter and Space, eased height and chevron over
+  `--duration-story-accordion`, closed bodies `inert`; instant under
+  reduced motion).
+- **Rhythm:** top 80 (56 on phones), foot 80. The closing CTA follows,
+  its wavy Warm Snow top handing off from the FAQ.
+- **Closing CTA:** the shared `ClosingCta` with this page's photo, the
+  three sisters at a fall festival (507:449, tablet 595:1855, mobile
+  596:2566). Figma's fill is 1080 x 719 (its largest), drawn about 1.45x
+  with the sky cut so their faces sit in the frame's top third, above the
+  mission line; `scripts/about-cta-assets.mjs` crops it the same way (the
+  top 170 and right 80 off: 1000 x 549; `imageFocus` centre). The small
+  source is art-directed (`artDirection`) for sharpness: desktop the whole
+  framed photo, tablet and mobile its centred 668 / 400 wide strip (all
+  their frames show), so the framing is the same at every width; each is
+  enlarged with Lanczos and light sharpening, as the hero's crops are, to
+  3200 / 2560 / 2304 wide (2x, 2x and 3x the width cover-fit draws it at).
+  The source still caps the detail (a phone shows about 200 of its pixels
+  across): a higher-resolution original from YM is the only full fix.
+
+| Token                     | Value                              | Use                                                    |
+| ------------------------- | ---------------------------------- | ------------------------------------------------------ |
+| `--about-faq-shape-drift` | 4rem / 6rem from md / 8rem from xl | The pale shape's parallax travel as the section passes |
 
 ## All about section
 
@@ -1021,8 +1645,9 @@ three accordions, the attribution naming their role and NeighborNet.
   monogram, the all-about section's marks, drifting with the scroll as the
   section passes (`ScrollDrift`, `--story-watermark-drift`: 8 / 10 / 12rem;
   static under reduced motion).
-- **Accordions** (`story-accordion.tsx`, the page's only client code): open
-  at first, as in Figma. The title is a button (`aria-expanded`,
+- **Accordions** (the shared `Accordion`, `components/site/accordion.tsx`,
+  the page's only client code; the About FAQ uses it too): open at first,
+  as in Figma. The title is a button (`aria-expanded`,
   `aria-controls`; Enter and Space) that closes and reopens it: the body's
   row eases between nothing and its height and the chevron
   (`keyboard_arrow_down`, turned up when open) turns, over
@@ -1080,6 +1705,63 @@ gallery (Figma 587:1538, tablet 593:1673, mobile 593:1733), built in
 | Token                               | Value                                             | Use                                       |
 | ----------------------------------- | ------------------------------------------------- | ----------------------------------------- |
 | `--duration-stories-alumni-stagger` | `var(--duration-everywhere-stat-stagger)` (140ms) | The delay between cards entering together |
+
+## Store split
+
+`src/app/store/store-split.tsx` and `store-split.module.css`: the Store page's
+hero (Figma 456:3296 desktop, 456:3556 tablet, 456:3698 mobile; hover
+456:3515, 456:3807, 456:3876), then the closing CTA (456:3355, tablet
+456:3611, mobile 456:3753) and the shared footer.
+
+- **A sticky hero:** the split is `StickyHero`'s pinned panel, exactly the
+  viewport's height (`100dvh`) on every device, with no minimum, under the
+  overlaid site header ("Store" as the current page; the scrim follows
+  StickyHero's marker). The closing CTA scrolls up over it. It has no wave of
+  its own (`wave="none"`): the CTA's wavy top is the hand-off, its section
+  clear above the wave (`ClosingCta overHero`), so the split shows there and
+  the wave rises over it. The CTA is shorter than the viewport, so the split
+  stays pinned while the footer follows too (`holdThroughFooter`).
+- **Layout:** side by side from `md`; stacked on phones, Brothers above,
+  each half half the viewport.
+- **Each half:** its photo covering it (centred), an Obsidian shade rising
+  from the foot (40% up to 44% of the way, then clearing:
+  `bg-linear-to-t from-brand-obsidian/40 from-44% to-transparent`), then,
+  centred, the name in Boldonse Pure White (`text-mobile-display` 32 /
+  `text-tablet-display` 40 from `md` / `text-display` 56 from `xl`) and its
+  button 20px below (16 from `xl`).
+- **Buttons:** the dark standard button. Brothers: `StandardButton
+tone="dark"` "Enter", to https://www.ymsite.com/ in a new tab. Sisters:
+  their store isn't open, so `StandardButtonStatic tone="dark"` "Coming
+  soon": the same label and Warm Snow underline as text (not a link or a
+  control: it can't be focused or clicked), no arrow, no fill on hover;
+  screen readers hear "The sisters' store is coming soon".
+- **Hover (a fine pointer):** at rest both photos are black and white (a CSS
+  `grayscale` filter on the colour originals, so one photo serves both
+  states). Hovering anywhere on a half, or focusing its button, fades its
+  photo to colour and, together, grows it `--store-split-hover-scale` within
+  the half, which clips it, over `--duration-store-split-hover`; leaving
+  reverses both. Filter and transform only, on a promoted layer.
+- **Touch:** no hover, so the photos show in colour (the hover frames'
+  state), at their resting size.
+- **Reduced motion:** the photo still fades to colour, but doesn't grow.
+- **Photos:** `scripts/store-assets.mjs` vendors Figma's colour fills to
+  `design-assets/figma/store/`: the brothers' at 3200 wide (from 4096; about
+  2x as drawn), the sisters' at its full 1365 x 2048, the largest Figma has.
+- **Closing CTA photo:** the sisters on the boardwalk by the lake, Figma's
+  fill (1200 x 1600, the largest it has), art-directed
+  (`scripts/store-cta-assets.mjs`): each frame's framing matched against the
+  fill, cropped to what the CTA's photo layer shows there (tablet widened
+  and mobile the whole fill, so wider screens keep the whole group), and
+  rendered 2880 / 2560 / 2400 wide (2x a 1440 desktop and a 1279 tablet, 3x
+  a phone) with Lanczos and light sharpening. The fill caps the detail (the
+  group spans about 880 of its pixels; desktop enlarges it about 1.2x): a
+  larger original from YM is the only full fix.
+
+| Token                          | Value                          | Use                                                   |
+| ------------------------------ | ------------------------------ | ----------------------------------------------------- |
+| `--store-split-hover-scale`    | 1.084                          | A hovered half's photo's growth (Figma: 1878 vs 1732) |
+| `--duration-store-split-hover` | 600ms                          | The photo's fade to colour and its growth, in and out |
+| `--ease-store-split-hover`     | `cubic-bezier(0.4, 0, 0.2, 1)` | Their easing: an even fade                            |
 
 ## Site footer
 
@@ -1636,7 +2318,13 @@ and `closing-cta.module.css`. Shared by every page, each with its own photo.
   the photo is drawn larger and the subject rides higher; desktop anchors the
   subject with `--closing-cta-low-focus-desktop`, so it stays the same
   distance below the top at any width and is never cropped on ultra-wide
-  screens). The mission line ("Seeking the pleasure of Allah (SWT) by
+  screens). `artDirection={{ tablet, mobile }}` (optional) adds tablet and
+  mobile crops, `image` then the desktop one, in a `<picture>`; each is
+  asked for at the width cover-fit draws it (the layer's height, 883 / 1054,
+  times its aspect, or the screen's width if wider), not just the screen's,
+  so dense screens get the whole crop (the About and Store pages).
+  `overHero` leaves the section clear above the shape's wavy top, for a CTA
+  that follows a pinned hero directly (the Store page). The mission line ("Seeking the pleasure of Allah (SWT) by
   empowering Muslim youth.") is the same everywhere and is not a prop. The
   landing page and the blog pass the YMATX railing photo
   (`landing-2026/cta/ymatx-railing.jpg`). The NeighborNets page passes the

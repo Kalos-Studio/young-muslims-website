@@ -35,9 +35,13 @@ class CdpClient {
     this.socket = socket;
     this.nextId = 1;
     this.pending = new Map();
+    this.listeners = [];
     socket.addEventListener("message", (event) => {
       const message = JSON.parse(event.data);
-      if (!message.id) return;
+      if (!message.id) {
+        for (const listener of this.listeners) listener(message);
+        return;
+      }
       const request = this.pending.get(message.id);
       if (!request) return;
       this.pending.delete(message.id);
@@ -84,14 +88,130 @@ async function waitUntil(client, sessionId, expression, timeout = 30000) {
     if (await evaluate(client, sessionId, expression)) return;
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
-  const diagnostic = await evaluate(
-    client,
-    sessionId,
-    `({path:location.pathname,text:document.body.innerText.slice(0,1200),entry:!!document.querySelector('[data-entry-animation]')})`,
-  );
+  const diagnostic = await evaluate(client, sessionId, PAGE_STATE);
   throw new Error(
     `Timed out waiting for ${expression}: ${JSON.stringify(diagnostic)}`,
   );
+}
+
+/*
+ * Diagnostics only (the checks themselves are unchanged): on any failure the
+ * audit prints the step it was on, how long it had been running, the page's
+ * state (below) and what the browser reported (exceptions, console errors,
+ * failed and still-pending requests), so an intermittent failure says why.
+ */
+const PAGE_STATE = `(() => {
+  const footer = document.querySelector('footer');
+  const stage = document.querySelector('[data-site-page-stage]');
+  const footerStage = document.querySelector('[data-footer-stage]');
+  const images = [...document.querySelectorAll('footer img, [data-footer-stage] img')];
+  return {
+    path: location.pathname,
+    readyState: document.readyState,
+    entryAnimation: !!document.querySelector('[data-entry-animation]'),
+    footer: footer ? { ...footer.dataset } : null,
+    stageTransform: stage ? getComputedStyle(stage).transform : null,
+    footerStageVisibility: footerStage ? getComputedStyle(footerStage).visibility : null,
+    scroll: { y: Math.round(scrollY), max: document.documentElement.scrollHeight - innerHeight },
+    footerImages: { total: images.length, complete: images.filter(i => i.complete && i.naturalWidth > 0).length, pending: images.filter(i => !(i.complete && i.naturalWidth > 0)).map(i => (i.currentSrc || i.src).slice(-80)).slice(0, 8) },
+    sinceNavigation: Math.round(performance.now()),
+    text: document.body.innerText.slice(0, 300),
+  };
+})()`;
+const started = Date.now();
+const step = { route: null, input: null, phase: "startup" };
+const browserLog = [];
+const pendingRequests = new Map();
+function record(message) {
+  const { method, params } = message;
+  if (method === "Runtime.exceptionThrown") {
+    browserLog.push(
+      `exception: ${params.exceptionDetails?.exception?.description ?? params.exceptionDetails?.text}`,
+    );
+  } else if (
+    method === "Runtime.consoleAPICalled" &&
+    ["error", "warning"].includes(params.type)
+  ) {
+    browserLog.push(
+      `console.${params.type}: ${params.args.map((arg) => arg.value ?? arg.description).join(" ")}`,
+    );
+  } else if (
+    method === "Log.entryAdded" &&
+    ["error", "warning"].includes(params.entry.level)
+  ) {
+    browserLog.push(
+      `log.${params.entry.level}: ${params.entry.text} ${params.entry.url ?? ""}`,
+    );
+  } else if (method === "Network.requestWillBeSent") {
+    pendingRequests.set(params.requestId, {
+      url: params.request.url,
+      at: Date.now(),
+    });
+  } else if (method === "Network.loadingFinished") {
+    pendingRequests.delete(params.requestId);
+  } else if (method === "Network.loadingFailed") {
+    const request = pendingRequests.get(params.requestId);
+    pendingRequests.delete(params.requestId);
+    if (!params.canceled)
+      browserLog.push(
+        `request failed: ${params.errorText} ${request?.url ?? ""}`,
+      );
+  }
+  if (browserLog.length > 40) browserLog.splice(0, browserLog.length - 40);
+}
+
+/* How long a trigger gets to start the flash before it is sent again. */
+const TRIGGER_RETRY_MS = 1500;
+
+/**
+ * Runs `action` (re-scrolling to the bottom and re-sending the input), then
+ * waits up to TRIGGER_RETRY_MS for `expression`, again and again, until it
+ * holds or `timeout` passes; then fails as waitUntil does, with the page's
+ * state.
+ */
+async function retryUntil(
+  client,
+  sessionId,
+  action,
+  expression,
+  timeout = 30000,
+) {
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline) {
+    await evaluate(client, sessionId, action);
+    const until = Math.min(deadline, Date.now() + TRIGGER_RETRY_MS);
+    while (Date.now() < until) {
+      if (await evaluate(client, sessionId, expression)) return;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+  await waitUntil(client, sessionId, expression, 1);
+}
+
+/** Scrolls to the page's foot and sends one `input` there. */
+function triggerScript(input) {
+  return `(async () => {
+    window.scrollTo(0, document.documentElement.scrollHeight - innerHeight - 100);
+    await new Promise(resolve => setTimeout(resolve, 50));
+    if (${JSON.stringify(input)} === 'wheel') {
+      window.dispatchEvent(new WheelEvent('wheel', { deltaY: 120 }));
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      window.dispatchEvent(new WheelEvent('wheel', { deltaY: 80 }));
+    } else if (${JSON.stringify(input)} === 'touch') {
+      // Complete touch lists (touches, targetTouches, changedTouches) with
+      // coordinates, as a real touch has: Lenis reads targetTouches[0], and
+      // threw on the bare synthetic events.
+      const touch = y => new Touch({ identifier: 1, target: document.body, clientX: 150, clientY: y });
+      const lists = point => ({ touches: [point], targetTouches: [point], changedTouches: [point] });
+      window.dispatchEvent(new TouchEvent('touchstart', lists(touch(600))));
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      window.dispatchEvent(new TouchEvent('touchmove', lists(touch(500))));
+      window.dispatchEvent(new TouchEvent('touchend', { touches: [], targetTouches: [], changedTouches: [touch(500)] }));
+    } else {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    }
+  })()`;
 }
 
 const profile = await mkdtemp(join(tmpdir(), "ym-footer-audit-"));
@@ -108,8 +228,10 @@ const chrome = spawn(
   { stdio: ["ignore", "ignore", "pipe"] },
 );
 let client;
+let failureState;
 try {
   client = await connect(await waitForBrowserUrl(chrome));
+  client.listeners.push(record);
   const { targetId } = await client.send("Target.createTarget", {
     url: "about:blank",
   });
@@ -118,6 +240,10 @@ try {
     flatten: true,
   });
   await client.send("Page.enable", {}, sessionId);
+  for (const domain of ["Runtime", "Log", "Network"]) {
+    await client.send(`${domain}.enable`, {}, sessionId);
+  }
+  failureState = () => evaluate(client, sessionId, PAGE_STATE);
   const routes = process.env.FOOTER_AUDIT_ROUTES?.split(",") ?? [
     "/stories",
     "/stories/rahmah-k",
@@ -130,6 +256,7 @@ try {
     "/",
   ];
   for (const route of routes) {
+    Object.assign(step, { route, input: null, phase: "load" });
     await client.send(
       "Emulation.setDeviceMetricsOverride",
       { width: 390, height: 844, deviceScaleFactor: 1, mobile: true },
@@ -150,39 +277,31 @@ try {
       sessionId,
       `window.scrollTo(0,document.documentElement.scrollHeight)`,
     );
+    step.phase = "wait for footer ready";
+    // Re-issue the scroll to the bottom on every poll: on a cold load,
+    // Lenis's startup can re-sync the scroll to the top after the first
+    // one, so a single scroll can miss (a harness race, not a site bug).
     await waitUntil(
       client,
       sessionId,
-      `document.querySelector('footer')?.dataset.footerReady === 'true'`,
+      `(window.scrollTo(0, document.documentElement.scrollHeight), document.querySelector('footer')?.dataset.footerReady === 'true')`,
     );
     for (const input of ["wheel", "touch", "keyboard"]) {
-      await evaluate(
+      Object.assign(step, { input, phase: "trigger" });
+      // Scroll to the bottom and send the input, then wait for the flash;
+      // if it has not started within TRIGGER_RETRY_MS, do both again, until
+      // the usual timeout. On a cold load, Lenis's startup can re-sync the
+      // scroll to the top at any point, which would leave a single trigger
+      // short of the bottom (a harness race, not a site bug). Every step
+      // that needs the page's foot re-scrolls this way.
+      step.phase = "wait for flashing";
+      await retryUntil(
         client,
         sessionId,
-        `(async () => {
-        window.scrollTo(0, document.documentElement.scrollHeight - innerHeight - 100);
-        await new Promise(resolve => setTimeout(resolve, 50));
-        if (${JSON.stringify(input)} === 'wheel') {
-          window.dispatchEvent(new WheelEvent('wheel', { deltaY: 120 }));
-          window.scrollTo(0, document.documentElement.scrollHeight);
-          window.dispatchEvent(new WheelEvent('wheel', { deltaY: 80 }));
-        } else if (${JSON.stringify(input)} === 'touch') {
-          const touch = y => new Touch({ identifier: 1, target: document.body, clientX: 150, clientY: y });
-          window.dispatchEvent(new TouchEvent('touchstart', { touches: [touch(600)] }));
-          window.scrollTo(0, document.documentElement.scrollHeight);
-          window.dispatchEvent(new TouchEvent('touchmove', { touches: [touch(500)] }));
-          window.dispatchEvent(new TouchEvent('touchend'));
-        } else {
-          window.scrollTo(0, document.documentElement.scrollHeight);
-          window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
-        }
-      })()`,
-      );
-      await waitUntil(
-        client,
-        sessionId,
+        triggerScript(input),
         `document.querySelector('footer')?.dataset.footerPhase === 'flashing'`,
       );
+      step.phase = "wait for montage reveal";
       // The page stage shifts up as the flash starts: wait for it to settle
       // at -200 rather than reading it the instant the phase flips (which
       // raced the shift and failed now and then). Bounded, so a montage that
@@ -204,6 +323,7 @@ try {
           `${route}: ${input} did not reveal the montage: ${JSON.stringify(state)}`,
         );
       }
+      step.phase = "wait for idle";
       await waitUntil(
         client,
         sessionId,
@@ -213,6 +333,7 @@ try {
     }
     console.log(`PASS ${route}: wheel, touch, keyboard, return to idle`);
   }
+  Object.assign(step, { route: null, input: null, phase: "reduced motion" });
   await client.send(
     "Emulation.setEmulatedMedia",
     { features: [{ name: "prefers-reduced-motion", value: "reduce" }] },
@@ -233,9 +354,45 @@ try {
   )
     throw new Error("Reduced motion did not suppress the montage");
   console.log("PASS reduced motion");
+} catch (error) {
+  // Report why, then fail as before.
+  let state = null;
+  try {
+    state = await failureState?.();
+  } catch (stateError) {
+    state = `unavailable: ${stateError.message}`;
+  }
+  const now = Date.now();
+  console.error(
+    [
+      `FAIL ${step.route ?? ""} ${step.input ?? ""} at "${step.phase}" after ${now - started}ms`,
+      `error: ${error.stack ?? error}`,
+      `origin: ${ORIGIN}`,
+      `page state: ${JSON.stringify(state, null, 2)}`,
+      `still-pending requests: ${JSON.stringify([...pendingRequests.values()].map((request) => `${now - request.at}ms ${request.url.slice(-100)}`).slice(0, 10))}`,
+      `browser log (latest last):\n  ${browserLog.join("\n  ") || "(none)"}`,
+    ].join("\n"),
+  );
+  process.exitCode = 1;
 } finally {
   client?.socket.close();
   chrome.kill();
   await new Promise((resolve) => chrome.once("exit", resolve));
-  await rm(profile, { recursive: true, force: true });
+  // Deleting the temporary profile can race Chrome's helper processes,
+  // still writing into it after the main process exits (ENOTEMPTY), so the
+  // delete retries. If it still fails, that is a cleanup failure after the
+  // checks, not a footer failure: report it as such.
+  try {
+    await rm(profile, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 100,
+    });
+  } catch (error) {
+    console.error(
+      `CLEANUP FAIL ${process.exitCode ? "(after a failed check)" : "(all checks passed)"}: could not delete the temporary Chrome profile ${profile}: ${error.code ?? ""} ${error.message}`,
+    );
+    process.exitCode = 1;
+  }
 }

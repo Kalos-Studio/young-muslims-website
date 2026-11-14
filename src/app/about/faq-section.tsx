@@ -1,143 +1,188 @@
-"use client";
+import { Fragment, type ReactNode } from "react";
 
-import { useState } from "react";
+import { Accordion } from "@/components/site/accordion";
+import { ScrollDrift } from "@/components/site/scroll-drift";
+import { TextReveal } from "@/components/site/text-reveal";
+import { textRevealUnit } from "@/components/site/text-reveal-unit";
+import { StandardButton } from "@/components/ui/standard-button";
 
-import { MaterialIcon } from "@/components/ui/material-icon";
+/*
+ * The pale background shape (Figma 608:3874, mirrored; vendored as
+ * design-assets/figma/about/faq/shape.svg). Figma fills it #F9F3ED, which
+ * has no token; like the youth section's shape it uses Landing Pale.
+ */
+const SHAPE =
+  "M390.472 1151.6C472.77 1146.76 555.31 1163.47 629.137 1200.19C818.423 1294.39 1044.42 1255 1186.43 1057.89C1238.39 985.813 1308.74 930.523 1390.88 896.784C1750.33 749.074 1654.8 102.055 1056.36 117.391C975.517 119.49 896.688 101.006 825.04 63.5539C81.1263 -324.851 -363.931 1195.76 390.472 1151.6Z";
 
-const faqs = [
+/* The questions and answers, verbatim from Figma (608:3798). */
+const QUESTIONS: { question: string; answer: ReactNode }[] = [
   {
-    question: "What is YM?",
+    question: "What is Young Muslims?",
     answer: (
       <>
-        Young Muslims is a national youth organization founded in the early
-        1990s. Its local groups, called NeighborNets, gather weekly for halaqas,
-        relevant discussions, activities, and meals. These gatherings help young
-        Muslims learn and practice Islam while building supportive bonds with
-        their peers.
+        <p>
+          Young Muslims (YM) is a pioneering national youth organization that
+          has been on the youth scene since the early 90’s. We have established
+          a well organized network of local youth groups that we call
+          NeighborNets (which means the network of neighbors) across the United
+          States.
+        </p>
+        <p>
+          Each NeighborNet is a dynamic youth group which attempts to build a
+          solid understanding of the principles of Islam amongst its members by
+          helping them put these principles into practice. By providing the
+          youth with an Islamic atmosphere where they can form bonds of
+          brotherhood with their peers, they become comfortable with Islam and
+          its teachings. We stress the importance of knowing, understanding, and
+          fulfilling our individual and collective obligations as Muslims.
+        </p>
+        <p>
+          The most fundamental aspect of YM is the Neighbornet. This is a weekly
+          gathering of brothers who come together to discuss relevant issues in
+          society, generally, learn about Islam, and just enjoy a Muslim
+          atmosphere. Within each Neighbornet, we have a halaqa led by a YM
+          member about different important topics. This is where YM members get
+          the basic knowledge they need. We try to supplement these halaqas with
+          activities and dinner to promote the safe space and brotherhood
+          atmosphere that today’s youth are desperately seeking.
+        </p>
       </>
     ),
   },
   {
-    question: "How old do I have to be to join YM?",
-    answer: <>Young Muslims serves youth and young adults ages 13 to 25.</>,
+    question: "How old do I have to be to join Young Muslims?",
+    answer: <p>Our age range is between 13 to 25 years old.</p>,
   },
   {
-    question: "How do I start a YM NeighborNet?",
+    question: "How do I start a Young Muslims Neighbornet?",
     answer: (
-      <>
-        Email the expansion team at{" "}
+      <p>
+        If you are interested in starting a Neighbornet, please send an email to
+        our expansion team at{" "}
         <a
           href="mailto:expansion@ymsite.com"
-          className="font-semibold text-brand-royal underline underline-offset-4"
+          className="font-extrabold underline outline-none focus-visible:ring-2 focus-visible:ring-brand-obsidian focus-visible:ring-offset-2 focus-visible:ring-offset-brand-warm-snow"
         >
           expansion@ymsite.com
         </a>
-        . They can connect you with nearby leadership and the resources needed
-        to get started.
-      </>
+        . From there, we will connect you with any local leadership that is
+        close by and other resources you may need.
+      </p>
     ),
   },
   {
-    question: "Does a YM group have to be affiliated with a specific masjid?",
+    question:
+      "Does a Young Muslims Group have to be affiliated with a specific Masjid?",
     answer: (
-      <>
-        No. Some NeighborNets are the official youth groups of their local
-        masajid, but affiliation is not required. A group can meet wherever best
-        supports its growth and development.
-      </>
+      <p>
+        No it is not necessary. There are YM Neighbornets which are the official
+        youth groups of their local masajid but this is not a requirement to
+        join. Meetings do not even have to necessarily take place in a Masjid.
+        Whatever location best suits the growth and development of the
+        Neighbornet should be chosen.
+      </p>
     ),
   },
   {
-    question: "Is YM co-ed? How can sisters join?",
+    question: "Where is Young Muslims?",
     answer: (
-      <>
-        YM has independently operated brothers and sisters wings, and local
-        gatherings are not mixed. The two wings coordinate at leadership levels.
-        Sisters interested in joining or starting a NeighborNet can connect with
-        the sisters wing through local YM leadership.
-      </>
-    ),
-  },
-  {
-    question: "Where is YM?",
-    answer: (
-      <>
-        YM has established regions and local NeighborNets across the country,
-        with expansion teams actively helping new communities get started.
-      </>
+      <p>
+        Currently, we have official Sub-Regions in New Jersey, New York, Dallas,
+        Houston, Florida, and Chicago, but we also have Expansion Units
+        throughout the country and are actively seeking to expand further.
+      </p>
     ),
   },
   {
     question: "How long does it take to get started?",
     answer: (
-      <>
-        Getting started does not take long. Founders are asked to take the
-        responsibility of maintaining their NeighborNet seriously.
-      </>
+      <p>
+        It does not take long at all. We just ask that the founders of a
+        NeighborNet take the responsibility of maintaining the NeighborNet very
+        seriously.
+      </p>
     ),
   },
   {
     question: "Are there any membership fees?",
-    answer: <>No, there are no membership fees.</>,
+    answer: <p>No, there are no fees to join Young Muslims.</p>,
   },
-] as const;
+];
 
+/**
+ * The About page's FAQ, after the partners (Figma 608:3743;
+ * DESIGN-SYSTEM.md, "About FAQ"), `#faq` (the Contact page links here).
+ *
+ * Two columns from tablet: on the left the heading, a line and a "Contact
+ * us" button (TextReveal); on the right seven
+ * accordions, all closed at first, with dividers between. The left column
+ * is `position: sticky` (never fixed: the footer's Easter egg transforms
+ * the page) below the header, so it stays beside the questions as the
+ * reader scrolls through the open ones, released as the list ends. Phones
+ * stack the two, with nothing pinned.
+ *
+ * Behind the left column, a pale organic shape belongs to the section, not
+ * the pinned copy: it starts at Figma's place (149 below the heading's top)
+ * and drifts with the section's scroll (ScrollDrift,
+ * `--about-faq-shape-drift`), lagging it slightly, so the copy pins over a
+ * background that keeps moving. Static under reduced motion.
+ */
 export function FaqSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
   return (
-    <section aria-labelledby="about-faq-heading">
-      <h2
-        id="about-faq-heading"
-        className="text-mobile-section font-extrabold text-brand-royal md:text-section"
+    <section
+      id="faq"
+      aria-labelledby="faq-heading"
+      className="relative scroll-mt-20 overflow-clip bg-brand-warm-snow text-brand-obsidian md:scroll-mt-24.25"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 mx-auto max-w-360"
       >
-        Frequently asked questions
-      </h2>
-
-      <div className="mt-8 overflow-hidden rounded-card bg-muted px-8">
-        {faqs.map((faq, index) => {
-          const isOpen = openIndex === index;
-          const answerId = `about-faq-answer-${index}`;
-
-          return (
-            <div
-              key={faq.question}
-              className="border-b border-brand-obsidian/10 last:border-b-0"
+        <ScrollDrift
+          token="--about-faq-shape-drift"
+          fallback={96}
+          className="absolute top-51.25 -left-177.75 h-312.25 w-400.25 will-change-transform md:top-57.25 md:-left-169.75 xl:-left-165.75"
+        >
+          <svg
+            viewBox="0 0 1601 1249"
+            className="size-full -scale-x-100 fill-landing-pale"
+          >
+            <path d={SHAPE} />
+          </svg>
+        </ScrollDrift>
+      </div>
+      <div className="relative mx-auto flex max-w-360 flex-col gap-12 px-8 pt-14 pb-20 md:grid md:grid-cols-2 md:items-start md:gap-8 md:px-16 md:pt-20 xl:px-20">
+        <div className="relative md:sticky md:top-36">
+          <TextReveal className="relative">
+            <h2
+              id="faq-heading"
+              className="text-mobile-section font-extrabold md:text-landing-section"
             >
-              <button
-                type="button"
-                aria-expanded={isOpen}
-                aria-controls={answerId}
-                onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex w-full cursor-pointer items-center justify-between gap-8 py-6 text-left text-body font-semibold text-brand-obsidian outline-none hover:text-brand-royal focus-visible:text-brand-royal"
-              >
-                <span>{faq.question}</span>
-                <MaterialIcon
-                  name="expand_more"
-                  size={20}
-                  className={`transition-transform duration-300 ease-out ${isOpen ? "rotate-180" : ""}`}
-                  aria-hidden
-                />
-              </button>
-              <div
-                id={answerId}
-                aria-hidden={!isOpen}
-                inert={!isOpen}
-                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
-                  isOpen
-                    ? "grid-rows-[1fr] opacity-100"
-                    : "grid-rows-[0fr] opacity-0"
-                }`}
-              >
-                <div className="min-h-0 overflow-hidden">
-                  <p className="max-w-3xl pb-6 text-body text-muted-foreground">
-                    {faq.answer}
-                  </p>
+              Frequently asked questions.
+            </h2>
+            <p className="mt-4 text-body font-medium md:text-article-title xl:text-landing-copy">
+              Have a question about a topic not listed here?
+            </p>
+            <StandardButton
+              href="/contact"
+              label="Contact us"
+              {...textRevealUnit}
+              className="mt-8"
+            />
+          </TextReveal>
+        </div>
+        <div className="relative flex flex-col gap-10 text-body md:text-article-title xl:text-landing-copy">
+          {QUESTIONS.map(({ question, answer }, index) => (
+            <Fragment key={question}>
+              {index > 0 && <div aria-hidden className="h-px bg-border" />}
+              <Accordion title={question} defaultOpen={false}>
+                <div className="flex flex-col gap-5 md:gap-5.5 xl:gap-6">
+                  {answer}
                 </div>
-              </div>
-            </div>
-          );
-        })}
+              </Accordion>
+            </Fragment>
+          ))}
+        </div>
       </div>
     </section>
   );

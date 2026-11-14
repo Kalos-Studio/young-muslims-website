@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { TeamCardText } from "@/components/site/team-card-text";
 import { TextReveal } from "@/components/site/text-reveal";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { cn } from "@/lib/utils";
@@ -81,17 +82,12 @@ function AlumnusCard({ alumnus, index }: { alumnus: Alumnus; index: number }) {
             <MaterialIcon name="arrow_outward" />
           </span>
         </div>
-        <div className="md:mt-6">
-          <p className="inline-block bg-brand-royal px-1.5 py-1 text-article-meta font-semibold text-brand-pure-white">
-            {alumnus.tag}
-          </p>
-          <h3 className="mt-3 text-article-title font-bold text-brand-obsidian">
-            {alumnus.name}
-          </h3>
-          <p className="mt-2 text-nav font-medium text-caption">
-            {alumnus.role}
-          </p>
-        </div>
+        <TeamCardText
+          tag={alumnus.tag}
+          name={alumnus.name}
+          role={alumnus.role}
+          className="md:mt-6"
+        />
       </Link>
     </li>
   );

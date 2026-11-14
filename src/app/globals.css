@@ -324,6 +324,12 @@
   --text-mobile-display--line-height: normal;
   --text-mobile-display--letter-spacing: -0.02em;
 
+  /* The Store split's Boldonse BROTHERS / SISTERS on tablet (Figma
+     456:3556, 40px), between Mobile display and Display. */
+  --text-tablet-display: 2.5rem;
+  --text-tablet-display--line-height: normal;
+  --text-tablet-display--letter-spacing: -0.02em;
+
   --text-mobile-section: 1.875rem;
   --text-mobile-section--line-height: 1.2;
   --text-mobile-section--letter-spacing: -0.02em;
@@ -607,6 +613,11 @@
     calc(var(--stories-hero-wave-height) * 0.1557),
     1px
   );
+  /* The About hero's wave (its own blob, Figma 507:3): a 150-unit band
+     (of 1440), with a 3.75rem minimum (the landing's 6rem in proportion),
+     peeking above the fold by the same share as the others. */
+  --about-hero-wave-height: max(3.75rem, round(calc(100vw * 0.104167), 1px));
+  --about-hero-peek: round(calc(var(--about-hero-wave-height) * 0.1557), 1px);
   /* The NeighborNets map (Figma 301:2121, 374:621, 401:1582). Its state
      borders stay 1.75px at every width and zoom (non-scaling stroke). */
   --neighbornets-map-outline-width: 1.75px;
@@ -891,6 +902,268 @@
 @media (width >= 80rem) {
   :root {
     --show-marquee-row-height: 3.7599rem;
+  }
+}
+
+/*
+ * About "A generation to believe in" tokens (Figma 507:33, tablet 595:1963,
+ * mobile 596:2628). Documented in DESIGN-SYSTEM.md under "About
+ * generation". Mobile values first; tablet from `md`, desktop from `xl`.
+ */
+:root {
+  /* One row of blob photos (296, 241.89 and 158.59 Figma units in the three
+     frames). The photos' widths, the gap between them (half a row) and the
+     rows' starting places are fixed multiples of it, so a row scales as
+     one. */
+  --generation-row-height: 9.91205rem;
+  /* Where each row starts, in row heights from the section's centre: its
+     first photo's Figma place, one repeat (5.98311 rows on top, 6.18243
+     below) further left, so the drift never shows an end. */
+  --generation-top-start: -9.463721;
+  --generation-bottom-start: -8.654172;
+  /* Scroll-linked drift across the section's scroll (from its top entering
+     the viewport to its bottom leaving): each row travels this many row
+     heights in all, half either side of its Figma place (reached when the
+     section is centred); the top row left as the page scrolls down, the
+     bottom row right. 238 / 363 / 444px. */
+  --generation-drift: 1.5;
+  /* The photos' entrance: the shared shape motion, as the landing's
+     blog cards. */
+  --duration-generation-blob: var(--duration-street-card);
+  --generation-blob-from-scale: var(--street-card-from-scale);
+  --ease-generation-blob: var(--ease-street);
+}
+
+@media (width >= 48rem) {
+  :root {
+    --generation-row-height: 15.11784rem;
+    --generation-top-start: -9.550923;
+    --generation-bottom-start: -9.132;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --generation-row-height: 18.5rem;
+    --generation-top-start: -8.915541;
+    --generation-bottom-start: -8.496622;
+  }
+}
+
+/*
+ * About "Built by the youth" tokens (Figma 529:233, tablet 595:1993, mobile
+ * 596:2662). Documented in DESIGN-SYSTEM.md under "About built by the
+ * youth". Mobile values first; tablet from `md`, desktop from `xl`.
+ */
+:root {
+  /* The pale background shape (534:315; 2210 x 1724 on desktop, 1738.26 x
+     1356 on tablet and phones, the same shape): its box from the section's
+     top left (desktop: from the centred 1440 column), reaching 180 / 444
+     above the section, into Mission & Vision. */
+  --youth-shape-left: -22.9588rem;
+  --youth-shape-top: -11.25rem;
+  --youth-shape-width: 108.64124rem;
+  /* Scroll-linked: across the section's scroll (its top entering the
+     viewport to its bottom leaving) the shape rises this far from its Figma
+     place, its top edge reaching further up into Mission & Vision. */
+  --youth-shape-drift: 4rem;
+  /* The faces' entrance and cursor drift: the Everywhere section's shapes'
+     (the shared shape motion), the faces entering one after another. */
+  --duration-youth-face: var(--duration-everywhere-shape);
+  --youth-face-from-scale: var(--everywhere-shape-from-scale);
+  --ease-youth-face: var(--ease-everywhere-enter);
+  --duration-youth-face-stagger: var(--duration-everywhere-stat-stagger);
+  --youth-pointer-drift: var(--everywhere-pointer-drift);
+  --duration-youth-pointer: var(--duration-everywhere-pointer);
+}
+
+@media (width >= 48rem) {
+  :root {
+    --youth-shape-drift: 6rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --youth-shape-left: -14.75rem;
+    --youth-shape-top: -27.75rem;
+    --youth-shape-width: 138.125rem;
+    --youth-shape-drift: 7.5rem;
+  }
+}
+
+/*
+ * About leadership tokens (Figma 530:273, tablet 595:2007). Documented in
+ * DESIGN-SYSTEM.md under "About leadership".
+ */
+:root {
+  /* The pinned panel's photo swaps: a slower, gentler BlobReveal sweep than
+     the global default (850ms reveal / 750ms cover), both ways. */
+  --duration-leadership-reveal: 1400ms;
+  --ease-leadership-reveal: cubic-bezier(0.45, 0, 0.25, 1);
+  /* The hold after the last photo: the last group's block is a viewport
+     plus this tall, its text pinned at the centre with the panel, so the
+     final photo and its text stay together for this much scroll before the
+     section releases. */
+  /* Where a photo's swap fires: the moment its group's text first enters
+     the viewport from the bottom. Positive moves the trigger line below the
+     bottom edge (earlier); negative, up into the viewport (later). */
+  --leadership-trigger-offset: 0px;
+  --leadership-hold: 75dvh;
+  --leadership-last-height: calc(100dvh + var(--leadership-hold));
+}
+
+/*
+ * About stats tokens (Figma 534:2641, tablet 595:2037, mobile 596:2700).
+ * Documented in DESIGN-SYSTEM.md under "About stats".
+ */
+@theme {
+  /* The scrim over the black-and-white photo: Obsidian at Figma's 48%,
+     for the Warm Snow type. */
+  --color-about-stats-scrim: color-mix(
+    in srgb,
+    var(--color-brand-obsidian) 48%,
+    transparent
+  );
+}
+
+:root {
+  /* The photo's scroll-linked drift: from half this above its place (the
+     section's top entering the viewport) to half below (its foot leaving).
+     The photo layer is this much taller than the section, half above and
+     half below, so no edge ever shows. */
+  --about-stats-drift: 6rem;
+  /* The metrics' entrance, one after another, top to bottom: each grows
+     from --about-stat-from-scale and slides in --about-stat-shift from the
+     right as it fades in (the Everywhere stats' staggered entrance, with
+     the shared shape entrance's growth). */
+  --duration-about-stat: var(--duration-everywhere-stat);
+  --duration-about-stat-stagger: 180ms;
+  --about-stat-from-scale: var(--everywhere-shape-from-scale);
+  --about-stat-shift: 1.5rem;
+  --ease-about-stat: var(--ease-everywhere-enter);
+}
+
+/*
+ * About history tokens (Figma 535:2724, tablet 596:2074, mobile 596:2730).
+ * Documented in DESIGN-SYSTEM.md under "About history".
+ */
+@theme {
+  /* The timeline line's track (Figma 542:48, #b6b6ba); its fill is
+     Obsidian. */
+  --color-about-history-track: #b6b6ba;
+}
+
+:root {
+  /* The front 1995 and each background year: a fade in. */
+  --duration-about-history-fade: 700ms;
+  /* The 2026 photo digits: each fades in, one after another, left to
+     right. */
+  --duration-about-history-digit: 600ms;
+  --duration-about-history-digit-stagger: 300ms;
+  --ease-about-history: var(--ease-everywhere-enter);
+  /* The line fills with the scroll, from empty as its top reaches
+     --about-history-line-start down the viewport to full as its foot
+     reaches --about-history-line-end. Full gates the 2026 digits. */
+  --about-history-line-start: 90%;
+  --about-history-line-end: 50%;
+  /* The background years' scroll-linked drift (ScrollDrift: half of it up
+     as they enter, half down as they leave). */
+  --about-history-drift: 3rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --about-history-drift: 4rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --about-history-drift: 5rem;
+  }
+}
+
+/*
+ * About "Two sides. One mission." tokens (Figma 536:2755, tablet 596:2101,
+ * mobile 596:2757; hover 542:75 / 542:180). Documented in DESIGN-SYSTEM.md
+ * under "About two sides".
+ */
+:root {
+  /* Hovering a logo (fine pointer): it dims to Figma's 4%, its wordmark
+     rises in over it and its four photos come out of the wordmark to the
+     corners, each one stagger after the last. */
+  --two-sides-hover-dim: 0.04;
+  --duration-two-sides-hover: 600ms;
+  --duration-two-sides-photo-stagger: 70ms;
+  --ease-two-sides-hover: var(--ease-everywhere-enter);
+  /* Where the wordmark and photos start: the wordmark from this scale,
+     each photo from this scale, 60% of the way back to the wordmark's
+     centre (its own translate classes, two-sides-section.tsx), so the
+     photos seem to come out of the wordmark. */
+  --two-sides-wordmark-from-scale: 0.94;
+  --two-sides-photo-from-scale: 0.4;
+  /* The pinned sequence: a one-viewport stage, sticky while this much
+     runway scrolls past. One progress value (0 as the section's top meets
+     the viewport's top, 1 as its foot meets the viewport's foot) is cut
+     into phases: the default state holds (the hover window) until
+     --two-sides-hold-end, then the heading, the paragraph and the logos'
+     letters fade out by --two-sides-fade-end, the monograms staying. */
+  --two-sides-stage-height: 100svh;
+  --two-sides-runway: 220svh;
+  --two-sides-section-height: calc(
+    var(--two-sides-stage-height) + var(--two-sides-runway)
+  );
+  --two-sides-hold-end: 0.1364;
+  --two-sides-fade-end: 0.3409;
+  /* The stage's content is centred below the header's clearance. */
+  --two-sides-stage-clearance: 5rem;
+  /* Then each monogram (its rig: the in-wordmark art and the standalone
+     logo, stacked) grows from its place in the logo to Figma's scroll-flow
+     frame 3 (the standalone logos side by side, centred) by
+     --two-sides-grow-end, crossfading from the in-wordmark art to the
+     standalone over the short window --two-sides-crossfade-start to -end;
+     grows on to frame 4 at --two-sides-zoom-frame-at and pushes out of
+     frame, Brothers left, Sisters right, by --two-sides-zoom-end: the end
+     of the runway, so the stage releases as they leave, with no empty hold,
+     straight into the Shura section (each phase keeps the scroll distance
+     it had on the earlier 250svh runway). */
+  --two-sides-grow-end: 0.6591;
+  --two-sides-crossfade-start: 0.5625;
+  --two-sides-crossfade-end: 0.5966;
+  --two-sides-zoom-frame-at: 0.8523;
+  --two-sides-zoom-end: 1;
+  /* The scroll flow's sizes, in logo widths (Figma's 485): the standalone
+     logos 335 square and 72 apart (frame 3), 840 and 181 apart (frame 4),
+     and 960 as they leave the frame. */
+  --two-sides-standalone-size: 0.6907;
+  --two-sides-standalone-gap: 0.1488;
+  --two-sides-zoom-size: 1.732;
+  --two-sides-zoom-gap: 0.373;
+  --two-sides-exit-size: 1.9794;
+  /* Each rig is laid out at its largest (the exit size: 565 / 960px) and
+     only ever scaled down, so it stays sharp. */
+  --two-sides-rig-size: 35.25rem;
+}
+
+/* Phones run the scroll flow vertically (Figma 597:3610, a 285 logo): the
+   standalone logos stacked 180 square and 94 apart (frame 3), 573 and 299
+   apart (frame 4), Brothers leaving off the top and Sisters off the
+   bottom at 656, the phone rig's laid-out size. */
+@media (width < 48rem) {
+  :root {
+    --two-sides-standalone-size: 0.631;
+    --two-sides-standalone-gap: 0.3295;
+    --two-sides-zoom-size: 2.0084;
+    --two-sides-zoom-gap: 1.0489;
+    --two-sides-exit-size: 2.2998;
+    --two-sides-rig-size: 41rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --two-sides-rig-size: 60rem;
   }
 }
 
@@ -1305,6 +1578,69 @@
 }
 
 /*
+ * About Shura ("The Young Muslims team.", Figma 542:174; DESIGN-SYSTEM.md,
+ * "About Shura"). The cards reuse the Stories alumni cards' entrance; their
+ * stagger is the same, the landing stats'.
+ */
+:root {
+  --duration-about-shura-stagger: var(--duration-everywhere-stat-stagger);
+  /* The columns' parallax (tablet and desktop): how far each column of
+     cards travels up over the section's whole pass through the viewport,
+     in Figma's place as the section's top reaches the viewport's top.
+     Tablet uses the first two (redefined below). */
+  --about-shura-column-drift-1: 12rem;
+  --about-shura-column-drift-2: 24rem;
+  --about-shura-column-drift-3: 16rem;
+  --about-shura-column-drift-4: 30rem;
+  /* While the "Two sides" section is pinned, the Shura section is pulled up
+     this far over the end of its runway (above its sticky stage), so the
+     team's header rises in while the monograms are still leaving. */
+  --about-shura-overlap: 35svh;
+}
+
+/*
+ * About partners (Figma 544:653; DESIGN-SYSTEM.md, "About partners"): the
+ * logo row's loop, one copy of the row (4,869px on desktop, scaled with the
+ * row on tablet and phones) a loop: about 54px a second on desktop, 40 on
+ * tablet and 28 on phones.
+ */
+:root {
+  --duration-about-partners-loop: 90s;
+}
+
+/*
+ * About FAQ (Figma 608:3743; DESIGN-SYSTEM.md, "About FAQ"): the pale shape
+ * behind the pinned copy drifts this far in all (half above its Figma
+ * place to half below) as it scrolls through the viewport (ScrollDrift),
+ * lagging the scroll slightly; the copy pins over it. Subtle, like the
+ * youth shape's.
+ */
+:root {
+  --about-faq-shape-drift: 4rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --about-faq-shape-drift: 6rem;
+  }
+}
+
+@media (width >= 80rem) {
+  :root {
+    --about-faq-shape-drift: 8rem;
+  }
+}
+
+/* Tablet's section is about twice as tall, so its two columns travel
+   further for the same rate. */
+@media (48rem <= width < 80rem) {
+  :root {
+    --about-shura-column-drift-1: 12rem;
+    --about-shura-column-drift-2: 26rem;
+  }
+}
+
+/*
  * Site footer tokens (components/site/site-footer.tsx; Figma 273:618,
  * tablet 280:843, mobile 298:1459). Documented in DESIGN-SYSTEM.md under
  * "Site footer". The Easter egg's own timings stay in site-footer.tsx.
@@ -1314,6 +1650,9 @@
      Figma offsets and sizes are multiples of it, so they keep their size
      at any width, anchored to the footer's left and right edges). */
   --footer-frame-height: 32.8125rem;
+  /* The footer's box height (its h-198.5 / md:h-131.25 in site-footer.tsx;
+     keep them in step), for StickyHero's `holdThroughFooter`. */
+  --site-footer-height: 49.625rem;
   /* The footer's organic top edge: the wave band its dark surface rises
      into above the footer's box (the box itself keeps its height: the
      Easter egg reads it), and the mask's seam so no hairline shows where the
@@ -1342,6 +1681,7 @@
 
 @media (width >= 48rem) {
   :root {
+    --site-footer-height: var(--footer-frame-height);
     --footer-shape-unit: 15rem;
     --footer-shape-drift: 4.5rem;
     --footer-shape-offset-blue: 1.5rem;
@@ -2234,3 +2574,18 @@
   --wf-rule: oklch(0.87 0 0);
 }
 /* WIREFRAME:end -------------------------------------------------------------- */
+
+/*
+ * Store split tokens (app/store/store-split.tsx; Figma 456:3296, hover
+ * 456:3515). Documented in DESIGN-SYSTEM.md under "Store split".
+ */
+:root {
+  /* A hovered half's photo grows by this within its half (Figma's hover
+     frame: 1878 against 1732 wide), as it turns from black and white to
+     colour. */
+  --store-split-hover-scale: 1.084;
+  /* The photo's colour fading in (and its growth, together), in and out:
+     a smooth, even fade. */
+  --duration-store-split-hover: 600ms;
+  --ease-store-split-hover: cubic-bezier(0.4, 0, 0.2, 1);
+}
