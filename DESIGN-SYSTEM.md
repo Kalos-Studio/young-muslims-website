@@ -285,8 +285,8 @@ scrolls up over it. Pass the media (a video or image with
   render, with Figma's brightening of the fill applied, and rendered at the
   resolution its screens need: 2880 / 1536 / 1200 wide, Lanczos-enlarged
   1.40x / 1.26x / 1.83x from the 2051 / 1219 / 656 source pixels each frame
-  shows, lightly sharpened, so the browser never stretches it), under the film
-  grain and a 25% Obsidian tint, with "ROOTED LOCALLY. GROWING TOGETHER."
+  shows, lightly sharpened, so the browser never stretches it), under a 25%
+  Obsidian tint, with no film grain (by design: a clean photo), with "ROOTED LOCALLY. GROWING TOGETHER."
   (two lines from tablet; wrapping on phones, as in Figma) and its subline
   centred in the landing hero's type.
 - The Stories hero (`src/app/stories/stories-hero.tsx`; Figma 401:3520 /
@@ -300,8 +300,8 @@ scrolls up over it. Pass the media (a video or image with
   the entry screen's grain as a shared SVG filter: static fractal noise laid
   over the source as source + 0.24 x (noise - 0.5), so it speckles without
   shifting the average colour. The entry screen's wordmark and monograms and
-  the NeighborNets, Stories and About hero photos (CSS `filter: url(#…)`) use it. It never
-  animates, so reduced motion needs nothing.
+  the NeighborNets and Stories hero photos (CSS `filter: url(#…)`) use it. It never
+  animates, so reduced motion needs nothing. The About hero has no grain, by design.
 - At load the wave's top hump peeks above the fold, as in the 1440 x 1024
   frame.
 - Sticky rather than fixed: the footer Easter egg transforms the page
@@ -727,7 +727,15 @@ The About page's leadership section (Figma 530:273, tablet 595:2007, mobile
   (`scripts/about-leadership-assets.mjs`, into
   `design-assets/figma/about/leadership/`), rendered at the size the
   screens need (desktop 1440 x 2048, tablet 768 x 2048, mobile 1080 x 1449)
-  with Lanczos and light sharpening, under the film grain (Figma's noise).
+  with Lanczos and light sharpening, with Figma's grain baked in, not a live
+  filter (the panel's sweeps repaint the photo every frame, and Safari runs a
+  live SVG filter on the CPU, so a live grain slowed every swap on iPhone).
+  Each IMG frame carries a Figma NOISE effect (MONOTONE, black at 24%,
+  density 1, size 0.5), measured against Figma's own export: each 0.5 px
+  grain darkens its pixels by one random amount, uniform from 0 to 24%, the
+  same on every channel, so the photo reads 12% darker on average. The bake
+  matches it (1 crop px grains at 2x, 1.5 at 3x; mean brightness within
+  0.1% of Figma's export).
   The lake photo's original is 1080 x 1620 and the frames show a small part
   of it: enlarged 2.85x (desktop), 1.91x (tablet), 2.11x (mobile); a larger
   original would make it crisp. The award photo is enlarged 1.33x / 1.26x;

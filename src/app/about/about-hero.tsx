@@ -1,17 +1,14 @@
 import { getImageProps } from "next/image";
 import type { ReactNode } from "react";
 
-import { GrainFilter } from "@/components/site/grain-filter";
 import {
   StickyHero,
   stickyHeroMediaClassName,
 } from "@/components/site/sticky-hero";
-import { cn } from "@/lib/utils";
 
 import heroDesktop from "../../../design-assets/figma/about/hero/hero-desktop.jpg";
 import heroMobile from "../../../design-assets/figma/about/hero/hero-mobile.jpg";
 import heroTablet from "../../../design-assets/figma/about/hero/hero-tablet.jpg";
-import styles from "./about-hero.module.css";
 
 const ALT =
   "A large group of Young Muslims brothers holding up red and blue YM flags";
@@ -19,7 +16,8 @@ const ALT =
 /**
  * The photo, art-directed: each frame's crop of the group with the YM flags
  * (scripts/about-hero-assets.mjs), desktop from `xl`, tablet from `md`,
- * mobile below. It covers the hero and carries the site's film grain.
+ * mobile below. It covers the hero. No film grain, by design (the other
+ * photo heroes have it): a clean photo.
  */
 function HeroPhoto() {
   const common = { alt: ALT, sizes: "100vw", loading: "eager" as const };
@@ -41,7 +39,7 @@ function HeroPhoto() {
         {...img}
         alt={ALT}
         fetchPriority="high"
-        className={cn(stickyHeroMediaClassName, styles.grain)}
+        className={stickyHeroMediaClassName}
       />
     </picture>
   );
@@ -51,7 +49,7 @@ function HeroPhoto() {
  * The About ("Who we are") hero (Figma 507:3, tablet 595:1782, mobile
  * 596:2493): the site's sticky shell (StickyHero) with a photo, built as the
  * Stories and NeighborNets heroes are. The group with the YM flags fills the
- * viewport under the site's film grain and the light Obsidian tint, with
+ * viewport under the light Obsidian tint (no film grain), with
  * "ROOTED LOCALLY. GROWING TOGETHER." and its subline centred over them.
  * The rest of the page scrolls up over the pinned hero behind this page's
  * own wave (AboutHeroWave), and the header scrim follows StickyHero's
@@ -64,7 +62,6 @@ export function AboutHero({ children }: { children: ReactNode }) {
       wave="about"
       media={
         <>
-          <GrainFilter id="about-hero-grain" />
           <HeroPhoto />
           {/* A light Obsidian tint keeps the white title legible over the
               busy photo, as on the other heroes. */}

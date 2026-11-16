@@ -1,6 +1,5 @@
 import Image, { getImageProps, type StaticImageData } from "next/image";
 
-import { GrainFilter } from "@/components/site/grain-filter";
 import { TextReveal } from "@/components/site/text-reveal";
 import { cn } from "@/lib/utils";
 
@@ -67,7 +66,10 @@ const GROUPS: Group[] = [
 
 /**
  * A photo filling the pinned panel, art-directed: Figma's desktop crop from
- * `xl`, its tablet crop from `md` (the panel only shows from `md`).
+ * `xl`, its tablet crop from `md` (the panel only shows from `md`). Figma's
+ * grain is baked into every crop (scripts/about-leadership-assets.mjs), not
+ * a live filter: the panel's sweeps repaint the photo every frame, and
+ * Safari runs a live SVG filter on the CPU.
  */
 function PanelPhoto({ group }: { group: Group }) {
   const common = { alt: group.alt, sizes: "50vw" };
@@ -84,7 +86,7 @@ function PanelPhoto({ group }: { group: Group }) {
       <img
         {...img}
         alt={group.alt}
-        className={cn("absolute inset-0 size-full object-cover", styles.grain)}
+        className="absolute inset-0 size-full object-cover"
       />
     </picture>
   );
@@ -119,7 +121,6 @@ export function LeadershipSection() {
       aria-label="Building leaders"
       className="relative text-brand-obsidian md:grid md:grid-cols-2"
     >
-      <GrainFilter id="leadership-grain" />
       <div aria-hidden="true" className="hidden md:block">
         <LeadershipPanel
           className={styles.panel}
@@ -150,7 +151,7 @@ export function LeadershipSection() {
                   src={group.photo.mobile}
                   alt={group.alt}
                   sizes="100vw"
-                  className={cn("h-auto w-full md:hidden", styles.grain)}
+                  className="h-auto w-full md:hidden"
                 />
                 <div
                   data-leadership-text

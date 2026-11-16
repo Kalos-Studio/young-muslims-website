@@ -11,6 +11,19 @@
 //   sharpening, so the browser never stretches it. The panel then covers
 //   the viewport's height with it.
 //
+// Each crop has Figma's grain baked in (NOISE), not applied live: Safari
+// runs a live SVG filter on the CPU, and the panel's BlobReveal sweeps
+// repaint the photo every frame, so a live grain slowed every swap on
+// iPhone. Each IMG frame (531:306, 534:321, 534:331) carries a Figma NOISE
+// effect: MONOTONE, black at 24% (alpha 0.24), density 1, size 0.5. Measured
+// against Figma's own 2x export (inside each flat block of its
+// nearest-neighbour upscale, where only the noise varies): every grain
+// darkens its pixels by the same random amount on all three channels,
+// uniform from 0 to 24% (out = in x (1 - alpha)), so the photo reads 12%
+// darker on average, which this matches. A grain is 0.5 Figma (CSS) px, so
+// GRAIN_PX of each crop's pixels: 1 on the desktop and tablet crops (2x), 1.5
+// on the mobile one (3x).
+//
 //   node scripts/about-leadership-assets.mjs <dir of Figma fills>
 //
 // The directory holds each photo's fill as <slug>.png.
@@ -27,6 +40,48 @@ const FRAMES = {
   tablet: [768, 2048],
   mobile: [1080, 1449],
 };
+
+/* Figma's NOISE effect: the most a grain darkens, and its size in CSS px. */
+const NOISE = { alpha: 0.24, size: 0.5 };
+/* Each frame's crop pixels per CSS (Figma) px. */
+const DENSITY = { desktop: 2, tablet: 2, mobile: 3 };
+
+/* A small seeded generator (mulberry32), so the grain is the same each run. */
+function random(seed) {
+  let state = seed >>> 0;
+  return () => {
+    state = (state + 0x6d2b79f5) >>> 0;
+    let t = state;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/*
+ * Figma's monotone noise on raw RGB: each grain (`grain` px square) darkens
+ * its pixels by one random amount, uniform from 0 to NOISE.alpha, the same
+ * on every channel.
+ */
+function addNoise(rgb, width, height, grain, seed) {
+  const next = random(seed);
+  const columns = Math.ceil(width / grain);
+  const rows = Math.ceil(height / grain);
+  const keep = new Float32Array(columns * rows);
+  for (let i = 0; i < keep.length; i++) keep[i] = 1 - NOISE.alpha * next();
+  const out = Buffer.alloc(rgb.length);
+  for (let y = 0; y < height; y++) {
+    const row = Math.floor(y / grain) * columns;
+    for (let x = 0; x < width; x++) {
+      const factor = keep[row + Math.floor(x / grain)];
+      const i = (y * width + x) * 3;
+      out[i] = Math.round(rgb[i] * factor);
+      out[i + 1] = Math.round(rgb[i + 1] * factor);
+      out[i + 2] = Math.round(rgb[i + 2] * factor);
+    }
+  }
+  return out;
+}
 
 /*
  * Each photo per frame: its fill's transform as [a, tx, d, ty], or null
@@ -90,10 +145,25 @@ for (const [slug, frames] of Object.entries(PHOTOS)) {
       };
     }
     const enlarge = width / region.width;
-    await sharp(source)
+    const { data } = await sharp(source)
       .extract(region)
       .resize({ width, height, fit: "cover", kernel: "lanczos3" })
       .sharpen({ sigma: enlarge > 1.2 ? 0.9 : 0.6, m1: 1, m2: 2 })
+      .removeAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    const seed = [...`${slug}-${frame}`].reduce(
+      (hash, char) => Math.imul(hash ^ char.charCodeAt(0), 16777619),
+      2166136261,
+    );
+    const grained = addNoise(
+      data,
+      width,
+      height,
+      NOISE.size * DENSITY[frame],
+      seed,
+    );
+    await sharp(grained, { raw: { width, height, channels: 3 } })
       .jpeg({ quality: 86, mozjpeg: true })
       .toFile(join(OUT, `${slug}-${frame}.jpg`));
     console.log(
