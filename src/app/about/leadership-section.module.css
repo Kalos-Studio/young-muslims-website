@@ -1,10 +1,3 @@
-/* The leadership photos' film grain: the shared filter (GrainFilter,
-   defined in the section as #leadership-grain), standing in for Figma's
-   noise. The noise is static, so it needs no reduced-motion handling. */
-.grain {
-  filter: url(#leadership-grain);
-}
-
 /* The panel's swaps run slower and gentler than BlobReveal's default
    (--duration-leadership-reveal, --ease-leadership-reveal), both sweeping in
    and out. Reduced motion still makes them instant (globals.css). */
