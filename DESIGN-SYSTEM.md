@@ -289,6 +289,35 @@ scrolls up over it. Pass the media (a video or image with
   Obsidian tint, with no film grain (by design: a clean photo), with "ROOTED LOCALLY. GROWING TOGETHER."
   (two lines from tablet; wrapping on phones, as in Figma) and its subline
   centred in the landing hero's type.
+- The Support hero (`src/app/support/support-hero.tsx`; Figma 415:1573 /
+  447:2198 / 447:2755): the sisters by the lake, art-directed per breakpoint
+  from the Figma image fill (`scripts/support-hero-assets.mjs`: each frame's
+  crop computed from Figma's own geometry, the fill's CROP transform in its
+  blob vector, at the frame's aspect, rendered 2880 / 1536 / 1200 wide,
+  Lanczos-enlarged 2.02x / 1.98x / 2.74x from the 1425 / 776 / 438 source
+  pixels each frame shows), under Figma's 32% Obsidian tint, no film grain
+  (Figma's noise is not baked, as on the About hero). `wave="support"`
+  (`SupportHeroWave`: its own two blobs, Figma 442:1752, the photo, and
+  442:1750, the pale band, each as Figma places it in the hero's BG frame,
+  turned 0.265deg). The overlay holds the copy and the live Fundraise Up
+  donation form: desktop, "YOUR SUPPORT / REACHES THE NEXT ONE"
+  (`text-landing-display`) and its subline (`text-landing-hero-subtitle`,
+  SemiBold, 16 below) in a 631 column at x 89, 62 above the box's centre,
+  and the form's Warm Snow box (`p-4`, square, as Figma) at the right (112
+  from the edge); tablet and phones stacked (72 / 36 apart), the copy left
+  on tablet and centred on phones (`text-mobile-display`, as the other
+  heroes' tablets: Figma's 34px tablet heading has no token), the box
+  left-aligned with the copy on tablet and centred on phones. The box hugs
+  the form and is the one visible frame: Fundraise Up's iframe is 100% of
+  the width it is given, 286 to 376px (its cap, inline `!important`), 450
+  tall, with its card 8px inside it, so the iframe sits in a window 12px
+  smaller on every side (clipping any card border away) and the box is that
+  window plus its padding, `max-w-96` (376 - 24 + 32): the iframe at its
+  cap exactly fills it, and narrower screens narrow both. The form inside
+  (fonts, colours, amounts, labels) is set in the Fundraise Up dashboard,
+  not here. Its wave SVG takes no pointer events (the blobs' masked
+  geometry would otherwise cover the form). It holds a form, so it uses
+  `fit`.
 - The Stories hero (`src/app/stories/stories-hero.tsx`; Figma 401:3520 /
   414:316 / 414:791) is the NeighborNets hero's build: the sisters with the
   YM letters, art-directed per breakpoint from the Figma image fill
@@ -312,6 +341,16 @@ scrolls up over it. Pass the media (a video or image with
   before it: the content is clear above its wavy edge, so the hero still
   shows there after the content's top has passed, and hiding it then would
   flash the page's Warm Snow through.
+- `fit`: for an overlay too tall to pin on every screen (the Support
+  hero's, which holds the donation form). The hero is at least a viewport
+  tall, grows to its overlay, and is pinned by its foot: `StickyHeroFit`
+  measures it and writes its sticky `top`, `min(0, viewport − hero)` in px
+  (again on every resize of the hero or the viewport, including iOS
+  Safari's toolbar), and sizes the header's scrim marker to the hero. When
+  it fits, it pins at the top like every other hero; taller, it scrolls
+  until its foot (the form's) reaches the viewport's foot, pins there, and
+  the page rises over it. Until measured (or without script) it is a plain
+  section, so the form is never cut off.
 - `holdThroughFooter`: for content after the hero shorter than the
   viewport (the Store page), the hero's root runs on under the footer (a
   block `--site-footer-height` tall, the footer's box, pulled back with a
@@ -336,11 +375,12 @@ scrolls up over it. Pass the media (a video or image with
   variant, `@media (max-height: 30rem)` (480px). It catches landscape phones
   (about 360-430px tall) but not landscape tablets or laptops.
 
-| Token                                                          | Value                                      | Use                                                                                                          |
-| -------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| `--hero-wave-height`                                           | `max(6rem, 16.944vw)`                      | The wave band: 244 of 1440 units, with a 6rem minimum so it stays a proper wave on phones                    |
-| `--hero-peek`                                                  | 15.57% of the band                         | How much of the band shows above the fold at load (38 of 244 units)                                          |
-| `--neighbornets-hero-wave-height` / `--neighbornets-hero-peek` | `max(5rem, 13.889vw)` / 15.57% of the band | The NeighborNets hero's wave band (200 of 1440 units; the landing's 6rem minimum in proportion) and its peek |
+| Token                                                          | Value                                         | Use                                                                                                                                                                              |
+| -------------------------------------------------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--hero-wave-height`                                           | `max(6rem, 16.944vw)`                         | The wave band: 244 of 1440 units, with a 6rem minimum so it stays a proper wave on phones                                                                                        |
+| `--hero-peek`                                                  | 15.57% of the band                            | How much of the band shows above the fold at load (38 of 244 units)                                                                                                              |
+| `--neighbornets-hero-wave-height` / `--neighbornets-hero-peek` | `max(5rem, 13.889vw)` / 15.57% of the band    | The NeighborNets hero's wave band (200 of 1440 units; the landing's 6rem minimum in proportion) and its peek                                                                     |
+| `--support-hero-wave-height` / `--support-hero-peek`           | `max(5.75rem, 16.181vw)` / 18.88% of the band | The Support hero's wave band (233 of 1440 units; the landing's 6rem minimum in proportion) and its peek (44 units, Figma's own: the photo's edge rises 40 above the hero's foot) |
 
 Both are rounded to whole pixels. Every section edge below the hero sits over
 the pinned hero, and an edge on a fractional pixel lets a hairline of it show
@@ -1159,6 +1199,56 @@ capped at 1440, 80 / 64 / 32 side insets.
 | Token                     | Value                              | Use                                                    |
 | ------------------------- | ---------------------------------- | ------------------------------------------------------ |
 | `--about-faq-shape-drift` | 4rem / 6rem from md / 8rem from xl | The pale shape's parallax travel as the section passes |
+
+## Support why it matters
+
+The Support page's second section, rising over the pinned hero (Figma
+415:1602, tablet 447:2464, mobile 447:2957), built in
+`src/app/support/why-it-matters.tsx` (with `why-it-matters.module.css`),
+its supporters row in `supporter-feed.tsx`, and its photo from
+`scripts/support-why-assets.mjs`. Warm Snow.
+
+- **Copy:** "Why it matters." (`text-mobile-section` /
+  `text-landing-section`, ExtraBold; tablet's 36px has no token, so tablet
+  uses the desktop role, as About partners does; `TextReveal`) and two
+  paragraphs 16 below (`text-body` / `text-article-title` /
+  `text-landing-copy`, Medium; Figma's blank line between them as 19 / 22 /
+  24 of space). Left, in the 1440 column at 32 / 64 / 90 from its edge; 640
+  wide from tablet, 1048 from desktop.
+- **Photo band:** the photo (Figma's fill of 446:1855, the brother thrown
+  in the air) between two Warm Snow waves, one blob (446:1851 above,
+  446:1853 below, mirrored) placed as each frame places it. Both waves'
+  edges lie in section y 540–1180 in every frame, so the band is that
+  640px (`--support-why-band-height`), clipping the photo; each range's
+  waves are an SVG over the band whose view box is centred on its frame and
+  as wide as the range's widest screen (768 / 1280 / 1440, `slice`), so the
+  waves keep their size and the in-between widths see more of them. From
+  desktop past 1440 the band and waves grow with the screen.
+- **Parallax:** the photo layer is `--support-why-drift` (96px) taller than
+  the band, half above and half below, and drifts from half of it up to
+  half down as it scrolls past (`ScrollDrift`, translate3d), so neither
+  wave edge ever opens a gap. Each crop is that layer's region of the
+  photo (the mobile photo enlarged 1.089x to cover it), with Figma's NOISE
+  grain baked in (not a live filter). Reduced motion: it rests.
+- **Supporters:** avatar (Brothers Slate circle, Material `person`, Warm
+  Snow) and "Anonymous from **State**" (`text-article-meta`), over the
+  amount (Boldonse, `text-tablet-display`) and an 88px `arrow_outward`,
+  Jade and Royal in turn; 10 padding, 20 apart. The row bleeds full width
+  and loops left on its own, not scroll-linked: the About partners'
+  mechanic (`PartnersMarquee`, a CSS `transform` animation of two copies,
+  paused off screen, resting under reduced motion), one copy (3,296px)
+  every `--duration-support-supporters-loop`. **Placeholder:** the entries
+  are Figma's sample supporters, not real gifts; `SupporterFeed` takes
+  real ones as `supporters`.
+- **Rhythm** (mobile / tablet / desktop): the copy 77 / 97 / 88 below the
+  hero's wave band; the band 70 / 107 / 90 below the copy; the supporters
+  40 below the band; 67 under them.
+
+| Token                                | Value                                | Use                                           |
+| ------------------------------------ | ------------------------------------ | --------------------------------------------- |
+| `--support-why-band-height`          | 40rem; desktop `max(40rem, 44.44vw)` | The photo's band between the waves            |
+| `--support-why-drift`                | 6rem                                 | The photo's drift (and its layer's overhang)  |
+| `--duration-support-supporters-loop` | 66s                                  | One loop of the supporters row (about 50px/s) |
 
 ## All about section
 

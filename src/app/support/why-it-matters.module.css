@@ -1,0 +1,47 @@
+/* The Support "Why it matters" section (why-it-matters.tsx; tokens and
+   geometry: DESIGN-SYSTEM.md, "Support why it matters"). */
+
+/* The photo's band between the two waves. */
+.band {
+  height: var(--support-why-band-height);
+}
+
+/* The photo layer: taller than the band by --support-why-drift, half above
+   and half below, so the drift never shows its edges (the band clips it,
+   and the waves cover all but the window between their edges). ScrollDrift
+   moves it. */
+.photo {
+  position: absolute;
+  inset: calc(-0.5 * var(--support-why-drift)) 0;
+}
+
+/* The supporters row's track: two identical copies of the row, each ending
+   in its gap, moving left by one copy (half its width) a loop, forever, so
+   the second copy lands exactly where the first began (the About partners'
+   mechanic). Paused while off screen (data-paused, PartnersMarquee); under
+   reduced motion it rests. */
+@media (prefers-reduced-motion: no-preference) {
+  .photo {
+    will-change: transform;
+  }
+
+  .track {
+    animation: supporters-loop var(--duration-support-supporters-loop) linear
+      infinite;
+    will-change: transform;
+  }
+
+  [data-paused] > .track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes supporters-loop {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}

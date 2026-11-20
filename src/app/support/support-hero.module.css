@@ -1,0 +1,13 @@
+/* The Support hero's overlay (support-hero.tsx): its foot clears the wave's
+   peek, plus breathing room on the stacked layouts (phones and tablets) so
+   the form never meets the wave; from desktop the copy and form are centred
+   above the peek, as in Figma. */
+.overlay {
+  padding-bottom: calc(var(--support-hero-peek) + var(--spacing) * 6);
+}
+
+@media (width >= 80rem) {
+  .overlay {
+    padding-bottom: var(--support-hero-peek);
+  }
+}

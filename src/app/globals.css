@@ -196,73 +196,6 @@
 /*
  ---break---
  */
-@keyframes nn-marquee-left {
-  from {
-    transform: translate3d(-25%, 0, 0);
-  }
-  to {
-    transform: translate3d(-75%, 0, 0);
-  }
-}
-
-.nn-image-marquee-track {
-  animation: nn-marquee-left 38s linear infinite;
-}
-
-.nn-explainer-marquee-track {
-  animation-name: nn-explainer-marquee-left;
-  animation-duration: 26s;
-}
-
-@keyframes nn-explainer-marquee-left {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-25%, 0, 0);
-  }
-}
-
-@keyframes nn-explainer-marquee-right {
-  from {
-    transform: translate3d(-25%, 0, 0);
-  }
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-.nn-explainer-marquee-track.support-donation-track {
-  animation-name: nn-explainer-marquee-right;
-}
-
-@media (min-width: 768px) {
-  .nn-image-marquee-track {
-    animation-duration: 61s;
-  }
-
-  .nn-explainer-marquee-track {
-    animation-duration: 55s;
-  }
-
-  .nn-explainer-marquee-track[data-direction="right"] {
-    animation-duration: 62s;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nn-image-marquee-track,
-  .nn-image-marquee-track[data-direction="right"] {
-    animation: none;
-    transform: translate3d(-25%, 0, 0);
-  }
-
-  .nn-explainer-marquee-track,
-  .nn-explainer-marquee-track[data-direction="right"] {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -618,6 +551,15 @@
      peeking above the fold by the same share as the others. */
   --about-hero-wave-height: max(3.75rem, round(calc(100vw * 0.104167), 1px));
   --about-hero-peek: round(calc(var(--about-hero-wave-height) * 0.1557), 1px);
+  /* The Support hero's wave (its own two blobs, Figma 415:1573): a 233-unit
+     band (of 1440), with a 5.75rem minimum (the landing's 6rem in
+     proportion), peeking 44 of its units above the fold, as in its frame
+     (the photo's edge rises to 40 above the hero's foot at the right). */
+  --support-hero-wave-height: max(5.75rem, round(calc(100vw * 0.161806), 1px));
+  --support-hero-peek: round(
+    calc(var(--support-hero-wave-height) * 0.188841),
+    1px
+  );
   /* The NeighborNets map (Figma 301:2121, 374:621, 401:1582). Its state
      borders stay 1.75px at every width and zoom (non-scaling stroke). */
   --neighbornets-map-outline-width: 1.75px;
@@ -2550,6 +2492,31 @@
      before (about a third of the entrance, so each reads on its own and the
      three finish within 1.5s). */
   --duration-neighbornets-involved-stagger: 300ms;
+}
+
+/*
+ * Support "Why it matters" (Figma 415:1602, tablet 447:2464, mobile
+ * 447:2957; DESIGN-SYSTEM.md, "Support why it matters").
+ */
+:root {
+  /* The photo's band between its two waves: section y 540 to 1180 in every
+     frame (both waves' edges stay inside it), fixed below desktop, and
+     from desktop growing with the screen past 1440 (640 of 1440), as the
+     waves do, so their ends never come into view. */
+  --support-why-band-height: 40rem;
+  /* The photo's scroll-linked drift in the band (ScrollDrift): from half
+     this above its place to half below. Its layer is this much taller than
+     the band, half above and half below, so no edge ever shows. */
+  --support-why-drift: 6rem;
+  /* The supporters row's loop: one copy of the row (3,296px, at every
+     width) a loop, about 50px a second. */
+  --duration-support-supporters-loop: 66s;
+}
+
+@media (width >= 80rem) {
+  :root {
+    --support-why-band-height: max(40rem, round(calc(100vw * 0.444444), 1px));
+  }
 }
 
 /* WIREFRAME:start ------------------------------------------------------------

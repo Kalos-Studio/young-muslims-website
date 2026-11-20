@@ -16,6 +16,7 @@ import mail from "../../../design-assets/icons/material-symbols-outlined/mail.sv
 import menu from "../../../design-assets/icons/material-symbols-outlined/menu.svg";
 import myLocation from "../../../design-assets/icons/material-symbols-outlined/my_location.svg";
 import northEast from "../../../design-assets/icons/material-symbols-outlined/north_east.svg";
+import person from "../../../design-assets/icons/material-symbols-outlined/person.svg";
 import playArrow from "../../../design-assets/icons/material-symbols-outlined/play_arrow.svg";
 import progressActivity from "../../../design-assets/icons/material-symbols-outlined/progress_activity.svg";
 import refresh from "../../../design-assets/icons/material-symbols-outlined/refresh.svg";
@@ -39,6 +40,7 @@ const MATERIAL_ICONS = {
   menu,
   my_location: myLocation,
   north_east: northEast,
+  person,
   play_arrow: playArrow,
   progress_activity: progressActivity,
   refresh,
