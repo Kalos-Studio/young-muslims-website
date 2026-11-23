@@ -1,6 +1,6 @@
 import Image from "next/image";
 import contactPhoto from "../../../design-assets/photos/10-24 photo 3732c992-31fc-4c67-8d1c-abe434b1a996.jpg";
-import { EditorialLink } from "@/components/site/editorial";
+import { ContactForm } from "./contact-form";
 
 export function ContactHero() {
   return (
@@ -50,21 +50,7 @@ export function ContactHero() {
             A question, an idea, or your first hello. We&apos;re glad
             you&apos;re here.
           </p>
-          {/* Replace this fallback with the Jotform embed when its form URL is available. */}
-          <div
-            data-contact-form-slot
-            className="mt-8 flex flex-1 flex-col items-center justify-center rounded-media border border-dashed border-border p-6 text-center"
-          >
-            <p className="text-card-title font-semibold">
-              Our contact form is on its way.
-            </p>
-            <p className="mt-4 max-w-sm text-body text-muted-foreground">
-              In the meantime, explore the ways to connect with YM below.
-            </p>
-            <div className="mt-8">
-              <EditorialLink href="#connect">Find your way in</EditorialLink>
-            </div>
-          </div>
+          <ContactForm />
         </section>
       </div>
       <svg
