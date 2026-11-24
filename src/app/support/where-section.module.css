@@ -1,0 +1,26 @@
+/* The Support "where your support goes" section (where-section.tsx;
+   DESIGN-SYSTEM.md, "Support where your support goes"). */
+
+/* The pale shapes' drifting layers (ScrollDrift). Paint-contained, as the
+   legacy section's monograms: without it Chrome repaints an inline SVG's
+   layer on every move; with it the move is compositor-only. */
+.shape {
+  contain: paint;
+}
+
+/* With a fine pointer, each photo's pointer layer trails the cursor: the
+   script sets its target, and this compositor transition eases it there
+   (About youth's faces'). */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .pointer {
+    transition: transform var(--duration-support-where-pointer)
+      var(--ease-support-where-photo);
+    will-change: transform;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shape {
+    will-change: transform;
+  }
+}

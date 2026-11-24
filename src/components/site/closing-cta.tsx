@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AnimatedCtaLabel } from "@/components/ui/animated-arrow";
 import { cn } from "@/lib/utils";
 
+import { ClosingCtaTopLink } from "./closing-cta-top-link";
 import styles from "./closing-cta.module.css";
 import { ScrollDrift } from "./scroll-drift";
 
@@ -87,6 +88,10 @@ const BUTTON =
  * - `artDirection`: optional tablet and mobile crops (`image` is then the
  *   desktop crop), each the strip of the photo its frames show, rendered
  *   for dense screens; the About page's (scripts/about-cta-assets.mjs).
+ * - `getInvolvedHref`: where "Get involved" goes (`/contact` by default).
+ * - `supportHref`: where "Support us" goes (`/support` by default), or
+ *   `"top"`: back to the top of this page (the Support page's own CTA,
+ *   whose top is the donation form; ClosingCtaTopLink).
  *
  * The mission line is the same everywhere, so it is not a prop.
  *
@@ -96,7 +101,7 @@ const BUTTON =
  * photo, running into the footer. The photo drifts within the shape and the
  * foot drifts too, each on its own layer (ScrollDrift). On it, the mission line and two box buttons:
  * "Get involved" (filled, to /contact) and "Support us" (outlined, to
- * /support), each with the label roll and the diagonal arrow launch; "Support
+ * /support; both overridable, see above), each with the label roll and the diagonal arrow launch; "Support
  * us" also fills with Warm Snow on hover. Desktop sets the line left and
  * the buttons stacked right; tablet and mobile stack them, the buttons full
  * width between the 32px gutters on mobile. Content caps at 1440.
@@ -107,13 +112,30 @@ export function ClosingCta({
   imageFocus = "center",
   artDirection,
   overHero = false,
+  getInvolvedHref = "/contact",
+  supportHref = "/support",
 }: {
   image: StaticImageData;
   alt: string;
   imageFocus?: "center" | "low";
   artDirection?: { tablet: StaticImageData; mobile: StaticImageData };
   overHero?: boolean;
+  getInvolvedHref?: string;
+  supportHref?: string;
 }) {
+  const supportClassName = cn(
+    BUTTON,
+    "border border-brand-warm-snow text-brand-warm-snow",
+    styles.button,
+    styles.outline,
+  );
+  const supportLabel = (
+    <AnimatedCtaLabel
+      label="Support us"
+      arrowMotion="diagonal"
+      textClassName="flex-1"
+    />
+  );
   const imageClassName = cn(
     "object-cover",
     imageFocus === "low" && styles.focusLow,
@@ -181,7 +203,7 @@ export function ClosingCta({
         </h2>
         <div className="mt-48 flex flex-col gap-8 md:mt-11.75 xl:mt-0">
           <Link
-            href="/contact"
+            href={getInvolvedHref}
             className={cn(
               BUTTON,
               "bg-brand-warm-snow text-brand-obsidian",
@@ -194,21 +216,15 @@ export function ClosingCta({
               textClassName="flex-1"
             />
           </Link>
-          <Link
-            href="/support"
-            className={cn(
-              BUTTON,
-              "border border-brand-warm-snow text-brand-warm-snow",
-              styles.button,
-              styles.outline,
-            )}
-          >
-            <AnimatedCtaLabel
-              label="Support us"
-              arrowMotion="diagonal"
-              textClassName="flex-1"
-            />
-          </Link>
+          {supportHref === "top" ? (
+            <ClosingCtaTopLink href="#" className={supportClassName}>
+              {supportLabel}
+            </ClosingCtaTopLink>
+          ) : (
+            <Link href={supportHref} className={supportClassName}>
+              {supportLabel}
+            </Link>
+          )}
         </div>
       </div>
     </section>

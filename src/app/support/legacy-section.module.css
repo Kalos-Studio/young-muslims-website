@@ -1,0 +1,36 @@
+/* The Support legacy section (legacy-section.tsx; DESIGN-SYSTEM.md,
+   "Support legacy"). */
+
+/* The lettering: the landing "show you" rows (their row offsets, measured
+   from the centre in row heights, show-you-section.module.css), the whole
+   block shifted right as each frame places it: the frames keep the same
+   rows, 3.0119 (tablet) and 7.4928 (mobile) row heights further right than
+   desktop's (the landing's). */
+.lettering {
+  margin-left: calc(var(--show-marquee-row-height) * 7.4928);
+}
+
+@media (width >= 48rem) {
+  .lettering {
+    margin-left: calc(var(--show-marquee-row-height) * 3.0119);
+  }
+}
+
+@media (width >= 80rem) {
+  .lettering {
+    margin-left: 0;
+  }
+}
+
+/* The monograms' drifting layers (ScrollDrift). Paint-contained: without
+   it Chrome repaints an inline SVG's layer on every move (measured: every
+   scroll frame); with it the move is compositor-only. */
+.mark {
+  contain: paint;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mark {
+    will-change: transform;
+  }
+}

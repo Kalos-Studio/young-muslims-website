@@ -50,6 +50,9 @@ the rest Figtree; line height is `normal` unless noted.
 | Mobile section heading  | `text-mobile-section`        | 30px |         1.2 |      -2% | Figtree ExtraBold section headings on mobile            |
 | Landing display         | `text-landing-display`       | 48px |      normal |      -2% | The landing and Stories heroes' Boldonse display lines  |
 | Landing section heading | `text-landing-section`       | 40px |         1.2 |      -2% | Landing section headings from tablet                    |
+| Tablet section heading  | `text-tablet-section`        | 36px |         1.2 |      -2% | Section headings on tablet (`md` to `xl`), see below    |
+| Item display            | `text-item-display`          | 36px |      normal |      -2% | Boldonse uppercase item titles from tablet (Support)    |
+| Item display, mobile    | `text-item-display-mobile`   | 30px |      normal |      -2% | The same titles below `md`                              |
 | Landing hero subtitle   | `text-landing-hero-subtitle` | 20px |         1.2 |      -2% | The landing and Stories heroes' introductions           |
 | Landing copy            | `text-landing-copy`          | 20px |         1.2 |      -2% | Landing sublines and body copy from tablet              |
 | Landing statistic       | `text-landing-stat`          | 48px |      normal |      -2% | Boldonse figures (the NeighborNets page)                |
@@ -60,6 +63,19 @@ the rest Figtree; line height is `normal` unless noted.
 | Footer tagline          | `text-footer-tagline`        | 40px |      normal |      -2% | The footer's Boldonse tagline on desktop                |
 | Footer tagline, tablet  | `text-footer-tagline-tablet` | 38px |      normal |      -2% | The footer tagline from `md`                            |
 | Footer tagline, mobile  | `text-footer-tagline-mobile` | 29px |      normal |      -2% | The footer tagline below `md`                           |
+
+`text-tablet-section` is the tablet frames' 36px Figtree section heading
+(e.g. Support 447:2464, 447:2546, 447:2578; About partners 596:2430). Use
+it as `md:text-tablet-section xl:text-landing-section` (with
+`text-mobile-section` below `md`), so tablet gets 36px and desktop keeps
+40px. It is applied to About partners, Support "Why it matters", Support
+legacy and Support "Where your support goes". Other sections noted below as substituting the
+desktop role on tablet have not been moved to it yet.
+
+`text-item-display` / `text-item-display-mobile` are Boldonse (with
+`font-display`, never a bold utility) for uppercase item titles: the
+Support "Where your support goes" items (Figma 446:2146, 447:3080),
+approved for that design.
 
 Boldonse's glyphs stand about 1.21x the font size, which is why the footer
 tagline's sizes are smaller than its Figma glyph heights (48.6 / 46.2 / 35.3px).
@@ -1107,8 +1123,8 @@ with its loop in `partners-section.module.css` and `partners-marquee.tsx`,
 and its logos from `scripts/about-partners-assets.mjs`. Warm Snow.
 
 - **Top row:** "Our Partners are what drive our movement forward."
-  (`text-mobile-section` / `text-landing-section`, ExtraBold; tablet's
-  36px has no token, so tablet uses the desktop role) on the left; the
+  (`text-mobile-section` / `text-tablet-section` / `text-landing-section`,
+  ExtraBold) on the left; the
   subline (`text-body` / `text-article-title` / `text-landing-copy`,
   Medium) and a "Contact us" `StandardButton` to `/contact`, 32 below it,
   on the right. Two equal columns 32 apart from tablet (capped at 1440,
@@ -1209,8 +1225,8 @@ its supporters row in `supporter-feed.tsx`, and its photo from
 `scripts/support-why-assets.mjs`. Warm Snow.
 
 - **Copy:** "Why it matters." (`text-mobile-section` /
-  `text-landing-section`, ExtraBold; tablet's 36px has no token, so tablet
-  uses the desktop role, as About partners does; `TextReveal`) and two
+  `text-tablet-section` / `text-landing-section`, ExtraBold; `TextReveal`)
+  and two
   paragraphs 16 below (`text-body` / `text-article-title` /
   `text-landing-copy`, Medium; Figma's blank line between them as 19 / 22 /
   24 of space). Left, in the 1440 column at 32 / 64 / 90 from its edge; 640
@@ -1249,6 +1265,104 @@ its supporters row in `supporter-feed.tsx`, and its photo from
 | `--support-why-band-height`          | 40rem; desktop `max(40rem, 44.44vw)` | The photo's band between the waves            |
 | `--support-why-drift`                | 6rem                                 | The photo's drift (and its layer's overhang)  |
 | `--duration-support-supporters-loop` | 66s                                  | One loop of the supporters row (about 50px/s) |
+
+## Support legacy
+
+The Support page's third section, "Built over generations. Still growing."
+(Figma 446:2011, tablet 447:2546, mobile 447:3037), built in
+`src/app/support/legacy-section.tsx` (with `legacy-section.module.css`),
+its lettering in `legacy-lettering.tsx`, its monograms in
+`legacy-monograms.ts` and the button in `support-form-link.tsx`. Warm Snow.
+
+- **Copy:** the heading (`text-mobile-section` / `text-tablet-section` /
+  `text-landing-section`, ExtraBold, `TextReveal`; one line from tablet, as
+  Figma) and, 32 below, a `StandardButton` "Support" (light
+  tone; Figma draws a solid Royal box). Left in the 1440 column at 32 / 64
+  / 90, top 67 / 152 / 152.
+- **Support button:** back up to the hero's donation form: it scrolls
+  (`smoothScrollTo`, Lenis's easing; a jump under reduced motion) to where
+  the form's box is centred in the viewport, clamped to the hero's runway
+  (StickyHero `fit`), so the whole form is in view; from the keyboard it
+  then focuses the form. Without script it is a link to `#donate`.
+- **Lettering:** the landing "show you" rows (its tiles recoloured
+  Obsidian, its row geometry and `--show-marquee-row-height` /
+  `--show-marquee-drift`), behind the video, 318 / 96 / 155 below its top;
+  the block sits 7.4928 / 3.0119 / 0 row heights right of the landing's,
+  as the frames place it. Scroll-linked like the landing's: top and bottom
+  rows left, the middle right, half the drift either side of their Figma
+  places, reached with the video's block centred. Reduced motion: at rest.
+- **Video:** a placeholder (`VideoPlaceholder`) until Young Muslims supply
+  the film: the poster (Figma's fill, `design-assets/figma/support/legacy/
+legacy-poster.jpg`) under Obsidian at 40% (Figma's black; there is no
+  black token), Material `play_arrow` at 100, and "COMING SOON"
+  (`text-article-meta` / `text-body`, ExtraBold) over the title
+  (`text-landing-copy` / `text-lead` / `text-mobile-display`, SemiBold),
+  18 / 30 / 40 in from the bottom left. 833 x 529 centred on desktop, 624 x
+  396 at the column's left on tablet (as Figma), the column's width x 397
+  on phones. Not a control. Swap in the real video in the same box.
+- **Monograms:** the "YM" mark (Royal) top right and the round "ym" mark
+  (Jade) bottom left, at 4%, 311 / 243 px, placed as each frame places
+  them in the 1440 column, drifting with the scroll (`ScrollDrift`,
+  `--support-legacy-mark-drift`). Their layers are paint-contained:
+  without it Chrome repaints an inline SVG's layer on every move.
+- **Rhythm** (mobile / tablet / desktop): the video 64 / 103 / 170 below
+  the button; 463 / 486 / 281 under it (the frames' heights).
+
+| Token                         | Value | Use                                           |
+| ----------------------------- | ----- | --------------------------------------------- |
+| `--support-legacy-mark-drift` | 8rem  | The monograms' drift (half above, half below) |
+
+## Support where your support goes
+
+The Support page's fourth section, "Where your support goes." (Figma
+446:2062, tablet 447:2578, mobile 447:3069), built in
+`src/app/support/where-section.tsx` (with `where-section.module.css`), its
+motion in `where-motion.tsx`, its shapes in `where-shapes.ts` and its photos
+from `scripts/support-where-assets.mjs`. Warm Snow.
+
+- **Heading:** "Where your support goes." centred (`text-mobile-section` /
+  `text-tablet-section` / `text-landing-section`, ExtraBold, `TextReveal`),
+  43 / 81 / 81 below the section's top.
+- **Items:** NeighborNets, Retreats & Conferences, Leadership & Mentorship,
+  Advocacy & Service, each a photo in its organic shape (Figma's own
+  shaped 2x exports, re-encoded as WebP; 450 wide on desktop, 533 on
+  tablet, 280–294 on phones as the mobile frame sizes each) over a centred
+  title (Boldonse, uppercase, `font-display` `text-item-display-mobile` /
+  `text-item-display`) and line (Medium, `text-article-title` /
+  `text-landing-copy`), 48 below the photo, 32 apart. Items are 543 wide
+  from tablet (296 on phones) with 10 padding, the photo overhanging it on
+  phones as in Figma. Phones and tablet: one centred column. Desktop: a
+  zigzag in the 1440 column, items 1 and 3 at 90 / 100 from its left, 2
+  and 4 at 90 / 100 from its right. Each frame keeps its item tops (296 /
+  571 / 1262 / 1588 on desktop, 249 / 1129 / 1980 / 2908 on tablet, 184 /
+  804 / 1443 / 2112 on phones), so each item's top margin is set to land
+  there: 104 / 82 / 82 on phones, 134 / 65 / 65 on tablet, and on desktop
+  the right-hand items pulled up 389 / 447 beside the left and the third 17.
+- **Shapes:** a pale shape (`landing-pale`, Figma's `#F7F3F0`) behind each
+  photo (about 668 wide on desktop), the nodes' paths stretched to each
+  frame's box, placed
+  from its item's top left as each frame places it. Each drifts with the
+  scroll (`ScrollDrift`, `--support-where-shape-drift`, half above to half
+  below its place), its layer paint-contained (the legacy monograms' fix).
+- **Photo motion:** About youth's faces' mechanic (`armShapeEntrances`,
+  `trackPointerDrift`): each photo grows from 0.92 as it fades in, once,
+  as it enters view, one stagger after the last; with a fine pointer, and
+  only while the section is on screen, each trails the cursor up to 14px
+  times its depth (0.8–1.15), eased by a compositor transition. Nothing
+  follows a touch.
+- **Reduced motion:** the photos simply present, the shapes at rest.
+- **Rhythm** (mobile / tablet / desktop): the first item 69 / 125 / 167
+  below the heading; 73 / 200 / 81 under the last.
+
+| Token                                    | Value                                 | Use                                        |
+| ---------------------------------------- | ------------------------------------- | ------------------------------------------ |
+| `--support-where-shape-drift`            | 6rem                                  | The shapes' drift (half above, half below) |
+| `--duration-support-where-photo`         | `--duration-everywhere-shape` (900ms) | Each photo's entrance                      |
+| `--support-where-photo-from-scale`       | `--everywhere-shape-from-scale`       | The entrance's start scale (0.92)          |
+| `--ease-support-where-photo`             | `--ease-everywhere-enter`             | The entrance's and cursor drift's easing   |
+| `--duration-support-where-photo-stagger` | `--duration-everywhere-stat-stagger`  | Between photos entering together (140ms)   |
+| `--support-where-pointer-drift`          | `--everywhere-pointer-drift` (14px)   | The cursor drift's reach (times depth)     |
+| `--duration-support-where-pointer`       | `--duration-everywhere-pointer`       | The cursor drift's easing time (700ms)     |
 
 ## All about section
 
@@ -2421,6 +2535,17 @@ and `closing-cta.module.css`. Shared by every page, each with its own photo.
   asked for at the width cover-fit draws it (the layer's height, 883 / 1054,
   times its aspect, or the screen's width if wider), not just the screen's,
   so dense screens get the whole crop (the About and Store pages).
+  `getInvolvedHref` and `supportHref` (optional) change the buttons'
+  destinations (`/contact` and `/support` by default); `supportHref="top"`
+  makes "Support us" take the reader back to the top of the page it is on
+  (`ClosingCtaTopLink`: `smoothScrollTo(0)`, Lenis's easing, a jump under
+  reduced motion; from the keyboard it then focuses the page's donation
+  form). The Support page passes `getInvolvedHref="/neighbornets"` (find a
+  chapter) and `supportHref="top"` (its top is the donation form), with the
+  brothers under the magnolia (`design-assets/figma/support/cta/`, from
+  `scripts/support-cta-assets.mjs`: Figma 415:1632 / 447:2253 / 447:2810,
+  placed from the vectors' own transforms; Figma counter-turns the photo
+  inside the 3.7deg vector, so it stands upright and the crops are plain).
   `overHero` leaves the section clear above the shape's wavy top, for a CTA
   that follows a pinned hero directly (the Store page). The mission line ("Seeking the pleasure of Allah (SWT) by
   empowering Muslim youth.") is the same everywhere and is not a prop. The

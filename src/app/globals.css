@@ -275,6 +275,25 @@
   --text-landing-section--line-height: 1.2;
   --text-landing-section--letter-spacing: -0.02em;
 
+  /* Figtree section headings on tablet (Figma's tablet frames, e.g.
+     447:2464, 447:2546, 447:2578: 36px, -2%), from `md` up to the desktop
+     role at `xl`; also the Support "where your support goes" item titles
+     (Bold) from tablet. */
+  --text-tablet-section: 2.25rem;
+  --text-tablet-section--line-height: 1.2;
+  --text-tablet-section--letter-spacing: -0.02em;
+
+  /* Boldonse item titles, uppercase (the Support "where your support
+     goes" items, Figma 446:2146 and its mobile 447:3080): 36px from
+     tablet, 30px on phones, -2%. */
+  --text-item-display: 2.25rem;
+  --text-item-display--line-height: normal;
+  --text-item-display--letter-spacing: -0.02em;
+
+  --text-item-display-mobile: 1.875rem;
+  --text-item-display-mobile--line-height: normal;
+  --text-item-display-mobile--letter-spacing: -0.02em;
+
   --text-landing-hero-subtitle: 1.25rem;
   --text-landing-hero-subtitle--line-height: 1.2;
   --text-landing-hero-subtitle--letter-spacing: -0.02em;
@@ -2517,6 +2536,36 @@
   :root {
     --support-why-band-height: max(40rem, round(calc(100vw * 0.444444), 1px));
   }
+}
+
+/*
+ * Support legacy (Figma 446:2011, tablet 447:2546, mobile 447:3037;
+ * DESIGN-SYSTEM.md, "Support legacy").
+ */
+:root {
+  /* The background monograms' scroll-linked drift (ScrollDrift): from half
+     this above their Figma places to half below, so they lag the page. */
+  --support-legacy-mark-drift: 8rem;
+}
+
+/*
+ * Support "Where your support goes" (Figma 446:2062, tablet 447:2578,
+ * mobile 447:3069; DESIGN-SYSTEM.md, "Support where your support goes").
+ */
+:root {
+  /* The pale background shapes' scroll-linked drift (ScrollDrift): from
+     half this above their Figma places to half below. */
+  --support-where-shape-drift: 6rem;
+  /* The photos' entrance and cursor drift: the Everywhere section's
+     shapes' (the shared shape motion), as About's youth faces use it. */
+  --duration-support-where-photo: var(--duration-everywhere-shape);
+  --support-where-photo-from-scale: var(--everywhere-shape-from-scale);
+  --ease-support-where-photo: var(--ease-everywhere-enter);
+  --duration-support-where-photo-stagger: var(
+    --duration-everywhere-stat-stagger
+  );
+  --support-where-pointer-drift: var(--everywhere-pointer-drift);
+  --duration-support-where-pointer: var(--duration-everywhere-pointer);
 }
 
 /* WIREFRAME:start ------------------------------------------------------------

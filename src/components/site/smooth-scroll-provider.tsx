@@ -65,6 +65,20 @@ export function startSmoothScroll() {
   activeLenis?.start();
 }
 
+/**
+ * Scrolls the page to `top` (px): with Lenis's easing when it is running,
+ * a plain jump under reduced motion (Lenis is never created then). Calls
+ * `onComplete` once the page is there.
+ */
+export function smoothScrollTo(top: number, onComplete?: () => void) {
+  if (activeLenis) {
+    activeLenis.scrollTo(top, { onComplete: () => onComplete?.() });
+    return;
+  }
+  window.scrollTo({ top, behavior: "instant" });
+  onComplete?.();
+}
+
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const media = window.matchMedia(REDUCED_MOTION_QUERY);

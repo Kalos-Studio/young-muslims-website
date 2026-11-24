@@ -106,7 +106,7 @@ export function WhyItMatters() {
           <TextReveal>
             <h2
               id="why-title"
-              className="text-mobile-section font-extrabold md:text-landing-section"
+              className="text-mobile-section font-extrabold md:text-tablet-section xl:text-landing-section"
             >
               Why it matters.
             </h2>
