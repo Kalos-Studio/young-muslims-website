@@ -134,7 +134,7 @@ export function PartnersSection() {
       <TextReveal className="mx-auto grid max-w-360 gap-4 px-8 md:grid-cols-2 md:gap-8 md:px-16 xl:px-20">
         <h2
           id="partners-heading"
-          className="text-mobile-section font-extrabold md:text-landing-section"
+          className="text-mobile-section font-extrabold md:text-tablet-section xl:text-landing-section"
         >
           Our Partners are what drive our movement forward.
         </h2>

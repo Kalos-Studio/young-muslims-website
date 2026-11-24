@@ -52,6 +52,35 @@
   overflow: visible;
 }
 
+/* The Support hero's wave and peek (its own two blobs; see
+   SupportHeroWave). */
+.followingSupport {
+  margin-top: calc(-1 * var(--support-hero-peek));
+}
+
+/* Decorative, and its blobs' geometry runs far above the band (only the mask
+   hides it, and masks do not affect hit-testing), so over the pinned hero it
+   would take the donation form's clicks: it takes none. */
+.waveSupport {
+  display: block;
+  width: 100%;
+  height: var(--support-hero-wave-height);
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* `fit`: at least a viewport tall, growing to its overlay. A plain section
+   until StickyHeroFit has measured it (so without script nothing is ever
+   cut off); then sticky, pinned by its foot: its `top` is written in px,
+   0 when it fits the viewport, else the viewport's height less its own. */
+.fit {
+  position: relative;
+}
+
+.fit[data-pinned] {
+  position: sticky;
+}
+
 /* No wave (`wave="none"`): the content after the hero brings its own wavy
    top, transparent above its edge, and follows the hero flush. */
 .followingFlush {

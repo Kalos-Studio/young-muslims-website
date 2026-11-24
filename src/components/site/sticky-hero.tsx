@@ -7,8 +7,10 @@ import {
   HeroWave,
   NeighborNetsHeroWave,
   StoriesHeroWave,
+  SupportHeroWave,
 } from "./hero-wave";
 import { StickyHeroCover } from "./sticky-hero-cover";
+import { StickyHeroFit } from "./sticky-hero-fit";
 import styles from "./sticky-hero.module.css";
 
 /** Classes for hero media (a video or image) so it covers the hero. */
@@ -44,6 +46,7 @@ export function StickyHero({
   overlay,
   wave = "landing",
   holdThroughFooter = false,
+  fit = false,
   children,
 }: {
   /** Accessible name for the hero region. */
@@ -59,7 +62,7 @@ export function StickyHero({
    * own wavy top (the Store page's closing CTA): it follows the hero
    * directly, with nothing peeking at load.
    */
-  wave?: "landing" | "neighbornets" | "stories" | "about" | "none";
+  wave?: "landing" | "neighbornets" | "stories" | "about" | "support" | "none";
   /**
    * Keep the hero pinned while the footer scrolls up too, for a page whose
    * content after the hero is shorter than the viewport (the Store page):
@@ -67,6 +70,16 @@ export function StickyHero({
    * that content ends.
    */
   holdThroughFooter?: boolean;
+  /**
+   * For a hero whose overlay is too tall for some viewports (the Support
+   * page's, which holds the donation form): the hero is at least a viewport
+   * tall, grows to its overlay, and is pinned by its foot (StickyHeroFit):
+   * at the top when it fits, as every other hero; taller, it scrolls until
+   * its foot reaches the viewport's foot and pins there, so nothing in it
+   * is ever cut off and the page still rises over it. The header's scrim
+   * marker takes the hero's height.
+   */
+  fit?: boolean;
   /** The rest of the page. */
   children: ReactNode;
 }) {
@@ -86,11 +99,20 @@ export function StickyHero({
       <section
         aria-label={label}
         data-sticky-hero
-        className="sticky top-0 z-0 h-dvh w-full overflow-hidden bg-brand-obsidian data-covered:invisible"
+        className={cn(
+          "z-0 w-full overflow-hidden bg-brand-obsidian data-covered:invisible",
+          fit ? cn("min-h-dvh", styles.fit) : "sticky top-0 h-dvh",
+        )}
       >
+        {fit ? <StickyHeroFit /> : null}
         {media}
         {overlay ? (
-          <div className="relative flex h-full items-center justify-center">
+          <div
+            className={cn(
+              "relative flex items-center justify-center",
+              fit ? "min-h-dvh" : "h-full",
+            )}
+          >
             {overlay}
           </div>
         ) : null}
@@ -101,6 +123,7 @@ export function StickyHero({
           wave === "neighbornets" && styles.followingNeighborNets,
           wave === "stories" && styles.followingStories,
           wave === "about" && styles.followingAbout,
+          wave === "support" && styles.followingSupport,
           wave === "none" && styles.followingFlush,
         )}
       >
@@ -110,6 +133,8 @@ export function StickyHero({
           <StoriesHeroWave />
         ) : wave === "about" ? (
           <AboutHeroWave />
+        ) : wave === "support" ? (
+          <SupportHeroWave />
         ) : (
           <HeroWave />
         )}

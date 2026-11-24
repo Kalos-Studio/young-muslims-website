@@ -273,3 +273,70 @@ export function AboutHeroWave({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/**
+ * The Support hero's two blobs (Figma 442:1750, the pale band, and 442:1752,
+ * the photo): two paths, not one scaled, each in the hero's BG frame (1440
+ * x 1024, its foot the hero's) as Figma places it, turned 0.265deg.
+ */
+const SUPPORT_PALE_BLOB_PATH =
+  "M3256.7 277.086C2875.149 330.317 2558.481 153.325 2171.031 74.677C-288.832 -424.893 -623.701 1745.452 990.478 1749.445C1118.055 1735.871 1221.87 1730.148 1330.572 1702.468C1561.289 1643.516 1810.882 1648.839 2037.049 1717.773C2147.605 1751.441 2250.914 1783.912 2314.112 1801.877C4885.036 2531.269 5757.516 -71.973 3256.7 277.219V277.086Z";
+const SUPPORT_PHOTO_BLOB_PATH =
+  "M3098.645 263.639C2735.611 314.286 2434.312 145.884 2065.665 71.052C-274.815 -404.272 -593.432 1660.742 942.408 1664.54C1063.793 1651.625 1162.57 1646.18 1265.996 1619.844C1485.516 1563.752 1722.996 1568.817 1938.186 1634.405C2043.376 1666.439 2141.672 1697.334 2201.803 1714.428C4647.954 2408.421 5478.09 -68.48 3098.645 263.765V263.639Z";
+const SUPPORT_TURN = "0.99998933 0.00462293 -0.00462293 0.99998933";
+const SUPPORT_PALE_BLOB = `matrix(${SUPPORT_TURN} -2460.071 -737.238)`;
+const SUPPORT_PHOTO_BLOB = `matrix(${SUPPORT_TURN} -2344.879 -736.706)`;
+
+/**
+ * The Support hero's bottom wave band, built as HeroWave is: clear above
+ * the photo blob's edge (the hero shows through), the Landing Pale band down
+ * to the pale blob's edge, and Warm Snow below. The photo's edge runs from
+ * BG y 984 (at the right) to 1115 (mid-width) and the pale band's from 1099
+ * to 1209, so the band is y 980-1213 at full width, scaled with
+ * `--support-hero-wave-height`; it peeks 44 units above the hero's foot
+ * (`--support-hero-peek`).
+ */
+export function SupportHeroWave({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 980 1440 233"
+      preserveAspectRatio="none"
+      className={cn(styles.waveSupport, className)}
+    >
+      <defs>
+        <mask
+          id="support-hero-wave-photo"
+          maskUnits="userSpaceOnUse"
+          x="0"
+          y="980"
+          width="1440"
+          height="239"
+        >
+          <rect x="0" y="980" width="1440" height="239" fill="white" />
+          <path
+            d={SUPPORT_PHOTO_BLOB_PATH}
+            transform={SUPPORT_PHOTO_BLOB}
+            fill="black"
+          />
+        </mask>
+      </defs>
+      <g mask="url(#support-hero-wave-photo)">
+        {/* Runs a few units past the band so no hairline of the hero can
+            show where the band meets the section below. */}
+        <rect
+          x="0"
+          y="980"
+          width="1440"
+          height="239"
+          className="fill-brand-warm-snow"
+        />
+        <path
+          d={SUPPORT_PALE_BLOB_PATH}
+          transform={SUPPORT_PALE_BLOB}
+          className="fill-landing-pale"
+        />
+      </g>
+    </svg>
+  );
+}
