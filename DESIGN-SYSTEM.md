@@ -265,16 +265,64 @@ frames).
 ## Sticky hero
 
 Every hero page uses `StickyHero` (`src/components/site/sticky-hero.tsx`).
-The hero is a full-viewport panel, `100dvh` on every device, pinned with
-`position: sticky; top: 0` while the rest of the page, passed as children,
-scrolls up over it. Pass the media (a video or image with
-`stickyHeroMediaClassName`, so it covers) and the centred overlay content.
+The hero is a panel 85% of the viewport tall (`--sticky-hero-height`,
+`round(85dvh, 1px)`) on every device, pinned with `position: sticky; top: 0`
+while the rest of the page, passed as children, scrolls up over it. The
+shorter height leaves a sliver of the next section (its wave and the top of
+its content) in view at load (135px at 1440 x 900, 127px at 390 x 844), so
+the hero reads as the start of a page rather than a whole screen. It is
+rounded to whole pixels because the content after the hero, and every
+section edge in it, starts at this height less the wave's peek; a
+fractional edge lets a hairline of the hero show through. `fullHeight`
+keeps the full viewport (`h-dvh`): the landing's video hero and the Store's
+split use it. The About, Stories, NeighborNets and Support heroes (and any
+new hero, such as the coming blog hero) take the default.
+
+A short hero (the default) is finished for being in view whole:
+
+- **The wave is its foot.** The content after it rises by its wave's
+  `--*-hero-rise` instead of the peek: the band's share above the photo
+  blob's lowest edge, measured from each blob (About 0.4617, Stories 0.30,
+  NeighborNets 0.3538, Support 0.5794, landing 0.3996), plus 0.04 of the
+  band, rounded to whole pixels. So every clear part of the wave lies over
+  the photo, the photo ends on the wave's curve (never a straight cut), and
+  the band's opaque rest runs on below the hero as part of the next
+  section's sliver. The Support overlay clears the rise (not the peek), so
+  its form never meets the wave; the hero grows a little where it must
+  (683 at 1280 x 720, 925 on tablet).
+- **A drifting wave** (`HeroWaveBand`, in `hero-wave.tsx`; every hero's
+  wave, the landing's full-height one too): the
+  same colours as Figma's (the Landing Pale band, Warm Snow below), in two
+  layers: the Landing Pale cut to the photo's edge (static, moving with the
+  page) and the Warm Snow below the pale edge (`HeroWaveDrift`), which
+  rises `--hero-wave-drift-share` of the band's height (0.24) above its
+  Figma place as the wave enters the viewport and settles back to it by
+  the end of the hand-off (translate3d, paint-contained), so the band
+  breathes as the page rises. It never sinks below its place: the pale
+  edge dips to 98% of the band, and any drift down would push the pale
+  shape past the band's foot, where the band's clip cuts it flat against
+  the section's own background (a seam: the shape seems to slide under the
+  section). The front overhangs the band's foot by more than it rises
+  (0.30, clipped by the band), so its foot never lifts off the band's; and
+  it rises less than the band's thinnest point (0.38 of its height or more
+  on every hero), so Warm Snow never reaches the photo.
+- **The hero dims as it is covered** (`StickyHeroTint`): an Obsidian layer
+  over the whole hero whose opacity follows how much of it the page has
+  covered, from none at load to `--sticky-hero-tint-max` (0.35) at 85%
+  covered: it recedes, never goes black. Only its opacity changes; it
+  takes no pointer events (the Support form stays usable).
+- Reduced motion: the wave rests at Figma's place and the hero is not
+  dimmed. Pass the media (a video or image with
+  `stickyHeroMediaClassName`, so it covers) and the centred overlay content.
 
 - The content after the hero begins with `HeroWave`, the bottom wave built
   from the Figma hero blobs (27:251 and 27:253): transparent above the photo
   edge so the hero shows through, the `landing-pale` band, then Warm Snow. It
-  is one shape that moves with the content, so it cannot misalign with the
-  hero, and it rises over the pinned hero like a mask line.
+  moves with the content, so it cannot misalign with the hero, and it rises
+  over the pinned hero like a mask line. On the landing's full-height video
+  hero it drifts as the short heroes' waves do (the same two layers, rise
+  only, the same overhang); the hero itself keeps the peek, no rise and no
+  dimming.
 - `wave="neighbornets"` swaps in `NeighborNetsHeroWave`, the same build from
   the NeighborNets hero's own blob (Figma 301:2108 / 301:2118, one path:
   the pale band and the photo at 0.9486 of it, turned 9.31deg), with its own
@@ -293,7 +341,9 @@ scrolls up over it. Pass the media (a video or image with
   and the same peek share (`--about-hero-wave-height`: a 150-unit band,
   3.75rem minimum; `--about-hero-peek`). Figma fills its pale band
   `#F3F0EE`, which has no token; it uses `landing-pale`, as every hero wave
-  does.
+  does. It is not in use: the About hero takes `wave="stories"` (a centred
+  arch), because its own blob's left-to-right rise read as a repeat of the
+  NeighborNets hero's.
 - The About hero (`src/app/about/about-hero.tsx`; Figma 507:3 / 595:1782 /
   596:2493) is the Stories hero's build: the group with the YM flags,
   art-directed per breakpoint from the Figma image fill
@@ -358,8 +408,9 @@ scrolls up over it. Pass the media (a video or image with
   shows there after the content's top has passed, and hiding it then would
   flash the page's Warm Snow through.
 - `fit`: for an overlay too tall to pin on every screen (the Support
-  hero's, which holds the donation form). The hero is at least a viewport
-  tall, grows to its overlay, and is pinned by its foot: `StickyHeroFit`
+  hero's, which holds the donation form). The hero is at least
+  `--sticky-hero-height` tall (its overlay too, so short overlays centre as
+  every hero's do), grows to its overlay, and is pinned by its foot: `StickyHeroFit`
   measures it and writes its sticky `top`, `min(0, viewport − hero)` in px
   (again on every resize of the hero or the viewport, including iOS
   Safari's toolbar), and sizes the header's scrim marker to the hero. When
@@ -375,9 +426,12 @@ scrolls up over it. Pass the media (a video or image with
 - Once the page has scrolled past the hero's wave the hero is fully covered,
   so `StickyHeroCover` hides it and pauses its videos until it comes back:
   pinned for the whole page, it would otherwise keep decoding and compositing
-  a full-screen video behind everything.
-- The header scrim is driven by an invisible 100dvh marker with
-  `data-header-hero` that scrolls normally (the pinned hero is always in
+  a full-screen video behind everything. Its observer's root runs far below
+  the viewport, so the state follows the real position after any jump too
+  (a `scrollTo`, an anchor, back-to-top), not just a scroll across the edge.
+- The header scrim is driven by an invisible marker the hero's height
+  (`--sticky-hero-height`, or `100dvh` with `fullHeight`; `fit` sizes it to
+  the hero) with `data-header-hero` that scrolls normally (the pinned hero is always in
   view, so it cannot be the sentinel).
 - The scrim (`site-header.module.css`) is Deep Obsidian at 65% easing out to
   clear, reaching `--header-scrim-reach` (200%) of the header's height below
@@ -391,12 +445,16 @@ scrolls up over it. Pass the media (a video or image with
   variant, `@media (max-height: 30rem)` (480px). It catches landscape phones
   (about 360-430px tall) but not landscape tablets or laptops.
 
-| Token                                                          | Value                                         | Use                                                                                                                                                                              |
-| -------------------------------------------------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--hero-wave-height`                                           | `max(6rem, 16.944vw)`                         | The wave band: 244 of 1440 units, with a 6rem minimum so it stays a proper wave on phones                                                                                        |
-| `--hero-peek`                                                  | 15.57% of the band                            | How much of the band shows above the fold at load (38 of 244 units)                                                                                                              |
-| `--neighbornets-hero-wave-height` / `--neighbornets-hero-peek` | `max(5rem, 13.889vw)` / 15.57% of the band    | The NeighborNets hero's wave band (200 of 1440 units; the landing's 6rem minimum in proportion) and its peek                                                                     |
-| `--support-hero-wave-height` / `--support-hero-peek`           | `max(5.75rem, 16.181vw)` / 18.88% of the band | The Support hero's wave band (233 of 1440 units; the landing's 6rem minimum in proportion) and its peek (44 units, Figma's own: the photo's edge rises 40 above the hero's foot) |
+| Token                                                                                                        | Value                                                 | Use                                                                                                                                                                              |
+| ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--sticky-hero-height`                                                                                       | `round(85dvh, 1px)`                                   | The hero's height (and its scrim marker's); `fullHeight` heroes use `100dvh`                                                                                                     |
+| `--sticky-hero-tint-max`                                                                                     | 0.35                                                  | A short hero's deepest dimming as the page covers it (StickyHeroTint)                                                                                                            |
+| `--hero-wave-drift-share`                                                                                    | 0.24                                                  | A short hero's wave front drift, as a share of its band's height                                                                                                                 |
+| `--hero-rise`, `--neighbornets-hero-rise`, `--stories-hero-rise`, `--about-hero-rise`, `--support-hero-rise` | the band x 0.44 / 0.39 / 0.34 / 0.50 / 0.62, whole px | How far a short hero's following content rises over it                                                                                                                           |
+| `--hero-wave-height`                                                                                         | `max(6rem, 16.944vw)`                                 | The wave band: 244 of 1440 units, with a 6rem minimum so it stays a proper wave on phones                                                                                        |
+| `--hero-peek`                                                                                                | 15.57% of the band                                    | How much of the band shows above the fold at load (38 of 244 units)                                                                                                              |
+| `--neighbornets-hero-wave-height` / `--neighbornets-hero-peek`                                               | `max(5rem, 13.889vw)` / 15.57% of the band            | The NeighborNets hero's wave band (200 of 1440 units; the landing's 6rem minimum in proportion) and its peek                                                                     |
+| `--support-hero-wave-height` / `--support-hero-peek`                                                         | `max(5.75rem, 16.181vw)` / 18.88% of the band         | The Support hero's wave band (233 of 1440 units; the landing's 6rem minimum in proportion) and its peek (44 units, Figma's own: the photo's edge rises 40 above the hero's foot) |
 
 Both are rounded to whole pixels. Every section edge below the hero sits over
 the pinned hero, and an edge on a fractional pixel lets a hairline of it show
@@ -1926,7 +1984,7 @@ hero (Figma 456:3296 desktop, 456:3556 tablet, 456:3698 mobile; hover
 456:3611, mobile 456:3753) and the shared footer.
 
 - **A sticky hero:** the split is `StickyHero`'s pinned panel, exactly the
-  viewport's height (`100dvh`) on every device, with no minimum, under the
+  viewport's height (`100dvh`, `fullHeight`) on every device, with no minimum, under the
   overlaid site header ("Store" as the current page; the scrim follows
   StickyHero's marker). The closing CTA scrolls up over it. It has no wave of
   its own (`wave="none"`): the CTA's wavy top is the hand-off, its section

@@ -51,15 +51,16 @@ function HeroPhoto() {
  * Stories and NeighborNets heroes are. The group with the YM flags fills the
  * viewport under the light Obsidian tint (no film grain), with
  * "ROOTED LOCALLY. GROWING TOGETHER." and its subline centred over them.
- * The rest of the page scrolls up over the pinned hero behind this page's
- * own wave (AboutHeroWave), and the header scrim follows StickyHero's
+ * The rest of the page scrolls up over the pinned hero behind the Stories
+ * hero's wave (StoriesHeroWave: a centred arch, so it reads apart from the
+ * NeighborNets hero's rising slope), and the header scrim follows StickyHero's
  * `data-header-hero` marker.
  */
 export function AboutHero({ children }: { children: ReactNode }) {
   return (
     <StickyHero
       label="Rooted locally, growing together"
-      wave="about"
+      wave="stories"
       media={
         <>
           <HeroPhoto />

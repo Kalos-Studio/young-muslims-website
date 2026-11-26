@@ -79,6 +79,7 @@ function Half({
 export function StoreSplit({ children }: { children: ReactNode }) {
   return (
     <StickyHero
+      fullHeight
       label="Our stores"
       wave="none"
       holdThroughFooter

@@ -17,6 +17,7 @@ import {
 export function LandingHero({ children }: { children: ReactNode }) {
   return (
     <StickyHero
+      fullHeight
       label="Young Muslims community introduction"
       media={
         <>

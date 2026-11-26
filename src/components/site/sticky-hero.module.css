@@ -1,5 +1,12 @@
 /* Sticky hero layout. Geometry tokens: "Sticky hero" in DESIGN-SYSTEM.md. */
 
+/* The hero's height (`--sticky-hero-height`, 85dvh), and its header-scrim
+   marker's: shorter than the viewport, so the next section shows below it.
+   A `fullHeight` hero (the landing's, the Store's) uses h-dvh instead. */
+.height {
+  height: var(--sticky-hero-height);
+}
+
 /* Everything after the hero: above it, and pulled up so the wave's top hump
    peeks above the fold at load. */
 .following {
@@ -69,12 +76,20 @@
   pointer-events: none;
 }
 
-/* `fit`: at least a viewport tall, growing to its overlay. A plain section
-   until StickyHeroFit has measured it (so without script nothing is ever
-   cut off); then sticky, pinned by its foot: its `top` is written in px,
-   0 when it fits the viewport, else the viewport's height less its own. */
+/* `fit`: at least the hero's height (`--sticky-hero-height`), growing to
+   its overlay. A plain section until StickyHeroFit has measured it (so
+   without script nothing is ever cut off); then sticky, pinned by its
+   foot: its `top` is written in px, 0 when it fits the viewport, else the
+   viewport's height less its own. */
 .fit {
   position: relative;
+  min-height: var(--sticky-hero-height);
+}
+
+/* The overlay of a `fit` hero: at least the hero's height, so short
+   overlays centre in it as every other hero's do. */
+.fitOverlay {
+  min-height: var(--sticky-hero-height);
 }
 
 .fit[data-pinned] {
@@ -100,4 +115,82 @@
   content: "";
   display: block;
   height: var(--site-footer-height);
+}
+
+/* A short hero (no `fullHeight`): the content after it rises by its wave's
+   `--*-hero-rise`, the share of the band above the photo blob's lowest
+   edge (measured from each blob), so every clear part of the wave sits
+   over the photo and the hero's foot is never seen as a cut edge; the
+   band's opaque rest (pale and Warm Snow) runs on below it. Declared after
+   the peeks, which they replace. */
+.riseLanding {
+  margin-top: calc(-1 * var(--hero-rise));
+}
+
+.riseNeighborNets {
+  margin-top: calc(-1 * var(--neighbornets-hero-rise));
+}
+
+.riseStories {
+  margin-top: calc(-1 * var(--stories-hero-rise));
+}
+
+.riseAbout {
+  margin-top: calc(-1 * var(--about-hero-rise));
+}
+
+.riseSupport {
+  margin-top: calc(-1 * var(--support-hero-rise));
+}
+
+/* A hero's wave (HeroWaveBand): the band's box clips its two
+   layers, the static Landing Pale back and the drifting Warm Snow front.
+   Decorative: it takes no pointer events (its clear part lies over the
+   hero, and the Support hero's form). */
+.waveBand {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.waveBack {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The front: the band's height and its overhang (FRONT_OVERHANG in
+   hero-wave.tsx, more than `--hero-wave-drift-share`), drifting on its own
+   layer. Paint-contained: Chrome repaints a moving inline SVG's layer on
+   every frame without it. */
+.waveFront {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 130%;
+  contain: paint;
+}
+
+.waveFrontArt {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The short hero's scroll-linked dimming (StickyHeroTint): clear until the
+   script sets its opacity; only that changes, on its own layer. */
+.tint {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .waveFront {
+    will-change: transform;
+  }
+
+  .tint {
+    will-change: opacity;
+  }
 }

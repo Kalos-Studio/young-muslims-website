@@ -537,6 +537,23 @@
  * DESIGN-SYSTEM.md under "Sticky hero".
  */
 :root {
+  /* The hero's height: 85% of the viewport, so a sliver of the next
+     section (its wave and the top of its content) shows under the hero at
+     load. Rounded to whole pixels, as the peeks are: the content after the
+     hero, and every section edge in it, starts at this height less the
+     peek, and a fractional edge lets a hairline of the hero show through.
+     The landing and Store heroes keep the full viewport (`fullHeight`). */
+  --sticky-hero-height: round(85dvh, 1px);
+  /* A short hero's dimming as the page covers it (StickyHeroTint): an
+     Obsidian layer's opacity at its deepest (a plain number). */
+  --sticky-hero-tint-max: 0.35;
+  /* A hero's wave front (the landing's too) rises this share of the band's height above
+     its Figma place, settling to it by the end of the hand-off
+     (HeroWaveDrift; it never sinks below, so the pale shape never reaches
+     the band's foot). Under the band's thinnest point on every hero (0.38
+     or more), so it never reaches the photo; the front overhangs the band
+     by more than this (FRONT_OVERHANG). */
+  --hero-wave-drift-share: 0.24;
   /* The bottom wave band spans Figma page y 986-1230 (244 units of 1440)
      and scales with the viewport width, with a minimum so it stays a proper
      wave on phones. */
@@ -546,6 +563,14 @@
      pixels: every section edge below sits over the pinned hero, and an edge
      on a fractional pixel lets a hairline of the hero show through. */
   --hero-peek: round(calc(var(--hero-wave-height) * 0.1557), 1px);
+  /* On a short hero (StickyHero without `fullHeight`) the content after it
+     rises by the band's share above the photo blob's lowest edge (measured
+     from the blob: 0.3996 here; About 0.4617, Stories 0.30, NeighborNets
+     0.3538, Support 0.5794) plus 0.04 of the band (2px or more at the
+     smallest), so all the band's clear part lies over the photo and the
+     curve's lowest point never meets the hero's foot; each wave has its
+     own. */
+  --hero-rise: round(calc(var(--hero-wave-height) * 0.44), 1px);
   /* The NeighborNets hero's wave (its own blob, Figma 301:2068): a 200-unit
      band (of 1440), with a 5rem minimum (the landing's 6rem in proportion),
      peeking above the fold by the same share as the landing's. */
@@ -557,6 +582,10 @@
     calc(var(--neighbornets-hero-wave-height) * 0.1557),
     1px
   );
+  --neighbornets-hero-rise: round(
+    calc(var(--neighbornets-hero-wave-height) * 0.39),
+    1px
+  );
   /* The Stories hero's wave (its own blob, Figma 401:3520): a 160-unit band
      (of 1440), with a 4rem minimum (the landing's 6rem in proportion),
      peeking above the fold by the same share as the others. */
@@ -565,11 +594,13 @@
     calc(var(--stories-hero-wave-height) * 0.1557),
     1px
   );
+  --stories-hero-rise: round(calc(var(--stories-hero-wave-height) * 0.34), 1px);
   /* The About hero's wave (its own blob, Figma 507:3): a 150-unit band
      (of 1440), with a 3.75rem minimum (the landing's 6rem in proportion),
      peeking above the fold by the same share as the others. */
   --about-hero-wave-height: max(3.75rem, round(calc(100vw * 0.104167), 1px));
   --about-hero-peek: round(calc(var(--about-hero-wave-height) * 0.1557), 1px);
+  --about-hero-rise: round(calc(var(--about-hero-wave-height) * 0.5), 1px);
   /* The Support hero's wave (its own two blobs, Figma 415:1573): a 233-unit
      band (of 1440), with a 5.75rem minimum (the landing's 6rem in
      proportion), peeking 44 of its units above the fold, as in its frame
@@ -579,6 +610,7 @@
     calc(var(--support-hero-wave-height) * 0.188841),
     1px
   );
+  --support-hero-rise: round(calc(var(--support-hero-wave-height) * 0.62), 1px);
   /* The NeighborNets map (Figma 301:2121, 374:621, 401:1582). Its state
      borders stay 1.75px at every width and zoom (non-scaling stroke). */
   --neighbornets-map-outline-width: 1.75px;
