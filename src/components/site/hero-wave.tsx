@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 
+import { HeroWaveDrift } from "./hero-wave-drift";
 import styles from "./sticky-hero.module.css";
 
 /**
@@ -25,46 +26,132 @@ export const HERO_PHOTO_BLOB = `matrix(${ROTATION} -122.2947 -985.8739) scale(0.
  * hero shows through), the Landing Pale band down to the pale blob's edge,
  * and Warm Snow below. It spans Figma page y 986-1230 at full width and
  * scales with `--hero-wave-height`. It moves with the content that follows
- * the hero, so it is a single shape with nothing to align.
+ * the hero, and its Warm Snow drifts as it scrolls past (HeroWaveBand).
  */
 export function HeroWave({ className }: { className?: string }) {
   return (
-    <svg
-      aria-hidden
-      viewBox="0 986 1440 244"
-      preserveAspectRatio="none"
+    <HeroWaveBand
+      id="landing"
+      viewBox={[0, 986, 1440, 244]}
+      photo={{ d: HERO_BLOB, transform: HERO_PHOTO_BLOB }}
+      pale={{ d: HERO_BLOB, transform: PALE_BLOB }}
       className={cn(styles.wave, className)}
-    >
-      <defs>
-        <mask
-          id="hero-wave-photo"
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="986"
-          width="1440"
-          height="250"
-        >
-          <rect x="0" y="986" width="1440" height="250" fill="white" />
-          <path d={HERO_BLOB} transform={HERO_PHOTO_BLOB} fill="black" />
-        </mask>
-      </defs>
-      <g mask="url(#hero-wave-photo)">
-        {/* Runs a few units past the band so no hairline of the hero can
-            show where the band meets the section below. */}
+    />
+  );
+}
+
+/** A blob placed in a wave band's Figma page coordinates. */
+type Blob = { d: string; transform: string };
+
+/*
+ * A hero's wave front overhangs its band by this share of the band's
+ * height (the band clips it): more than `--hero-wave-drift-share` (0.24),
+ * the most it rises, so its foot never lifts off the band's foot, even with
+ * sub-pixel rounding on dense screens.
+ */
+const FRONT_OVERHANG = 0.3;
+
+/**
+ * A hero's bottom wave band (Figma page coordinates `viewBox`, stretched to
+ * the band's box): clear above the photo blob's edge, so the hero shows
+ * through; a pale band down to the pale blob's edge; Warm Snow below. It
+ * moves with the content after the hero, so it cannot misalign with it.
+ *
+ * Figma's colours in two layers, so the band drifts: the Landing Pale below
+ * the photo's edge (static, moving with the page) and the Warm Snow below
+ * the pale edge (HeroWaveDrift: a composited, paint-contained layer that
+ * rises from its Figma place and settles back to it by the end of the
+ * hand-off, so the pale band breathes). It never sinks below its place, so
+ * the pale shape never reaches the band's foot (where the clip would cut
+ * it flat against the section's background); it overhangs the band's foot
+ * by more than it rises (FRONT_OVERHANG, clipped by the band), so no seam
+ * opens there; and it rises less than the band's thinnest point (38% of
+ * its height or more on every hero), so Warm Snow never crosses onto the
+ * photo. Every hero's wave is built so, full height (the landing's) or
+ * short.
+ */
+function HeroWaveBand({
+  id,
+  viewBox: [x, y, width, height],
+  photo,
+  pale,
+  className,
+}: {
+  id: string;
+  viewBox: [number, number, number, number];
+  photo: Blob;
+  pale: Blob;
+  className: string;
+}) {
+  // Each fill runs a few units past the band so no hairline of the hero
+  // can show where the band meets the section below.
+  const fillHeight = height + 6;
+  const frontHeight = height * (1 + FRONT_OVERHANG);
+  return (
+    <div aria-hidden className={cn(className, styles.waveBand)}>
+      <svg
+        viewBox={`${x} ${y} ${width} ${height}`}
+        preserveAspectRatio="none"
+        className={styles.waveBack}
+      >
+        <defs>
+          <mask
+            id={`${id}-hero-wave-photo`}
+            maskUnits="userSpaceOnUse"
+            x={x}
+            y={y}
+            width={width}
+            height={fillHeight}
+          >
+            <rect x={x} y={y} width={width} height={fillHeight} fill="white" />
+            <path d={photo.d} transform={photo.transform} fill="black" />
+          </mask>
+        </defs>
         <rect
-          x="0"
-          y="986"
-          width="1440"
-          height="250"
-          className="fill-brand-warm-snow"
-        />
-        <path
-          d={HERO_BLOB}
-          transform={PALE_BLOB}
+          x={x}
+          y={y}
+          width={width}
+          height={fillHeight}
+          mask={`url(#${id}-hero-wave-photo)`}
           className="fill-landing-pale"
         />
-      </g>
-    </svg>
+      </svg>
+      <HeroWaveDrift className={styles.waveFront}>
+        <svg
+          viewBox={`${x} ${y} ${width} ${frontHeight}`}
+          preserveAspectRatio="none"
+          className={styles.waveFrontArt}
+        >
+          <defs>
+            <mask
+              id={`${id}-hero-wave-pale`}
+              maskUnits="userSpaceOnUse"
+              x={x}
+              y={y}
+              width={width}
+              height={frontHeight + 6}
+            >
+              <rect
+                x={x}
+                y={y}
+                width={width}
+                height={frontHeight + 6}
+                fill="white"
+              />
+              <path d={pale.d} transform={pale.transform} fill="black" />
+            </mask>
+          </defs>
+          <rect
+            x={x}
+            y={y}
+            width={width}
+            height={frontHeight + 6}
+            mask={`url(#${id}-hero-wave-pale)`}
+            className="fill-brand-warm-snow"
+          />
+        </svg>
+      </HeroWaveDrift>
+    </div>
   );
 }
 
@@ -92,49 +179,17 @@ const NEIGHBORNETS_PHOTO_BLOB =
  * band down to the pale blob's edge, and Warm Snow below. The edges span
  * Figma page y 1019-1212, so the band is y 1015-1215 at full width, scaled
  * with `--neighbornets-hero-wave-height`.
+ * It drifts as HeroWaveBand's do.
  */
 export function NeighborNetsHeroWave({ className }: { className?: string }) {
   return (
-    <svg
-      aria-hidden
-      viewBox="0 1015 1440 200"
-      preserveAspectRatio="none"
+    <HeroWaveBand
+      id="neighbornets"
+      viewBox={[0, 1015, 1440, 200]}
+      photo={{ d: NEIGHBORNETS_HERO_BLOB, transform: NEIGHBORNETS_PHOTO_BLOB }}
+      pale={{ d: NEIGHBORNETS_HERO_BLOB, transform: NEIGHBORNETS_PALE_BLOB }}
       className={cn(styles.waveNeighborNets, className)}
-    >
-      <defs>
-        <mask
-          id="neighbornets-hero-wave-photo"
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="1015"
-          width="1440"
-          height="206"
-        >
-          <rect x="0" y="1015" width="1440" height="206" fill="white" />
-          <path
-            d={NEIGHBORNETS_HERO_BLOB}
-            transform={NEIGHBORNETS_PHOTO_BLOB}
-            fill="black"
-          />
-        </mask>
-      </defs>
-      <g mask="url(#neighbornets-hero-wave-photo)">
-        {/* Runs a few units past the band so no hairline of the hero can
-            show where the band meets the section below. */}
-        <rect
-          x="0"
-          y="1015"
-          width="1440"
-          height="206"
-          className="fill-brand-warm-snow"
-        />
-        <path
-          d={NEIGHBORNETS_HERO_BLOB}
-          transform={NEIGHBORNETS_PALE_BLOB}
-          className="fill-landing-pale"
-        />
-      </g>
-    </svg>
+    />
   );
 }
 
@@ -161,49 +216,17 @@ const STORIES_PHOTO_BLOB = "translate(-1508 1058.94) scale(1 -1)";
  * to the pale blob's edge, and Warm Snow below. The edges span Figma page y
  * 1015-1168, so the band is y 1011-1171 at full width, scaled with
  * `--stories-hero-wave-height`.
+ * It drifts as HeroWaveBand's do.
  */
 export function StoriesHeroWave({ className }: { className?: string }) {
   return (
-    <svg
-      aria-hidden
-      viewBox="0 1011 1440 160"
-      preserveAspectRatio="none"
+    <HeroWaveBand
+      id="stories"
+      viewBox={[0, 1011, 1440, 160]}
+      photo={{ d: STORIES_HERO_BLOB, transform: STORIES_PHOTO_BLOB }}
+      pale={{ d: STORIES_HERO_BLOB, transform: STORIES_PALE_BLOB }}
       className={cn(styles.waveStories, className)}
-    >
-      <defs>
-        <mask
-          id="stories-hero-wave-photo"
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="1011"
-          width="1440"
-          height="166"
-        >
-          <rect x="0" y="1011" width="1440" height="166" fill="white" />
-          <path
-            d={STORIES_HERO_BLOB}
-            transform={STORIES_PHOTO_BLOB}
-            fill="black"
-          />
-        </mask>
-      </defs>
-      <g mask="url(#stories-hero-wave-photo)">
-        {/* Runs a few units past the band so no hairline of the hero can
-            show where the band meets the section below. */}
-        <rect
-          x="0"
-          y="1011"
-          width="1440"
-          height="166"
-          className="fill-brand-warm-snow"
-        />
-        <path
-          d={STORIES_HERO_BLOB}
-          transform={STORIES_PALE_BLOB}
-          className="fill-landing-pale"
-        />
-      </g>
-    </svg>
+    />
   );
 }
 
@@ -232,45 +255,17 @@ const ABOUT_PHOTO_BLOB =
  * the pale blob's edge, and Warm Snow below. The edges span Figma page y
  * 969-1111, so the band is y 965-1115 at full width, scaled with
  * `--about-hero-wave-height`.
+ * It drifts as HeroWaveBand's do.
  */
 export function AboutHeroWave({ className }: { className?: string }) {
   return (
-    <svg
-      aria-hidden
-      viewBox="0 965 1440 150"
-      preserveAspectRatio="none"
+    <HeroWaveBand
+      id="about"
+      viewBox={[0, 965, 1440, 150]}
+      photo={{ d: ABOUT_HERO_BLOB, transform: ABOUT_PHOTO_BLOB }}
+      pale={{ d: ABOUT_HERO_BLOB, transform: ABOUT_PALE_BLOB }}
       className={cn(styles.waveAbout, className)}
-    >
-      <defs>
-        <mask
-          id="about-hero-wave-photo"
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="965"
-          width="1440"
-          height="156"
-        >
-          <rect x="0" y="965" width="1440" height="156" fill="white" />
-          <path d={ABOUT_HERO_BLOB} transform={ABOUT_PHOTO_BLOB} fill="black" />
-        </mask>
-      </defs>
-      <g mask="url(#about-hero-wave-photo)">
-        {/* Runs a few units past the band so no hairline of the hero can
-            show where the band meets the section below. */}
-        <rect
-          x="0"
-          y="965"
-          width="1440"
-          height="156"
-          className="fill-brand-warm-snow"
-        />
-        <path
-          d={ABOUT_HERO_BLOB}
-          transform={ABOUT_PALE_BLOB}
-          className="fill-landing-pale"
-        />
-      </g>
-    </svg>
+    />
   );
 }
 
@@ -295,48 +290,16 @@ const SUPPORT_PHOTO_BLOB = `matrix(${SUPPORT_TURN} -2344.879 -736.706)`;
  * to 1209, so the band is y 980-1213 at full width, scaled with
  * `--support-hero-wave-height`; it peeks 44 units above the hero's foot
  * (`--support-hero-peek`).
+ * It drifts as HeroWaveBand's do.
  */
 export function SupportHeroWave({ className }: { className?: string }) {
   return (
-    <svg
-      aria-hidden
-      viewBox="0 980 1440 233"
-      preserveAspectRatio="none"
+    <HeroWaveBand
+      id="support"
+      viewBox={[0, 980, 1440, 233]}
+      photo={{ d: SUPPORT_PHOTO_BLOB_PATH, transform: SUPPORT_PHOTO_BLOB }}
+      pale={{ d: SUPPORT_PALE_BLOB_PATH, transform: SUPPORT_PALE_BLOB }}
       className={cn(styles.waveSupport, className)}
-    >
-      <defs>
-        <mask
-          id="support-hero-wave-photo"
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="980"
-          width="1440"
-          height="239"
-        >
-          <rect x="0" y="980" width="1440" height="239" fill="white" />
-          <path
-            d={SUPPORT_PHOTO_BLOB_PATH}
-            transform={SUPPORT_PHOTO_BLOB}
-            fill="black"
-          />
-        </mask>
-      </defs>
-      <g mask="url(#support-hero-wave-photo)">
-        {/* Runs a few units past the band so no hairline of the hero can
-            show where the band meets the section below. */}
-        <rect
-          x="0"
-          y="980"
-          width="1440"
-          height="239"
-          className="fill-brand-warm-snow"
-        />
-        <path
-          d={SUPPORT_PALE_BLOB_PATH}
-          transform={SUPPORT_PALE_BLOB}
-          className="fill-landing-pale"
-        />
-      </g>
-    </svg>
+    />
   );
 }
