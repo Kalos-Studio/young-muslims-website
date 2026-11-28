@@ -10,12 +10,15 @@ import farhanAli from "../../../design-assets/figma/about/shura/farhan-ali.jpg";
 import moazAteya from "../../../design-assets/figma/about/shura/moaz-ateya.jpg";
 import tauseefSiddique from "../../../design-assets/figma/about/shura/tauseef-siddique.jpg";
 import aishaAbouganba from "../../../design-assets/photos/sisters-leadership/aisha-abouganba.jpg";
+import duaaAli from "../../../design-assets/photos/sisters-leadership/duaa-ali.jpg";
 import aleezaBhatti from "../../../design-assets/figma/about/shura/aleeza-bhatti.jpg";
 import ayraIslam from "../../../design-assets/photos/sisters-leadership/ayra-islam.jpg";
 import imanVirani from "../../../design-assets/photos/sisters-leadership/iman-virani.jpg";
+import daniaAli from "../../../design-assets/photos/sisters-leadership/dania-ali.jpg";
 import sarahSiddiqui from "../../../design-assets/figma/about/shura/sarah-siddiqui.jpg";
 import aminahSyed from "../../../design-assets/photos/sisters-leadership/aminah-syed.jpg";
 import mariamMohtisham from "../../../design-assets/photos/sisters-leadership/mariam-mohtisham.jpg";
+import sunbulShaikh from "../../../design-assets/photos/sisters-leadership/sunbul-shaikh.jpg";
 import thameenaSheikh from "../../../design-assets/photos/sisters-leadership/thameena-sheikh.jpg";
 
 /**
@@ -120,7 +123,7 @@ export const SHURA: ShuraMember[] = [
     name: "Duaa Ali",
     role: "Secretary General",
     tag: "-",
-    photo: { placeholder: "jade" },
+    photo: duaaAli,
   },
   {
     name: "Aleeza Bhatti",
@@ -130,7 +133,7 @@ export const SHURA: ShuraMember[] = [
   },
   {
     name: "Aminah Syed",
-    role: "Marking, YMC;National Shura",
+    role: "Marketing, YMC; National Shura",
     tag: "New York",
     photo: aminahSyed,
   },
@@ -144,7 +147,7 @@ export const SHURA: ShuraMember[] = [
     name: "Dania Ali",
     role: "Societal Impact; National Shura",
     tag: "New Jersey",
-    photo: { placeholder: "jade" },
+    photo: daniaAli,
   },
   {
     name: "Iman Virani",
@@ -168,7 +171,7 @@ export const SHURA: ShuraMember[] = [
     name: "Sunbul Shaikh",
     role: "Expansion; National Shura",
     tag: "New York",
-    photo: { placeholder: "jade" },
+    photo: sunbulShaikh,
   },
   {
     name: "Thameena Shaik",
