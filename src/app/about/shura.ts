@@ -18,6 +18,7 @@ import daniaAli from "../../../design-assets/photos/sisters-leadership/dania-ali
 import sarahSiddiqui from "../../../design-assets/figma/about/shura/sarah-siddiqui.jpg";
 import aminahSyed from "../../../design-assets/photos/sisters-leadership/aminah-syed.jpg";
 import mariamMohtisham from "../../../design-assets/photos/sisters-leadership/mariam-mohtisham.jpg";
+import sunbulShaikh from "../../../design-assets/photos/sisters-leadership/sunbul-shaikh.jpg";
 import thameenaSheikh from "../../../design-assets/photos/sisters-leadership/thameena-sheikh.jpg";
 
 /**
@@ -170,7 +171,7 @@ export const SHURA: ShuraMember[] = [
     name: "Sunbul Shaikh",
     role: "Expansion; National Shura",
     tag: "New York",
-    photo: { placeholder: "jade" },
+    photo: sunbulShaikh,
   },
   {
     name: "Thameena Shaik",
